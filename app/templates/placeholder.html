@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} | Sparksmetrics{% endblock %}
+{% block content %}
+<section class="py-32 bg-black min-h-[60vh] flex items-center justify-center">
+    <div class="max-w-2xl mx-auto px-6 text-center">
+        <h1 class="text-4xl md:text-6xl font-display font-black text-white uppercase tracking-tighter mb-6">{{ title }}</h1>
+        <p class="text-slate-400 text-lg">This page is coming soon.</p>
+        <a href="{{ url_for('main.index') }}" class="inline-block mt-10 px-8 py-4 bg-primary text-white font-black uppercase rounded-xl hover:brightness-110 transition-all">Back to home</a>
+    </div>
+</section>
+{% endblock %}

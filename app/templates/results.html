@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+{% block title %}Sparksmetrics | Results &amp; Case Studies{% endblock %}
+{% block head_extras %}{% endblock %}
+{% block content %}
+<section class="bg-black relative pt-8 pb-12 overflow-hidden border-b border-white/5" id="hero">
+<div class="content-narrow px-6 relative z-10 text-center pt-6 pb-8">
+<p class="text-primary font-bold text-sm uppercase tracking-[0.4em] mb-6">RESULTS</p>
+<h1 class="text-3xl md:text-5xl lg:text-6xl mb-6 text-white font-display font-black uppercase tracking-tighter leading-[1.1]">
+    Funnels We've Hand Crafted That Convert.
+</h1>
+<p class="text-lg md:text-xl text-gray-400 font-medium mb-8 italic">
+    CRO, analytics, and tracking that turn traffic into revenue. Here's the proof.
+</p>
+<div class="flex flex-col items-center gap-4 mt-6">
+<a class="w-full max-w-xl inline-flex items-center justify-center px-8 py-6 bg-primary text-white font-display text-2xl md:text-3xl font-black rounded-xl shadow-[0_20px_50px_rgba(255,77,0,0.3)] hover:scale-[1.02] transition-all" href="#cta">SCHEDULE A CALL</a>
+<p class="text-gray-500 font-bold uppercase text-xs tracking-widest">Free strategy session · See what's possible for your funnel</p>
+</div>
+</div>
+</section>
+
+<section class="py-12 md:py-16 bg-light-base border-b border-gray-100">
+<div class="max-w-7xl mx-auto px-6">
+<div class="text-center mb-8">
+<h2 class="text-3xl md:text-5xl font-display font-black text-deep-charcoal uppercase tracking-tighter">Results in the Wild</h2>
+<p class="text-gray-500 font-bold uppercase tracking-widest text-sm mt-2">Real metrics from real brands we've worked with.</p>
+</div>
+<div class="grid md:grid-cols-3 gap-4">
+<a href="{{ url_for('main.case_study', slug='global-restaurant-bookings') }}" class="block bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md hover:border-primary/30 transition-all group">
+<div class="h-32 overflow-hidden bg-gray-100">
+<img src="{{ url_for('static', filename='images/location-page.jpg') }}" alt="Global Dining &amp; Entertainment Brand — location page" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"/>
+</div>
+<div class="p-4">
+<div class="grid grid-cols-2 gap-2 mb-3 min-w-0">
+<div class="min-w-0"><span class="block text-2xl md:text-3xl font-black text-primary leading-none truncate">8.53x</span><p class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mt-0.5">ROI</p></div>
+<div class="min-w-0"><span class="block text-2xl md:text-3xl font-black text-deep-charcoal leading-none truncate">+63%</span><p class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mt-0.5">Conversion Rate</p></div>
+</div>
+<p class="text-sm md:text-base font-bold text-deep-charcoal uppercase tracking-tight group-hover:text-primary transition-colors leading-tight">Global Dining &amp; Entertainment Brand</p>
+<p class="text-[10px] text-gray-500 mt-1">View case study →</p>
+</div>
+</a>
+<a href="{{ url_for('main.case_study', slug='shopify-premium-home-wellness-brand') }}" class="block bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md hover:border-primary/30 transition-all group">
+<div class="h-32 overflow-hidden bg-gray-100">
+<img src="{{ url_for('static', filename='images/wellness-main.jpg') }}" alt="Shopify Premium Home-Wellness Brand" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"/>
+</div>
+<div class="p-4">
+<div class="grid grid-cols-3 gap-2 mb-3 min-w-0">
+<div class="min-w-0"><span class="block text-xl md:text-2xl font-black text-primary leading-none truncate">+6%</span><p class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mt-0.5">Subscription</p></div>
+<div class="min-w-0"><span class="block text-xl md:text-2xl font-black text-deep-charcoal leading-none truncate">+22%</span><p class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mt-0.5">CVR</p></div>
+<div class="min-w-0"><span class="block text-xl md:text-2xl font-black text-deep-charcoal leading-none truncate">+5%</span><p class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mt-0.5">AOV</p></div>
+</div>
+<p class="text-sm md:text-base font-bold text-deep-charcoal uppercase tracking-tight group-hover:text-primary transition-colors leading-tight">Shopify Subscription-Based Wellness Brand</p>
+<p class="text-[10px] text-gray-500 mt-1">View case study →</p>
+</div>
+</a>
+<a href="{{ url_for('main.case_study', slug='shopify-bidet-brand') }}" class="block bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md hover:border-primary/30 transition-all group">
+<div class="h-32 overflow-hidden bg-gray-100">
+<img src="{{ url_for('static', filename='images/bidet-main.jpg') }}" alt="Shopify Home-Essentials Brand" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"/>
+</div>
+<div class="p-4">
+<div class="grid grid-cols-2 gap-2 mb-3 min-w-0">
+<div class="min-w-0"><span class="block text-2xl md:text-3xl font-black text-primary leading-none truncate">+20%</span><p class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mt-0.5">Conversion Rate</p></div>
+<div class="min-w-0"><span class="block text-2xl md:text-3xl font-black text-deep-charcoal leading-none truncate">+15%</span><p class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mt-0.5">Per Session Value</p></div>
+</div>
+<p class="text-sm md:text-base font-bold text-deep-charcoal uppercase tracking-tight group-hover:text-primary transition-colors leading-tight">Leading Shopify Home-Essentials Brand</p>
+<p class="text-[10px] text-gray-500 mt-1">View case study →</p>
+</div>
+</a>
+<a href="{{ url_for('main.case_study', slug='ai-brand-redesign') }}" class="block bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md hover:border-primary/30 transition-all group">
+<div class="h-32 overflow-hidden bg-gray-100">
+<img src="{{ url_for('static', filename='images/ai-main.jpg') }}" alt="AI Brand Redesign" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"/>
+</div>
+<div class="p-4">
+<p class="text-sm md:text-base font-bold text-deep-charcoal uppercase tracking-tight group-hover:text-primary transition-colors leading-tight">AI Brand Redesign for Lead Growth</p>
+<p class="text-[10px] text-gray-500 mt-1">View case study →</p>
+</div>
+</a>
+<a href="{{ url_for('main.case_study', slug='global-tour-brand') }}" class="block bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md hover:border-primary/30 transition-all group">
+<div class="h-32 overflow-hidden bg-gray-100">
+<img src="{{ url_for('static', filename='images/tour-main.jpg') }}" alt="Global Tour Brand" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"/>
+</div>
+<div class="p-4">
+<p class="text-sm md:text-base font-bold text-deep-charcoal uppercase tracking-tight group-hover:text-primary transition-colors leading-tight">Global Food Tour Brand</p>
+<p class="text-[10px] text-gray-500 mt-1">View case study →</p>
+</div>
+</a>
+<a href="{{ url_for('main.case_study', slug='national-fitness-franchise') }}" class="block bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md hover:border-primary/30 transition-all group">
+<div class="h-32 overflow-hidden bg-gray-100">
+<img src="{{ url_for('static', filename='images/fitness-main.jpg') }}" alt="USA National Kids Fitness Franchise" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"/>
+</div>
+<div class="p-4">
+<p class="text-sm md:text-base font-bold text-deep-charcoal uppercase tracking-tight group-hover:text-primary transition-colors leading-tight">USA National Kids Fitness Franchise</p>
+<p class="text-[10px] text-gray-500 mt-1">View case study →</p>
+</div>
+</a>
+</div>
+<p class="text-center text-gray-500 font-bold uppercase tracking-widest text-sm mt-8">And many more…</p>
+</div>
+</section>
+
+<section class="py-20 md:py-24 bg-white border-b border-gray-100">
+<div class="max-w-7xl mx-auto px-6">
+<div class="text-center mb-14">
+<h2 class="text-3xl md:text-5xl font-display font-black text-deep-charcoal uppercase tracking-tighter">This Is What <span class="text-primary">They Say.</span></h2>
+<p class="text-gray-500 font-bold uppercase tracking-widest text-sm mt-4">Direct feedback from brands we've worked with.</p>
+</div>
+<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Professional and great quality work, thank you"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn is a great go to resource when it comes to building a proper infrastructure for Google Analytics and setting up the dashboard so you get access to your data in a very simple way. You only need to explain the purpose of the project and he will outline a great strategy that can sync with your media buying activities. This is awesome!"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn was a pleasure to work with and he successfully solved the problems we had tracking our Google ads campaigns through Gtags, and set up Google Analytics. He is an excellent communicator and friendly guy. I look forward to working with him again."</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Great experience working with Stijn!"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"I had a very specific situation with GTM and GA4. Stijn helped me to solve the issue quickly and efficiently. Thanks so much!"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"It was a great pleasure working with Stijn. Absolutely recommend him to work with, and I'm sure I'll hire him in the future"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Thanks for checking GTM"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Helped me get relevant insights for a few clients. Highly recommended and will hire again."</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn really knows his stuff. Great working with him."</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn was very helpful in making sure our Google Offline Conversions were set up properly!"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn did a great job on instructing me with GTM!"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"He was great. Would highly recommend to anyone needing a GA4 pro!"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Loved this guy, very good experience"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn has provided a great level of professional service, fulfilling the tasks in time and providing initiatives to help the efficient project development."</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn wasn't always available during my working hours but connected server side analytics for us quickly!"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Knowledgeable but we haven't been able to fully wrap this up."</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn has excellent communications skills. He has a solid understanding of Digital Marketing, Google Tag Manager and Google Analytics. He was able to clearly explain to me how to use these tools. He was also very conscious of our time, so that I could stay within my budget. I appreciated that. I would hire him again for future jobs relating to digital marketing!"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"I don't know how to thank Stijn enough for helping our school with this project. Stijn was able to help our school implement a custom Google Analytics tracking code for our LMS system and now we can track e-commerce sales and see which marketing channel helped with the conversion. Stijn is an excellent contractor to work with and I look forward to working with him again soon!"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn did exactly what we asked, would highly recommend him."</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"He has a good commitment and he helped us to better plan the work. He has the skills that he shares in his profile, we did a job related to Google Tag Manager and Analytics, which were done successfully. 100% we will work again with Stijn!"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"He did a good job helping us installing GA4 and old Analytics for our website"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn Wollerich gives me great advice for my business"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"We needed very specific SEO consulting, not just regular consulting with generic reports. We had a problem regarding indexing several pages. What he told us makes sense totally and we will do all his recommendations. I am pretty sure the web positioning and organic visits will increase. I totally recommend him"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"He's great! Very communicative, responsive and knowledgeable, I would 100% hire him in the future if the need comes up"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Excellent communication, great ideas and hard working. Would absolutely recommend him to anyone. Thanks!"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Good SEO skills and cooperation. Stijn did exactly what we expected and was available for the update needed. We recommend Stijn for SEO audits"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Great work. Stijn works fast and knows exactly what to do. He's definitely an expert in tagging analytics!"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Incredibly knowledgeable on Google Tag Manager, Google Analytics, and Google Ads. Had a very specific challenge with GTM that Stijn was able to solve and then became a valuable resource for more projects. Available and flexible. Will work with Stijn again!"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Fantastic work! Will hire again, Stijn absolutely knows what's up and this was a pretty complex job!"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn fixed our issue without any problems."</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Easy to work with, responsive, and executed the job quickly. Would happily continue working with Stijn."</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn was very responsive, could explain very well the concepts of GA4 and helped me to dig into the data and generate two custom reports. Excellent job and exactly what I wanted! If I need help with GA4, I will book Stijn again for sure."</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn was easy to communicate and available. He ran into some issues while setting up my GA but at the end was able to solve the issue and correctly set it up within the budget estimated."</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"A true delight to work with. Happy to have on my roster for work moving forward!"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn was great, helped me figure out why my client's pixels weren't firing correctly and did it in a time-efficient way. Would absolutely work with him again"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Great job! Very good at what he does and also explained everything well. Highly recommended."</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Excellent working with this person"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn was very helpful in consulting us for all things GA4, I can highly recommend him!"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn is very skilled and we had good communication. Would recommend"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn was easy to work and conveyed trust. He responded to my messages within 24 hours. My project was small (update GA4 on website) and the due date was flexible so he squeezed me in. I had some concerns a couple of months later, so he checked everything for me again. I am happy with the work that was done and would absolutely recommend Stijn as a freelancer who can help with GA4"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn helped me with my GTM configuration for stockhawk.io. He quickly got me sorted out. He really knows his domain and I can highly recommend him."</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn is very knowledgeable about google analytics and was very helpful in sorting out discrepancies in our numbers."</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Easy to work with, completed the task quickly, highly recommend Stijn 🙂"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Excellent work"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn is one of the best freelancers on UpWork. He is very knowledgeable in Google Tag Manager, Google Analytics, and WordPress. I would definitely reach out to him in the future as I get more projects related to this type of work. Thank you, Stijn! Five STARZZZ!!!!"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Great work. Would recommend"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"I highly advise you, understands the tasks assigned to them, and strives to provide the best"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"great Job! Thank you"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Great Freelancer, really enjoyed working with him and did exactly what I wanted"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Brilliant experience. Really easy and fast communication, knowledgeable, and completed on time. Impressed with how this project was executed and would use again"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Finding this freelancer was like finding a magic lantern and a genie. He always appeared when I needed him and he always had a solution to my problems. In addition to being fantastically responsive, he was also unobtrusively pro-active–suggesting ways forward and new ideas that did not occur to me. I am truly proud of the digital marketing products we developed together. They have brought the results I hoped for. I highly recommend Stijn. He's a dream come true"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn is wonderful and knowledgeable. If you're considering him, I would recommend hiring him right away. I'll continue to come back to him in the future for all my SEO related work."</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn has excellent communications skills. He has a solid understanding of Digital Marketing, Google Tag Manager and Google Analytics. He was able to clearly explain to me how to use these tools. He was also very conscious of our time, so that I could stay within my budget. I appreciated that. I would hire him again for future jobs relating to digital marketing!"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn was super professional efficient and knowledgeable. He surpassed my expectations and allowed us to achieve more from the project than we had first aimed for. I would highly recommend Stijn."</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn was a star with helping us with a serious tracking issue and saved us hundreds of dollars! Thank you again 😁"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn was very helpful in answering our questions and provided sound insight into Google Analytics and Google Search Console. I would recommend his help and advice to anyone trying to navigate these platforms. He was fluent with all of the terminology, patient, and friendly. Five stars all around."</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn helped us build event tracking in GTM and reporting in GA4, he was extremely knowledgeable and creative to find solutions for all of our unique requests and had the patience to guide us and answer all of our questions."</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"He has a good commitment and he helped us to better plan the work. He has the skills that he shares in his profile, we did a job related to Google Tag Manager and Analytics, which were done successfully. 100% we will work again with Stijn."</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Excellent technical understanding and super helpful"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"A dream to work with, communication fantastic a very cooperative individual, highly recommend them."</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn is great to work with. He is friendly, well versed in everything that has to do with Analytics and Looker studio and was able to give us exactly what we were looking for. He is the real deal."</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"We hired Stijn to support with some quick updates we needed to get our google analytics 4 configured correctly, and he did a great job. We were impressed with his speed of delivery, and his presentation of the work he had completed via loom so that our team could watch the updates and make sure everything was fully understood. I would highly recommend Stijn for his speed, clarity, and expertise in google analytics"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"All amazing!"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn was a pleasure to work with, finished the project on time and in budget. Will be working with Stijn again and would highly recommend."</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Incredible professional. Looking forward to working with him again A+++"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn helped us quickly implement dynamic product schema via Google Tag Manager. He was great at explaining points along the way and did a great job."</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn is WONDERFUL. He is fast, knows his stuff, and always delivers great results. I will continue to use him."</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"First part of the job – fixing Adwords account – was completed perfectly. Stijn knew exactly what to do and how to fix the tag, and actually provided detailed explanations in video which I didn't expect and was so grateful for. This really made me understand the issue thoroughly. Stijn is really nice and helpful"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn is easy to work with and professional. He really knows his GA4 stuff. If you're looking for anything GA4 related, I highly recommend him"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"I had an excellent experience working with Stijn. His GA and tags skill are top notch and he was very patient with dealing with me (a technical luddite) in understanding what I needed and how to execute it. His communication was excellent and he got the job done exactly as I wanted, on a modest budget. I will be working with Stijn again for future jobs of this nature."</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn completed my project quickly and even provided a short tutorial so I could understand the topic better. Would highly recommend and hire again"</p></div>
+<div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"><p class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic">"Stijn is super responsive. Very easy to work with. Knows what he is doing. Followed instructions and also provided guidance to complete the project in the best possible way, possibly even better than the original direction. I'm looking forward to working with him again"</p></div>
+</div>
+</div>
+</section>
+
+<section class="py-20 md:py-24 bg-light-base border-b border-gray-100">
+<div class="content-narrow px-6 text-center">
+<h2 class="text-3xl md:text-5xl font-display font-black text-deep-charcoal uppercase tracking-tighter mb-8">So… You've Seen the Proof.</h2>
+<p class="text-xl text-gray-600 mb-6">These brands didn't just get lucky. They fixed what most people ignore—the post-click experience. They stopped pouring money into ads that bring traffic to pages that don't convert. Instead, they made small, smart changes that turned browsers into buyers.</p>
+<p class="text-xl text-gray-600 mb-8">That's what we do. It's not magic, it's math—better pages, better tracking, better results. If your site is getting clicks but not customers, you don't need more traffic. You need to make what you already have work harder.</p>
+<p class="text-deep-charcoal font-bold text-lg">Ready to see what your own 20%, 40%, or even 60% lift looks like?</p>
+</div>
+</section>
+
+<section class="py-24 bg-light-base border-t border-gray-100" id="cta">
+<div class="content-narrow px-6 text-center">
+<h2 class="text-4xl md:text-6xl mb-8 text-deep-charcoal">Ready to Get <span class="text-primary">Results?</span></h2>
+<p class="text-xl text-gray-600 mb-10">Schedule a call or email us. We'll get the research phase started and show you what's possible for your funnel.</p>
+<a class="w-full inline-flex items-center justify-center px-10 py-10 bg-primary text-white font-display text-2xl md:text-3xl font-black rounded-2xl shadow-[0_25px_60px_rgba(255,77,0,0.4)] hover:scale-105 transition-all" href="#">SCHEDULE A CALL</a>
+<p class="mt-4 text-gray-500 font-bold uppercase tracking-widest text-sm">No pitch—just a clear next step for your growth</p>
+</div>
+</section>
+{% endblock %}

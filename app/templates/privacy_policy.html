@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Privacy Policy | Sparksmetrics{% endblock %}
+{% block content %}
+<section class="py-16 md:py-24 bg-white">
+    <div class="max-w-3xl mx-auto px-6">
+        <h1 class="text-4xl md:text-5xl font-display font-black text-charcoal uppercase tracking-tighter mb-2">Privacy Policy</h1>
+        <p class="text-slate-500 font-bold uppercase tracking-widest text-sm mb-12">Effective Date: Jan 17, 2025</p>
+        <div class="prose prose-slate max-w-none">
+            <p class="text-slate-700 leading-relaxed mb-8">Sparksmetrics (“we,” “our,” or “us”) respects your privacy and is committed to protecting your personal data. This Privacy Policy explains how we collect, use, and safeguard your information when you visit our website, interact with our Facebook ads, or download our free ebook.</p>
+
+            <h2 class="text-xl font-display font-black text-charcoal uppercase tracking-tight mt-12 mb-4">1. Information We Collect</h2>
+            <p class="text-slate-700 leading-relaxed mb-4">We may collect the following types of information:</p>
+            <ul class="list-disc pl-6 text-slate-700 space-y-2 mb-8">
+                <li><strong>Cookies and Tracking Technologies:</strong> To improve your experience, we may use cookies and other tracking tools to analyze website traffic and ad performance.</li>
+                <li><strong>Usage Data:</strong> Information about how you interact with our website, such as IP address, browser type, time spent on pages, and referral URLs.</li>
+                <li><strong>Personal Information:</strong> Name, email address, or any details you provide when filling out our lead form to download the ebook.</li>
+            </ul>
+
+            <h2 class="text-xl font-display font-black text-charcoal uppercase tracking-tight mt-12 mb-4">2. How We Use Your Information</h2>
+            <p class="text-slate-700 leading-relaxed mb-4">We use the information we collect for the following purposes:</p>
+            <ul class="list-disc pl-6 text-slate-700 space-y-2 mb-8">
+                <li>To analyze and improve the performance of our Facebook ads and marketing campaigns.</li>
+                <li>To send you updates, promotional content, or offers related to marketing analytics (you can opt out at any time).</li>
+                <li>To personalize and enhance your experience with Sparksmetrics.</li>
+                <li>To deliver the free ebook you requested.</li>
+            </ul>
+
+            <h2 class="text-xl font-display font-black text-charcoal uppercase tracking-tight mt-12 mb-4">3. How We Share Your Information</h2>
+            <p class="text-slate-700 leading-relaxed mb-4">We do not sell, trade, or rent your personal information to third parties. We may share your data with:</p>
+            <ul class="list-disc pl-6 text-slate-700 space-y-2 mb-8">
+                <li><strong>Legal Authorities:</strong> When required by law to comply with legal obligations.</li>
+                <li><strong>Advertising Partners:</strong> To show you relevant ads on Facebook and other platforms.</li>
+                <li><strong>Service Providers:</strong> For hosting, email delivery, or ad optimization.</li>
+            </ul>
+
+            <h2 class="text-xl font-display font-black text-charcoal uppercase tracking-tight mt-12 mb-4">4. Your Rights</h2>
+            <p class="text-slate-700 leading-relaxed mb-4">Depending on your location, you may have rights regarding your personal data, such as:</p>
+            <ul class="list-disc pl-6 text-slate-700 space-y-2 mb-4">
+                <li>Limiting the processing of your data.</li>
+                <li>Opting out of targeted advertising or email communications.</li>
+                <li>Accessing, correcting, or deleting your personal information.</li>
+            </ul>
+            <p class="text-slate-700 leading-relaxed mb-8">To exercise these rights, contact us at <a href="mailto:stijn@sparksmetrics.com" class="text-primary font-semibold hover:underline">stijn@sparksmetrics.com</a>.</p>
+
+            <h2 class="text-xl font-display font-black text-charcoal uppercase tracking-tight mt-12 mb-4">5. Cookies and Tracking</h2>
+            <p class="text-slate-700 leading-relaxed mb-4">We use cookies and similar technologies to:</p>
+            <ul class="list-disc pl-6 text-slate-700 space-y-2 mb-8">
+                <li>Improve user experience on our website.</li>
+                <li>Measure ad performance and effectiveness.</li>
+            </ul>
+            <p class="text-slate-700 leading-relaxed mb-8">You can control or disable cookies through your browser settings. However, this may affect certain functionalities of the website.</p>
+
+            <h2 class="text-xl font-display font-black text-charcoal uppercase tracking-tight mt-12 mb-4">6. Data Security</h2>
+            <p class="text-slate-700 leading-relaxed mb-8">We implement reasonable security measures to protect your information from unauthorized access, disclosure, or misuse. However, no method of online transmission or storage is completely secure.</p>
+
+            <h2 class="text-xl font-display font-black text-charcoal uppercase tracking-tight mt-12 mb-4">7. Changes to This Policy</h2>
+            <p class="text-slate-700 leading-relaxed mb-8">We may update this Privacy Policy periodically. Any changes will be posted on this page with an updated “Effective Date.”</p>
+
+            <h2 class="text-xl font-display font-black text-charcoal uppercase tracking-tight mt-12 mb-4">8. Contact Us</h2>
+            <p class="text-slate-700 leading-relaxed mb-8">If you have any questions or concerns about this Privacy Policy, please contact us at:</p>
+            <p class="text-slate-700 leading-relaxed mb-8">Sparksmetrics · Netherlands · <a href="mailto:stijn@sparksmetrics.com" class="text-primary font-semibold hover:underline">stijn@sparksmetrics.com</a></p>
+
+            <p class="text-slate-600 text-sm border-t border-slate-200 pt-8 mt-12">This Privacy Policy applies to all users of our website and Facebook ads. By using our website or interacting with our ads, you agree to the terms of this Privacy Policy.</p>
+        </div>
+        <p class="mt-12">
+            <a href="{{ url_for('main.index') }}" class="text-primary font-bold uppercase tracking-widest text-sm hover:underline">← Back to home</a>
+        </p>
+    </div>
+</section>
+{% endblock %}

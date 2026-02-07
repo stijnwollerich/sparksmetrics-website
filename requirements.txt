@@ -1,0 +1,8 @@
+# Flask
+flask>=3.0.0
+
+# Environment and config
+python-dotenv>=1.0.0
+
+# Production WSGI server (optional)
+gunicorn>=21.0.0

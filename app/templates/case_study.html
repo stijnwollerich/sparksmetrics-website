@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% block title %}{{ case.meta_title or (case.result_headline ~ " | Sparksmetrics") }}{% endblock %}
+{% block head_extras %}{% endblock %}
+{% block content %}
+<section class="bg-black relative pt-8 pb-12 overflow-hidden border-b border-white/5" id="hero">
+<div class="content-narrow px-6 relative z-10 pt-6 pb-8">
+<a href="{{ url_for('main.results') }}" class="inline-flex items-center gap-2 text-gray-400 hover:text-white text-sm font-bold uppercase tracking-widest mb-6 transition-colors">
+<span class="material-symbols-outlined text-lg">arrow_back</span> All results
+</a>
+<p class="text-primary font-bold text-sm uppercase tracking-[0.4em] mb-3">Case Study</p>
+<h1 class="text-3xl md:text-5xl lg:text-6xl mb-4 text-white font-display font-black uppercase tracking-tighter leading-[1.1]">
+    {{ case.result_headline }}
+</h1>
+<p class="text-lg md:text-xl text-gray-400 font-medium mb-0 italic">
+    {{ case.subtitle }}
+</p>
+</div>
+</section>
+
+{% if case.main_image %}
+<section class="py-0 bg-white border-b border-gray-100">
+<div class="content-narrow px-6">
+<img src="{{ url_for('static', filename=case.main_image) }}" alt="Location page redesign" class="w-full rounded-2xl border border-gray-200 shadow-lg"/>
+<p class="text-center text-gray-500 text-xs font-bold uppercase tracking-widest mt-4">Redesigned location page</p>
+</div>
+</section>
+{% endif %}
+
+<section class="py-12 md:py-16 bg-light-base border-b border-gray-100">
+<div class="content-narrow px-6">
+<p class="text-gray-500 text-sm font-bold uppercase tracking-widest mb-10">Updated: {{ case.updated_date }}</p>
+<h2 class="text-2xl md:text-3xl font-display font-black text-deep-charcoal uppercase tracking-tighter mb-6">The Project</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-0">
+{% for key, value in case.project_items %}
+<div class="flex border-b border-gray-200 pb-3">
+<span class="text-gray-500 text-sm font-bold uppercase tracking-widest w-40 flex-shrink-0">{{ key }}</span>
+<span class="text-deep-charcoal font-medium text-sm">{{ value }}</span>
+</div>
+{% endfor %}
+</div>
+</div>
+</section>
+
+<section class="py-12 md:py-16 bg-white border-b border-gray-100">
+<div class="content-narrow px-6">
+<h2 class="text-2xl md:text-3xl font-display font-black text-deep-charcoal uppercase tracking-tighter mb-6">The Challenge</h2>
+<div class="prose prose-lg text-gray-700 max-w-none space-y-6">
+{% for p in case.challenge %}
+<p class="text-gray-700 leading-relaxed mb-0">{{ p }}</p>
+{% endfor %}
+</div>
+</div>
+</section>
+
+<section class="py-12 md:py-16 bg-light-base border-b border-gray-100">
+<div class="content-narrow px-6">
+<h2 class="text-2xl md:text-3xl font-display font-black text-deep-charcoal uppercase tracking-tighter mb-6">Our Approach</h2>
+<div class="prose prose-lg text-gray-700 max-w-none space-y-6">
+{% for p in case.approach %}
+<p class="text-gray-700 leading-relaxed mb-0">{{ p }}</p>
+{% endfor %}
+</div>
+</div>
+</section>
+
+{% if case.gallery_images %}
+<section class="py-12 md:py-16 bg-white border-b border-gray-100">
+<div class="content-narrow px-6">
+<h2 class="text-2xl md:text-3xl font-display font-black text-deep-charcoal uppercase tracking-tighter mb-8">Gallery</h2>
+<div class="space-y-10">
+{% for item in case.gallery_images %}
+<div class="rounded-2xl border border-gray-200 overflow-hidden bg-white shadow-lg">
+<img src="{{ url_for('static', filename=item.src) }}" alt="{{ item.caption or 'Case study' }}" class="w-full"/>
+{% if item.caption %}<p class="text-center text-gray-500 text-xs font-bold uppercase tracking-widest py-3 border-t border-gray-100">{{ item.caption }}</p>{% endif %}
+</div>
+{% endfor %}
+</div>
+</div>
+</section>
+{% endif %}
+
+<section class="py-12 md:py-16 bg-white border-b border-gray-100">
+<div class="content-narrow px-6">
+<h2 class="text-2xl md:text-3xl font-display font-black text-deep-charcoal uppercase tracking-tighter mb-6">The Tests</h2>
+<div class="prose prose-lg text-gray-700 max-w-none space-y-6">
+{% for p in case.tests %}
+<p class="text-gray-700 leading-relaxed mb-0">{{ p }}</p>
+{% endfor %}
+</div>
+</div>
+</section>
+
+<section class="py-12 md:py-16 bg-light-base border-b border-gray-100">
+<div class="content-narrow px-6">
+<h2 class="text-2xl md:text-3xl font-display font-black text-deep-charcoal uppercase tracking-tighter mb-6">Result</h2>
+{% if case.results_images %}
+<div class="space-y-8 mb-8">
+{% for img in case.results_images %}
+<div class="rounded-2xl border border-gray-200 overflow-hidden bg-white shadow-lg">
+<img src="{{ url_for('static', filename=img.src) }}" alt="{{ img.caption or 'Test results' }}" class="w-full"/>
+{% if img.caption %}<p class="text-center text-gray-500 text-xs font-bold uppercase tracking-widest py-3 border-t border-gray-100">{{ img.caption }}</p>{% endif %}
+</div>
+{% endfor %}
+</div>
+{% elif case.results_image %}
+<div class="mb-8 rounded-2xl border border-gray-200 overflow-hidden bg-white shadow-lg">
+<img src="{{ url_for('static', filename=case.results_image) }}" alt="Test results" class="w-full"/>
+<p class="text-center text-gray-500 text-xs font-bold uppercase tracking-widest py-3 border-t border-gray-100">A/B test results</p>
+</div>
+{% endif %}
+<div class="p-8 md:p-10 bg-white border-l-4 border-primary rounded-r-2xl shadow-sm mb-8">
+<p class="text-2xl md:text-3xl font-black text-primary leading-tight mb-4">{{ case.result_metric }}</p>
+{% for p in case.result %}
+<p class="text-gray-700 leading-relaxed mb-4">{{ p }}</p>
+{% endfor %}
+</div>
+</div>
+</section>
+
+<section class="py-24 bg-light-base border-t border-gray-100" id="cta">
+<div class="content-narrow px-6 text-center">
+<h2 class="text-3xl md:text-5xl font-display font-black text-deep-charcoal uppercase tracking-tighter mb-6">Ready for Your Own Results?</h2>
+<p class="text-xl text-gray-600 mb-10">Schedule a call. We'll review your funnel and show you what's possible.</p>
+<a class="w-full inline-flex items-center justify-center px-10 py-10 bg-primary text-white font-display text-2xl md:text-3xl font-black rounded-2xl shadow-[0_25px_60px_rgba(255,77,0,0.4)] hover:scale-105 transition-all" href="#">SCHEDULE A CALL</a>
+<p class="mt-4 text-gray-500 font-bold uppercase tracking-widest text-sm">Free strategy session</p>
+</div>
+</section>
+{% endblock %}
