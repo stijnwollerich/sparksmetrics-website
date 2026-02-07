@@ -56,6 +56,20 @@ if _env_file.exists():
     except Exception:
         pass
 
+# Re-apply DATABASE_URL from our parse so load_dotenv can't overwrite it with empty
+if _env_vars.get("DATABASE_URL"):
+    os.environ["DATABASE_URL"] = _env_vars["DATABASE_URL"]
+elif not (os.environ.get("DATABASE_URL") or "").strip() and _env_file.exists():
+    try:
+        for line in _env_file.read_text(encoding="utf-8", errors="replace").splitlines():
+            if "DATABASE_URL=" in line:
+                v = line.split("=", 1)[1].strip().strip("'\"").replace("\r", "")
+                if v:
+                    os.environ["DATABASE_URL"] = v
+                break
+    except Exception:
+        pass
+
 
 def _get_database_uri() -> str | None:
     uri = os.environ.get("DATABASE_URL", "").strip()
