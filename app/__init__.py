@@ -19,6 +19,18 @@ def create_app(config_object="app.config") -> Flask:
     app = Flask(__name__, template_folder="templates", static_folder="static")
     app.config.from_object(config_object)
 
+    # Ensure DATABASE_URL is set when running from script/certain environments (config may load from elsewhere)
+    if not app.config.get("SQLALCHEMY_DATABASE_URI") and _env_path.exists():
+        try:
+            for line in _env_path.read_text(encoding="utf-8", errors="replace").splitlines():
+                if "DATABASE_URL=" in line:
+                    v = line.split("=", 1)[1].strip().strip("'\"").replace("\r", "")
+                    if v:
+                        app.config["SQLALCHEMY_DATABASE_URI"] = v.replace("postgres://", "postgresql://", 1)
+                    break
+        except Exception:
+            pass
+
     db.init_app(app)
     with app.app_context():
         if app.config.get("SQLALCHEMY_DATABASE_URI"):
