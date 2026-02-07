@@ -1,0 +1,16 @@
+{# Simple YouTube embeds. Uses youtube_video_ids from context. #}
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
+  {% for video_id in youtube_video_ids %}
+  <div class="aspect-video w-full rounded-xl overflow-hidden bg-black">
+    <iframe
+      src="https://www.youtube.com/embed/{{ video_id }}"
+      title="YouTube video {{ loop.index }}"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allowfullscreen
+      class="w-full h-full"
+      loading="lazy"
+    ></iframe>
+  </div>
+  {% endfor %}
+</div>

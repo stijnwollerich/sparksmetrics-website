@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 {% block title %}Schedule a Call | Sparksmetrics{% endblock %}
+{% block meta_description %}Book a free CRO or analytics audit. No pitch—we focus on your funnel and next steps. Used by 200+ brands.{% endblock %}
+{% block og_description %}Book a free CRO or analytics audit. No pitch—we focus on your funnel and next steps. Used by 200+ brands.{% endblock %}
+{% block twitter_description %}Book a free CRO or analytics audit. No pitch—we focus on your funnel and next steps. Used by 200+ brands.{% endblock %}
+{% block og_title %}Schedule a Call | Sparksmetrics{% endblock %}
+{% block twitter_title %}Schedule a Call | Sparksmetrics{% endblock %}
 {% block head_extras %}{% endblock %}
 {% block content %}
 <section class="bg-black relative pt-8 pb-12 overflow-hidden border-b border-white/5" id="hero">
@@ -112,40 +117,7 @@
       We Live, Breathe, And Sleep CRO.
     </h2>
     <p class="text-center text-gray-500 font-bold uppercase tracking-widest text-sm mb-12"><a class="hover:text-primary transition-colors" href="https://www.youtube.com/@stijnwollerich" target="_blank" rel="noopener">More on our YouTube channel →</a></p>
-    <div class="flex overflow-x-auto gap-6 pb-8 hide-scrollbar snap-x cursor-grab">
-      <a href="https://www.youtube.com/watch?v=VIDEO_ID_1" target="_blank" rel="noopener" class="min-w-[300px] md:min-w-[400px] aspect-video bg-deep-charcoal rounded-2xl overflow-hidden relative snap-center shadow-lg flex-shrink-0 group block">
-        <img alt="Video thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://img.youtube.com/vi/VIDEO_ID_1/mqdefault.jpg"/>
-        <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors">
-          <div class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-            <span class="material-symbols-outlined text-deep-charcoal text-4xl translate-x-0.5">play_arrow</span>
-          </div>
-        </div>
-      </a>
-      <a href="https://www.youtube.com/watch?v=VIDEO_ID_2" target="_blank" rel="noopener" class="min-w-[300px] md:min-w-[400px] aspect-video bg-deep-charcoal rounded-2xl overflow-hidden relative snap-center shadow-lg flex-shrink-0 group block">
-        <img alt="Video thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://img.youtube.com/vi/VIDEO_ID_2/mqdefault.jpg"/>
-        <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors">
-          <div class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-            <span class="material-symbols-outlined text-deep-charcoal text-4xl translate-x-0.5">play_arrow</span>
-          </div>
-        </div>
-      </a>
-      <a href="https://www.youtube.com/watch?v=VIDEO_ID_3" target="_blank" rel="noopener" class="min-w-[300px] md:min-w-[400px] aspect-video bg-deep-charcoal rounded-2xl overflow-hidden relative snap-center shadow-lg flex-shrink-0 group block">
-        <img alt="Video thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://img.youtube.com/vi/VIDEO_ID_3/mqdefault.jpg"/>
-        <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors">
-          <div class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-            <span class="material-symbols-outlined text-deep-charcoal text-4xl translate-x-0.5">play_arrow</span>
-          </div>
-        </div>
-      </a>
-      <a href="https://www.youtube.com/watch?v=VIDEO_ID_4" target="_blank" rel="noopener" class="min-w-[300px] md:min-w-[400px] aspect-video bg-deep-charcoal rounded-2xl overflow-hidden relative snap-center shadow-lg flex-shrink-0 group block">
-        <img alt="Video thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://img.youtube.com/vi/VIDEO_ID_4/mqdefault.jpg"/>
-        <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors">
-          <div class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-            <span class="material-symbols-outlined text-deep-charcoal text-4xl translate-x-0.5">play_arrow</span>
-          </div>
-        </div>
-      </a>
-    </div>
+    {% include '_youtube_gallery.html' %}
   </div>
 </section>
 <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>

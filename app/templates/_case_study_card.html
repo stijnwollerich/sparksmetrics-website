@@ -1,0 +1,23 @@
+{# Renders one case study card. Requires: slug, case. Use in loop over case_studies_list. White card everywhere. #}
+<a href="{{ url_for('main.case_study', slug=slug) }}" class="block rounded-3xl overflow-hidden group transition-all bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-primary/30">
+  <div class="h-56 overflow-hidden">
+    {% if case.main_image %}
+    <img alt="{{ case.card_title|default(case.result_headline) }}" class="w-full h-full object-cover transition-opacity duration-500 group-hover:scale-105 transition-transform duration-300" src="{{ url_for('static', filename=case.main_image) }}" loading="lazy" width="400" height="224"/>
+    {% endif %}
+  </div>
+  <div class="p-8">
+    <h4 class="text-2xl font-black uppercase tracking-tight mb-6 text-deep-charcoal group-hover:text-primary transition-colors">{{ case.card_title|default(case.result_headline) }}</h4>
+    {% if case.card_metrics %}
+    <ul class="space-y-4">
+      {% for m in case.card_metrics %}
+      <li class="flex items-center gap-3 text-gray-700">
+        <span class="material-symbols-outlined text-primary">add_circle</span>
+        <span class="font-bold">{{ m.value }} {{ m.label }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="text-gray-500 text-sm font-bold uppercase tracking-widest">View case study →</p>
+    {% endif %}
+  </div>
+</a>

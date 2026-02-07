@@ -1,5 +1,8 @@
 """Main (public) routes."""
-from flask import abort, Blueprint, redirect, render_template, url_for
+import re
+from flask import abort, Blueprint, current_app, jsonify, redirect, render_template, request, url_for, Response
+
+from app.models import Lead, db
 
 main_bp = Blueprint("main", __name__)
 
@@ -40,6 +43,8 @@ CASE_STUDIES = {
             "No new traffic. No extra ad spend. Just a refined user journey that helped people say \"yes\" faster.",
             "By clarifying the offer and removing hesitation points, the brand turned existing visitors into paying guests—unlocking more revenue from the traffic they already had.",
         ],
+        "card_title": "Global Dining & Entertainment Brand",
+        "card_metrics": [{"value": "8.53x", "label": "Return on Investment"}, {"value": "+63%", "label": "Conversion Rate"}],
         "main_image": "images/location-page.jpg",
         "results_image": "images/test-results.png",
         "gallery_images": [
@@ -81,6 +86,8 @@ CASE_STUDIES = {
             "The experiments confirmed a strong return on testing investment: +10%–+22.5% conversion lift on the product pages; increased subscription selection and retention rates across tested products.",
             "By focusing on behavior-driven design and LTV-oriented testing, we helped the brand convert more visitors and create longer-lasting customer relationships—without increasing ad spend.",
         ],
+        "card_title": "Shopify Subscription-Based Wellness Brand",
+        "card_metrics": [{"value": "+6%", "label": "Subscriptions"}, {"value": "+22%", "label": "Conversion Rate"}, {"value": "+5%", "label": "Average Order Value"}],
         "main_image": "images/wellness-main.jpg",
         "results_images": [
             {"src": "images/wellness-results-1.png", "caption": "A/B test results"},
@@ -121,6 +128,8 @@ CASE_STUDIES = {
             "The redesign fundamentally changed how the brand is perceived online. The new website presents a modern, credible, and trustworthy image aligned with the company's position in the AI sector.",
             "Through improved storytelling, structure, and visual execution, the site now drives stronger engagement, increased lead generation, and a higher level of confidence among prospective clients.",
         ],
+        "card_title": "AI Brand Redesign for Lead Growth",
+        "card_metrics": [],
         "main_image": "images/ai-main.jpg",
         "gallery_images": [
             {"src": "images/ai-figma-1.jpg", "caption": "Figma design"},
@@ -157,6 +166,8 @@ CASE_STUDIES = {
             "The redesigned PDP achieved a +20% increase in conversion rate, with a 99% confidence level. Revenue per visitor and add-to-cart rates followed a similar upward trend.",
             "By combining design clarity with data-driven experimentation, we helped the brand turn more visitors into buyers—improving efficiency and revenue without additional ad spend.",
         ],
+        "card_title": "Leading Shopify Home-Essentials Brand",
+        "card_metrics": [{"value": "+20%", "label": "Conversion Rate"}, {"value": "+15%", "label": "Per Session Value"}],
         "main_image": "images/bidet-main.jpg",
         "gallery_images": [
             {"src": "images/bidet-gallery.jpg", "caption": "Product page design"},
@@ -188,6 +199,8 @@ CASE_STUDIES = {
             "The new design delivers a cleaner, more confident booking experience that aligns with the brand's global reputation.",
             "By improving clarity, reducing friction, and reinforcing trust at every step, the new PDPs are set to convert a higher share of visitors into paying guests—particularly on high-intent traffic from search and retargeting campaigns.",
         ],
+        "card_title": "Global Food Tour Brand",
+        "card_metrics": [],
         "main_image": "images/tour-main.jpg",
         "gallery_images": [
             {"src": "images/tour-gallery-1.jpg", "caption": "Booking experience"},
@@ -220,6 +233,8 @@ CASE_STUDIES = {
             "The new design positions the brand as a trusted national leader in kids' fitness, balancing professionalism with playfulness.",
             "Parents now understand what makes the program unique within seconds—leading to stronger engagement, more trial requests, and higher conversion potential across all franchise locations.",
         ],
+        "card_title": "USA National Kids Fitness Franchise",
+        "card_metrics": [],
         "main_image": "images/fitness-main.jpg",
         "gallery_images": [
             {"src": "images/fitness-gallery-1.jpg", "caption": "Product page design"},
@@ -229,6 +244,16 @@ CASE_STUDIES = {
     },
 }
 
+# Display order for case study cards (homepage + results). Add new slugs here to show everywhere.
+CASE_STUDY_ORDER = [
+    "global-restaurant-bookings",
+    "shopify-premium-home-wellness-brand",
+    "shopify-bidet-brand",
+    "ai-brand-redesign",
+    "global-tour-brand",
+    "national-fitness-franchise",
+]
+
 
 @main_bp.route("/")
 def index():
@@ -236,10 +261,10 @@ def index():
     return render_template("landing_alt.html")
 
 
-@main_bp.route("/landing-alt")
-def landing_alt():
-    """Alternate landing (dark theme, direct-response)."""
-    return render_template("index.html")
+@main_bp.route("/favicon.ico")
+def favicon():
+    """Redirect to SVG favicon so browsers that request .ico get the icon."""
+    return redirect(url_for("static", filename="favicon.svg"))
 
 
 @main_bp.route("/cro")
@@ -258,6 +283,64 @@ def cro_ebook():
 def schedule_a_call():
     """Schedule a call / booking page."""
     return render_template("schedule_a_call.html")
+
+
+# Downloadable resources: slug -> filename in static/downloads/. Add new resources here.
+RESOURCE_DOWNLOADS = {
+    "cro-checklist": {"filename": "57-point-cro-checklist.pdf"},
+    # Add more: "ebook": {"filename": "your-ebook.pdf"},
+}
+
+
+def _save_lead(fname: str, email: str, submission_type: str, resource_slug: str | None = None) -> None:
+    """Persist lead to Postgres if DATABASE_URL is set. Logs errors, does not raise."""
+    if not current_app.config.get("SQLALCHEMY_DATABASE_URI"):
+        return
+    try:
+        lead = Lead(
+            fname=fname,
+            email=email,
+            submission_type=submission_type,
+            resource_slug=resource_slug,
+        )
+        db.session.add(lead)
+        db.session.commit()
+    except Exception as e:
+        current_app.logger.warning("Failed to save lead: %s", e)
+        db.session.rollback()
+
+
+@main_bp.route("/request-audit", methods=["POST"])
+def request_audit():
+    """Collect fname and email for free CRO audit request; returns success (no file)."""
+    data = request.get_json(silent=True) or {}
+    fname = (data.get("fname") or "").strip()
+    email = (data.get("email") or "").strip()
+    if not fname:
+        return jsonify({"success": False, "error": "First name required"}), 400
+    if not email or not re.match(r"^[^\s@]+@[^\s@]+\.[^\s@]+$", email):
+        return jsonify({"success": False, "error": "Invalid email"}), 400
+    _save_lead(fname, email, "audit", resource_slug=None)
+    return jsonify({"success": True})
+
+
+@main_bp.route("/download-resource", methods=["POST"])
+def download_resource():
+    """Collect fname and email for resource download; return download URL. Resource slug in body."""
+    data = request.get_json(silent=True) or {}
+    fname = (data.get("fname") or "").strip()
+    email = (data.get("email") or "").strip()
+    slug = (data.get("resource") or "").strip()
+    if not fname:
+        return jsonify({"success": False, "error": "First name required"}), 400
+    if not email or not re.match(r"^[^\s@]+@[^\s@]+\.[^\s@]+$", email):
+        return jsonify({"success": False, "error": "Invalid email"}), 400
+    resource = RESOURCE_DOWNLOADS.get(slug) if slug else None
+    if not resource:
+        return jsonify({"success": False, "error": "Unknown resource"}), 400
+    _save_lead(fname, email, "resource", resource_slug=slug or None)
+    download_url = url_for("static", filename="downloads/" + resource["filename"])
+    return jsonify({"success": True, "download_url": download_url})
 
 
 @main_bp.route("/analytics")
@@ -309,3 +392,55 @@ def terms_and_conditions():
 def earnings_disclaimer():
     """Earnings disclaimer — placeholder until page is built."""
     return render_template("placeholder.html", title="Earnings Disclaimer")
+
+
+@main_bp.route("/sitemap.xml")
+def sitemap():
+    """Generate sitemap XML with all public pages and case study URLs."""
+    pages = [
+        ("main.index", {}),
+        ("main.cro", {}),
+        ("main.analytics", {}),
+        ("main.results", {}),
+        ("main.schedule_a_call", {}),
+        ("main.cro_ebook", {}),
+        ("main.privacy_policy", {}),
+        ("main.terms", {}),
+        ("main.earnings_disclaimer", {}),
+    ]
+    urls = []
+    for endpoint, kwargs in pages:
+        try:
+            urls.append(url_for(endpoint, _external=True, **kwargs))
+        except Exception:
+            pass
+    for slug in CASE_STUDIES:
+        try:
+            urls.append(url_for("main.case_study", slug=slug, _external=True))
+        except Exception:
+            pass
+    def escape_loc(s: str) -> str:
+        return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;").replace("'", "&apos;")
+
+    xml_lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ]
+    for loc in urls:
+        xml_lines.append("  <url>")
+        xml_lines.append(f"    <loc>{escape_loc(loc)}</loc>")
+        xml_lines.append("  </url>")
+    xml_lines.append("</urlset>")
+    return Response("\n".join(xml_lines), mimetype="application/xml")
+
+
+@main_bp.route("/robots.txt")
+def robots():
+    """Serve robots.txt allowing crawlers and pointing to sitemap."""
+    base = request.url_root.rstrip("/")
+    body = f"""User-agent: *
+Allow: /
+
+Sitemap: {base}/sitemap.xml
+"""
+    return Response(body, mimetype="text/plain")

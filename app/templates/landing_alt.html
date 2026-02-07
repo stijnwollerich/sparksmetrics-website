@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 {% block title %}Sparksmetrics | Results-Driven Conversion Rate Optimization{% endblock %}
+{% block meta_description %}Results-driven CRO and analytics for brands that scale. Free conversion audit, data-driven optimization, and proven case studies. Stop guessing—turn your data into revenue.{% endblock %}
+{% block og_description %}Results-driven CRO and analytics for brands that scale. Free conversion audit, data-driven optimization, and proven case studies. Stop guessing—turn your data into revenue.{% endblock %}
+{% block twitter_description %}Results-driven CRO and analytics for brands that scale. Free conversion audit, data-driven optimization, and proven case studies. Stop guessing—turn your data into revenue.{% endblock %}
+{% block og_title %}Sparksmetrics | Results-Driven Conversion Rate Optimization{% endblock %}
+{% block twitter_title %}Sparksmetrics | Results-Driven Conversion Rate Optimization{% endblock %}
 {% block head_extras %}{% endblock %}
 {% block content %}
 <section
@@ -24,7 +29,7 @@
     <div class="flex flex-col items-center gap-4 mt-6">
       <a
         class="w-full max-w-xl inline-flex items-center justify-center px-8 py-6 bg-primary text-white font-display text-2xl md:text-3xl font-black rounded-xl shadow-[0_20px_50px_rgba(255,77,0,0.3)] hover:scale-[1.02] transition-all group"
-        href="#cta"
+        href="{{ url_for('main.schedule_a_call') }}"
       >
         BOOK YOUR CRO CALL
       </a>
@@ -204,7 +209,7 @@
       <div class="mt-16">
         <a
           class="w-full inline-flex items-center justify-center px-8 py-8 bg-primary text-white font-display text-2xl md:text-3xl font-black rounded-xl shadow-[0_20px_50px_rgba(255,77,0,0.3)] hover:scale-[1.02] transition-all group"
-          href="#cta"
+          href="{{ url_for('main.schedule_a_call') }}"
         >
           YES, I WANT DATA-DRIVEN CRO
         </a>
@@ -259,7 +264,7 @@
         </p>
         <a
           class="w-full inline-flex items-center justify-center px-8 py-8 bg-primary text-white font-display text-2xl md:text-3xl font-black rounded-xl shadow-[0_20px_50px_rgba(255,77,0,0.3)] hover:scale-[1.02] transition-all group"
-          href="#cta"
+          href="{{ url_for('main.schedule_a_call') }}"
         >
           I'M READY FOR DATA-DRIVEN CRO
         </a>
@@ -323,7 +328,7 @@
       <div class="mt-20">
         <a
           class="w-full inline-flex items-center justify-center px-8 py-8 bg-primary text-white font-display text-2xl md:text-3xl font-black rounded-xl shadow-[0_20px_50px_rgba(255,77,0,0.3)] hover:scale-[1.02] transition-all group"
-          href="#cta"
+          href="{{ url_for('main.schedule_a_call') }}"
         >
           GET THE CRO ROADMAP
         </a>
@@ -366,7 +371,7 @@
       </div>
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
         <div class="group relative aspect-[3/4] bg-deep-charcoal rounded-3xl overflow-hidden cursor-pointer">
-          <img alt="Testimonial thumbnail" class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFS7tchnT47RHQy-Nw_YGnhWHnONvMLNHE7TciupEtSWxYBGXV76VPvSVLg2uZmiP6NXKLh4K_Di8iI96MDbRhVc2EULcMMVv37mRL4l4T1tQ7LluPTO-G1dphJXYATHPceAlPYyji3w9Dkv4_tXvR5m4SfY5rEM0ehzcSlBLHqtBoAreVb_5l9rcBCvXMyMWkmMi_tJWlcvwLTEzYpUVEH2JmmkNv6Xyv4ZPBcWuKjFKp_v8GuI_OVp9NJ9pmKpOphc_mFBcnD8w"/>
+          <img alt="Testimonial thumbnail" class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFS7tchnT47RHQy-Nw_YGnhWHnONvMLNHE7TciupEtSWxYBGXV76VPvSVLg2uZmiP6NXKLh4K_Di8iI96MDbRhVc2EULcMMVv37mRL4l4T1tQ7LluPTO-G1dphJXYATHPceAlPYyji3w9Dkv4_tXvR5m4SfY5rEM0ehzcSlBLHqtBoAreVb_5l9rcBCvXMyMWkmMi_tJWlcvwLTEzYpUVEH2JmmkNv6Xyv4ZPBcWuKjFKp_v8GuI_OVp9NJ9pmKpOphc_mFBcnD8w" loading="lazy"/>
           <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"></div>
           <div class="absolute inset-0 flex items-center justify-center">
             <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-all">
@@ -379,7 +384,7 @@
           </div>
         </div>
         <div class="group relative aspect-[3/4] bg-deep-charcoal rounded-3xl overflow-hidden cursor-pointer">
-          <img alt="Testimonial thumbnail" class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBb6CWYwON3S7pnTxzoX2t--XsN_q1eDtODLd8EvF3yQgiLweE-TZ1bhjplhcKfMgboas8LfJTSs5g24lIFgl_Q3XAhAmZNfr-sC--3Lcpw7rdn1eEBQXkvpcSksuuTJ2KLqWUgZPLGDu7kpPAxNGw0okGPjxznBNL_5cvkXZanWgQfIyVOBHHe0YF23hRuFZXxS-yuGC0dJ8kUyDxMOcU0K91zBF5bBxPg366Yo317EFWWmRbTC0dYniXuuMr8TpZiiOFVH2I511E"/>
+          <img alt="Testimonial thumbnail" class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBb6CWYwON3S7pnTxzoX2t--XsN_q1eDtODLd8EvF3yQgiLweE-TZ1bhjplhcKfMgboas8LfJTSs5g24lIFgl_Q3XAhAmZNfr-sC--3Lcpw7rdn1eEBQXkvpcSksuuTJ2KLqWUgZPLGDu7kpPAxNGw0okGPjxznBNL_5cvkXZanWgQfIyVOBHHe0YF23hRuFZXxS-yuGC0dJ8kUyDxMOcU0K91zBF5bBxPg366Yo317EFWWmRbTC0dYniXuuMr8TpZiiOFVH2I511E" loading="lazy"/>
           <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"></div>
           <div class="absolute inset-0 flex items-center justify-center">
             <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-all">
@@ -414,72 +419,9 @@
         <p class="text-slate-500 font-bold uppercase tracking-widest text-sm mt-4">Raw case studies from the front lines.</p>
       </div>
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-        <div class="bg-surface rounded-3xl border border-white/5 overflow-hidden group hover:border-primary/30 transition-all">
-          <div class="h-56 overflow-hidden">
-            <img alt="Proof 1" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBb6CWYwON3S7pnTxzoX2t--XsN_q1eDtODLd8EvF3yQgiLweE-TZ1bhjplhcKfMgboas8LfJTSs5g24lIFgl_Q3XAhAmZNfr-sC--3Lcpw7rdn1eEBQXkvpcSksuuTJ2KLqWUgZPLGDu7kpPAxNGw0okGPjxznBNL_5cvkXZanWgQfIyVOBHHe0YF23hRuFZXxS-yuGC0dJ8kUyDxMOcU0K91zBF5bBxPg366Yo317EFWWmRbTC0dYniXuuMr8TpZiiOFVH2I511E"/>
-          </div>
-          <div class="p-8">
-            <h4 class="text-2xl font-black text-white mb-6 uppercase tracking-tight">Venture Apparel Scale</h4>
-            <ul class="space-y-4">
-              <li class="flex items-center gap-3 text-slate-300">
-                <span class="material-symbols-outlined text-primary">add_circle</span>
-                <span class="font-bold">+124% Conversion Lift</span>
-              </li>
-              <li class="flex items-center gap-3 text-slate-300">
-                <span class="material-symbols-outlined text-primary">remove_circle</span>
-                <span class="font-bold">-32% CPA Reduction</span>
-              </li>
-              <li class="flex items-center gap-3 text-slate-300">
-                <span class="material-symbols-outlined text-primary">trending_up</span>
-                <span class="font-bold">4.2x ROAS Sustained</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="bg-surface rounded-3xl border border-white/5 overflow-hidden group hover:border-primary/30 transition-all">
-          <div class="h-56 overflow-hidden">
-            <img alt="Proof 2" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAuFwWcPqh8zrRs_CDu9_ayNBGas4Bg_C9-SEvDihDFy7iGjoBfM7e-F3-0ALrqsIJcyFd267dkrfu_k0hDMOMHIvvy_aSMjOhcV9OMT0usFGPbIUsMN3mu3X7OpgqSBqp3Ip959Nu7ZJGpgdPTA1TdaXIUjZOzp5pSsM8KBv2fiogkI9XQfzUynjrLX8yo_t2S9iPtZs54O8NMK1c-jmWUaA43osjDM49KfJClvrHTlpIu36meK26beTN05wR8ZDiwl9lLwxvAtSg"/>
-          </div>
-          <div class="p-8">
-            <h4 class="text-2xl font-black text-white mb-6 uppercase tracking-tight">HealthTech Attribution</h4>
-            <ul class="space-y-4">
-              <li class="flex items-center gap-3 text-slate-300">
-                <span class="material-symbols-outlined text-primary">add_circle</span>
-                <span class="font-bold">+88% Revenue Growth</span>
-              </li>
-              <li class="flex items-center gap-3 text-slate-300">
-                <span class="material-symbols-outlined text-primary">bolt</span>
-                <span class="font-bold">1st-Party Data Lock</span>
-              </li>
-              <li class="flex items-center gap-3 text-slate-300">
-                <span class="material-symbols-outlined text-primary">visibility</span>
-                <span class="font-bold">Zero-Waste Attribution</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="bg-surface rounded-3xl border border-white/5 overflow-hidden group hover:border-primary/30 transition-all">
-          <div class="h-56 overflow-hidden">
-            <img alt="Proof 3" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFS7tchnT47RHQy-Nw_YGnhWHnONvMLNHE7TciupEtSWxYBGXV76VPvSVLg2uZmiP6NXKLh4K_Di8iI96MDbRhVc2EULcMMVv37mRL4l4T1tQ7LluPTO-G1dphJXYATHPceAlPYyji3w9Dkv4_tXvR5m4SfY5rEM0ehzcSlBLHqtBoAreVb_5l9rcBCvXMyMWkmMi_tJWlcvwLTEzYpUVEH2JmmkNv6Xyv4ZPBcWuKjFKp_v8GuI_OVp9NJ9pmKpOphc_mFBcnD8w"/>
-          </div>
-          <div class="p-8">
-            <h4 class="text-2xl font-black text-white mb-6 uppercase tracking-tight">DTC Home Goods</h4>
-            <ul class="space-y-4">
-              <li class="flex items-center gap-3 text-slate-300">
-                <span class="material-symbols-outlined text-primary">add_circle</span>
-                <span class="font-bold">+45% AOV Boost</span>
-              </li>
-              <li class="flex items-center gap-3 text-slate-300">
-                <span class="material-symbols-outlined text-primary">remove_circle</span>
-                <span class="font-bold">-22% Churn Rate</span>
-              </li>
-              <li class="flex items-center gap-3 text-slate-300">
-                <span class="material-symbols-outlined text-primary">rocket_launch</span>
-                <span class="font-bold">2.8x Scale in 90 Days</span>
-              </li>
-            </ul>
-          </div>
-        </div>
+        {% for slug, case in case_studies_list %}
+        {% include '_case_study_card.html' %}
+        {% endfor %}
       </div>
     </div>
   </section>
@@ -487,40 +429,7 @@
     <div class="max-w-7xl mx-auto px-6">
       <h2 class="text-3xl md:text-5xl lg:text-6xl font-display font-black text-deep-charcoal text-center mb-4 uppercase tracking-tighter">WE LIVE, BREATHE, AND SLEEP CRO.</h2>
       <p class="text-center text-gray-500 font-bold uppercase tracking-widest text-sm mb-12"><a class="hover:text-primary transition-colors" href="https://www.youtube.com/@stijnwollerich" target="_blank" rel="noopener">More on our YouTube channel →</a></p>
-      <div class="flex overflow-x-auto gap-6 pb-8 hide-scrollbar snap-x cursor-grab">
-        <a href="https://www.youtube.com/watch?v=VIDEO_ID_1" target="_blank" rel="noopener" class="min-w-[300px] md:min-w-[400px] aspect-video bg-deep-charcoal rounded-2xl overflow-hidden relative snap-center shadow-lg flex-shrink-0 group block">
-          <img alt="Video thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://img.youtube.com/vi/VIDEO_ID_1/mqdefault.jpg"/>
-          <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors">
-            <div class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-              <span class="material-symbols-outlined text-charcoal text-4xl translate-x-0.5">play_arrow</span>
-            </div>
-          </div>
-        </a>
-        <a href="https://www.youtube.com/watch?v=VIDEO_ID_2" target="_blank" rel="noopener" class="min-w-[300px] md:min-w-[400px] aspect-video bg-deep-charcoal rounded-2xl overflow-hidden relative snap-center shadow-lg flex-shrink-0 group block">
-          <img alt="Video thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://img.youtube.com/vi/VIDEO_ID_2/mqdefault.jpg"/>
-          <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors">
-            <div class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-              <span class="material-symbols-outlined text-charcoal text-4xl translate-x-0.5">play_arrow</span>
-            </div>
-          </div>
-        </a>
-        <a href="https://www.youtube.com/watch?v=VIDEO_ID_3" target="_blank" rel="noopener" class="min-w-[300px] md:min-w-[400px] aspect-video bg-deep-charcoal rounded-2xl overflow-hidden relative snap-center shadow-lg flex-shrink-0 group block">
-          <img alt="Video thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://img.youtube.com/vi/VIDEO_ID_3/mqdefault.jpg"/>
-          <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors">
-            <div class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-              <span class="material-symbols-outlined text-charcoal text-4xl translate-x-0.5">play_arrow</span>
-            </div>
-          </div>
-        </a>
-        <a href="https://www.youtube.com/watch?v=VIDEO_ID_4" target="_blank" rel="noopener" class="min-w-[300px] md:min-w-[400px] aspect-video bg-deep-charcoal rounded-2xl overflow-hidden relative snap-center shadow-lg flex-shrink-0 group block">
-          <img alt="Video thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://img.youtube.com/vi/VIDEO_ID_4/mqdefault.jpg"/>
-          <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors">
-            <div class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-              <span class="material-symbols-outlined text-charcoal text-4xl translate-x-0.5">play_arrow</span>
-            </div>
-          </div>
-        </a>
-      </div>
+      {% include '_youtube_gallery.html' %}
     </div>
   </section>
   <section class="py-24 bg-white border-t border-gray-100">
@@ -531,16 +440,16 @@
           <div class="inline-block px-4 py-1.5 bg-black/20 rounded-full text-xs font-black uppercase tracking-widest mb-6">Free Resource</div>
           <h2 class="text-4xl md:text-6xl font-display font-black uppercase leading-none mb-6">The 57-Point CRO Checklist</h2>
           <p class="text-xl text-white/90 font-medium mb-10 leading-relaxed">Download the exact blueprint we use to audit $10M+ brands. Every leak, every conversion lever, mapped out for you to fix today.</p>
-          <a class="inline-flex items-center justify-center px-8 py-4 bg-white text-primary font-black uppercase rounded-xl hover:scale-105 transition-all shadow-2xl" href="#">
+          <button type="button" class="inline-flex items-center justify-center px-8 py-4 bg-white text-primary font-black uppercase rounded-xl hover:scale-105 transition-all shadow-2xl cursor-pointer" data-download-modal data-resource="cro-checklist" data-title="The 57-Point CRO Checklist" data-description="Enter your email and we’ll send you the exact blueprint we use to audit $10M+ brands." data-button-text="Send me the checklist">
             Send Me The Checklist
             <span class="material-symbols-outlined ml-2">download</span>
-          </a>
+          </button>
           <p class="mt-4 text-white/80 text-sm font-bold uppercase tracking-widest">Used by $10M+ brands to find revenue leaks</p>
         </div>
         <div class="w-full md:w-1/3 relative z-10">
           <div class="relative group">
             <div class="absolute inset-0 bg-black/20 blur-2xl group-hover:scale-110 transition-transform"></div>
-            <img alt="3D Book Mockup" class="relative rounded-lg shadow-2xl transform rotate-3 group-hover:rotate-0 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFS7tchnT47RHQy-Nw_YGnhWHnONvMLNHE7TciupEtSWxYBGXV76VPvSVLg2uZmiP6NXKLh4K_Di8iI96MDbRhVc2EULcMMVv37mRL4l4T1tQ7LluPTO-G1dphJXYATHPceAlPYyji3w9Dkv4_tXvR5m4SfY5rEM0ehzcSlBLHqtBoAreVb_5l9rcBCvXMyMWkmMi_tJWlcvwLTEzYpUVEH2JmmkNv6Xyv4ZPBcWuKjFKp_v8GuI_OVp9NJ9pmKpOphc_mFBcnD8w"/>
+            <img alt="3D Book Mockup" class="relative rounded-lg shadow-2xl transform rotate-3 group-hover:rotate-0 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFS7tchnT47RHQy-Nw_YGnhWHnONvMLNHE7TciupEtSWxYBGXV76VPvSVLg2uZmiP6NXKLh4K_Di8iI96MDbRhVc2EULcMMVv37mRL4l4T1tQ7LluPTO-G1dphJXYATHPceAlPYyji3w9Dkv4_tXvR5m4SfY5rEM0ehzcSlBLHqtBoAreVb_5l9rcBCvXMyMWkmMi_tJWlcvwLTEzYpUVEH2JmmkNv6Xyv4ZPBcWuKjFKp_v8GuI_OVp9NJ9pmKpOphc_mFBcnD8w" loading="lazy"/>
           </div>
         </div>
       </div>
@@ -558,7 +467,7 @@
         </p>
         <a
           class="w-full inline-flex items-center justify-center px-10 py-10 bg-primary text-white font-display text-3xl md:text-4xl font-black rounded-2xl shadow-[0_25px_60px_rgba(255,77,0,0.4)] hover:scale-105 transition-all group"
-          href="#"
+          href="{{ url_for('main.schedule_a_call') }}"
         >
           BOOK YOUR FREE CRO AUDIT
         </a>
@@ -634,9 +543,7 @@
     </div>
   </section>
   {% endblock %}
-  {% block footer_links %}
-  <li><a class="text-sm text-slate-400 hover:text-white transition-colors" href="{{ url_for('main.landing_alt') }}">Alternate landing</a></li>
-  {% endblock %}
+  {% block footer_links %}{% endblock %}
   {% block body_end %}
   <script src="{{ url_for('static', filename='js/video-embed.js') }}" defer></script>
   {% endblock %}

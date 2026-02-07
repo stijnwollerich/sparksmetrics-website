@@ -1,12 +1,31 @@
 <!DOCTYPE html>
 <html class="scroll-smooth" lang="en">
 <head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-ML2ZDNH2');</script>
+    <!-- End Google Tag Manager -->
     <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
     <title>{% block title %}Sparksmetrics{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Results-driven CRO and analytics for brands that scale. Free conversion audit and data-driven optimization.{% endblock %}"/>
+    <link rel="canonical" href="{{ request.url }}"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="{% block og_title %}Sparksmetrics{% endblock %}"/>
+    <meta property="og:description" content="{% block og_description %}Results-driven CRO and analytics for brands that scale. Free conversion audit and data-driven optimization.{% endblock %}"/>
+    <meta property="og:url" content="{{ request.url }}"/>
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:title" content="{% block twitter_title %}Sparksmetrics{% endblock %}"/>
+    <meta name="twitter:description" content="{% block twitter_description %}Results-driven CRO and analytics for brands that scale. Free conversion audit and data-driven optimization.{% endblock %}"/>
+    <meta name="theme-color" content="#050505"/>
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}"/>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('main.favicon') }}"/>
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
     <link crossorigin href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://calendly.com" rel="preconnect"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Lexend:wght@700;800;900&amp;display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -36,6 +55,7 @@
       @layer base {
         h1, h2, h3, h4 { @apply font-display font-black uppercase tracking-tighter leading-tight; }
         p { @apply mb-6 text-lg md:text-xl; }
+        a, button { -webkit-tap-highlight-color: rgba(255, 77, 0, 0.2); }
       }
       @layer components {
         .content-narrow { max-width: 800px; margin-left: auto; margin-right: auto; }
@@ -56,6 +76,10 @@
     {% block head_extras %}{% endblock %}
 </head>
 <body class="antialiased selection:bg-primary selection:text-white {% block body_class %}bg-light-base text-gray-800 font-sans leading-relaxed{% endblock %}">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-ML2ZDNH2"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 {% block primary_bar %}
 <div class="bg-primary text-white text-[10px] md:text-xs font-black uppercase tracking-[0.25em] py-3.5 text-center border-b border-black/5 relative z-[110]">
     Only accepting 2 more partners for Q3. High-volume brands only.
@@ -63,24 +87,35 @@
 {% endblock %}
 {% block header %}
 <header class="sticky top-0 left-0 right-0 z-[100] bg-black backdrop-blur-md border-b border-white/10">
-    <nav class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-        <div class="flex items-center gap-8">
-            <a href="{{ url_for('main.index') }}" class="flex items-center gap-2 group cursor-pointer">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between" aria-label="Main navigation">
+        <div class="flex items-center gap-4 sm:gap-8">
+            <a href="{{ url_for('main.index') }}" class="flex items-center gap-2 group cursor-pointer min-h-[44px]">
                 <div class="w-9 h-9 bg-primary rounded flex items-center justify-center rotate-3 transition-transform">
                     <span class="text-white font-black text-xl">S</span>
                 </div>
-                <span class="font-display text-xl tracking-tighter uppercase font-extrabold text-white">Sparksmetrics</span>
+                <span class="font-display text-lg sm:text-xl tracking-tighter uppercase font-extrabold text-white">Sparksmetrics</span>
             </a>
         </div>
-        <div class="flex items-center gap-8">
+        <div class="flex items-center gap-2 sm:gap-8">
             <div class="hidden md:flex items-center gap-8">
-                <a class="text-[11px] font-bold uppercase tracking-widest hover:text-primary transition-colors text-white" href="{{ url_for('main.cro') }}">CRO</a>
-                <a class="text-[11px] font-bold uppercase tracking-widest hover:text-primary transition-colors text-white" href="{{ url_for('main.analytics') }}">Analytics</a>
-                <a class="text-[11px] font-bold uppercase tracking-widest hover:text-primary transition-colors text-white" href="{{ url_for('main.results') }}">Results</a>
+                <a class="text-[11px] font-bold uppercase tracking-widest hover:text-primary transition-colors text-white py-3 min-h-[44px] inline-flex items-center" href="{{ url_for('main.cro') }}">CRO</a>
+                <a class="text-[11px] font-bold uppercase tracking-widest hover:text-primary transition-colors text-white py-3 min-h-[44px] inline-flex items-center" href="{{ url_for('main.analytics') }}">Analytics</a>
+                <a class="text-[11px] font-bold uppercase tracking-widest hover:text-primary transition-colors text-white py-3 min-h-[44px] inline-flex items-center" href="{{ url_for('main.results') }}">Results</a>
             </div>
-            <a class="px-6 py-3 bg-primary text-white text-xs font-black uppercase rounded hover:brightness-110 transition-all shadow-lg shadow-primary/20" href="#cta">Talk to us</a>
+            <a class="hidden md:inline-flex px-6 py-3 min-h-[44px] items-center justify-center bg-primary text-white text-xs font-black uppercase rounded hover:brightness-110 transition-all shadow-lg shadow-primary/20" href="{{ url_for('main.schedule_a_call') }}">Talk to us</a>
+            <button type="button" id="nav-menu-toggle" class="md:hidden p-3 min-h-[44px] min-w-[44px] flex items-center justify-center text-white hover:bg-white/10 rounded-lg transition-colors -m-2" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+                <span class="material-symbols-outlined text-2xl" aria-hidden="true">menu</span>
+            </button>
         </div>
     </nav>
+    <div id="nav-menu" class="md:hidden hidden absolute top-full left-0 right-0 bg-black border-b border-white/10 shadow-lg" aria-hidden="true">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-1">
+            <a class="min-h-[44px] px-4 py-3 flex items-center text-sm font-bold uppercase tracking-widest text-white hover:bg-white/10 rounded-lg transition-colors" href="{{ url_for('main.cro') }}">CRO</a>
+            <a class="min-h-[44px] px-4 py-3 flex items-center text-sm font-bold uppercase tracking-widest text-white hover:bg-white/10 rounded-lg transition-colors" href="{{ url_for('main.analytics') }}">Analytics</a>
+            <a class="min-h-[44px] px-4 py-3 flex items-center text-sm font-bold uppercase tracking-widest text-white hover:bg-white/10 rounded-lg transition-colors" href="{{ url_for('main.results') }}">Results</a>
+            <a class="min-h-[44px] px-4 py-3 flex items-center text-sm font-bold uppercase text-primary bg-primary/10 rounded-lg mt-2" href="{{ url_for('main.schedule_a_call') }}">Talk to us</a>
+        </div>
+    </div>
 </header>
 {% endblock %}
 <main>
@@ -98,6 +133,14 @@
                     <span class="font-display text-xl tracking-tighter uppercase font-extrabold text-white">Sparksmetrics</span>
                 </a>
                 <p class="mt-4 text-slate-500 text-sm max-w-xs">Results-driven CRO and analytics for brands that scale.</p>
+                <a href="https://www.youtube.com/@stijnwollerich" target="_blank" rel="noopener noreferrer" class="mt-5 inline-flex items-center gap-2 text-slate-400 hover:text-primary transition-colors group/yt" aria-label="Sparksmetrics on YouTube">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-700 group-hover/yt:bg-primary/20 transition-colors" aria-hidden="true">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                        </svg>
+                    </span>
+                    <span class="text-sm font-bold uppercase tracking-widest">YouTube</span>
+                </a>
             </div>
             <div>
                 <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">Services</h3>
@@ -125,6 +168,120 @@
     </div>
 </footer>
 {% endblock %}
+{# Single lead modal: resource download or audit. Form → thank you + Calendly. Content from trigger data. #}
+<div id="lead-modal" class="fixed inset-0 z-[200] hidden" aria-hidden="true" aria-modal="true" role="dialog" aria-labelledby="lead-modal-title">
+  <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" data-lead-close></div>
+  <div class="absolute inset-0 flex items-center justify-center p-4 md:p-6 pointer-events-none">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden pointer-events-auto flex flex-col border border-gray-100" id="lead-modal-panel">
+      {# Form state: email capture + sidebar #}
+      <div id="lead-form-state" class="flex flex-col md:flex-row flex-1 min-h-0">
+        <div class="p-8 md:p-12 md:w-[55%] flex flex-col min-w-0 overflow-y-auto">
+          <div class="flex items-start justify-between gap-4 mb-6">
+            <div class="flex items-center gap-2 flex-wrap" id="lead-modal-badges"></div>
+            <button type="button" class="p-3 min-h-[44px] min-w-[44px] -m-2 text-slate-400 hover:text-deep-charcoal rounded-lg transition-colors shrink-0 flex items-center justify-center" data-lead-close aria-label="Close">
+              <span class="material-symbols-outlined">close</span>
+            </button>
+          </div>
+          <h2 id="lead-modal-title" class="text-2xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tighter mb-3"></h2>
+          <p id="lead-modal-description" class="text-gray-600 text-base md:text-lg mb-8"></p>
+          <form id="lead-form" class="space-y-6">
+            <input type="hidden" name="resource" id="lead-slug" value=""/>
+            <input type="hidden" name="modal_type" id="lead-modal-type" value="resource"/>
+            <div>
+              <label for="lead-fname" class="block text-xs font-black uppercase tracking-widest text-deep-charcoal mb-2">First name</label>
+              <input type="text" id="lead-fname" name="fname" required placeholder="Your first name" class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl text-deep-charcoal placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" autocomplete="given-name"/>
+            </div>
+            <div>
+              <label for="lead-email" class="block text-xs font-black uppercase tracking-widest text-deep-charcoal mb-2">Email</label>
+              <input type="email" id="lead-email" name="email" required placeholder="you@company.com" class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl text-deep-charcoal placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" autocomplete="email"/>
+            </div>
+            <button type="submit" id="lead-submit" class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 px-6 py-4 bg-primary text-white font-display text-sm font-black uppercase rounded-xl hover:brightness-110 transition-all shadow-lg shadow-primary/25">
+              <span id="lead-submit-text">Send me the resource</span>
+              <span class="material-symbols-outlined text-lg">download</span>
+            </button>
+          </form>
+          <div class="mt-8 space-y-4">
+            <p class="flex items-center gap-2 text-gray-600 text-sm">
+              <span class="material-symbols-outlined text-primary text-lg">lock</span>
+              Your data is private.
+            </p>
+            <p class="text-xs text-gray-500 font-bold uppercase tracking-widest">Used by 200+ brands · Same process for $10M+ funnels</p>
+          </div>
+        </div>
+        <div class="bg-light-base border-t md:border-t-0 md:border-l border-gray-100 p-8 md:p-12 md:w-[45%] rounded-b-3xl md:rounded-b-none md:rounded-r-3xl flex flex-col overflow-y-auto">
+          <div id="lead-sidebar-badge" class="inline-flex items-center gap-2 px-3 py-2 bg-primary/10 rounded-lg w-fit mb-8">
+            <span class="material-symbols-outlined text-primary text-lg">schedule</span>
+            <span class="text-[10px] font-black uppercase tracking-widest text-primary">Instant download</span>
+          </div>
+          <p class="text-[10px] font-black uppercase tracking-widest text-primary mb-4">What you get</p>
+          <ul id="lead-modal-bullets" class="space-y-5 text-sm text-gray-700 mb-10">
+            <li class="flex gap-3"><span class="material-symbols-outlined text-primary shrink-0">check_circle</span> Every leak and conversion lever we audit for</li>
+            <li class="flex gap-3"><span class="material-symbols-outlined text-primary shrink-0">check_circle</span> Prioritized fix list you can use today</li>
+            <li class="flex gap-3"><span class="material-symbols-outlined text-primary shrink-0">check_circle</span> Same blueprint used for $10M+ brands</li>
+          </ul>
+          <div class="mt-auto pt-8 border-t border-gray-200 relative">
+            <span class="absolute top-6 right-0 material-symbols-outlined text-primary text-xl">verified</span>
+            <p class="text-deep-charcoal font-bold text-sm mb-1">Verified partner</p>
+            <p class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-3">CRO &amp; analytics</p>
+            <p class="text-gray-600 text-sm italic leading-snug">"Stijn is a great go-to resource for building a proper infrastructure for Google Analytics and setting up the dashboard so you get access to your data in a simple way. You only need to explain the purpose and he'll outline a great strategy."</p>
+          </div>
+        </div>
+      </div>
+      {# Thank-you state: full modal about scheduling — Calendly one side, reasons + info other side #}
+      <div id="lead-thankyou-state" class="hidden flex flex-col md:flex-row flex-1 min-h-0">
+        <div class="flex flex-col md:w-[55%] min-h-[70vh] md:min-h-[80vh] bg-gray-50">
+          <div class="flex items-center justify-between p-4 border-b border-gray-200 shrink-0">
+            <span class="text-xs font-black uppercase tracking-widest text-primary">Pick a time</span>
+            <button type="button" class="p-2 -m-2 text-slate-400 hover:text-deep-charcoal rounded-lg transition-colors" data-lead-close aria-label="Close">
+              <span class="material-symbols-outlined">close</span>
+            </button>
+          </div>
+          <div class="flex-1 min-h-0">
+            <iframe id="lead-calendly-iframe" title="Schedule a call" class="w-full h-full min-h-[500px]" src="about:blank"></iframe>
+          </div>
+        </div>
+        <div class="p-8 md:p-12 md:w-[45%] flex flex-col overflow-y-auto bg-white border-t md:border-t-0 md:border-l border-gray-100 rounded-b-3xl md:rounded-b-none md:rounded-r-3xl">
+          <span class="material-symbols-outlined text-primary text-4xl mb-4">check_circle</span>
+          <h2 class="text-xl md:text-3xl font-display font-black text-deep-charcoal uppercase tracking-tighter mb-2">You’re in. Now let’s talk.</h2>
+          <p id="lead-thankyou-message" class="text-gray-600 text-base mb-8">Pick a time on the left for a free 30-minute strategy session.</p>
+          <div class="mb-8">
+            <h3 class="text-primary font-display font-black uppercase tracking-tighter text-sm mb-5">Why book a call?</h3>
+            <ul class="space-y-5">
+              <li class="flex gap-4 p-4 rounded-xl bg-light-base border border-gray-100">
+                <span class="material-symbols-outlined text-primary shrink-0 mt-0.5">check_circle</span>
+                <div>
+                  <p class="font-bold text-deep-charcoal mb-1">No pitch.</p>
+                  <p class="text-gray-600 text-sm leading-relaxed mb-0">We focus on your funnel and your next steps—not a sales script.</p>
+                </div>
+              </li>
+              <li class="flex gap-4 p-4 rounded-xl bg-light-base border border-gray-100">
+                <span class="material-symbols-outlined text-primary shrink-0 mt-0.5">check_circle</span>
+                <div>
+                  <p class="font-bold text-deep-charcoal mb-1">Clear next steps.</p>
+                  <p class="text-gray-600 text-sm leading-relaxed mb-0">You’ll leave with a clear picture of where you’re leaking and what to fix first.</p>
+                </div>
+              </li>
+              <li class="flex gap-4 p-4 rounded-xl bg-light-base border border-gray-100">
+                <span class="material-symbols-outlined text-primary shrink-0 mt-0.5">check_circle</span>
+                <div>
+                  <p class="font-bold text-deep-charcoal mb-1">Same process we use for $10M+ brands.</p>
+                  <p class="text-gray-600 text-sm leading-relaxed mb-0">Data, audits, and prioritization—not guesswork.</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <p class="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-6">Used by 200+ brands</p>
+          <div class="pt-6 border-t border-gray-200 relative">
+            <span class="absolute top-6 right-0 material-symbols-outlined text-primary text-lg">verified</span>
+            <p class="text-deep-charcoal font-bold text-sm mb-1">Verified partner</p>
+            <p class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2">CRO &amp; analytics</p>
+            <p class="text-gray-600 text-sm italic leading-snug">"Stijn is a great go-to resource for building a proper infrastructure for Google Analytics and setting up the dashboard so you get access to your data in a simple way."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <div id="audit-bar" class="fixed bottom-0 left-0 right-0 z-[90] bg-white border-t border-slate-200 px-4 py-2 shadow-[0_-10px_40px_rgba(0,0,0,0.08)] transition-transform duration-300" role="banner" aria-label="Free CRO audit offer" style="transform: translateY(100%); visibility: hidden;">
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
         <div class="flex items-center gap-2">
@@ -137,14 +294,28 @@
             </div>
         </div>
         <div class="flex items-center gap-2">
-            <a href="#cta" class="px-5 py-2 md:px-6 md:py-2 bg-primary text-white text-[10px] md:text-xs font-black uppercase rounded-md hover:brightness-110 transition-all shadow-lg shadow-primary/30">Claim Audit Now</a>
+            <button type="button" class="px-5 py-2 md:px-6 md:py-2 bg-primary text-white text-[10px] md:text-xs font-black uppercase rounded-md hover:brightness-110 transition-all shadow-lg shadow-primary/30 cursor-pointer" data-audit-modal data-title="Get a FREE 24-Hour CRO Audit" data-description="Enter your email and we’ll get in touch to schedule your free audit. Limited to 3 brands per week." data-button-text="Claim my free audit">Claim Audit Now</button>
             <button type="button" id="audit-bar-close" class="p-1.5 text-slate-400 hover:text-charcoal hover:bg-slate-100 rounded transition-colors" aria-label="Close audit bar">
                 <span class="material-symbols-outlined text-lg">close</span>
             </button>
         </div>
     </div>
 </div>
+<script>
+(function(){
+  var t = document.getElementById('nav-menu-toggle');
+  var m = document.getElementById('nav-menu');
+  if (!t || !m) return;
+  t.addEventListener('click', function(){
+    var open = m.classList.toggle('hidden');
+    t.setAttribute('aria-expanded', !open);
+    m.setAttribute('aria-hidden', open);
+    t.querySelector('.material-symbols-outlined').textContent = open ? 'menu' : 'close';
+  });
+})();
+</script>
 <script src="{{ url_for('static', filename='js/audit-bar.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/checklist-modal.js') }}" defer></script>
 {% block body_end %}{% endblock %}
 </body>
 </html>
