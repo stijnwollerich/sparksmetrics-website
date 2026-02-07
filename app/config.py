@@ -36,6 +36,18 @@ for key, value in _env_vars.items():
     if value:
         os.environ[key] = value
 
+# Fallback: if DATABASE_URL still missing, read file for any line containing DATABASE_URL=
+if not (os.environ.get("DATABASE_URL") or "").strip() and _env_file.exists():
+    try:
+        for line in _env_file.read_text(encoding="utf-8", errors="replace").splitlines():
+            if "DATABASE_URL=" in line:
+                v = line.split("=", 1)[1].strip().strip("'\"").replace("\r", "")
+                if v:
+                    os.environ["DATABASE_URL"] = v
+                break
+    except Exception:
+        pass
+
 # Then load_dotenv for any vars not in our read (e.g. multi-line or other formats)
 if _env_file.exists():
     try:
