@@ -84,12 +84,12 @@ Save and exit (Ctrl+O, Enter, Ctrl+X).
 
 **You must create `.env` (step 4) first.** Otherwise you'll get: `RuntimeError: Either 'SQLALCHEMY_DATABASE_URI' or 'SQLALCHEMY_BINDS' must be set.`
 
-Tables are created on first app start when `DATABASE_URL` is set. You can also run:
+Clear any stale bytecode so the app uses the latest config, then create tables:
 
 ```bash
 cd $APP_DIR && source .venv/bin/activate
+find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null; true
 python3 -c "
-from dotenv import load_dotenv; load_dotenv()
 from app import create_app
 app = create_app()
 with app.app_context():
@@ -98,6 +98,8 @@ with app.app_context():
     print('Tables created.')
 "
 ```
+
+Tables are also created automatically on first app start when `DATABASE_URL` is set (e.g. by systemd `EnvironmentFile` below).
 
 ---
 
@@ -118,7 +120,7 @@ Visit `http://YOUR_DROPLET_IP:8000`. If it works, stop with Ctrl+C.
 sudo nano /etc/systemd/system/sparksmetrics.service
 ```
 
-Paste (fix `APP_DIR` and user if needed):
+Paste (fix `APP_DIR` and user if needed). **Use `EnvironmentFile`** so the app gets `DATABASE_URL` and other vars from `.env` (avoids relying on loading `.env` inside the app):
 
 ```ini
 [Unit]
@@ -129,6 +131,7 @@ After=network.target postgresql.service
 User=deploy
 Group=deploy
 WorkingDirectory=/home/deploy/sparksmetrics
+EnvironmentFile=/home/deploy/sparksmetrics/.env
 Environment="PATH=/home/deploy/sparksmetrics/.venv/bin"
 ExecStart=/home/deploy/sparksmetrics/.venv/bin/gunicorn --workers 2 --bind 127.0.0.1:8000 "run:app"
 Restart=always
@@ -141,6 +144,7 @@ If you use root and `/var/www/sparksmetrics`:
 
 - `User=root` (or create a dedicated user)
 - `WorkingDirectory=/var/www/sparksmetrics`
+- `EnvironmentFile=/var/www/sparksmetrics/.env`
 - `Environment="PATH=/var/www/sparksmetrics/.venv/bin"`
 - `ExecStart=/var/www/sparksmetrics/.venv/bin/gunicorn ...`
 
@@ -208,6 +212,7 @@ sudo certbot --nginx -d YOUR_DOMAIN -d www.YOUR_DOMAIN
 ```bash
 cd /home/deploy/sparksmetrics   # or your APP_DIR
 git pull
+find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null; true
 source .venv/bin/activate
 pip install -r requirements.txt
 sudo systemctl restart sparksmetrics

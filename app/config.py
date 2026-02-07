@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 _env_file = BASE_DIR / ".env"
 if _env_file.exists():
     from dotenv import load_dotenv
-    load_dotenv(_env_file)
+    load_dotenv(_env_file, override=True)  # override so we always pick up DATABASE_URL from file
 
 # If DATABASE_URL still not in env, read .env directly (handles encoding / path quirks)
 def _get_database_uri() -> str | None:
