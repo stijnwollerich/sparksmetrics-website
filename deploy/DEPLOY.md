@@ -182,50 +182,91 @@ sudo systemctl status sparksmetrics
 
 ---
 
-## 8. Nginx (reverse proxy and SSL later)
+## 8. Nginx (site on IP now; add domain later)
+
+Install the config from the repo (or copy the contents of `deploy/nginx-sparksmetrics.conf`):
 
 ```bash
-sudo nano /etc/nginx/sites-available/sparksmetrics
-```
-
-Paste (replace `YOUR_DOMAIN`):
-
-```nginx
-server {
-    listen 80;
-    server_name YOUR_DOMAIN www.YOUR_DOMAIN;
-    root /home/deploy/sparksmetrics;   # or /var/www/sparksmetrics
-
-    location / {
-        proxy_pass http://127.0.0.1:8000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-
-    location /static {
-        alias /home/deploy/sparksmetrics/app/static;   # or /var/www/sparksmetrics/app/static
-    }
-}
-```
-
-Enable and reload:
-
-```bash
-sudo ln -s /etc/nginx/sites-available/sparksmetrics /etc/nginx/sites-enabled/
+sudo cp /var/www/sparksmetrics/deploy/nginx-sparksmetrics.conf /etc/nginx/sites-available/sparksmetrics
+sudo ln -sf /etc/nginx/sites-available/sparksmetrics /etc/nginx/sites-enabled/
+# Remove default site so this one is used for all requests
+sudo rm -f /etc/nginx/sites-enabled/default
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
-Point your domain’s DNS A record to the droplet’s IP.
+Allow HTTP in the firewall (if you use ufw):
+
+```bash
+sudo ufw allow 80
+sudo ufw status
+```
+
+The site is now available at **http://YOUR_DROPLET_PUBLIC_IP** (get the IP from the DigitalOcean dashboard or run `curl -s ifconfig.me` on the server).
+
+**When you want to use your real domain:** point your domain’s DNS A record to the droplet’s IP, then edit the Nginx config and add your domain to `server_name`:
+
+```bash
+sudo nano /etc/nginx/sites-available/sparksmetrics
+# Change: server_name _;
+# To:     server_name _ yourdomain.com www.yourdomain.com;
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+(Optional) Then add HTTPS with Certbot (section 9).
 
 ---
 
-## 9. (Optional) HTTPS with Certbot
+## 8b. Go live: switch sparksmetrics.com from WordPress (Hostnet) to droplet
+
+**1. On the droplet** – ensure Nginx serves the domain and pull latest config:
+
+```bash
+cd /var/www/sparksmetrics && git pull
+sudo cp /var/www/sparksmetrics/deploy/nginx-sparksmetrics.conf /etc/nginx/sites-available/sparksmetrics
+sudo ln -sf /etc/nginx/sites-available/sparksmetrics /etc/nginx/sites-enabled/
+sudo rm -f /etc/nginx/sites-enabled/default
+sudo nginx -t && sudo systemctl reload nginx
+sudo ufw allow 80
+sudo ufw allow 443
+sudo ufw status
+```
+
+**2. Get your droplet’s public IP** (e.g. DigitalOcean dashboard or `curl -s ifconfig.me` on the server).
+
+**3. At Hostnet (DNS)** – point the domain to the droplet:
+
+- **sparksmetrics.com** → A record → droplet IP (e.g. `167.172.32.42`)
+- **www.sparksmetrics.com** → A record → same droplet IP (or CNAME to `sparksmetrics.com` if you prefer)
+
+Remove or leave old WordPress A records; once the new A records propagate, traffic goes to the droplet.
+
+**4. Wait for DNS** – can take a few minutes up to 48h. Check with:
+
+```bash
+dig sparksmetrics.com +short
+dig www.sparksmetrics.com +short
+```
+
+When both show your droplet IP, continue.
+
+**5. Add HTTPS on the droplet** (after DNS points to the droplet):
 
 ```bash
 sudo apt install -y certbot python3-certbot-nginx
-sudo certbot --nginx -d YOUR_DOMAIN -d www.YOUR_DOMAIN
+sudo certbot --nginx -d sparksmetrics.com -d www.sparksmetrics.com
+```
+
+Follow the prompts (email, agree to terms). Certbot will configure SSL and redirect HTTP → HTTPS.
+
+**6. Test** – open https://sparksmetrics.com and https://www.sparksmetrics.com. Your Flask app is live; WordPress on Hostnet is no longer used for this domain.
+
+---
+
+## 9. HTTPS with Certbot (if not done in 8b)
+
+```bash
+sudo apt install -y certbot python3-certbot-nginx
+sudo certbot --nginx -d sparksmetrics.com -d www.sparksmetrics.com
 ```
 
 ---
@@ -248,5 +289,6 @@ sudo systemctl restart sparksmetrics
 - [ ] PostgreSQL user and database created; password in `.env` as `DATABASE_URL`
 - [ ] `.env` has `SECRET_KEY` and `DATABASE_URL`
 - [ ] Systemd service runs and `systemctl status sparksmetrics` is active
-- [ ] Nginx config uses your domain and correct paths; `nginx -t` passes
-- [ ] DNS A record for your domain points to the droplet IP
+- [ ] Nginx config installed; `nginx -t` passes; port 80 (and 443 for SSL) allowed
+- [ ] DNS: A records for sparksmetrics.com and www.sparksmetrics.com point to droplet IP
+- [ ] Certbot run so https://sparksmetrics.com works
