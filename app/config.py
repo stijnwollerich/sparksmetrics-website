@@ -11,23 +11,30 @@ if _env_file.exists():
     from dotenv import load_dotenv
     load_dotenv(_env_file)
 
-# If DATABASE_URL still not in env (e.g. load_dotenv ran before .env existed), read .env directly
+# If DATABASE_URL still not in env, read .env directly (handles encoding / path quirks)
 def _get_database_uri() -> str | None:
     uri = os.environ.get("DATABASE_URL", "").strip()
     if uri:
         return uri.replace("postgres://", "postgresql://", 1)
-    if _env_file.exists():
+
+    def _read_env(path: Path) -> str | None:
+        if not path.exists():
+            return None
         try:
-            for line in _env_file.read_text().splitlines():
-                line = line.strip()
-                if line and not line.startswith("#") and "=" in line:
-                    key, _, value = line.partition("=")
-                    if key.strip() == "DATABASE_URL":
-                        uri = value.strip().strip("'\"").replace("postgres://", "postgresql://", 1)
-                        return uri if uri else None
+            raw = path.read_text(encoding="utf-8", errors="replace")
+            for line in raw.splitlines():
+                line = line.strip().replace("\r", "")
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                key, _, value = line.partition("=")
+                if key.strip() == "DATABASE_URL":
+                    uri = value.strip().strip("'\"").replace("\r", "").replace("postgres://", "postgresql://", 1)
+                    return uri if uri else None
         except Exception:
             pass
-    return None
+        return None
+
+    return _read_env(_env_file) or _read_env(Path.cwd() / ".env")
 
 
 class Config:
