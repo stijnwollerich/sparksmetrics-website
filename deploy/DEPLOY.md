@@ -92,8 +92,11 @@ find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null; true
 python3 scripts/create_tables.py
 ```
 
-Or one-liner (no paste indentation):  
-`python3 -c "from app import create_app; from app.models import db; app = create_app(); app.app_context().push(); db.create_all(); print('Tables created.')"`
+If `scripts/create_tables.py` is not on the server yet, use this one-liner (paste as a single line, no extra spaces):
+
+```bash
+python3 -c "from app import create_app; from app.models import db; app = create_app(); app.app_context().push(); db.create_all(); print('Tables created.')"
+```
 
 Tables are also created automatically on first app start when `DATABASE_URL` is set (e.g. by systemd `EnvironmentFile` below).
 
