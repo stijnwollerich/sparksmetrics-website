@@ -31,6 +31,7 @@ Thumbs.db
 # Flask
 instance/
 .webassets-cache
+local.db
 
 # Testing
 .pytest_cache/

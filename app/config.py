@@ -91,14 +91,24 @@ def _get_database_uri() -> str | None:
     return None
 
 
+def _get_sqlalchemy_uri() -> str:
+    """Database URI: from DATABASE_URL, or SQLite for local dev when unset."""
+    uri = _get_database_uri()
+    if uri:
+        return uri
+    # Local dev: no PostgreSQL → use SQLite in project root (no setup required)
+    path = BASE_DIR / "local.db"
+    return f"sqlite:///{path.as_posix()}"
+
+
 class Config:
     """Default configuration."""
 
     SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-change-in-production")
     DEBUG = os.environ.get("FLASK_DEBUG", "0") == "1"
     TESTING = False
-    # PostgreSQL: set DATABASE_URL (e.g. postgresql://user:pass@localhost:5432/dbname)
-    SQLALCHEMY_DATABASE_URI = _get_database_uri()
+    # PostgreSQL: set DATABASE_URL (e.g. postgresql://user:pass@localhost:5432/dbname). Else SQLite for local dev.
+    SQLALCHEMY_DATABASE_URI = _get_sqlalchemy_uri()
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ENGINE_OPTIONS = {"pool_pre_ping": True}
     # YouTube: manual list (comma-separated in env) or default below. Thumbnails from img.youtube.com.

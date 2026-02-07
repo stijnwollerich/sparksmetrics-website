@@ -284,6 +284,150 @@ sudo systemctl restart sparksmetrics
 
 ---
 
+## Troubleshooting: Main site (sparksmetrics.com) still shows WordPress
+
+If **sparksmetrics.com** or **www.sparksmetrics.com** still show the old WordPress site while **spark.sparksmetrics.com** shows the new Flask site, **DNS is still pointing the main domain to the old host.**
+
+- **Fix:** In your DNS at **Hostnet**, set **A records** for the main domain to the **droplet IP** (e.g. `167.172.32.42`), not the old WordPress server:
+  - **sparksmetrics.com** → A → `<droplet-IP>`
+  - **www.sparksmetrics.com** → A → `<droplet-IP>` (or CNAME to `sparksmetrics.com`)
+- **Check:** After saving, wait a few minutes and run:
+  ```bash
+  dig sparksmetrics.com +short
+  dig www.sparksmetrics.com +short
+  ```
+  Both should return the droplet IP. Until they do, the main site will keep serving WordPress.
+
+---
+
+## Troubleshooting: sparksmetrics.com shows the wrong app (e.g. spark.sparksmetrics)
+
+If visiting **sparksmetrics.com** or **www.sparksmetrics.com** shows another app (e.g. the one for spark.sparksmetrics.com) — including when **GTmetrix** or other crawlers test the site — another Nginx server block is catching the hostname.
+
+**1. See which server blocks exist and their `server_name`:**
+```bash
+sudo grep -r "server_name" /etc/nginx/sites-enabled/
+```
+
+**2. Fix:** The config for **spark.sparksmetrics.com** must **not** use a wildcard that includes the apex domain. In Nginx, `server_name .sparksmetrics.com;` (leading dot) matches **sparksmetrics.com**, **www.sparksmetrics.com**, and **spark.sparksmetrics.com** — so the spark app can steal the main site.
+
+- Open the Nginx config that serves spark (e.g. the one with `spark.sparksmetrics.com`):
+  ```bash
+  sudo nano /etc/nginx/sites-enabled/<that-file>
+  ```
+- Change `server_name .sparksmetrics.com;` or `server_name *.sparksmetrics.com;` to **only**:
+  ```nginx
+  server_name spark.sparksmetrics.com;
+  ```
+- Ensure the **sparksmetrics** (main site) config has:
+  ```nginx
+  server_name sparksmetrics.com www.sparksmetrics.com;
+  ```
+  and proxies to `http://127.0.0.1:8000` (Gunicorn). Re-deploy from repo if needed:
+  ```bash
+  sudo cp /var/www/sparksmetrics/deploy/nginx-sparksmetrics.conf /etc/nginx/sites-available/sparksmetrics
+  ```
+  Then run Certbot again so SSL is re-applied to that block:  
+  `sudo certbot --nginx -d sparksmetrics.com -d www.sparksmetrics.com` (reinstall/expand if needed).
+
+**3. Make sparksmetrics.com the default for HTTPS** so paths like `/login` never hit Spark by mistake. On the server, add `default_server` to the sparksmetrics 443 block (fix the typo if the IPv4 line wasn’t updated before):
+```bash
+# Add default_server to both 443 listen lines in sparksmetrics config
+sudo sed -i 's/listen 443 ssl; # managed by Certbot/listen 443 ssl default_server; # managed by Certbot/' /etc/nginx/sites-available/sparksmetrics
+sudo sed -i 's/listen \[::]:443 ssl; # managed by Certbot/listen [::]:443 ssl default_server; # managed by Certbot/' /etc/nginx/sites-available/sparksmetrics
+# (If the IPv6 line differs, edit manually so both 443 listen lines include default_server.)
+# If another site has default_server on 443, remove it to avoid "duplicate default server"
+sudo grep -l "listen.*443.*default_server" /etc/nginx/sites-enabled/*
+# Then remove default_server from those lines in the *other* file (not sparksmetrics), e.g.:
+# sudo sed -i 's/ listen 443 ssl default_server;/ listen 443 ssl;/' /etc/nginx/sites-available/spark
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+**4. Same backend port: Spark is listening on 8000**  
+If Nginx is correct but the response is Spark (e.g. `Location: /board` or Spark’s UI), the process on **port 8000** is Spark, not the marketing app. Nginx for sparksmetrics.com proxies to `127.0.0.1:8000`, so whoever listens there is what gets served.
+
+- **Check what is on 8000:**
+  ```bash
+  sudo ss -tlnp | grep 8000
+  # or: sudo lsof -i :8000
+  ```
+- **Fix:** The **Sparksmetrics marketing app** (this repo) must be the one on `127.0.0.1:8000`.  
+  - If Spark is using 8000: move Spark to another port (e.g. **8001**), update Spark’s Nginx to `proxy_pass http://127.0.0.1:8001`, and (re)start the Spark app on 8001.  
+  - Start (or restart) the marketing app so it binds to 8000:
+    ```bash
+    sudo systemctl start sparksmetrics   # or restart
+    sudo systemctl status sparksmetrics
+    ```
+- **Verify:** After that, this should return **200** and HTML from the marketing site (no redirect to `/board`):
+  ```bash
+  curl -sS -o /dev/null -w "%{http_code}\n" -H "Host: sparksmetrics.com" https://127.0.0.1/ -k
+  curl -sS -I -H "Host: sparksmetrics.com" https://127.0.0.1/ -k
+  ```
+  You should **not** see `Location: /board`.
+
+**5. Verify from the server** that the main site is served for `sparksmetrics.com`:
+```bash
+# Should return 200 and HTML from the marketing site (no redirect to /board)
+curl -sS -o /dev/null -w "%{http_code}" -H "Host: sparksmetrics.com" https://127.0.0.1/ -k
+curl -sS -I -H "Host: sparksmetrics.com" https://127.0.0.1/ -k
+```
+Then run a new GTmetrix test; it may cache, so use "Test again" or a different test URL if needed.
+
+**6. Reload Nginx** (if you didn’t above):
+```bash
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+---
+
+## Run both the main site and Spark (spark.sparksmetrics.com)
+
+Use **port 8000** for the marketing app (this repo) and **port 8001** for Spark so both can run.
+
+**On the server:**
+
+**1. Spark: bind to 8001**  
+Spark may use a **Gunicorn config file** (e.g. `gunicorn_config.py`) instead of `--bind` in the unit. Edit the **systemd unit** and/or the **Gunicorn config** so the app listens on `127.0.0.1:8001`:
+
+- **If the unit has `--bind` in ExecStart:**  
+  `sudo nano /etc/systemd/system/spark.service` → change `8000` to `8001` in the bind, then `sudo systemctl daemon-reload`.
+
+- **If the unit uses `--config gunicorn_config.py`** (no `--bind` in ExecStart): change the port in that config file, e.g.:
+  ```bash
+  sudo nano /var/www/Spark/gunicorn_config.py
+  # Set bind to "127.0.0.1:8001" (or the equivalent port variable)
+  ```
+  Then restart Spark (no daemon-reload needed).
+
+**2. Spark’s Nginx: proxy to 8001**  
+Edit the Spark Nginx config and point `proxy_pass` to port 8001:
+```bash
+sudo nano /etc/nginx/sites-available/spark
+# Change: proxy_pass http://127.0.0.1:8000;  →  proxy_pass http://127.0.0.1:8001;
+# (and any other occurrence of 8000 in that server block)
+# Save
+```
+
+**3. Start Spark and reload Nginx**
+```bash
+sudo systemctl start spark
+sudo systemctl status spark
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+**4. Verify**
+```bash
+# Port 8000 = marketing app (sparksmetrics.com)
+curl -sS -o /dev/null -w "%{http_code}\n" -H "Host: sparksmetrics.com" https://127.0.0.1/ -k
+# Expect 200, no Location: /board
+
+# Port 8001 = Spark (spark.sparksmetrics.com)
+curl -sS -o /dev/null -w "%{http_code}\n" -H "Host: spark.sparksmetrics.com" https://127.0.0.1/ -k
+# Expect 302 with Location: /board (or 200 for Spark’s page)
+```
+
+---
+
 ## Checklist
 
 - [ ] PostgreSQL user and database created; password in `.env` as `DATABASE_URL`
@@ -292,3 +436,4 @@ sudo systemctl restart sparksmetrics
 - [ ] Nginx config installed; `nginx -t` passes; port 80 (and 443 for SSL) allowed
 - [ ] DNS: A records for sparksmetrics.com and www.sparksmetrics.com point to droplet IP
 - [ ] Certbot run so https://sparksmetrics.com works
+- [ ] No other vhost uses `server_name .sparksmetrics.com` (only `spark.sparksmetrics.com` for the spark app)

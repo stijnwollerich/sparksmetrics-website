@@ -71,6 +71,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         .editorial-text strong { @apply text-black font-extrabold; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        /* Temporarily hidden: remove class sm-temporarily-hidden from these to show again. See HIDDEN_ELEMENTS below. */
+        .sm-temporarily-hidden { display: none !important; }
       }
     </style>
     {% block head_extras %}{% endblock %}
@@ -80,8 +82,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-ML2ZDNH2"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
+{# HIDDEN_ELEMENTS: primary_bar, audit_bar, homepage_video, video_testimonials, cro_checklist. To show/hide: add or remove from temporarily_hidden. #}
+{% set temporarily_hidden = ['homepage_video', 'video_testimonials', 'cro_checklist'] %}
 {% block primary_bar %}
-<div class="bg-primary text-white text-[10px] md:text-xs font-black uppercase tracking-[0.25em] py-3.5 text-center border-b border-black/5 relative z-[110]">
+<div id="primary_bar" class="bg-primary text-white text-[10px] md:text-xs font-black uppercase tracking-[0.25em] py-3.5 text-center border-b border-black/5 relative z-[110] {{ 'sm-temporarily-hidden' if 'primary_bar' in temporarily_hidden else '' }}">
     Only accepting 2 more partners for Q3. High-volume brands only.
 </div>
 {% endblock %}
@@ -282,7 +286,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
   </div>
 </div>
-<div id="audit-bar" class="fixed bottom-0 left-0 right-0 z-[90] bg-white border-t border-slate-200 px-4 py-2 shadow-[0_-10px_40px_rgba(0,0,0,0.08)] transition-transform duration-300" role="banner" aria-label="Free CRO audit offer" style="transform: translateY(100%); visibility: hidden;">
+<div id="audit-bar" class="fixed bottom-0 left-0 right-0 z-[90] bg-white border-t border-slate-200 px-4 py-2 shadow-[0_-10px_40px_rgba(0,0,0,0.08)] transition-transform duration-300 {{ 'sm-temporarily-hidden' if 'audit_bar' in temporarily_hidden else '' }}" role="banner" aria-label="Free CRO audit offer" style="transform: translateY(100%); visibility: hidden;">
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
         <div class="flex items-center gap-2">
             <div class="w-7 h-7 md:w-8 md:h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">

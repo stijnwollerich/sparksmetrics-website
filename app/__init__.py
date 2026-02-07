@@ -3,7 +3,7 @@ from datetime import datetime
 from pathlib import Path
 
 from dotenv import load_dotenv
-from flask import Flask
+from flask import Flask, render_template
 
 from app.models import db
 from app.routes.main import CASE_STUDIES, CASE_STUDY_ORDER, main_bp
@@ -31,6 +31,11 @@ def create_app(config_object="app.config") -> Flask:
         except Exception:
             pass
 
+    # Fallback: local SQLite so the app runs without DATABASE_URL (e.g. local dev)
+    if not (app.config.get("SQLALCHEMY_DATABASE_URI") or "").strip():
+        _base = Path(__file__).resolve().parent.parent
+        app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{(_base / 'local.db').as_posix()}"
+
     db.init_app(app)
     with app.app_context():
         if app.config.get("SQLALCHEMY_DATABASE_URI"):
@@ -38,6 +43,10 @@ def create_app(config_object="app.config") -> Flask:
             db.create_all()
 
     app.register_blueprint(main_bp)
+
+    @app.errorhandler(404)
+    def page_not_found(e):
+        return render_template("404.html"), 404
 
     @app.context_processor
     def inject_now():

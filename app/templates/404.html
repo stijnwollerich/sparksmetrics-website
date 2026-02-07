@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Page not found | Sparksmetrics{% endblock %}
+{% block meta_description %}This page doesn't exist. Return to Sparksmetrics for CRO and analytics that scale.{% endblock %}
+{% block body_class %}bg-background-dark text-slate-300{% endblock %}
+{% block content %}
+<section class="relative min-h-[70vh] flex flex-col justify-center items-center overflow-hidden pt-24 pb-24">
+  <div class="noise-bg absolute inset-0 pointer-events-none"></div>
+  <div class="concentric-circles"></div>
+  <div class="relative z-10 max-w-2xl mx-auto px-6 text-center space-y-10">
+    <p class="text-primary font-bold text-sm uppercase tracking-[0.4em]">Error 404</p>
+    <h1 class="font-display text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-none text-white uppercase">
+      404
+    </h1>
+    <p class="text-xl md:text-2xl text-slate-400 font-medium">
+      This page doesn't exist or has moved. Let's get you back on track.
+    </p>
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+      <a class="inline-flex items-center justify-center px-8 py-4 bg-primary text-white font-display text-lg font-black rounded-xl shadow-[0_20px_50px_rgba(255,87,34,0.3)] hover:scale-105 transition-all group" href="{{ url_for('main.index') }}">
+        <span class="material-symbols-outlined mr-2 text-xl" aria-hidden="true">home</span>
+        Back to home
+      </a>
+      <a class="inline-flex items-center justify-center px-8 py-4 border-2 border-white/20 text-white font-display text-lg font-black rounded-xl hover:border-primary hover:text-primary transition-all" href="{{ url_for('main.schedule_a_call') }}">
+        Talk to us
+      </a>
+    </div>
+  </div>
+</section>
+{% endblock %}
