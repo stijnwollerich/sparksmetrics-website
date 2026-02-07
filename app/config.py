@@ -72,9 +72,22 @@ elif not (os.environ.get("DATABASE_URL") or "").strip() and _env_file.exists():
 
 
 def _get_database_uri() -> str | None:
-    uri = os.environ.get("DATABASE_URL", "").strip()
+    uri = (os.environ.get("DATABASE_URL") or "").strip()
     if uri:
         return uri.replace("postgres://", "postgresql://", 1)
+    # Last resort: read .env directly (avoids any load_dotenv / import-order issues)
+    for path in (_env_file, Path.cwd() / ".env"):
+        if not path.exists():
+            continue
+        try:
+            for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+                if "DATABASE_URL=" in line:
+                    v = line.split("=", 1)[1].strip().strip("'\"").replace("\r", "")
+                    if v:
+                        return v.replace("postgres://", "postgresql://", 1)
+                    break
+        except Exception:
+            pass
     return None
 
 
