@@ -5,6 +5,12 @@ from pathlib import Path
 # Base directory (project root)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load .env from project root before reading env vars (so it works regardless of cwd/call order)
+_env_file = BASE_DIR / ".env"
+if _env_file.exists():
+    from dotenv import load_dotenv
+    load_dotenv(_env_file)
+
 
 class Config:
     """Default configuration."""

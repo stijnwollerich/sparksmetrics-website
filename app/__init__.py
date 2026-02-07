@@ -1,11 +1,17 @@
 """Sparksmetrics Flask application factory."""
 from datetime import datetime
+from pathlib import Path
 
+from dotenv import load_dotenv
 from flask import Flask
 
 from app.models import db
 from app.routes.main import CASE_STUDIES, CASE_STUDY_ORDER, main_bp
 from app.youtube import get_latest_video_ids
+
+# Load .env from project root (parent of app/) so it works regardless of cwd
+_env_path = Path(__file__).resolve().parent.parent / ".env"
+load_dotenv(_env_path)
 
 
 def create_app(config_object="app.config") -> Flask:

@@ -82,6 +82,8 @@ Save and exit (Ctrl+O, Enter, Ctrl+X).
 
 ## 5. Create DB tables
 
+**You must create `.env` (step 4) first.** Otherwise you'll get: `RuntimeError: Either 'SQLALCHEMY_DATABASE_URI' or 'SQLALCHEMY_BINDS' must be set.`
+
 Tables are created on first app start when `DATABASE_URL` is set. You can also run:
 
 ```bash
