@@ -1,0 +1,15 @@
+[Unit]
+Description=Sparksmetrics Flask app
+After=network.target postgresql.service
+
+[Service]
+User=root
+Group=root
+WorkingDirectory=/var/www/sparksmetrics
+EnvironmentFile=/var/www/sparksmetrics/.env
+Environment="PATH=/var/www/sparksmetrics/.venv/bin"
+ExecStart=/var/www/sparksmetrics/.venv/bin/gunicorn --workers 2 --bind 127.0.0.1:8000 "run:app"
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

@@ -168,22 +168,17 @@ Restart=always
 WantedBy=multi-user.target
 ```
 
-If you use root and `/var/www/sparksmetrics`:
-
-- `User=root` (or create a dedicated user)
-- `WorkingDirectory=/var/www/sparksmetrics`
-- `EnvironmentFile=/var/www/sparksmetrics/.env`
-- `Environment="PATH=/var/www/sparksmetrics/.venv/bin"`
-- `ExecStart=/var/www/sparksmetrics/.venv/bin/gunicorn ...`
-
-Then:
+If you use root and `/var/www/sparksmetrics`, you can install the unit from the repo:
 
 ```bash
+sudo cp $APP_DIR/deploy/sparksmetrics.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable sparksmetrics
 sudo systemctl start sparksmetrics
 sudo systemctl status sparksmetrics
 ```
+
+(Or create `/etc/systemd/system/sparksmetrics.service` manually and paste the same content as in `deploy/sparksmetrics.service`.)
 
 ---
 
