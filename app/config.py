@@ -11,6 +11,24 @@ if _env_file.exists():
     from dotenv import load_dotenv
     load_dotenv(_env_file)
 
+# If DATABASE_URL still not in env (e.g. load_dotenv ran before .env existed), read .env directly
+def _get_database_uri() -> str | None:
+    uri = os.environ.get("DATABASE_URL", "").strip()
+    if uri:
+        return uri.replace("postgres://", "postgresql://", 1)
+    if _env_file.exists():
+        try:
+            for line in _env_file.read_text().splitlines():
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    key, _, value = line.partition("=")
+                    if key.strip() == "DATABASE_URL":
+                        uri = value.strip().strip("'\"").replace("postgres://", "postgresql://", 1)
+                        return uri if uri else None
+        except Exception:
+            pass
+    return None
+
 
 class Config:
     """Default configuration."""
@@ -19,7 +37,7 @@ class Config:
     DEBUG = os.environ.get("FLASK_DEBUG", "0") == "1"
     TESTING = False
     # PostgreSQL: set DATABASE_URL (e.g. postgresql://user:pass@localhost:5432/dbname)
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL", "").replace("postgres://", "postgresql://") or None
+    SQLALCHEMY_DATABASE_URI = _get_database_uri()
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ENGINE_OPTIONS = {"pool_pre_ping": True}
     # YouTube: manual list (comma-separated in env) or default below. Thumbnails from img.youtube.com.
