@@ -28,12 +28,13 @@ def _read_env_file(path: Path) -> dict[str, str]:
     return out
 
 
-# Set env from .env file first (so DATABASE_URL is always available when this module loads)
+# Load .env into os.environ (overwrite so file always wins; same pattern as Upwork run.mjs)
 _env_vars = _read_env_file(_env_file)
 if not _env_vars and (Path.cwd() / ".env").exists():
     _env_vars = _read_env_file(Path.cwd() / ".env")
 for key, value in _env_vars.items():
-    os.environ.setdefault(key, value)
+    if value:
+        os.environ[key] = value
 
 # Then load_dotenv for any vars not in our read (e.g. multi-line or other formats)
 if _env_file.exists():
