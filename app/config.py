@@ -4,37 +4,51 @@ from pathlib import Path
 
 # Base directory (project root)
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-# Load .env from project root before reading env vars (so it works regardless of cwd/call order)
 _env_file = BASE_DIR / ".env"
-if _env_file.exists():
-    from dotenv import load_dotenv
-    load_dotenv(_env_file, override=True)  # override so we always pick up DATABASE_URL from file
 
-# If DATABASE_URL still not in env, read .env directly (handles encoding / path quirks)
+
+def _read_env_file(path: Path) -> dict[str, str]:
+    """Read KEY=VALUE lines from path; return dict. Does not rely on dotenv or import order."""
+    out: dict[str, str] = {}
+    if not path.exists():
+        return out
+    try:
+        raw = path.read_text(encoding="utf-8", errors="replace")
+        for line in raw.splitlines():
+            line = line.strip().replace("\r", "")
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, _, value = line.partition("=")
+            k = key.strip()
+            v = value.strip().strip("'\"").replace("\r", "")
+            if k and v:
+                out[k] = v
+    except Exception:
+        pass
+    return out
+
+
+# Set env from .env file first (so DATABASE_URL is always available when this module loads)
+_env_vars = _read_env_file(_env_file)
+if not _env_vars and (Path.cwd() / ".env").exists():
+    _env_vars = _read_env_file(Path.cwd() / ".env")
+for key, value in _env_vars.items():
+    os.environ.setdefault(key, value)
+
+# Then load_dotenv for any vars not in our read (e.g. multi-line or other formats)
+if _env_file.exists():
+    try:
+        from dotenv import load_dotenv
+        load_dotenv(_env_file, override=True)
+    except Exception:
+        pass
+
+
 def _get_database_uri() -> str | None:
     uri = os.environ.get("DATABASE_URL", "").strip()
     if uri:
         return uri.replace("postgres://", "postgresql://", 1)
-
-    def _read_env(path: Path) -> str | None:
-        if not path.exists():
-            return None
-        try:
-            raw = path.read_text(encoding="utf-8", errors="replace")
-            for line in raw.splitlines():
-                line = line.strip().replace("\r", "")
-                if not line or line.startswith("#") or "=" not in line:
-                    continue
-                key, _, value = line.partition("=")
-                if key.strip() == "DATABASE_URL":
-                    uri = value.strip().strip("'\"").replace("\r", "").replace("postgres://", "postgresql://", 1)
-                    return uri if uri else None
-        except Exception:
-            pass
-        return None
-
-    return _read_env(_env_file) or _read_env(Path.cwd() / ".env")
+    return None
 
 
 class Config:

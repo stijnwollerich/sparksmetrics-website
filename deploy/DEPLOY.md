@@ -9,6 +9,35 @@ Run these on your droplet (Ubuntu 22.04 / 24.04). Replace placeholders:
 
 ---
 
+## What to run every time you deploy
+
+**On your local machine** (from the project root):
+
+```bash
+git add -A && git status   # review changes
+git commit -m "Your message"
+git push
+```
+
+**On the server** (SSH into the droplet, then):
+
+```bash
+cd /var/www/sparksmetrics   # or your APP_DIR
+git pull
+find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null; true
+source .venv/bin/activate
+pip install -r requirements.txt
+sudo systemctl restart sparksmetrics
+```
+
+If you added new DB tables or this is the first deploy: run `python3 scripts/create_tables.py` once (see section 5).
+
+**Env / secrets:**  
+- **Local:** `.env` can have `FLASK_DEBUG=1`, `SECRET_KEY=...`, and optionally `DATABASE_URL` if you run Postgres locally. If `DATABASE_URL` is missing, the app runs but lead forms won’t be saved to a DB.  
+- **Server:** `.env` must have `FLASK_DEBUG=0`, `SECRET_KEY=...`, and `DATABASE_URL=postgresql://sparksmetrics:YOUR_PASSWORD@localhost:5432/sparksmetrics`. Use the same password you set in PostgreSQL (section 2). Do not commit `.env`; it is in `.gitignore`.
+
+---
+
 ## 1. Update system and install dependencies
 
 ```bash
