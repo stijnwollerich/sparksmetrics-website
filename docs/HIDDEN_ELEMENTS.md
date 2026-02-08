@@ -11,8 +11,10 @@ Control visibility by editing `temporarily_hidden` in `app/templates/base.html`.
 | `homepage_video`    | landing_alt.html | Homepage hero video: "Watch: How we find and fix conversion leaks" |
 | `video_testimonials`| landing_alt.html | Video testimonials (3 cards) + YouTube gallery section |
 | `cro_checklist`     | landing_alt.html | "The 57-Point CRO Checklist" section |
+| `results_section`  | landing_alt.html | "The Results of Relentless Optimization" section + video cards |
+| `cro_video_testimonials` | cro.html | CRO page: "The Results of Relentless Optimization" video testimonial cards (3 cards) |
 
-**Currently hidden:** `homepage_video`, `video_testimonials`, `cro_checklist`  
+**Currently hidden:** `homepage_video`, `video_testimonials`, `cro_checklist`, `results_section`, `cro_video_testimonials`  
 **Currently visible:** `primary_bar`, `audit_bar`
 
 ## How to change visibility
@@ -25,4 +27,4 @@ In `app/templates/base.html`, find:
 
 - To **show everything**: set to empty: `{% set temporarily_hidden = [] %}`
 - To **hide primary or audit bar again**: add `'primary_bar'` and/or `'audit_bar'` to the list.
-- To **show video or checklist again**: remove `'homepage_video'`, `'video_testimonials'`, or `'cro_checklist'` from the list.
+- To **show video, checklist, results section, or CRO video testimonials again**: remove the corresponding key from the list (e.g. `'cro_video_testimonials'` for the CRO page video cards).

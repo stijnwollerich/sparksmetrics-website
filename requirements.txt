@@ -8,5 +8,8 @@ psycopg2-binary>=2.9.9
 # Environment and config
 python-dotenv>=1.0.0
 
+# HTTP (Brevo API)
+requests>=2.28.0
+
 # Production WSGI server (optional)
 gunicorn>=21.0.0

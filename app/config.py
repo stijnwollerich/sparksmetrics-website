@@ -120,6 +120,21 @@ class Config:
     )
     YOUTUBE_CHANNEL_ID = os.environ.get("YOUTUBE_CHANNEL_ID", "").strip()
 
+    # Brevo: sync leads to Brevo (email marketing). If unset, leads are not sent to Brevo.
+    BREVO_API_KEY = os.environ.get("BREVO_API_KEY", "").strip()
+    # Optional: comma-separated list IDs to add contacts to (e.g. "2,5"). Find in Brevo: Contacts → Lists.
+    _brevo_lists = os.environ.get("BREVO_LIST_IDS", "").strip()
+    BREVO_LIST_IDS = [int(x.strip()) for x in _brevo_lists.split(",") if x.strip().isdigit()] if _brevo_lists else []
+    # CRO Ebook list (id 7): contacts who download the ebook are added to this list.
+    _cro_ebook = (os.environ.get("BREVO_CRO_EBOOK_LIST_ID") or "7").strip()
+    BREVO_CRO_EBOOK_LIST_ID = int(_cro_ebook) if _cro_ebook.isdigit() else 7
+    # Free CRO audit list (id 11): contacts who request the audit are added to this list.
+    _audit_list = (os.environ.get("BREVO_AUDIT_LIST_ID") or "11").strip()
+    BREVO_AUDIT_LIST_ID = int(_audit_list) if _audit_list.isdigit() else 11
+
+    # Slack: webhook URL for lead notifications. If set, every lead submission posts to Slack.
+    SLACK_WEBHOOK_URL = os.environ.get("SLACK_WEBHOOK_URL", "").strip()
+
 
 class ProductionConfig(Config):
     """Production configuration."""

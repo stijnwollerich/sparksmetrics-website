@@ -92,7 +92,13 @@
 
   function triggerDownload(url) {
     if (!url || url === "#") return;
-    window.open(url, "_blank", "noopener");
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = (url.split("/").pop() || "download").split("?")[0] || "download";
+    a.rel = "noopener";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   }
 
   function showThankYou(hasDownload, downloadUrl) {
@@ -101,7 +107,7 @@
     if (thankYouState) thankYouState.classList.remove("hidden");
     if (thankYouMessage) {
       thankYouMessage.textContent = hasDownload
-        ? "Your file is downloading. Pick a time on the left for a free 30-minute strategy session—we can walk through your checklist and next steps."
+        ? "Your ebook is downloading. Pick a time on the left for a free 30-minute strategy session—we can walk through the strategies and your next steps."
         : "We’ll be in touch to schedule your free 24-hour CRO audit. Or pick a time on the left to get on the calendar now.";
     }
     if (calendlyIframe) calendlyIframe.src = CALENDLY_URL;
@@ -126,9 +132,9 @@
       resetModal();
       if (el.getAttribute("data-checklist-modal") !== null && !el.getAttribute("data-resource")) {
         el.setAttribute("data-resource", "cro-checklist");
-        el.setAttribute("data-title", "The 57-Point CRO Checklist");
-        el.setAttribute("data-description", "Enter your email and we'll send you the exact blueprint we use to audit $10M+ brands.");
-        el.setAttribute("data-button-text", "Send me the checklist");
+        el.setAttribute("data-title", "13 Bulletproof Strategies to Skyrocket Conversions");
+        el.setAttribute("data-description", "Enter your email and we'll send you the free ebook with 13 actionable CRO strategies used by $10M+ brands.");
+        el.setAttribute("data-button-text", "Send me the ebook");
       }
       openModal(el);
     });

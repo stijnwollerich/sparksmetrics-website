@@ -14,10 +14,33 @@ _env_path = Path(__file__).resolve().parent.parent / ".env"
 load_dotenv(_env_path)
 
 
-def create_app(config_object="app.config") -> Flask:
+def _read_env_var(path: Path, key: str) -> str:
+    """Read a single KEY from .env file; return value or empty string."""
+    if not path.exists():
+        return ""
+    try:
+        for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+            line = line.strip().replace("\r", "")
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            k, _, v = line.partition("=")
+            if k.strip() == key:
+                return v.strip().strip("'\"").replace("\r", "") or ""
+    except Exception:
+        pass
+    return ""
+
+
+def create_app(config_object="app.config.Config") -> Flask:
     """Create and configure the Flask application."""
     app = Flask(__name__, template_folder="templates", static_folder="static")
     app.config.from_object(config_object)
+
+    # Ensure BREVO/Slack from .env (avoids import-order issues with config module)
+    if not (app.config.get("BREVO_API_KEY") or "").strip():
+        app.config["BREVO_API_KEY"] = _read_env_var(_env_path, "BREVO_API_KEY")
+    if not (app.config.get("SLACK_WEBHOOK_URL") or "").strip():
+        app.config["SLACK_WEBHOOK_URL"] = _read_env_var(_env_path, "SLACK_WEBHOOK_URL")
 
     # Ensure DATABASE_URL is set when running from script/certain environments (config may load from elsewhere)
     if not app.config.get("SQLALCHEMY_DATABASE_URI") and _env_path.exists():

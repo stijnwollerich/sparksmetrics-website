@@ -4,6 +4,8 @@ from flask import abort, Blueprint, current_app, jsonify, redirect, render_templ
 
 from app.models import Lead, db
 
+BREVO_CONTACTS_URL = "https://api.brevo.com/v3/contacts"
+
 main_bp = Blueprint("main", __name__)
 
 # Individual case study data (slug -> case dict for case_study.html)
@@ -257,8 +259,8 @@ CASE_STUDY_ORDER = [
 
 @main_bp.route("/")
 def index():
-    """Home page — main landing (use index.html; landing_alt.html was removed from repo)."""
-    return render_template("index.html")
+    """Home page — CRO landing (light theme)."""
+    return render_template("landing_alt.html")
 
 
 @main_bp.route("/favicon.ico")
@@ -287,8 +289,7 @@ def schedule_a_call():
 
 # Downloadable resources: slug -> filename in static/downloads/. Add new resources here.
 RESOURCE_DOWNLOADS = {
-    "cro-checklist": {"filename": "57-point-cro-checklist.pdf"},
-    # Add more: "ebook": {"filename": "your-ebook.pdf"},
+    "cro-checklist": {"filename": "13-bulletproof-strategies-conversions-sparksmetrics.pdf"},
 }
 
 
@@ -310,6 +311,86 @@ def _save_lead(fname: str, email: str, submission_type: str, resource_slug: str 
         db.session.rollback()
 
 
+def _sync_lead_to_brevo(
+    fname: str, email: str, submission_type: str, resource_slug: str | None = None
+) -> None:
+    """Add or update contact in Brevo if BREVO_API_KEY is set. Logs errors, does not raise."""
+    api_key = (current_app.config.get("BREVO_API_KEY") or "").strip()
+    if not api_key:
+        current_app.logger.info("Brevo: BREVO_API_KEY not set in .env, skipping contact sync")
+        return
+    list_ids = list(current_app.config.get("BREVO_LIST_IDS") or [])
+    if submission_type == "resource" and resource_slug == "cro-checklist":
+        cro_ebook_id = current_app.config.get("BREVO_CRO_EBOOK_LIST_ID")
+        if cro_ebook_id and cro_ebook_id not in list_ids:
+            list_ids.append(cro_ebook_id)
+    if submission_type == "audit":
+        audit_list_id = current_app.config.get("BREVO_AUDIT_LIST_ID")
+        if audit_list_id and audit_list_id not in list_ids:
+            list_ids.append(audit_list_id)
+    payload = {
+        "email": email,
+        "attributes": {"FNAME": fname},
+        "updateEnabled": True,
+    }
+    if list_ids:
+        payload["listIds"] = list_ids
+    try:
+        import requests
+    except ModuleNotFoundError:
+        current_app.logger.warning(
+            "Brevo sync skipped: install requests with: pip install requests"
+        )
+        return
+    try:
+        r = requests.post(
+            BREVO_CONTACTS_URL,
+            json=payload,
+            headers={"api-key": api_key, "Content-Type": "application/json"},
+            timeout=10,
+        )
+        if r.status_code in (200, 201, 204):
+            current_app.logger.info("Brevo: contact synced for %s (lists: %s)", email, list_ids)
+        else:
+            current_app.logger.warning(
+                "Brevo contact sync failed: HTTP %s – %s", r.status_code, (r.text or "")[:400]
+            )
+    except Exception as e:
+        current_app.logger.warning("Brevo contact sync error: %s", e)
+
+
+def _notify_slack_lead(
+    fname: str, email: str, submission_type: str, resource_slug: str | None = None
+) -> None:
+    """Post a short message to Slack when a lead is submitted. Logs errors, does not raise."""
+    webhook_url = (current_app.config.get("SLACK_WEBHOOK_URL") or "").strip()
+    if not webhook_url:
+        return
+    if submission_type == "audit":
+        label = "Free CRO audit"
+    elif submission_type == "resource" and resource_slug == "cro-checklist":
+        label = "CRO ebook download"
+    else:
+        label = "Resource download"
+    text = "New lead: *{}* <{}> – {}".format(fname, email, label)
+    try:
+        import requests
+    except ModuleNotFoundError:
+        current_app.logger.warning("Slack notify skipped: install requests (pip install requests)")
+        return
+    try:
+        r = requests.post(
+            webhook_url,
+            json={"text": text},
+            headers={"Content-Type": "application/json"},
+            timeout=5,
+        )
+        if r.status_code != 200:
+            current_app.logger.warning("Slack webhook failed: HTTP %s – %s", r.status_code, (r.text or "")[:200])
+    except Exception as e:
+        current_app.logger.warning("Slack notify error: %s", e)
+
+
 @main_bp.route("/request-audit", methods=["POST"])
 def request_audit():
     """Collect fname and email for free CRO audit request; returns success (no file)."""
@@ -321,6 +402,7 @@ def request_audit():
     if not email or not re.match(r"^[^\s@]+@[^\s@]+\.[^\s@]+$", email):
         return jsonify({"success": False, "error": "Invalid email"}), 400
     _save_lead(fname, email, "audit", resource_slug=None)
+    _sync_lead_to_brevo(fname, email, "audit", resource_slug=None)
     return jsonify({"success": True})
 
 
@@ -339,6 +421,8 @@ def download_resource():
     if not resource:
         return jsonify({"success": False, "error": "Unknown resource"}), 400
     _save_lead(fname, email, "resource", resource_slug=slug or None)
+    _sync_lead_to_brevo(fname, email, "resource", resource_slug=slug or None)
+    _notify_slack_lead(fname, email, "resource", resource_slug=slug or None)
     download_url = url_for("static", filename="downloads/" + resource["filename"])
     return jsonify({"success": True, "download_url": download_url})
 

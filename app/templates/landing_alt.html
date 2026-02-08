@@ -1,0 +1,827 @@
+{% extends "base.html" %} {% block title %}Sparksmetrics | Results-Driven
+Conversion Rate Optimization{% endblock %} {% block meta_description
+%}Results-driven CRO and analytics for brands that scale. Free conversion audit,
+data-driven optimization, and proven case studies. Stop guessing—turn your data
+into revenue.{% endblock %} {% block og_description %}Results-driven CRO and
+analytics for brands that scale. Free conversion audit, data-driven
+optimization, and proven case studies. Stop guessing—turn your data into
+revenue.{% endblock %} {% block twitter_description %}Results-driven CRO and
+analytics for brands that scale. Free conversion audit, data-driven
+optimization, and proven case studies. Stop guessing—turn your data into
+revenue.{% endblock %} {% block og_title %}Sparksmetrics | Results-Driven
+Conversion Rate Optimization{% endblock %} {% block twitter_title
+%}Sparksmetrics | Results-Driven Conversion Rate Optimization{% endblock %} {%
+block head_extras %}{% endblock %} {% block content %}
+<section
+  class="bg-black relative pt-8 pb-12 overflow-hidden border-b border-white/5"
+  id="hero"
+>
+  <div class="content-narrow px-6 relative z-10 text-center pt-6 pb-8">
+    <p class="text-primary font-bold text-sm uppercase tracking-[0.4em] mb-6">
+      MOST "BEST PRACTICES" ARE GUESSWORK
+    </p>
+    <h1
+      class="text-4xl md:text-6xl lg:text-7xl mb-6 text-white font-display font-black uppercase tracking-tighter leading-[1.05]"
+    >
+      We Turn Your Data Into
+      <span class="text-primary">Revenue.</span>
+    </h1>
+    <p class="text-xl md:text-2xl text-gray-400 font-medium mb-8 italic">
+      You're changing your site and funnel on intuition and "best practices."
+      Your CVR, AOV, and LTV don't support scaling.
+      <span class="text-white underline decoration-primary">We fix that.</span>
+    </p>
+    <div class="flex flex-col items-center gap-4 mt-6">
+      <a
+        class="w-full max-w-xl inline-flex items-center justify-center px-8 py-6 bg-primary text-white font-display text-2xl md:text-3xl font-black rounded-xl shadow-[0_20px_50px_rgba(255,77,0,0.3)] hover:scale-[1.02] transition-all group"
+        href="{{ url_for('main.schedule_a_call') }}"
+      >
+        BOOK YOUR CRO CALL
+      </a>
+      <p class="text-gray-500 font-bold uppercase text-xs tracking-widest mt-3">
+        Free conversion audit—no pitch
+      </p>
+      <!-- Overlapping avatars + stars reviews -->
+      <div class="flex flex-wrap items-center justify-center gap-4 mt-6">
+        <div class="flex items-center avatar-stack">
+          <img
+            src="https://i.pravatar.cc/96?img=12"
+            alt=""
+            class="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover border-2 border-deep-charcoal"
+          />
+          <img
+            src="https://i.pravatar.cc/96?img=33"
+            alt=""
+            class="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover border-2 border-deep-charcoal -ml-3"
+          />
+          <img
+            src="https://i.pravatar.cc/96?img=45"
+            alt=""
+            class="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover border-2 border-deep-charcoal -ml-3"
+          />
+          <img
+            src="https://i.pravatar.cc/96?img=68"
+            alt=""
+            class="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover border-2 border-deep-charcoal -ml-3"
+          />
+          <img
+            src="https://i.pravatar.cc/96?img=70"
+            alt=""
+            class="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover border-2 border-deep-charcoal -ml-3"
+          />
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="flex text-primary">
+            <span
+              class="material-symbols-outlined star-filled text-lg md:text-xl"
+              >star</span
+            >
+            <span
+              class="material-symbols-outlined star-filled text-lg md:text-xl"
+              >star</span
+            >
+            <span
+              class="material-symbols-outlined star-filled text-lg md:text-xl"
+              >star</span
+            >
+            <span
+              class="material-symbols-outlined star-filled text-lg md:text-xl"
+              >star</span
+            >
+            <span
+              class="material-symbols-outlined star-filled text-lg md:text-xl"
+              >star</span
+            >
+          </span>
+          <span
+            class="text-gray-500 text-sm font-bold uppercase tracking-widest"
+            >Rated 5.0 by 50+ brands</span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Logos on dark section -->
+  <div class="border-t border-white/5 py-6">
+    <div class="max-w-7xl mx-auto px-6">
+      <div
+        class="flex flex-wrap justify-center items-center gap-8 md:gap-16 text-white/40"
+      >
+        <span
+          class="font-display font-black text-xl md:text-2xl tracking-tighter"
+          >LUMINA</span
+        >
+        <span
+          class="font-display font-black text-xl md:text-2xl tracking-tighter"
+          >AETHER</span
+        >
+        <span
+          class="font-display font-black text-xl md:text-2xl tracking-tighter"
+          >ZENITH</span
+        >
+        <span
+          class="font-display font-black text-xl md:text-2xl tracking-tighter"
+          >VORTEX</span
+        >
+        <span
+          class="font-display font-black text-xl md:text-2xl tracking-tighter"
+          >EQUINOX</span
+        >
+      </div>
+    </div>
+  </div>
+</section>
+<main>
+  <section class="py-16 md:py-24 bg-light-base">
+    <div class="max-w-4xl mx-auto px-6 flex flex-col items-center">
+      <div
+        id="video-container"
+        class="w-full aspect-video bg-black rounded-2xl border border-gray-200 overflow-hidden relative shadow-2xl group cursor-pointer"
+        data-video-id="jNQXAC9IVRw"
+      >
+        <!-- Thumbnail / play overlay (hidden when video plays) -->
+        <div
+          id="video-poster"
+          class="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-primary/5 z-10 flex items-center justify-center"
+        >
+          <div
+            class="w-24 h-24 md:w-32 md:h-32 bg-primary rounded-full flex items-center justify-center shadow-[0_0_60px_rgba(255,77,0,0.4)] group-hover:scale-110 transition-transform duration-500 pointer-events-none"
+          >
+            <span
+              class="material-symbols-outlined text-white text-6xl md:text-7xl translate-x-1"
+              >play_arrow</span
+            >
+          </div>
+        </div>
+        <!-- YouTube iframe (injected on play) -->
+        <div id="video-embed" class="absolute inset-0 hidden">
+          <iframe
+            id="video-iframe"
+            class="w-full h-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+      <p
+        class="mt-8 text-lg font-bold text-gray-500 uppercase tracking-widest flex items-center gap-3"
+      >
+        <span class="w-3 h-3 rounded-full bg-primary animate-pulse"></span>
+        Watch: How we find and fix conversion leaks
+      </p>
+    </div>
+  </section>
+  <!-- <section class="py-24 bg-light-base" id="problem">
+    <div class="content-narrow px-6 editorial-text">
+      <div class="problem-intro text-gray-700">
+        <p>Running a business is not hard.</p>
+        <p>It's exhausting.</p>
+        <p>You fall asleep replaying decisions you already made.</p>
+        <p>You wake up tired before the day even starts.</p>
+        <p>There is no off switch. Not at night. Not on weekends. Not when&nbsp;things are going well.</p>
+        <p>You raise the ad budget.</p>
+        <p>You tell yourself this is growth.</p>
+        <p>Then you spend the rest of the day refreshing results,</p>
+        <p>wondering if every click is money you will never see again.</p>
+        <p>Traffic shows up.</p>
+        <p>It looks busy. Alive.</p>
+        <p>End of the month hits.</p>
+        <p>Revenue looks decent, for a second...</p>
+        <p>Then you subtract ad spend. Fees. Refunds.</p>
+        <p>Suddenly the business ran full speed just to barely break even.</p>
+        <p>Dinner at home. Your phone is face down.</p>
+        <p>Your head is not.</p>
+        <p>You think about what this was supposed to give you.</p>
+        <p>Time. Space. Freedom.</p>
+        <p>And then you notice the pattern.</p>
+        <p>It is not traffic.</p>
+        <p>Traffic shows up. People click. They arrive.</p>
+        <p>The problem is <span class="highlight-soft">what happens next.</span></p>
+        <p>They hesitate. They stall. They bounce.</p>
+        <p>Every ad dollar sends more people to the same moment of doubt.</p>
+        <p>More spend does not fix it.</p>
+        <p>It just makes <span class="highlight-soft">the leak louder.</span></p>
+        <p>You are paying to expose a weak conversion point.</p>
+        <p>That is why ads feel heavier every month.</p>
+        <p>Because you are buying traffic faster than the page can convert it.</p>
+        <p>You want the calm that comes from knowing the business finally converts what it already earns.</p>
+        <p>Right now, it doesn't feel like that.</p>
+        <p>It feels fragile.</p>
+        <p>It feels personal.</p>
+        <p>Like everything depends on you fixing the moment where people hesitate.</p>
+        <p>That's the part of running a business <span class="highlight-soft">no one posts about.</span></p>
+      </div>
+      <div
+        class="my-16 p-10 bg-white border border-gray-200 border-l-4 border-l-primary rounded-r-xl shadow-sm"
+      >
+        <h4 class="text-2xl mb-6 text-deep-charcoal">
+          Why Your Funnel Is Leaking:
+        </h4>
+        <ul class="space-y-4 text-gray-600 font-bold">
+          <li class="flex gap-3">
+            <span class="text-primary">01.</span> BLIND SPOTS: You don't know where users drop off or why—no clear data, just guesswork.
+          </li>
+          <li class="flex gap-3">
+            <span class="text-primary">02.</span> BEST-PRACTICE BINGE: Changes are based on opinions and "what everyone does," not tests and statistics.
+          </li>
+          <li class="flex gap-3">
+            <span class="text-primary">03.</span> CONVERSION CEILING: Your CVR has flatlined. You're leaving revenue on the table and you can't see the lever to pull.
+          </li>
+        </ul>
+      </div>
+      <div class="mt-16">
+        <a
+          class="w-full inline-flex items-center justify-center px-8 py-8 bg-primary text-white font-display text-2xl md:text-3xl font-black rounded-xl shadow-[0_20px_50px_rgba(255,77,0,0.3)] hover:scale-[1.02] transition-all group"
+          href="{{ url_for('main.schedule_a_call') }}"
+        >
+          YES, I WANT DATA-DRIVEN CRO
+        </a>
+        <p
+          class="mt-4 text-gray-500 text-sm font-bold uppercase tracking-widest text-center"
+        >
+          Get a clear picture of where your conversion is really going
+        </p>
+      </div>
+    </div>
+  </section> -->
+  <section class="py-24 bg-white border-y border-gray-100">
+    <div class="content-narrow px-6">
+      <h2 class="text-4xl md:text-6xl mb-16 text-center text-deep-charcoal">
+        Does This <span class="text-primary">Sound Familiar?</span>
+      </h2>
+      <div class="space-y-12 text-gray-700">
+        <div class="border-b border-gray-100 pb-12">
+          <h3 class="text-2xl text-primary mb-4">
+            01. Guessing instead of knowing
+          </h3>
+          <p>You change pages, funnels, or flows because they feel right.</p>
+          <p>A headline here.</p>
+          <p>A layout there.</p>
+          <p>Someone said it's a best practice.</p>
+          <p>
+            You ship it and watch results, but you don't really know why
+            anything works or doesn't.
+          </p>
+          <p>
+            Decisions are based on instinct, not a clear understanding of how
+            visitors actually turn into customers.
+          </p>
+        </div>
+        <div class="border-b border-gray-100 pb-12">
+          <h3 class="text-2xl text-primary mb-4">02. Ads won't scale</h3>
+          <p>You try to push ad spend, but the numbers fight back.</p>
+          <p>Conversion rate is too low.</p>
+          <p>AOV won't budge.</p>
+          <p>LTV doesn't justify the risk.</p>
+          <p>Every increase in budget makes margins thinner.</p>
+          <p>You want to scale, but the core KPIs can't carry more volume.</p>
+        </div>
+        <div class="border-b border-gray-100 pb-12">
+          <h3 class="text-2xl text-primary mb-4">03. Data you don't use</h3>
+          <p>You have dashboards.</p>
+          <p>Reports.</p>
+          <p>Tools.</p>
+          <p>But they don't give answers.</p>
+          <p>They show what happened, not why.</p>
+          <p>
+            You know insights are hiding in the data, but you're not pulling
+            them out in a way that changes decisions.
+          </p>
+          <p>So the same questions keep coming back every month.</p>
+        </div>
+        <div class="pb-12">
+          <h3 class="text-2xl text-primary mb-4">
+            04. Ads keep getting more expensive
+          </h3>
+          <p>Clicks cost more than they used to.</p>
+          <p>Competition keeps rising.</p>
+          <p>Every channel feels noisier.</p>
+          <p>You're paying more just to stay visible.</p>
+          <p>
+            And when conversion doesn't improve, higher ad costs hit profit
+            immediately.
+          </p>
+          <p>
+            Growth starts to feel like buying risk instead of building leverage.
+          </p>
+        </div>
+      </div>
+      <div class="mt-16 text-center">
+        <p
+          class="text-2xl font-black text-deep-charcoal italic mb-10 uppercase tracking-tight"
+        >
+          "If you're facing even one of these, you haven't hit a market
+          cap—you've hit a conversion failure."
+        </p>
+        <a
+          class="w-full inline-flex items-center justify-center px-8 py-8 bg-primary text-white font-display text-2xl md:text-3xl font-black rounded-xl shadow-[0_20px_50px_rgba(255,77,0,0.3)] hover:scale-[1.02] transition-all group"
+          href="{{ url_for('main.schedule_a_call') }}"
+        >
+          I'M READY FOR DATA-DRIVEN CRO
+        </a>
+        <p
+          class="mt-4 text-gray-500 text-sm font-bold uppercase tracking-widest text-center"
+        >
+          2 new partners per month—secure your spot
+        </p>
+      </div>
+    </div>
+  </section>
+  <section class="py-24 bg-light-base" id="system">
+    <div class="content-narrow px-6">
+      <h2
+        class="text-4xl md:text-6xl mb-12 text-center leading-[0.9] text-deep-charcoal"
+      >
+        You Don't Need More Traffic. <br />You Need
+        <span class="text-primary">More Conversions.</span>
+      </h2>
+      <div class="space-y-8 mt-20">
+        <div
+          class="p-8 bg-white border border-gray-200 rounded-2xl relative shadow-sm"
+        >
+          <div
+            class="absolute -left-3 top-8 w-6 h-6 bg-primary rounded-full border-4 border-light-base"
+          ></div>
+          <h4 class="text-2xl mb-4 text-deep-charcoal">
+            1. Accurate data you can trust
+          </h4>
+          <p class="text-gray-600 mb-0">
+            You have tons of data, but can't tell what's actually true or what
+            levers to pull next. You're drowning in reports but starving for
+            clarity. You need reliable answers.
+          </p>
+        </div>
+        <div
+          class="p-8 bg-white border border-gray-200 rounded-2xl relative shadow-sm"
+        >
+          <div
+            class="absolute -left-3 top-8 w-6 h-6 bg-primary rounded-full border-4 border-light-base"
+          ></div>
+          <h4 class="text-2xl mb-4 text-deep-charcoal">
+            2. Stop messing around
+          </h4>
+          <p class="text-gray-600 mb-0">
+            You're tired of opinions and "best practices." You need someone
+            who's run the tests, knows what moves the needle and puts a
+            money-back guarantee behind it.
+          </p>
+        </div>
+        <div
+          class="p-8 bg-white border border-gray-200 rounded-2xl relative shadow-sm"
+        >
+          <div
+            class="absolute -left-3 top-8 w-6 h-6 bg-primary rounded-full border-4 border-light-base"
+          ></div>
+          <h4 class="text-2xl mb-4 text-deep-charcoal">
+            3. A team that can do A to Z
+          </h4>
+          <p class="text-gray-600 mb-0">
+            Tracking, analysis, design, dev, testing. It's all in different
+            hands. Nothing connects. You need one team that owns the full loop
+            so you're not juggling handoffs.
+          </p>
+        </div>
+        <div
+          class="p-8 bg-white border border-gray-200 rounded-2xl relative shadow-sm"
+        >
+          <div
+            class="absolute -left-3 top-8 w-6 h-6 bg-primary rounded-full border-4 border-light-base"
+          ></div>
+          <h4 class="text-2xl mb-4 text-deep-charcoal">
+            4. A money back guarantee
+          </h4>
+          <p class="text-gray-600 mb-0">
+            You've shipped changes and couldn't tell if they worked. You need
+            results that are real—statistically valid, clear before/after.
+          </p>
+        </div>
+      </div>
+      <div class="mt-20">
+        <a
+          class="w-full inline-flex items-center justify-center px-8 py-8 bg-primary text-white font-display text-2xl md:text-3xl font-black rounded-xl shadow-[0_20px_50px_rgba(255,77,0,0.3)] hover:scale-[1.02] transition-all group"
+          href="{{ url_for('main.schedule_a_call') }}"
+        >
+          GET THE CRO ROADMAP
+        </a>
+        <p
+          class="mt-4 text-gray-500 text-sm font-bold uppercase tracking-widest text-center"
+        >
+          Same approach used for 200+ brands
+        </p>
+      </div>
+    </div>
+  </section>
+  <section class="py-16 md:py-20 bg-white border-t border-gray-100" id="proof">
+    <div class="content-narrow px-6 text-center">
+      <h2
+        class="text-3xl md:text-4xl lg:text-5xl font-display font-black uppercase tracking-tighter text-deep-charcoal mb-10 md:mb-12 leading-tight"
+      >
+        The Evidence Is
+        <span class="text-primary block mt-1 md:mt-0 md:inline"
+          >Inescapable.</span
+        >
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 text-left">
+        <div
+          class="bg-white p-6 md:p-7 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md hover:border-primary/20 transition-all duration-200"
+        >
+          <span
+            class="block text-5xl md:text-6xl font-black text-deep-charcoal mb-1 leading-none"
+            >217+</span
+          >
+          <p
+            class="text-xs font-bold uppercase tracking-widest text-primary mb-3"
+          >
+            Brands Optimized
+          </p>
+          <p class="text-gray-600 text-sm md:text-base leading-relaxed mb-0">
+            From DTC to SaaS, we've audited and optimized funnels across every
+            stage. Real data, real tests, real lifts—no guesswork.
+          </p>
+        </div>
+        <div
+          class="bg-white p-6 md:p-7 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md hover:border-primary/20 transition-all duration-200"
+        >
+          <span
+            class="block text-5xl md:text-6xl font-black text-deep-charcoal mb-1 leading-none"
+            >2,400+</span
+          >
+          <p
+            class="text-xs font-bold uppercase tracking-widest text-primary mb-3"
+          >
+            Tests Run
+          </p>
+          <p class="text-gray-600 text-sm md:text-base leading-relaxed mb-0">
+            A/B tests, multivariate tests, and personalization experiments—all
+            statistically rigorous. We don't ship opinions; we ship evidence.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section
+    class="py-20 md:py-24 bg-light-base {{ 'sm-temporarily-hidden' if 'results_section' in temporarily_hidden else '' }}"
+    id="results"
+  >
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-14 md:mb-20">
+        <h2
+          class="text-3xl md:text-5xl lg:text-6xl font-display font-black text-deep-charcoal uppercase tracking-tighter"
+        >
+          The Results of Relentless Optimization
+        </h2>
+        <p
+          class="text-gray-500 font-bold uppercase tracking-widest text-sm mt-4"
+        >
+          Direct feedback from brands currently in the engine.
+        </p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        <div
+          class="group relative aspect-[3/4] bg-deep-charcoal rounded-3xl overflow-hidden cursor-pointer"
+        >
+          <img
+            alt="Testimonial thumbnail"
+            class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFS7tchnT47RHQy-Nw_YGnhWHnONvMLNHE7TciupEtSWxYBGXV76VPvSVLg2uZmiP6NXKLh4K_Di8iI96MDbRhVc2EULcMMVv37mRL4l4T1tQ7LluPTO-G1dphJXYATHPceAlPYyji3w9Dkv4_tXvR5m4SfY5rEM0ehzcSlBLHqtBoAreVb_5l9rcBCvXMyMWkmMi_tJWlcvwLTEzYpUVEH2JmmkNv6Xyv4ZPBcWuKjFKp_v8GuI_OVp9NJ9pmKpOphc_mFBcnD8w"
+            loading="lazy"
+          />
+          <div
+            class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"
+          ></div>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div
+              class="w-16 h-16 bg-primary rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-all"
+            >
+              <span class="material-symbols-outlined text-white text-3xl"
+                >play_arrow</span
+              >
+            </div>
+          </div>
+          <div class="absolute bottom-6 left-6 right-6">
+            <p class="text-white font-bold text-lg">Mark Henderson</p>
+            <p
+              class="text-primary text-xs font-black uppercase tracking-widest"
+            >
+              Founder, EcoStyle
+            </p>
+          </div>
+        </div>
+        <div
+          class="group relative aspect-[3/4] bg-deep-charcoal rounded-3xl overflow-hidden cursor-pointer"
+        >
+          <img
+            alt="Testimonial thumbnail"
+            class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBb6CWYwON3S7pnTxzoX2t--XsN_q1eDtODLd8EvF3yQgiLweE-TZ1bhjplhcKfMgboas8LfJTSs5g24lIFgl_Q3XAhAmZNfr-sC--3Lcpw7rdn1eEBQXkvpcSksuuTJ2KLqWUgZPLGDu7kpPAxNGw0okGPjxznBNL_5cvkXZanWgQfIyVOBHHe0YF23hRuFZXxS-yuGC0dJ8kUyDxMOcU0K91zBF5bBxPg366Yo317EFWWmRbTC0dYniXuuMr8TpZiiOFVH2I511E"
+            loading="lazy"
+          />
+          <div
+            class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"
+          ></div>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div
+              class="w-16 h-16 bg-primary rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-all"
+            >
+              <span class="material-symbols-outlined text-white text-3xl"
+                >play_arrow</span
+              >
+            </div>
+          </div>
+          <div class="absolute bottom-6 left-6 right-6">
+            <p class="text-white font-bold text-lg">Sarah Jenkins</p>
+            <p
+              class="text-primary text-xs font-black uppercase tracking-widest"
+            >
+              CMO, Lumos Wellness
+            </p>
+          </div>
+        </div>
+        <div
+          class="group relative aspect-[3/4] bg-deep-charcoal rounded-3xl overflow-hidden cursor-pointer"
+        >
+          <img
+            alt="Testimonial thumbnail"
+            class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAuFwWcPqh8zrRs_CDu9_ayNBGas4Bg_C9-SEvDihDFy7iGjoBfM7e-F3-0ALrqsIJcyFd267dkrfu_k0hDMOMHIvvy_aSMjOhcV9OMT0usFGPbIUsMN3mu3X7OpgqSBqp3Ip959Nu7ZJGpgdPTA1TdaXIUjZOzp5pSsM8KBv2fiogkI9XQfzUynjrLX8yo_t2S9iPtZs54O8NMK1c-jmWUaA43osjDM49KfJClvrHTlpIu36meK26beTN05wR8ZDiwl9lLwxvAtSg"
+          />
+          <div
+            class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"
+          ></div>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div
+              class="w-16 h-16 bg-primary rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-all"
+            >
+              <span class="material-symbols-outlined text-white text-3xl"
+                >play_arrow</span
+              >
+            </div>
+          </div>
+          <div class="absolute bottom-6 left-6 right-6">
+            <p class="text-white font-bold text-lg">David Chen</p>
+            <p
+              class="text-primary text-xs font-black uppercase tracking-widest"
+            >
+              CEO, GearShift
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="py-20 md:py-24 bg-deep-charcoal border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-14 md:mb-20">
+        <h2
+          class="text-3xl md:text-5xl lg:text-6xl font-display font-black text-white uppercase tracking-tighter"
+        >
+          Proven ROI in the Wild
+        </h2>
+        <p
+          class="text-slate-500 font-bold uppercase tracking-widest text-sm mt-4"
+        >
+          Raw case studies from the front lines.
+        </p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        {% for slug, case in case_studies_list %} {% include
+        '_case_study_card.html' %} {% endfor %}
+      </div>
+    </div>
+  </section>
+  <section
+    class="py-20 md:py-24 bg-white overflow-hidden border-t border-gray-100"
+  >
+    <div class="max-w-7xl mx-auto px-6">
+      <h2
+        class="text-3xl md:text-5xl lg:text-6xl font-display font-black text-deep-charcoal text-center mb-4 uppercase tracking-tighter"
+      >
+        WE LIVE, BREATHE, AND SLEEP CRO.
+      </h2>
+      <p
+        class="text-center text-gray-500 font-bold uppercase tracking-widest text-sm mb-12"
+      >
+        <a
+          class="hover:text-primary transition-colors"
+          href="https://www.youtube.com/@stijnwollerich"
+          target="_blank"
+          rel="noopener"
+          >More on our YouTube channel →</a
+        >
+      </p>
+      {% include '_youtube_gallery.html' %}
+    </div>
+  </section>
+  <section class="py-24 bg-white border-t border-gray-100">
+    <div class="max-w-7xl mx-auto px-6">
+      <div
+        class="bg-primary rounded-[3rem] p-12 md:p-20 flex flex-col md:flex-row items-center gap-16 relative overflow-hidden shadow-[0_40px_100px_rgba(255,77,0,0.3)]"
+      >
+        <div
+          class="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"
+        ></div>
+        <div class="flex-1 text-white relative z-10">
+          <div
+            class="inline-block px-4 py-1.5 bg-black/20 rounded-full text-xs font-black uppercase tracking-widest mb-6"
+          >
+            Free Resource
+          </div>
+          <h2
+            class="text-4xl md:text-6xl font-display font-black uppercase leading-none mb-6"
+          >
+            13 Bulletproof Strategies to Skyrocket Conversions
+          </h2>
+          <p class="text-xl text-white/90 font-medium mb-10 leading-relaxed">
+            Download our free ebook: actionable CRO strategies used by $10M+
+            brands. Every leak, every conversion lever, mapped out for you to
+            fix today.
+          </p>
+          <button
+            type="button"
+            class="inline-flex items-center justify-center px-8 py-4 bg-white text-primary font-black uppercase rounded-xl hover:scale-105 transition-all shadow-2xl cursor-pointer"
+            data-download-modal
+            data-resource="cro-checklist"
+            data-title="13 Bulletproof Strategies to Skyrocket Conversions"
+            data-description="Enter your email and we’ll send you the free ebook with 13 actionable CRO strategies used by $10M+ brands."
+            data-button-text="Send me the ebook"
+          >
+            Send Me The Ebook
+            <span class="material-symbols-outlined ml-2">download</span>
+          </button>
+          <p
+            class="mt-4 text-white/80 text-sm font-bold uppercase tracking-widest"
+          >
+            Used by $10M+ brands to find revenue leaks
+          </p>
+        </div>
+        <div class="w-full md:w-1/3 relative z-10">
+          <div class="relative group">
+            <div
+              class="absolute inset-0 bg-black/20 blur-2xl group-hover:scale-110 transition-transform"
+            ></div>
+            <img
+              alt="13 Bulletproof Strategies to Skyrocket Conversions ebook"
+              class="relative rounded-lg shadow-2xl transform rotate-3 group-hover:rotate-0 transition-transform duration-500"
+              src="{{ url_for('static', filename='images/ebook-thumbnail.png') }}"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="py-24 bg-light-base" id="cta">
+    <div class="content-narrow px-6">
+      <div class="text-center space-y-10">
+        <h3 class="text-5xl md:text-7xl text-deep-charcoal">
+          READY TO STOP <span class="text-primary">GUESSING?</span>
+        </h3>
+        <p class="text-xl text-gray-600">
+          We only take on 2 new CRO partners per month so every brand gets the
+          focus it deserves. Don't wait until your conversion rate hits the
+          floor.
+        </p>
+        <a
+          class="w-full inline-flex items-center justify-center px-10 py-10 bg-primary text-white font-display text-3xl md:text-4xl font-black rounded-2xl shadow-[0_25px_60px_rgba(255,77,0,0.4)] hover:scale-105 transition-all group"
+          href="{{ url_for('main.schedule_a_call') }}"
+        >
+          BOOK YOUR FREE CRO AUDIT
+        </a>
+        <p
+          class="text-gray-400 font-bold uppercase tracking-[0.2em] text-sm mt-4"
+        >
+          ⚠️ Limited Capacity: Only 2 Spots Remaining for Q4
+        </p>
+      </div>
+    </div>
+  </section>
+  <section class="py-24 bg-white border-t border-gray-100" id="faq">
+    <div class="content-narrow px-6">
+      <h2 class="text-3xl md:text-5xl mb-12 text-center text-deep-charcoal">
+        6 Questions <span class="text-primary">We Get All the Time.</span>
+      </h2>
+      <div class="space-y-4">
+        <details
+          class="group bg-light-base border border-gray-200 rounded-xl overflow-hidden"
+        >
+          <summary
+            class="p-6 cursor-pointer list-none flex justify-between items-center font-bold text-deep-charcoal text-lg"
+          >
+            What makes your CRO approach different?
+            <span
+              class="material-symbols-outlined group-open:rotate-180 transition-transform text-primary"
+              >expand_more</span
+            >
+          </summary>
+          <div class="p-6 pt-0 text-gray-600">
+            Most agencies rely on "best practices" and opinions. We don't. We
+            use a data-driven process: full audits, prioritized test roadmaps
+            (CLX method), and statistical rigor so every change is validated—not
+            guessed.
+          </div>
+        </details>
+        <details
+          class="group bg-light-base border border-gray-200 rounded-xl overflow-hidden"
+        >
+          <summary
+            class="p-6 cursor-pointer list-none flex justify-between items-center font-bold text-deep-charcoal text-lg"
+          >
+            What does the process look like?
+            <span
+              class="material-symbols-outlined group-open:rotate-180 transition-transform text-primary"
+              >expand_more</span
+            >
+          </summary>
+          <div class="p-6 pt-0 text-gray-600">
+            We start with a data and UI/UX audit, build a prioritized test
+            roadmap, design and build variants, then run A/B tests in platforms
+            like Convert and VWO. You get clear communication every step—Slack,
+            weekly wrap-ups, and regular alignment meetings.
+          </div>
+        </details>
+        <details
+          class="group bg-light-base border border-gray-200 rounded-xl overflow-hidden"
+        >
+          <summary
+            class="p-6 cursor-pointer list-none flex justify-between items-center font-bold text-deep-charcoal text-lg"
+          >
+            How long until we see results?
+            <span
+              class="material-symbols-outlined group-open:rotate-180 transition-transform text-primary"
+              >expand_more</span
+            >
+          </summary>
+          <div class="p-6 pt-0 text-gray-600">
+            We typically have the first tests live within weeks. Results depend
+            on traffic and test velocity—we focus on statistical significance,
+            not vanity wins. Most partners see meaningful conversion movement
+            within the first 90 days.
+          </div>
+        </details>
+        <details
+          class="group bg-light-base border border-gray-200 rounded-xl overflow-hidden"
+        >
+          <summary
+            class="p-6 cursor-pointer list-none flex justify-between items-center font-bold text-deep-charcoal text-lg"
+          >
+            What platforms do you work with?
+            <span
+              class="material-symbols-outlined group-open:rotate-180 transition-transform text-primary"
+              >expand_more</span
+            >
+          </summary>
+          <div class="p-6 pt-0 text-gray-600">
+            Shopify, WordPress, custom builds—we work in your stack. We
+            implement tests in A/B tools (Convert, VWO, Mida) and/or directly in
+            code. Every implementation is tested for performance and tracking
+            before go-live.
+          </div>
+        </details>
+        <details
+          class="group bg-light-base border border-gray-200 rounded-xl overflow-hidden"
+        >
+          <summary
+            class="p-6 cursor-pointer list-none flex justify-between items-center font-bold text-deep-charcoal text-lg"
+          >
+            Do you work with our team or replace them?
+            <span
+              class="material-symbols-outlined group-open:rotate-180 transition-transform text-primary"
+              >expand_more</span
+            >
+          </summary>
+          <div class="p-6 pt-0 text-gray-600">
+            We work alongside you. We handle strategy, design, dev, and test
+            execution—you stay in the loop via Slack, weekly summaries, and
+            regular alignment meetings. We need access to analytics and your
+            site; we don't take over your whole marketing function.
+          </div>
+        </details>
+        <details
+          class="group bg-light-base border border-gray-200 rounded-xl overflow-hidden"
+        >
+          <summary
+            class="p-6 cursor-pointer list-none flex justify-between items-center font-bold text-deep-charcoal text-lg"
+          >
+            What's included in the free audit?
+            <span
+              class="material-symbols-outlined group-open:rotate-180 transition-transform text-primary"
+              >expand_more</span
+            >
+          </summary>
+          <div class="p-6 pt-0 text-gray-600">
+            We review your data and UI/UX to pinpoint where users drop off and
+            where the biggest conversion opportunities are. You get a clear
+            picture of what's leaking and a prioritized roadmap—no obligation.
+            It's a discovery call that actually delivers value.
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+  {% endblock %} {% block footer_links %}{% endblock %} {% block body_end %}
+  <script
+    src="{{ url_for('static', filename='js/video-embed.js') }}"
+    defer
+  ></script>
+  {% endblock %}
+</main>
