@@ -3,7 +3,7 @@ from datetime import datetime
 from pathlib import Path
 
 from dotenv import load_dotenv
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 from app.models import db
 from app.routes.main import CASE_STUDIES, CASE_STUDY_ORDER, main_bp
@@ -70,6 +70,16 @@ def create_app(config_object="app.config.Config") -> Flask:
     @app.errorhandler(404)
     def page_not_found(e):
         return render_template("404.html"), 404
+
+    @app.after_request
+    def static_cache_and_embed(response):
+        """Static files: cacheable and safe to load from elsewhere (e.g. email signature images)."""
+        if request.path.startswith("/static/"):
+            response.headers.set("Cache-Control", "public, max-age=31536000")  # 1 year
+            # Don’t restrict who can load the resource (email clients, external referrers)
+            if "Content-Security-Policy" not in response.headers:
+                response.headers.set("X-Content-Type-Options", "nosniff")
+        return response
 
     @app.context_processor
     def inject_now():
