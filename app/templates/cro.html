@@ -17,13 +17,14 @@ block head_extras %}{% endblock %} {% block content %}
     <h1
       class="text-3xl md:text-5xl lg:text-6xl mb-6 text-white font-display font-black uppercase tracking-tighter leading-[1.1]"
     >
-      We Turn Your Data Into Measurable Revenue—With a Process That Actually
-      Scales.
+      You'll Know Exactly Where You're Losing Revenue. We'll Fix It and Prove
+      It. <span class="text-primary">Money Back If We Don't.</span>
     </h1>
     <p class="text-lg md:text-xl text-gray-400 font-medium mb-8 italic">
-      Stop changing your site on intuition. We use audits, prioritization, and
-      rigorous A/B testing so every decision is backed by data—and your CVR,
-      AOV, and LTV can support real growth.
+      No more guessing. We audit your funnel, find the leaks, prioritize what
+      moves the needle, and run real A/B tests. You get data that says "this
+      works" or "this doesn't." Your CVR and LTV finally support growth—or we
+      refund you.
     </p>
     <div class="flex flex-col items-center gap-4 mt-6">
       <a
@@ -32,35 +33,63 @@ block head_extras %}{% endblock %} {% block content %}
         >BOOK YOUR CRO CALL</a
       >
       <p class="text-gray-500 font-bold uppercase text-xs tracking-widest">
-        Free audit · Positive ROI guarantee within 150 days
+        Free audit · Positive ROI or your money back within 150 days
       </p>
     </div>
   </div>
   <div class="border-t border-white/5 py-6">
-    <div class="max-w-7xl mx-auto px-6">
+    <div class="max-w-7xl mx-auto px-6 overflow-x-auto">
       <div
-        class="flex flex-wrap justify-center items-center gap-8 md:gap-16 text-white/40"
+        class="flex flex-nowrap justify-center items-center gap-6 md:gap-8 shrink-0"
       >
-        <span
-          class="font-display font-black text-xl md:text-2xl tracking-tighter"
-          >LUMINA</span
-        >
-        <span
-          class="font-display font-black text-xl md:text-2xl tracking-tighter"
-          >AETHER</span
-        >
-        <span
-          class="font-display font-black text-xl md:text-2xl tracking-tighter"
-          >ZENITH</span
-        >
-        <span
-          class="font-display font-black text-xl md:text-2xl tracking-tighter"
-          >VORTEX</span
-        >
-        <span
-          class="font-display font-black text-xl md:text-2xl tracking-tighter"
-          >EQUINOX</span
-        >
+        <img
+          src="{{ url_for('static', filename='images/logos/argenx.png') }}"
+          alt="Argenx"
+          class="h-7 md:h-8 w-auto max-w-[110px] shrink-0 object-contain opacity-50 grayscale brightness-0 invert hover:opacity-80 hover:grayscale-0 hover:brightness-100 hover:invert-0 transition-all duration-300"
+          loading="lazy"
+        />
+        <img
+          src="{{ url_for('static', filename='images/logos/canopy.png') }}"
+          alt="Canopy"
+          class="h-7 md:h-8 w-auto max-w-[110px] shrink-0 object-contain opacity-50 grayscale brightness-0 invert hover:opacity-80 hover:grayscale-0 hover:brightness-100 hover:invert-0 transition-all duration-300"
+          loading="lazy"
+        />
+        <img
+          src="{{ url_for('static', filename='images/logos/lpc.png') }}"
+          alt="Le Petit Chef"
+          class="h-7 md:h-8 w-auto max-w-[110px] shrink-0 object-contain opacity-50 grayscale brightness-0 invert hover:opacity-80 hover:grayscale-0 hover:brightness-100 hover:invert-0 transition-all duration-300"
+          loading="lazy"
+        />
+        <img
+          src="{{ url_for('static', filename='images/logos/outdoor-research.png') }}"
+          alt="Outdoor Research"
+          class="h-7 md:h-8 w-auto max-w-[110px] shrink-0 object-contain opacity-50 grayscale brightness-0 invert hover:opacity-80 hover:grayscale-0 hover:brightness-100 hover:invert-0 transition-all duration-300"
+          loading="lazy"
+        />
+        <img
+          src="{{ url_for('static', filename='images/logos/edikted.png') }}"
+          alt="Edikted"
+          class="h-7 md:h-8 w-auto max-w-[110px] shrink-0 object-contain opacity-50 grayscale brightness-0 invert hover:opacity-80 hover:grayscale-0 hover:brightness-100 hover:invert-0 transition-all duration-300"
+          loading="lazy"
+        />
+        <img
+          src="{{ url_for('static', filename='images/logos/vacation-renter.png') }}"
+          alt="Vacation Renter"
+          class="h-7 md:h-8 w-auto max-w-[110px] shrink-0 object-contain opacity-50 grayscale brightness-0 invert hover:opacity-80 hover:grayscale-0 hover:brightness-100 hover:invert-0 transition-all duration-300"
+          loading="lazy"
+        />
+        <img
+          src="{{ url_for('static', filename='images/logos/alle.png') }}"
+          alt="Alle"
+          class="h-7 md:h-8 w-auto max-w-[110px] shrink-0 object-contain opacity-50 grayscale brightness-0 invert hover:opacity-80 hover:grayscale-0 hover:brightness-100 hover:invert-0 transition-all duration-300"
+          loading="lazy"
+        />
+        <img
+          src="{{ url_for('static', filename='images/logos/client-2.png') }}"
+          alt="TUSHY"
+          class="h-7 md:h-8 w-auto max-w-[110px] shrink-0 object-contain opacity-50 grayscale brightness-0 invert hover:opacity-80 hover:grayscale-0 hover:brightness-100 hover:invert-0 transition-all duration-300"
+          loading="lazy"
+        />
       </div>
     </div>
   </div>
@@ -68,110 +97,217 @@ block head_extras %}{% endblock %} {% block content %}
 
 <section class="py-24 bg-light-base" id="problem">
   <div class="content-narrow px-6">
-    <h2 class="text-4xl md:text-5xl mb-4 text-deep-charcoal">
-      Sound familiar?
+    <h2 class="text-4xl md:text-6xl mb-16 text-center text-deep-charcoal">
+      When Your <span class="text-primary">Conversion Rate</span> Keeps You
+      <span class="text-primary">Up at Night.</span>
     </h2>
-    <p class="text-xl text-gray-500 mb-12">The CRO trap in plain words.</p>
 
     <div class="space-y-6 text-gray-700">
       <p class="text-lg leading-relaxed">
-        You're spending more on traffic. Ads, SEO, whatever. But revenue isn't
-        moving the way it should. You <em>know</em> there's a leak—people land
-        on your site, then … where do they go? You're guessing. Your analytics
-        are a mess or you don't trust them. So you change a headline. You tweak
-        the checkout. Nothing moves. Or it does for a week and then it doesn't.
-        You're stuck.
+        You pour money into ads. Into SEO. Into traffic.
+      </p>
+      <p class="text-lg leading-relaxed">Revenue barely moves.</p>
+      <p class="text-lg leading-relaxed">
+        You lie awake wondering where it's leaking.
       </p>
       <p class="text-lg leading-relaxed">
-        What you actually want is simple:
-        <strong class="text-deep-charcoal">to know where it's broken</strong>.
-        To make one change and have it actually move the needle. To scale
-        without your conversion rate falling off a cliff. To stop
-        second-guessing every update because you have data that says "this
-        works" or "this doesn't." That's not too much to ask. It's literally
-        what CRO is for. Most people never get there because they're still
-        optimizing on vibes.
+        Your conversion rate isn't just a number. It's your stress level. Your
+        sleep. Your weekends.
+      </p>
+      <p class="text-lg leading-relaxed">
+        You tweak a headline. You change the checkout. Nothing. Or it works for
+        a week. Then it doesn't.
+      </p>
+      <p class="text-lg leading-relaxed">
+        You're not broken. You're missing the process.
       </p>
     </div>
 
-    <div class="my-12 max-w-md mx-auto">
-      <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+    <div class="my-12 w-full">
+      <div
+        class="bg-white border border-gray-200 rounded-2xl p-4 md:p-5 shadow-sm"
+      >
         <p
-          class="text-xs font-black uppercase tracking-widest text-gray-400 mb-6"
+          class="text-xs font-black uppercase tracking-widest text-gray-400 mb-1"
         >
           The classic pain
         </p>
-        <p class="text-sm font-bold text-deep-charcoal mb-4">
+        <p class="text-base font-bold text-deep-charcoal mb-3">
           Traffic goes up. Conversion doesn't.
         </p>
-        <div class="h-44 w-full" style="min-height: 176px">
+        <div
+          class="w-full aspect-[2/1]"
+          style="min-height: 220px; max-height: 340px"
+        >
           <svg
-            viewBox="0 0 280 140"
+            viewBox="0 0 420 200"
             class="w-full h-full"
             preserveAspectRatio="xMidYMid meet"
             style="overflow: visible"
           >
-            <!-- Grid lines -->
+            <!-- Plot area background -->
+            <rect
+              x="60"
+              y="25"
+              width="340"
+              height="145"
+              rx="6"
+              fill="#f8fafc"
+            />
+            <!-- Grid lines (horizontal) -->
             <line
-              x1="40"
-              y1="20"
-              x2="260"
-              y2="20"
+              x1="60"
+              y1="45"
+              x2="400"
+              y2="45"
+              stroke="#e2e8f0"
+              stroke-width="0.75"
+            />
+            <line
+              x1="60"
+              y1="72"
+              x2="400"
+              y2="72"
+              stroke="#e2e8f0"
+              stroke-width="0.75"
+            />
+            <line
+              x1="60"
+              y1="100"
+              x2="400"
+              y2="100"
+              stroke="#e2e8f0"
+              stroke-width="0.75"
+            />
+            <line
+              x1="60"
+              y1="127"
+              x2="400"
+              y2="127"
+              stroke="#e2e8f0"
+              stroke-width="0.75"
+            />
+            <!-- Grid lines (vertical) -->
+            <line
+              x1="130"
+              y1="25"
+              x2="130"
+              y2="170"
               stroke="#e2e8f0"
               stroke-width="0.5"
             />
             <line
-              x1="40"
-              y1="50"
-              x2="260"
-              y2="50"
+              x1="230"
+              y1="25"
+              x2="230"
+              y2="170"
               stroke="#e2e8f0"
               stroke-width="0.5"
             />
             <line
-              x1="40"
-              y1="80"
-              x2="260"
-              y2="80"
+              x1="330"
+              y1="25"
+              x2="330"
+              y2="170"
               stroke="#e2e8f0"
               stroke-width="0.5"
+            />
+            <!-- Axis frame -->
+            <line
+              x1="60"
+              y1="170"
+              x2="400"
+              y2="170"
+              stroke="#cbd5e1"
+              stroke-width="1"
             />
             <line
-              x1="40"
-              y1="110"
-              x2="260"
-              y2="110"
-              stroke="#e2e8f0"
-              stroke-width="0.5"
+              x1="60"
+              y1="25"
+              x2="60"
+              y2="170"
+              stroke="#cbd5e1"
+              stroke-width="1"
             />
-            <!-- Traffic line (rising): 25% -> 40% -> 58% -> 78% -> 100% of vertical -->
+            <!-- Area fill under Traffic (subtle gradient effect via opacity) -->
+            <path
+              d="M 60 170 L 60 155 L 130 130 L 200 98 L 270 68 L 340 42 L 400 30 L 400 170 Z"
+              fill="#FF4D00"
+              fill-opacity="0.08"
+            />
+            <!-- Legend: top-left, well above CVR line (y 55–58) so no overlap -->
+            <g>
+              <line
+                x1="72"
+                y1="34"
+                x2="105"
+                y2="34"
+                stroke="#FF4D00"
+                stroke-width="2.5"
+                stroke-linecap="round"
+              />
+              <text
+                x="112"
+                y="37"
+                fill="#1e293b"
+                font-size="11"
+                font-weight="600"
+              >
+                Traffic
+              </text>
+              <line
+                x1="72"
+                y1="48"
+                x2="105"
+                y2="48"
+                stroke="#64748b"
+                stroke-width="2"
+                stroke-dasharray="6 4"
+                stroke-linecap="round"
+              />
+              <text
+                x="112"
+                y="51"
+                fill="#1e293b"
+                font-size="11"
+                font-weight="600"
+              >
+                CVR
+              </text>
+            </g>
+            <!-- Traffic line (rising) -->
             <polyline
-              points="40,105 100,84 160,58 220,31 260,20"
+              points="60,155 130,130 200,98 270,68 340,42 400,30"
               fill="none"
               stroke="#FF4D00"
-              stroke-width="3"
+              stroke-width="3.5"
               stroke-linecap="round"
               stroke-linejoin="round"
             />
-            <!-- CVR line (flat/slightly down): 80% -> 78% -> 76% -> 75% -> 74% -->
+            <!-- CVR line (flat) -->
             <polyline
-              points="40,28 100,31 160,34 220,35 260,36"
+              points="60,58 130,57 200,56 270,56 340,55 400,55"
               fill="none"
               stroke="#64748b"
-              stroke-width="3"
+              stroke-width="2.5"
               stroke-linecap="round"
               stroke-linejoin="round"
-              stroke-dasharray="4 3"
+              stroke-dasharray="8 5"
             />
+            <!-- X-axis label -->
+            <text
+              x="230"
+              y="192"
+              text-anchor="middle"
+              fill="#64748b"
+              font-size="11"
+              font-weight="600"
+            >
+              Time →
+            </text>
           </svg>
         </div>
-        <div
-          class="flex justify-between mt-2 text-[10px] font-bold uppercase text-gray-500"
-        >
-          <span>Traffic <span class="text-primary">—</span></span>
-          <span>CVR <span class="text-slate-400">- -</span></span>
-        </div>
-        <p class="text-xs text-gray-500 mt-4 italic">
+        <p class="text-sm text-gray-500 mt-3 italic text-center">
           More spend, same (or worse) conversion. That's the leak.
         </p>
       </div>
@@ -179,9 +315,8 @@ block head_extras %}{% endblock %} {% block content %}
 
     <div class="space-y-6 text-gray-700">
       <p class="text-lg leading-relaxed">
-        If that's you—traffic up, conversion flat or all over the place, no
-        clear picture of where users drop—you're not doomed. You're just missing
-        the process. We fix that.
+        If that's you—traffic up, conversion flat—you're not doomed. You're
+        missing the process. We fix that.
       </p>
     </div>
 
@@ -209,6 +344,30 @@ block head_extras %}{% endblock %} {% block content %}
   </div>
 </section>
 
+<section class="py-8 md:py-12 bg-light-base border-t border-gray-100">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-14 md:mb-20">
+      <h2
+        class="text-3xl md:text-5xl font-display font-black text-deep-charcoal uppercase tracking-tighter"
+      >
+        Proven ROI in the Wild
+      </h2>
+      <p class="text-gray-500 font-bold uppercase tracking-widest text-sm mt-4">
+        Real metrics from real brands we've worked with.
+      </p>
+    </div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+      {% for slug, case in case_studies_list %} {% include
+      '_case_study_card.html' %} {% endfor %}
+    </div>
+    <p
+      class="text-center text-gray-500 font-bold uppercase tracking-widest text-sm mt-8"
+    >
+      And many more…
+    </p>
+  </div>
+</section>
+
 <section class="py-24 bg-white border-y border-gray-100" id="system">
   <div class="content-narrow px-6">
     <h2 class="text-4xl md:text-6xl mb-4 text-center text-deep-charcoal">
@@ -220,14 +379,14 @@ block head_extras %}{% endblock %} {% block content %}
       No randomness. No guesswork. Only data-driven decisions that create direct
       business impact.
     </p>
-    <p class="text-center text-gray-600 max-w-2xl mx-auto mb-14">
-      We offer full-service
-      <strong class="text-deep-charcoal">A/B testing</strong>: we analyze your
-      funnel, strategize what to test, design and develop variants that match
-      your <strong class="text-deep-charcoal">design DNA</strong>, then run the
-      tests. We work with
-      <strong class="text-deep-charcoal">Shopify, WordPress,</strong> and many
-      other platforms—so your site stays yours, we just make it convert better.
+    <p class="text-center text-gray-600 max-w-2xl mx-auto mb-10">
+      We do it all. We <strong class="text-deep-charcoal">track</strong>. We
+      design using your <strong class="text-deep-charcoal">brand DNA</strong>.
+      We develop on
+      <strong class="text-deep-charcoal">Shopify, WordPress,</strong> or
+      anything else. We test through
+      <strong class="text-deep-charcoal">A/B tests</strong>. One team, full
+      loop.
     </p>
     <div class="space-y-16">
       <div
@@ -239,20 +398,12 @@ block head_extras %}{% endblock %} {% block content %}
           1
         </div>
         <h3 class="text-2xl text-deep-charcoal mb-3 pl-8">
-          Analyze: Data &amp; UI/UX Audit
+          Audit: Data &amp; UI/UX
         </h3>
-        <p class="text-gray-600 mb-4 pl-8">
-          We start with a full data and UI/UX analysis to pinpoint exactly where
-          users drop off, why it happens, and which patterns actually drive
-          impact. Using GA4, Hotjar, heatmaps, BigQuery, Python, and funnel
-          analysis, we combine hard data with qualitative insights.
-        </p>
         <p class="text-gray-600 mb-0 pl-8">
-          <strong class="text-deep-charcoal"
-            >This is where we stand out:</strong
-          >
-          we're data nerds who combine data science, statistics, and hundreds of
-          executed tests to draw crystal-clear conclusions.
+          We audit your data and UI/UX so we know exactly where users drop off
+          and what’s actually measurable. No guessing—hard data and clear
+          conclusions before we touch a single test.
         </p>
       </div>
       <div
@@ -264,19 +415,12 @@ block head_extras %}{% endblock %} {% block content %}
           2
         </div>
         <h3 class="text-2xl text-deep-charcoal mb-3 pl-8">
-          Strategize: Test Roadmap with Prioritization
+          Prioritize: Highest Results First
         </h3>
-        <p class="text-gray-600 mb-4 pl-8">
-          We translate all insights into a clear testing roadmap. Using the CLX
-          method—<strong class="text-deep-charcoal"
-            >Impact, Confidence, Leverage, Effort</strong
-          >—we prioritize the ideas that drive the most revenue. No randomness,
-          no guesswork. Only data-driven decisions that create direct business
-          impact.
-        </p>
         <p class="text-gray-600 mb-0 pl-8">
-          Every test idea is scored so we run the highest-yield A/B tests first
-          and avoid wasting traffic on low-impact changes.
+          We prioritize tests to be efficient and effective—most likely highest
+          results first. Every idea is scored so we run the biggest-impact tests
+          first and don’t waste your traffic on low-yield changes.
         </p>
       </div>
       <div
@@ -287,72 +431,22 @@ block head_extras %}{% endblock %} {% block content %}
         >
           3
         </div>
-        <h3 class="text-2xl text-deep-charcoal mb-3 pl-8">
-          Design That Drives Revenue
-        </h3>
-        <p class="text-gray-600 mb-4 pl-8">
-          We translate data, psychology, and proven UI principles into designs
-          that reduce friction and increase conversion. We work within your
-          <strong class="text-deep-charcoal">design DNA</strong>—every test
-          variant fits your brand and visual identity so users always feel
-          they're still on your site.
-        </p>
+        <h3 class="text-2xl text-deep-charcoal mb-3 pl-8">Actually Test</h3>
         <p class="text-gray-600 mb-0 pl-8">
-          With hundreds of executed A/B tests behind us, we know which patterns
-          work and which don't. We handle design, dev, and copy so you get
-          turnkey test variants, not just recommendations.
+          We run the tests. A/B tests, multivariate, directional—where it fits.
+          Every test is analyzed for significance and quality. You get a clear
+          read on what won, why, and what to do next.
         </p>
       </div>
-      <div
-        class="p-8 md:p-10 bg-light-base border border-gray-200 rounded-2xl relative"
-      >
-        <div
-          class="absolute -left-3 top-8 w-10 h-10 bg-primary rounded-full border-4 border-white flex items-center justify-center text-white font-black text-sm"
-        >
-          4
-        </div>
-        <h3 class="text-2xl text-deep-charcoal mb-3 pl-8">
-          Develop: Build Fast. Deploy Safely.
-        </h3>
-        <p class="text-gray-600 mb-4 pl-8">
-          We build test variants quickly and safely—both within A/B testing
-          tools and directly in your codebase. We work with
-          <strong class="text-deep-charcoal">Shopify, WordPress,</strong> and
-          many other platforms; whatever you're on, we develop pixel-perfect
-          implementations that are fully compatible with your existing system.
-        </p>
-        <p class="text-gray-600 mb-0 pl-8">
-          Every implementation is thoroughly tested for performance, errors, and
-          tracking.
-          <strong class="text-deep-charcoal"
-            >Zero risk to live traffic or revenue.</strong
-          >
-          We deploy in a way that lets you roll back instantly if needed.
-        </p>
-      </div>
-      <div
-        class="p-8 md:p-10 bg-light-base border border-gray-200 rounded-2xl relative"
-      >
-        <div
-          class="absolute -left-3 top-8 w-10 h-10 bg-primary rounded-full border-4 border-white flex items-center justify-center text-white font-black text-sm"
-        >
-          5
-        </div>
-        <h3 class="text-2xl text-deep-charcoal mb-3 pl-8">
-          Test: A/B Testing That Delivers Results
-        </h3>
-        <p class="text-gray-600 mb-4 pl-8">
-          We run <strong class="text-deep-charcoal">A/B tests</strong> in
-          leading platforms—Convert.com, VWO, Mida—combined with our own
-          statistical methodology. We execute A/B tests, multivariate tests, and
-          directional tests where appropriate.
-        </p>
-        <p class="text-gray-600 mb-0 pl-8">
-          Every test is analyzed for statistical significance, reliability, and
-          variant quality. Decisions are never based on noise. You get a clear
-          read on what won, why it won, and what to do next.
-        </p>
-      </div>
+    </div>
+    <div
+      class="mt-14 p-8 md:p-10 bg-white border border-gray-200 border-l-4 border-l-primary rounded-r-xl shadow-sm"
+    >
+      <p class="text-deep-charcoal font-bold text-lg mb-0">
+        <strong class="text-primary">Money-back guarantee.</strong> We’re so
+        confident in our process that we back it. If we don’t deliver the
+        results we promise, you get your money back.
+      </p>
     </div>
     <div class="mt-16 text-center">
       <a
@@ -557,7 +651,9 @@ block head_extras %}{% endblock %} {% block content %}
   </div>
 </section>
 
-<section class="py-20 md:py-24 bg-light-base border-t border-gray-100 {{ 'sm-temporarily-hidden' if 'cro_video_testimonials' in temporarily_hidden else '' }}">
+<section
+  class="py-20 md:py-24 bg-light-base border-t border-gray-100 {{ 'sm-temporarily-hidden' if 'cro_video_testimonials' in temporarily_hidden else '' }}"
+>
   <div class="max-w-7xl mx-auto px-6">
     <div class="text-center mb-14">
       <h2
@@ -666,8 +762,7 @@ block head_extras %}{% endblock %} {% block content %}
           Proven Track Record
         </h4>
         <p class="text-gray-600 text-base mb-0">
-          100% success rate on Upwork. 200+ satisfied clients. Our track record
-          speaks for itself.
+          200+ satisfied clients. Our track record speaks for itself.
         </p>
       </div>
       <div class="bg-white p-8 rounded-2xl border border-gray-200">

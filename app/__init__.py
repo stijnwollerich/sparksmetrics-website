@@ -75,6 +75,22 @@ def create_app(config_object="app.config.Config") -> Flask:
     def inject_now():
         return {"now": datetime.utcnow}
 
+    @app.context_processor
+    def inject_primary_bar():
+        """Primary bar: month name + slots (3 on days 1–10, 2 on 11–20, 1 on 21–31)."""
+        utc = datetime.utcnow()
+        day = utc.day
+        if day <= 10:
+            slots = 3
+        elif day <= 20:
+            slots = 2
+        else:
+            slots = 1
+        return {
+            "primary_bar_month": utc.strftime("%B"),
+            "primary_bar_slots": slots,
+        }
+
     # Default video IDs when nothing is configured (so gallery always shows something)
     _DEFAULT_YT_IDS = ["BKN3rEt45Sk", "qEd0zrqFYeg"]
 

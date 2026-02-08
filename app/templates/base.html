@@ -85,11 +85,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-ML2ZDNH2"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
-{# HIDDEN_ELEMENTS: primary_bar, audit_bar, homepage_video, video_testimonials, cro_checklist, results_section, cro_video_testimonials. To show/hide: add or remove from temporarily_hidden. #}
-{% set temporarily_hidden = ['homepage_video', 'video_testimonials', 'cro_checklist', 'results_section', 'cro_video_testimonials'] %}
+{# HIDDEN_ELEMENTS: primary_bar, audit_bar, homepage_video, video_testimonials, cro_checklist, results_section, cro_video_testimonials, analytics_video_testimonials. To show/hide: add or remove from temporarily_hidden. #}
+{% set temporarily_hidden = ['homepage_video', 'video_testimonials', 'cro_checklist', 'results_section', 'cro_video_testimonials', 'analytics_video_testimonials'] %}
 {% block primary_bar %}
 <div id="primary_bar" class="bg-primary text-white text-[10px] md:text-xs font-black uppercase tracking-[0.25em] py-3.5 text-center border-b border-black/5 relative z-[110] {{ 'sm-temporarily-hidden' if 'primary_bar' in temporarily_hidden else '' }}">
-    Only accepting 2 more partners for Q3. High-volume brands only.
+    Only accepting {{ primary_bar_slots }} more partner{{ 's' if primary_bar_slots != 1 else '' }} for {{ primary_bar_month }}.
 </div>
 {% endblock %}
 {% block header %}

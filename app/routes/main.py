@@ -270,6 +270,12 @@ def favicon():
 
 
 @main_bp.route("/cro")
+def cro_redirect():
+    """Redirect old /cro URL to full path."""
+    return redirect(url_for("main.cro"), code=301)
+
+
+@main_bp.route("/conversion-rate-optimization")
 def cro():
     """CRO (Conversion Rate Optimization) service landing."""
     return render_template("cro.html")

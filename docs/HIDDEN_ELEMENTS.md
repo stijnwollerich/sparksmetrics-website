@@ -13,8 +13,9 @@ Control visibility by editing `temporarily_hidden` in `app/templates/base.html`.
 | `cro_checklist`     | landing_alt.html | "The 57-Point CRO Checklist" section |
 | `results_section`  | landing_alt.html | "The Results of Relentless Optimization" section + video cards |
 | `cro_video_testimonials` | cro.html | CRO page: "The Results of Relentless Optimization" video testimonial cards (3 cards) |
+| `analytics_video_testimonials` | analytics.html | Analytics page: "The Results of Accurate Tracking" video testimonial cards (3 cards) |
 
-**Currently hidden:** `homepage_video`, `video_testimonials`, `cro_checklist`, `results_section`, `cro_video_testimonials`  
+**Currently hidden:** `homepage_video`, `video_testimonials`, `cro_checklist`, `results_section`, `cro_video_testimonials`, `analytics_video_testimonials`  
 **Currently visible:** `primary_bar`, `audit_bar`
 
 ## How to change visibility
