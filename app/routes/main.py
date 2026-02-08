@@ -257,8 +257,8 @@ CASE_STUDY_ORDER = [
 
 @main_bp.route("/")
 def index():
-    """Home page — CRO landing (light theme)."""
-    return render_template("landing_alt.html")
+    """Home page — main landing (use index.html; landing_alt.html was removed from repo)."""
+    return render_template("index.html")
 
 
 @main_bp.route("/favicon.ico")
