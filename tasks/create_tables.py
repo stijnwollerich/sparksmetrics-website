@@ -1,4 +1,4 @@
-"""Create database tables. Run from project root: python3 scripts/create_tables.py"""
+"""Create database tables. Run from project root: python3 tasks/create_tables.py"""
 import os
 import sys
 from pathlib import Path
@@ -37,3 +37,4 @@ app = create_app()
 with app.app_context():
     db.create_all()
     print("Tables created.")
+

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }} | Sparksmetrics{% endblock %}
+{% block meta_description %}{{ post.description }}{% endblock %}
+{% block og_title %}{{ post.title }}{% endblock %}
+{% block twitter_title %}{{ post.title }}{% endblock %}
+{% block og_description %}{{ post.description }}{% endblock %}
+{% block twitter_description %}{{ post.description }}{% endblock %}
+
+{% block content %}
+<section class="bg-light-base py-10 md:py-14 border-b border-gray-100">
+  <div class="content-narrow px-6">
+    <a href="{{ url_for('main.blog_index') }}" class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-500 hover:text-primary transition-colors min-h-[44px]">
+      <span class="material-symbols-outlined text-base" aria-hidden="true">arrow_back</span>
+      Back to blog
+    </a>
+
+    <header class="mt-6">
+      <p class="text-primary font-bold text-sm uppercase tracking-[0.4em] mb-4">{{ post.category }}</p>
+      <h1 class="normal-case text-3xl md:text-5xl font-display font-black tracking-tight text-deep-charcoal mb-4">{{ post.title }}</h1>
+      <p class="text-gray-600 text-base md:text-lg mb-0">{{ post.description }}</p>
+      <div class="mt-6 flex flex-wrap gap-2">
+        <span class="inline-flex items-center px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-500 text-[10px] font-bold uppercase tracking-widest">Published {{ post.published_date }}</span>
+        <span class="inline-flex items-center px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-500 text-[10px] font-bold uppercase tracking-widest">{{ post.reading_time }}</span>
+        <span class="inline-flex items-center px-3 py-2 rounded-lg bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest">Framework</span>
+      </div>
+    </header>
+  </div>
+</section>
+
+<section class="bg-light-base py-12 md:py-16">
+  <div class="content-narrow px-6">
+    <article class="blog-prose"><script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"{{ post.title }}","author":{"@type":"Person","name":"Sparksmetrics"}}</script>
+<p class="byline">By Sparksmetrics — CRO &amp; Analytics</p>
+<nav id="toc" class="mb-6 p-4 bg-primary/5 rounded-lg"><strong>Table of contents</strong><ul class="ml-4 mt-2">
+<li><a href="#toc-1">Step 1: Define the outcome and the constraints</a></li>
+<li><a href="#toc-2">Step 2: Validate tracking before you trust any funnel</a></li>
+<li><a href="#toc-3">Step 3: Find the leak with 3 evidence layers</a></li>
+<li><a href="#toc-4">Step 4: Write hypotheses that can be proven wrong</a></li>
+<li><a href="#toc-5">Step 5: Prioritize by impact × confidence × effort</a></li>
+</ul></nav>
+
+<h2>Step 1: Define the outcome and the constraints<span id="toc-1"></span></h2>
+<p>Start with a single primary objective (e.g. purchase conversion rate, lead rate, booked calls). Then list the constraints: traffic volume, seasonality, paid vs organic mix, checkout control, tech stack, and what you can actually change.</p>
+<div class="callout"><p class="callout-title">Why this matters</p><p>Clear objectives prevent scope creep and keep the audit focused on high-value fixes. Defining constraints up-front helps you create realistic hypotheses that are testable within your traffic and engineering limitations.</p><p><strong>How to check:</strong> identify your current monthly sessions by channel, list critical integrations (checkout provider, payment gateways), and confirm which pages can be edited without a full redesign.</p><ul><li><strong>Quick test:</strong> pull a 30‑day traffic overview and calculate baseline conversion per channel.</li><li><strong>Output:</strong> a single page objective and a constraints checklist.</li></ul></div>
+<h2>Step 2: Validate tracking before you trust any funnel<span id="toc-2"></span></h2>
+<p>If events are duplicated, missing, or misattributed, every “drop-off insight” is suspect. Validate core events first: view item, add to cart, begin checkout, purchase (or lead submits).</p>
+<div class="callout"><p class="callout-title">Why this matters</p><p>Bad instrumentation creates false positives and negatives. Before recommending changes, make sure the data you rely on actually reflects user behavior.</p><p><strong>How to check:</strong> run a p-card purchase or test lead submission and verify the event appears in GA4, your A/B tool, and server-side logs. Check for duplicate events (fired twice) and missing parameters (currency, value).</p><ul><li><strong>Quick test:</strong> instrument a test purchase and trace the event through GTM/GA4 and your backend.</li><li><strong>Output:</strong> a short instrumentation report listing missing/duplicate events and recommended fixes.</li></ul></div>
+<h2>Step 3: Find the leak with 3 evidence layers<span id="toc-3"></span></h2>
+<p>We use three layers because any single one lies: quantitative funnels (analytics), qualitative signals (surveys & recordings), and technical validation (logs, devtools).</p>
+<div class="callout"><p class="callout-title">Why this matters</p><p>Combining evidence reduces false leads. For example, analytics may show a drop on checkout, recordings reveal a slow payment widget, and logs confirm payment gateway timeouts — together they identify the true root cause.</p><p><strong>How to check:</strong> correlate funnel drops with session recordings, look for JavaScript errors in the same timeframe, and review server logs for payment or API failures.</p><ul><li><strong>Quick test:</strong> pick a high-traffic day with a known drop and correlate across layers.</li><li><strong>Output:</strong> a prioritized list of candidate leaks with supporting evidence for each.</li></ul></div>
+<h2>Step 4: Write hypotheses that can be proven wrong<span id="toc-4"></span></h2>
+<p>A useful hypothesis includes: the user problem, the change, why it should work, and the measurement. Example: “If we show explicit shipping timing above the CTA, purchase completion will increase because users cite shipping uncertainty in surveys.”</p>
+<div class="callout"><p class="callout-title">Why this matters</p><p>Good hypotheses make experiments interpretable. They force you to pick measurable outcomes and define the minimum detectable effect given your traffic.</p><p><strong>How to check:</strong> ensure each hypothesis has a clear primary metric, secondary metrics (AOV, bounce), and an expected direction.</p><ul><li><strong>Quick test:</strong> convert the top three qualitative themes into testable hypotheses this sprint.</li><li><strong>Output:</strong> a hypothesis document ready for engineering handoff.</li></ul></div>
+<h2>Step 5: Prioritize by impact × confidence × effort<span id="toc-5"></span></h2>
+<p>The output of your audit should be a ranked backlog. We typically score each item by expected revenue impact, confidence (evidence), and engineering effort.</p>
+<div class="callout"><p class="callout-title">Why this matters</p><p>A ranked backlog helps stakeholders agree on what to ship next and prevents busy teams from chasing low-value ideas.</p><p><strong>How to check:</strong> apply the scoring to the top 10 hypotheses and validate that the highest-scoring items are feasible within the next sprint.</p><ul><li><strong>Quick test:</strong> score the top 10 items with a cross-functional group and publish the resulting roadmap.</li><li><strong>Output:</strong> a prioritized test calendar for the next 4–8 weeks.</li></ul></div>
+<hr /><div class="callout"><p class="callout-title">Want us to run the audit?</p><p>We’ll audit your funnel, implement fixes, and turn the findings into a prioritized test plan. Our engagement includes an instrumentation review, qualitative sampling, and a prioritized roadmap. <a href="{{ url_for('main.schedule_a_call') }}">Book a call</a>.</p></div>
+<section class="mt-10 p-6 bg-light-base border border-gray-200 rounded-2xl"><h3>Implementation checklist</h3><ul><li>Run qualitative research: surveys & session recordings</li><li>Validate tracking & reconcile events across sources</li><li>Produce 8–12 testable hypotheses from evidence</li><li>Prioritize and schedule experiments for the next 4–8 weeks</li><li>Deliver experiment exports, analysis, and a handoff document</li></ul></section>
+</article>
+  </div>
+</section>
+{% endblock %}
+

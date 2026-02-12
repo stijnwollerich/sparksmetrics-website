@@ -30,7 +30,7 @@ pip install -r requirements.txt
 sudo systemctl restart sparksmetrics
 ```
 
-If you added new DB tables or this is the first deploy: run `python3 scripts/create_tables.py` once (see section 5).
+If you added new DB tables or this is the first deploy: run `python3 tasks/create_tables.py` once (see section 5).
 
 **Env / secrets:**  
 - **Local:** `.env` can have `FLASK_DEBUG=1`, `SECRET_KEY=...`, and optionally `DATABASE_URL` if you run Postgres locally. If `DATABASE_URL` is missing, the app runs but lead forms won’t be saved to a DB.  
@@ -118,10 +118,10 @@ Clear any stale bytecode so the app uses the latest config, then create tables:
 ```bash
 cd $APP_DIR && source .venv/bin/activate
 find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null; true
-python3 scripts/create_tables.py
+python3 tasks/create_tables.py
 ```
 
-If `scripts/create_tables.py` is not on the server yet, use this one-liner (paste as a single line, no extra spaces):
+If `tasks/create_tables.py` is not on the server yet, use this one-liner (paste as a single line, no extra spaces):
 
 ```bash
 python3 -c "from app import create_app; from app.models import db; app = create_app(); app.app_context().push(); db.create_all(); print('Tables created.')"

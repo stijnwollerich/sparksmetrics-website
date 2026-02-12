@@ -1,5 +1,8 @@
 """Main (public) routes."""
+import json
 import re
+from pathlib import Path
+from datetime import datetime, timezone
 from flask import abort, Blueprint, current_app, jsonify, redirect, render_template, request, url_for, Response
 
 from app.models import Lead, db
@@ -256,6 +259,104 @@ CASE_STUDY_ORDER = [
     "national-fitness-franchise",
 ]
 
+def _load_blog_posts() -> list[dict]:
+    """Load blog posts metadata from app/blog_posts.json (cron-friendly)."""
+    path = Path(__file__).resolve().parents[1] / "blog_posts.json"
+    try:
+        raw = path.read_text(encoding="utf-8")
+        data = json.loads(raw)
+        posts = data.get("posts") if isinstance(data, dict) else data
+        return list(posts or [])
+    except Exception:
+        return []
+
+
+def _scan_blog_templates() -> list[dict]:
+    """Scan app/templates/blog/ for templates and build a lightweight posts list.
+    This allows the blog index to reflect files in the templates/blog folder automatically.
+    """
+    tmpl_dir = Path(__file__).resolve().parents[1] / "templates" / "blog"
+    if not tmpl_dir.exists():
+        return []
+    posts: list[dict] = []
+    # Load any existing metadata from app/blog_posts.json so we can prefer explicit titles/descriptions
+    metadata_by_slug = {}
+    try:
+        for p in _load_blog_posts():
+            if isinstance(p, dict) and p.get("slug"):
+                metadata_by_slug[p["slug"]] = p
+    except Exception:
+        metadata_by_slug = {}
+    # Build a reverse map from known video_id -> slug so templates can be renamed
+    video_id_to_slug = {
+        p.get("video_id"): slug for slug, p in metadata_by_slug.items() if p.get("video_id")
+    }
+    for f in sorted(tmpl_dir.glob("*.html"), key=lambda p: p.name, reverse=True):
+        name = f.name
+        # Derive slug: remove leading blog_ if present, and extension
+        slug = name
+        if slug.startswith("blog_"):
+            slug = slug[len("blog_") :]
+        slug = slug.rsplit(".html", 1)[0]
+
+        text = f.read_text(encoding="utf-8", errors="ignore")
+        # If the template contains an embedded YouTube ID that matches metadata, map this file to that slug.
+        m_vid = re.search(r"(?:youtube\\.com/embed/|youtu\\.be/)([A-Za-z0-9_-]{5,20})", text)
+        if m_vid:
+            found_vid = m_vid.group(1)
+            mapped = video_id_to_slug.get(found_vid)
+            if mapped:
+                # Use the canonical slug from blog_posts.json so URLs remain stable
+                slug = mapped
+        # Try to extract a sensible title: first <h1> or <h2>, else filename
+        m = re.search(r"<h1[^>]*>(.*?)</h1>", text, flags=re.I | re.S)
+        if not m:
+            m = re.search(r"<h2[^>]*>(.*?)</h2>", text, flags=re.I | re.S)
+        raw_title = re.sub(r"<[^>]+>", "", m.group(1)).strip() if m else ""
+        # If the extracted title looks like a template variable, treat it as missing
+        extracted_title = None if (not raw_title or re.search(r"\{\{\s*post\.|\{\{|\{%\s", raw_title)) else raw_title
+        # Prefer explicit metadata from blog_posts.json when available, otherwise use extracted title or filename
+        title = (
+            metadata_by_slug.get(slug, {}).get("title")
+            or extracted_title
+            or slug.replace("-", " ").replace("_", " ").title()
+        )
+        # Extract first paragraph as description, but avoid template placeholders
+        m2 = re.search(r"<p[^>]*>(.*?)</p>", text, flags=re.I | re.S)
+        description_raw = re.sub(r"<[^>]+>", " ", (m2.group(1) or "")).strip() if m2 else ""
+        extracted_description = None if (not description_raw or re.search(r"\{\{|\{%\s", description_raw)) else description_raw
+        description = metadata_by_slug.get(slug, {}).get("description") or extracted_description or (title + " — insights and examples.")
+        # published date from file mtime
+        try:
+            mtime = f.stat().st_mtime
+            published = datetime.fromtimestamp(mtime).strftime("%d %b %Y")
+        except Exception:
+            published = datetime.now(timezone.utc).strftime("%d %b %Y")
+        # simple reading time estimate (200 wpm)
+        words = len(re.findall(r"\w+", re.sub(r"<[^>]+>", " ", text)))
+        minutes = max(1, int(round(words / 200.0)))
+        reading_time = f"{minutes} min read"
+
+        post = {
+            "slug": slug,
+            "title": title,
+            "description": description[:200],
+            "published_date": published,
+            "updated_date": published,
+            "reading_time": reading_time,
+            "category": "CRO",
+            "template": f"blog/{name}",
+            # include any explicit video_id or youtube_url from metadata so templates can use them
+            **({"video_id": metadata_by_slug[slug].get("video_id")} if slug in metadata_by_slug and metadata_by_slug[slug].get("video_id") else {}),
+            **({"youtube_url": metadata_by_slug[slug].get("youtube_url")} if slug in metadata_by_slug and metadata_by_slug[slug].get("youtube_url") else {}),
+        }
+        posts.append(post)
+    return posts
+
+
+# Blog posts (no DB): one HTML template per post. Metadata lives in app/blog_posts.json.
+BLOG_POSTS: list[dict] = _load_blog_posts()
+
 
 @main_bp.route("/")
 def index():
@@ -460,6 +561,24 @@ def case_studies():
     return redirect(url_for("main.results"), code=301)
 
 
+@main_bp.route("/blog")
+def blog_index():
+    """Blog overview page."""
+    # Prefer scanning templates/blog/ so the index reflects templates present in templates/blog/.
+    posts = _scan_blog_templates() or _load_blog_posts()
+    return render_template("blog.html", posts=posts)
+
+
+@main_bp.route("/blog/<slug>")
+def blog_post(slug: str):
+    """Individual blog post page (template per post)."""
+    posts = _scan_blog_templates() or _load_blog_posts()
+    post = next((p for p in posts if p.get("slug") == slug), None)
+    if not post:
+        abort(404)
+    return render_template(post["template"], post=post)
+
+
 @main_bp.route("/privacy-policy")
 def privacy_policy():
     """Privacy policy."""
@@ -492,6 +611,7 @@ def sitemap():
         ("main.cro", {}),
         ("main.analytics", {}),
         ("main.results", {}),
+        ("main.blog_index", {}),
         ("main.schedule_a_call", {}),
         ("main.cro_ebook", {}),
         ("main.privacy_policy", {}),
@@ -507,6 +627,11 @@ def sitemap():
     for slug in CASE_STUDIES:
         try:
             urls.append(url_for("main.case_study", slug=slug, _external=True))
+        except Exception:
+            pass
+    for post in _load_blog_posts():
+        try:
+            urls.append(url_for("main.blog_post", slug=post["slug"], _external=True))
         except Exception:
             pass
     def escape_loc(s: str) -> str:

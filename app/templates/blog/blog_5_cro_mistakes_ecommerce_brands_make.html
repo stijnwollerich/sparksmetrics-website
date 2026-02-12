@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }} | Sparksmetrics{% endblock %}
+{% block meta_description %}{{ post.description }}{% endblock %}
+{% block og_title %}{{ post.title }}{% endblock %}
+{% block twitter_title %}{{ post.title }}{% endblock %}
+{% block og_description %}{{ post.description }}{% endblock %}
+{% block twitter_description %}{{ post.description }}{% endblock %}
+
+{% block content %}
+<section class="bg-light-base py-10 md:py-14 border-b border-gray-100">
+  <div class="content-narrow px-6">
+    <a href="{{ url_for('main.blog_index') }}" class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-500 hover:text-primary transition-colors min-h-[44px]">
+      <span class="material-symbols-outlined text-base" aria-hidden="true">arrow_back</span>
+      Back to blog
+    </a>
+
+    <header class="mt-6">
+      <p class="text-primary font-bold text-sm uppercase tracking-[0.4em] mb-4">{{ post.category }}</p>
+      <h1 class="normal-case text-3xl md:text-5xl font-display font-black tracking-tight text-deep-charcoal mb-4">{{ post.title }}</h1>
+      <p class="text-gray-600 text-base md:text-lg mb-0">{{ post.description }}</p>
+      <div class="mt-6 flex flex-wrap gap-2">
+        <span class="inline-flex items-center px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-500 text-[10px] font-bold uppercase tracking-widest">Published {{ post.published_date }}</span>
+        <span class="inline-flex items-center px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-500 text-[10px] font-bold uppercase tracking-widest">{{ post.reading_time }}</span>
+      </div>
+    </header>
+  </div>
+</section>
+
+<section class="bg-light-base py-12 md:py-16">
+  <div class="content-narrow px-6">
+    <div class="aspect-video w-full rounded-2xl overflow-hidden bg-black border border-black/10">
+      <iframe
+        class="w-full h-full"
+        src="https://www.youtube.com/embed/{{ post.video_id or 'qEd0zrqFYeg' }}"
+        title="YouTube video player"
+        frameborder="0"
+        loading="lazy"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <article class="blog-prose mt-10">
+      <script type="application/ld+json">{{ {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": (post.title or "5 CRO mistakes e-commerce brands make"),
+        "description": (post.description or "Practical CRO research and prioritization advice to fix common conversion leaks.")
+      } | tojson }}</script>
+
+      <div class="article-hero">
+        <div class="kicker">CRO</div>
+        <h2>{{ post.title or "5 CRO mistakes e-commerce brands make" }}</h2>
+        <p class="lead">We audited 90+ e‑commerce stores and keep finding the same five mistakes. This guide walks through each mistake, why it matters, and the exact, testable steps to fix it.</p>
+        <p class="mt-4">Read time: {{ post.reading_time }} — Includes a practical checklist and example hypotheses you can use in your next sprint.</p>
+        <div class="mt-6 flex gap-3">
+          <a class="btn btn-primary" href="/schedule-a-call/">Hire Sparksmetrics</a>
+          <button class="btn btn-outline" data-checklist-modal>Download free ebook</button>
+        </div>
+      </div>
+
+      <nav id="toc" class="mb-6 p-4 bg-primary/5 rounded-lg">
+        <strong>Contents</strong>
+        <ul class="ml-4 mt-2">
+          <li><a href="#mistake-1">Mistake #1: Skipping qualitative research</a></li>
+          <li><a href="#mistake-2">Mistake #2: Treating quantitative data as the whole story</a></li>
+          <li><a href="#mistake-3">Mistake #3: Prioritizing tests ineffectively</a></li>
+          <li><a href="#mistake-4">Mistake #4: Weak copy that doesn't convert</a></li>
+          <li><a href="#mistake-5">Mistake #5: Choosing the wrong test scope</a></li>
+        </ul>
+      </nav>
+
+      <h2 id="mistake-1">Mistake #1: Skipping qualitative research</h2>
+      <p>Analytics show where users drop off; qualitative research shows why. Without short surveys, session recordings, or 1:1 interviews, teams guess at motivations and design tests that miss the root cause.</p>
+      <p>Why this matters: Quantitative metrics tell you "what" but not "why." Qualitative signals expose friction, trust issues, and confusing copy that data alone cannot reveal.</p>
+      <p>Start with a 1‑question micro‑survey on the page you care about (PDP, checkout). Ask: “What’s stopping you from buying today?” Gather 30–100 responses, group themes, and convert each into a hypothesis.</p>
+      <p><strong>Quick actions:</strong> deploy a micro‑survey (5–10 min), review 30 recordings (2–4 hours), extract top objections, and draft hypotheses. Example hypothesis: "If we add explicit shipping timing above the CTA, purchase completion will increase by reducing uncertainty."</p>
+
+      <h2 id="mistake-2">Mistake #2: Treating quantitative data as the whole story</h2>
+      <p>GA4 funnels and heatmaps are essential but incomplete. They point to the problem area; qualitative signals and segmentation explain the cause. A single aggregate drop can hide device or channel‑specific issues.</p>
+      <p>Why this matters: Aggregated metrics can disguise critical differences — a desktop uplift might hide a mobile crash that costs you more revenue overall.</p>
+      <p>Combine segmentation (device, channel, landing page) with survey findings. For example, a mobile drop may indicate layout issues while desktop drop signals performance or checkout complexity.</p>
+      <p><strong>Quick actions:</strong> segment your funnel, cross‑reference with survey quotes, and create targeted hypotheses per segment. Example: Create a mobile-only variant that simplifies the PDP and measure add-to-cart rate separately.</p>
+
+      <h2 id="mistake-3">Mistake #3: Prioritizing tests ineffectively</h2>
+      <p>Prioritization is how you allocate scarce development time. Frameworks (ICE, RICE, PXL) help, but anchor scores in data: traffic, revenue opportunity, and confidence from research.</p>
+      <p>Why this matters: Doing lots of low-impact tests wastes engineering capacity and delays high-value wins. Prioritization ensures continuous learning while targeting revenue upside.</p>
+      <p>Run a balanced pipeline: 1 higher‑impact experiment and 2–3 quick wins per sprint. This keeps learning continuous while pursuing big upside.</p>
+      <p><strong>Quick actions:</strong> create an ICE spreadsheet, estimate effort in dev hours, and schedule non‑conflicting tests. Example prioritization: score each hypothesis by expected revenue impact × confidence (from research) ÷ effort hours.</p>
+
+      <h2 id="mistake-4">Mistake #4: Weak copy that doesn't convert</h2>
+      <p>Copy is the interface between product and buyer. Vague, brand‑first language loses conversions. Use benefit statements, concise value stacks, and answer the top three buyer questions above the fold.</p>
+      <p>Why this matters: Clear, benefit-led copy reduces hesitation and increases intent. Small headline wins can compound into large revenue improvements when applied to high-traffic pages.</p>
+      <p>Test headline variants and a short FAQ addressing the top objections found in your qualitative research.</p>
+      <p><strong>Quick actions:</strong> run 3 headline A/Bs, add one-line value stack, and surface the top 3 objections near CTA. Example copy test: Control vs "Free 30‑day returns + same‑day dispatch" on PDP.</p>
+
+      <h2 id="mistake-5">Mistake #5: Choosing the wrong test scope (big vs incremental)</h2>
+      <p>Big redesigns are costly and risky; incremental tests compound. If fundamentals (research, measurement) are missing, validate direction with small tests first, then scale to a redesign.</p>
+      <p>Why this matters: Incremental tests produce rapid learning at low cost. When multiple micro‑wins point the same direction, a redesign becomes a lower-risk, higher-confidence investment.</p>
+      <p><strong>Quick actions:</strong> run 4–6 micro‑tests to validate hypotheses before committing to large engineering efforts. Example sequence: copy tweaks → CTA prominence → trust signals → pricing presentation.</p>
+
+      <section class="p-6 bg-light-base border border-gray-200 rounded-2xl mt-10">
+        <h3>Implementation checklist</h3>
+        <ul>
+          <li>Deploy a 1‑question micro‑survey on the target page (5–10 min)</li>
+          <li>Review 30 session recordings and tag friction (2–4 hours)</li>
+          <li>Prioritize ideas with ICE/RICE and pick 2 quick wins for next sprint (1–2 hours)</li>
+          <li>Run headline + CTA tests and measure revenue‑per‑visitor (1–3 days)</li>
+          <li>Plan a testing calendar to avoid overlapping experiments (1 day)</li>
+          <li>Document each experiment with hypothesis, measurement, and outcome (ongoing)</li>
+          <li>Deliver experiment exports and variant URLs to a shared repository monthly</li>
+        </ul>
+      </section>
+
+      <div class="callout mt-8 p-6 bg-primary/10 rounded-lg border border-primary/20">
+        <p class="callout-title font-semibold text-lg mb-2">Ready to stop guessing?</p>
+        <p>Book a free 24‑hour CRO audit and we’ll show the top three fixes you can implement this week.</p>
+        <p class="mt-2">If you prefer a guided approach, we offer a short engagement that includes research, prioritized roadmap, and two implementation-ready experiments.</p>
+        <div class="mt-4 flex gap-3"><button type="button" class="btn btn-primary" data-audit-modal data-title="Get a FREE 24-Hour CRO Audit" data-description="Enter your email and we’ll get in touch to schedule your free audit." data-button-text="Claim my free audit">Claim free CRO audit</button><a class="btn btn-outline" href="/schedule-a-call/">Schedule a call</a></div>
+      </div>
+
+    </article>
+  </div>
+</section>
+{% endblock %}
+

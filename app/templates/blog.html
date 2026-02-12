@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Sparksmetrics | Blog{% endblock %}
+{% block meta_description %}Tactical insights on CRO, GA4, tracking, and growth systems. No fluff—just what works and how to implement it.{% endblock %}
+{% block og_title %}Sparksmetrics | Blog{% endblock %}
+{% block twitter_title %}Sparksmetrics | Blog{% endblock %}
+{% block og_description %}Tactical insights on CRO, GA4, tracking, and growth systems. No fluff—just what works and how to implement it.{% endblock %}
+{% block twitter_description %}Tactical insights on CRO, GA4, tracking, and growth systems. No fluff—just what works and how to implement it.{% endblock %}
+
+{% block content %}
+<section class="bg-black relative pt-10 pb-12 overflow-hidden border-b border-white/5">
+  <div class="content-narrow px-6 relative z-10 text-center">
+    <p class="text-primary font-bold text-sm uppercase tracking-[0.4em] mb-6">INSIGHTS</p>
+    <h1 class="text-3xl md:text-5xl lg:text-6xl mb-6 text-white font-display font-black uppercase tracking-tighter leading-[1.1]">Blog</h1>
+    <p class="text-lg md:text-xl text-gray-400 font-medium mb-0 italic">
+      CRO + analytics posts written for operators. Clean explanations, clear steps, and a bias toward what’s verifiable.
+    </p>
+  </div>
+</section>
+
+<section class="py-14 md:py-20 bg-light-base">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid md:grid-cols-2 gap-6 md:gap-8">
+      {% for post in posts %}
+      <a href="{{ url_for('main.blog_post', slug=post.slug) }}" class="group block bg-white border border-gray-200 rounded-3xl p-7 md:p-8 shadow-sm hover:shadow-md transition-shadow">
+        <div class="flex flex-wrap items-center gap-2 mb-4">
+          <span class="inline-flex items-center px-3 py-2 rounded-lg bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest">{{ post.category }}</span>
+          <span class="inline-flex items-center px-3 py-2 rounded-lg bg-gray-50 border border-gray-200 text-gray-500 text-[10px] font-bold uppercase tracking-widest">{{ post.reading_time }}</span>
+        </div>
+        <h2 class="normal-case text-xl md:text-2xl font-display font-black tracking-tight text-deep-charcoal group-hover:text-primary transition-colors mb-3">{{ post.title }}</h2>
+        <p class="text-gray-600 text-sm md:text-base leading-relaxed mb-0">{{ post.description }}</p>
+        <div class="mt-6 flex items-center justify-between gap-3">
+          <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Published {{ post.published_date }}</span>
+          <span class="text-[10px] font-black uppercase tracking-widest text-primary">Read →</span>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+
+    <div class="mt-12 md:mt-16 bg-white border border-gray-200 rounded-3xl p-7 md:p-10 shadow-sm">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        <div>
+          <p class="text-primary text-[10px] font-black uppercase tracking-widest mb-2">Want help implementing?</p>
+          <p class="text-deep-charcoal font-bold text-lg mb-0">If you want us to audit your funnel or fix your tracking, we’ll map the leaks, implement, and verify until the numbers add up.</p>
+        </div>
+        <a class="shrink-0 inline-flex items-center justify-center px-6 py-4 min-h-[48px] bg-primary text-white text-xs font-black uppercase rounded-xl hover:brightness-110 transition-all shadow-lg shadow-primary/25" href="{{ url_for('main.schedule_a_call') }}">Talk to us</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+

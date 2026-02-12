@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }} | Sparksmetrics{% endblock %}
+{% block meta_description %}{{ post.description }}{% endblock %}
+{% block og_title %}{{ post.title }}{% endblock %}
+{% block twitter_title %}{{ post.title }}{% endblock %}
+{% block og_description %}{{ post.description }}{% endblock %}
+{% block twitter_description %}{{ post.description }}{% endblock %}
+
+{% block content %}
+<section class="bg-light-base py-10 md:py-14 border-b border-gray-100">
+  <div class="content-narrow px-6">
+    <a href="{{ url_for('main.blog_index') }}" class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-500 hover:text-primary transition-colors min-h-[44px]">
+      <span class="material-symbols-outlined text-base" aria-hidden="true">arrow_back</span>
+      Back to blog
+    </a>
+
+    <header class="mt-6">
+      <p class="text-primary font-bold text-sm uppercase tracking-[0.4em] mb-4">{{ post.category }}</p>
+      <h1 class="normal-case text-3xl md:text-5xl font-display font-black tracking-tight text-deep-charcoal mb-4">{{ post.title }}</h1>
+      <p class="text-gray-600 text-base md:text-lg mb-0">{{ post.description }}</p>
+      <div class="mt-6 flex flex-wrap gap-2">
+        <span class="inline-flex items-center px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-500 text-[10px] font-bold uppercase tracking-widest">Published {{ post.published_date }}</span>
+        <span class="inline-flex items-center px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-500 text-[10px] font-bold uppercase tracking-widest">{{ post.reading_time }}</span>
+        <span class="inline-flex items-center px-3 py-2 rounded-lg bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest">Practical</span>
+      </div>
+    </header>
+  </div>
+</section>
+
+<section class="bg-light-base py-12 md:py-16">
+  <div class="content-narrow px-6">
+    <article class="blog-prose"><script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"{{ post.title }}","author":{"@type":"Person","name":"Sparksmetrics"}}</script>
+<p class="byline">By Sparksmetrics — CRO &amp; Analytics</p>
+<nav id="toc" class="mb-6 p-4 bg-primary/5 rounded-lg"><strong>Table of contents</strong><ul class="ml-4 mt-2">
+<li><a href="#toc-1">1) You’re comparing different attribution models</a></li>
+<li><a href="#toc-2">2) Consent mode and ad blockers remove events upstream</a></li>
+<li><a href="#toc-3">3) You have duplicate or missing purchase events</a></li>
+<li><a href="#toc-4">4) Your source/medium is getting overwritten</a></li>
+<li><a href="#toc-5">5) The right goal is “decision-grade,” not “perfect match”</a></li>
+</ul></nav>
+
+<h2>1) You’re comparing different attribution models<span id="toc-1"></span></h2>
+<p>GA4 reports are usually data-driven attribution (or last-click depending on the view), Google Ads has its own conversion logic and settings, and Meta reports are often view-through + click-through within a chosen window. If you compare “Purchases” across platforms without aligning windows and attribution rules, mismatch is guaranteed.</p>
+<div class="callout"><p class="callout-title">Why this matters</p><p>Different attribution rules mean each platform assigns credit differently. Without alignment you can misallocate budget and misinterpret channel performance.</p><p><strong>How to check:</strong> compare conversions using the same attribution window and define a canonical source-of-truth for reporting (e.g., server-side conversions reconciled with GA4).</p><ul><li><strong>Quick test:</strong> pull the last 30 days and compare conversions by aligned 7‑day click windows.</li><li><strong>Output:</strong> a short note describing the expected delta and an adjusted reporting dashboard.</li></ul></div>
+<h2>2) Consent mode and ad blockers remove events upstream<span id="toc-2"></span></h2>
+<p>If consent is denied (or an ad blocker blocks requests), GA4 may receive modeled or reduced signals, and ad platforms may receive nothing. The result is not a “reporting issue” — it’s missing input data.</p>
+<div class="callout"><p class="callout-title">Why this matters</p><p>Missing signals mean you underreport conversions in analytics and may over- or under-invest in channels. Server-side capture and modeled conversions can reduce this gap.</p><p><strong>How to check:</strong> compare client-side event counts to server-side logs and consent-mode reports. Look for a consistent percentage of missing events by browser and device.</p><ul><li><strong>Quick test:</strong> instrument a server-side purchase event and compare counts over a week.</li><li><strong>Output:</strong> ratio of client-side to server-side events and recommended mitigation (server-side tagging, modeled conversions).</li></ul></div>
+<h2>3) You have duplicate or missing purchase events<span id="toc-3"></span></h2>
+<p>The most common technical issues we see: duplicate events fired on page refresh, missing ecommerce parameters (value, currency), or server callbacks failing under load.</p>
+<div class="callout"><p class="callout-title">Why this matters</p><p>Duplicates inflate conversions and break attribution, while missing events hide true performance. Both lead to poor decision-making.</p><p><strong>How to check:</strong> run a test checkout at low traffic and inspect the network calls, GA4 debug view, and server logs for one transaction ID.</p><ul><li><strong>Quick test:</strong> complete 5 instrumented test orders and verify one-to-one mapping between order IDs and events.</li><li><strong>Output:</strong> list of missing/duplicate events and fixes (dedup keys, backend callbacks, GTM filters).</li></ul></div>
+<h2>4) Your source/medium is getting overwritten<span id="toc-4"></span></h2>
+<p>Even if purchases are correct, you can still get channel chaos if UTMs get stripped, redirects are misconfigured, or you’re losing gclid/fbclid through checkout. This shows up as “Direct” growing mysteriously or paid being underreported.</p>
+<div class="callout"><p class="callout-title">Why this matters</p><p>When source attribution is wrong, budget decisions based on channel ROI will be wrong. Fixing UTM persistence and redirect handling restores trustworthy channel reporting.</p><p><strong>How to check:</strong> test flows from ad click through checkout and confirm UTM/gclid persistence across redirects and third-party payment flows.</p><ul><li><strong>Quick test:</strong> click an ad with test UTMs and complete checkout; inspect final URL and stored utm/gclid values.</li><li><strong>Output:</strong> list of pages or redirects that drop UTMs and proposed fixes (cookie persistence, URL parameter forwarding).</li></ul></div>
+<h2>5) The right goal is “decision-grade,” not “perfect match”<span id="toc-5"></span></h2>
+<p>The objective isn’t making GA4 equal Meta to the cent. It’s building an instrumentation layer where:</p>
+<div class="callout"><p class="callout-title">Why this matters</p><p>A decision-grade system gives you consistent directional signals and a reliable basis for budget allocation. Perfection is expensive; consistency and reconciliation are valuable.</p><p><strong>How to check:</strong> establish tolerance bands for expected deltas between platforms and focus on trends rather than exact counts.</p><ul><li><strong>Quick test:</strong> define a reporting tolerance (e.g., ±15%) and compare weekly trends rather than day-to-day spikes.</li><li><strong>Output:</strong> documented reporting tolerances and a reconciliation playbook.</li></ul></div>
+<hr /><div class="callout"><p class="callout-title">Want us to run the audit?</p><p>We’ll audit your tracking, reconcile platforms, and deliver a prioritized list of fixes and tests. Our approach includes server-side validation, UTM persistence fixes, and a 4‑week reconciliation plan. <a href="{{ url_for('main.schedule_a_call') }}">Book a call</a>.</p></div>
+<section class="mt-10 p-6 bg-light-base border border-gray-200 rounded-2xl"><h3>Implementation checklist</h3><ul><li>Compare attribution windows and choose canonical reporting rules</li><li>Instrument server-side events and compare to client-side</li><li>Fix duplicate/missing events and persist UTMs across redirects</li><li>Document reconciliation steps and tolerance bands</li></ul></section>
+</article>
+  </div>
+</section>
+{% endblock %}
+

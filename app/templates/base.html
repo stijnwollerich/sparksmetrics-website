@@ -72,10 +72,45 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         .editorial-text strong { @apply text-black font-extrabold; }
         .problem-intro p { @apply leading-[1.85] mb-0; }
         .problem-intro { @apply space-y-6; }
+        /* Blog typography (scoped for best reading experience) */
+        .blog-prose { @apply text-gray-800; }
+        .blog-prose h1 { @apply normal-case text-3xl md:text-5xl font-display font-black tracking-tight text-deep-charcoal mb-4; }
+        .blog-prose h2 { @apply normal-case text-2xl md:text-3xl font-display font-black tracking-tight text-deep-charcoal mt-12 mb-4; }
+        .blog-prose h3 { @apply normal-case text-xl md:text-2xl font-display font-black tracking-tight text-deep-charcoal mt-10 mb-3; }
+        /* Blog paragraphs: slightly smaller for better visual rhythm on long articles */
+        .blog-prose p { @apply mb-5 text-base md:text-lg leading-[1.7] text-gray-800 font-medium; }
+        .blog-prose a { @apply text-primary font-bold underline decoration-primary/30 underline-offset-4 hover:decoration-primary; }
+        .blog-prose a.btn { @apply no-underline; }
+        .blog-prose ul { @apply my-6 pl-6 list-disc space-y-2 text-lg md:text-xl leading-[1.8] font-medium; }
+        .blog-prose ol { @apply my-6 pl-6 list-decimal space-y-2 text-lg md:text-xl leading-[1.8] font-medium; }
+        .blog-prose li { @apply text-gray-800; }
+        .blog-prose blockquote { @apply my-8 border-l-4 border-primary pl-6 pr-4 py-3 bg-primary/5 rounded-r-2xl italic text-gray-800; }
+        .blog-prose hr { @apply my-12 border-gray-200; }
+        .blog-prose code { @apply font-mono text-[0.95em] bg-gray-100 px-1.5 py-0.5 rounded border border-gray-200; }
+        .blog-prose pre { @apply my-8 p-5 bg-gray-950 text-gray-100 rounded-2xl overflow-x-auto border border-black/10; }
+        .blog-prose pre code { @apply bg-transparent p-0 border-0 text-gray-100; }
+        .blog-prose .callout { @apply my-10 p-6 md:p-8 bg-primary/5 border border-primary/10 rounded-2xl; }
+        .blog-prose .callout-title { @apply normal-case text-sm font-black uppercase tracking-widest text-primary mb-2; }
+        .blog-prose .btn { @apply inline-flex items-center justify-center gap-2 px-6 py-4 min-h-[48px] rounded-xl font-black uppercase tracking-[0.18em] text-[10px] md:text-[11px] transition-all; }
+        .blog-prose .btn-primary { @apply bg-primary text-white hover:brightness-110 shadow-lg shadow-primary/25; }
+        .blog-prose .btn-outline { @apply bg-white text-deep-charcoal border border-gray-200 hover:border-primary/30 hover:text-primary; }
+        .blog-prose .btn-soft { @apply bg-primary/10 text-primary hover:bg-primary/15; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         /* Temporarily hidden: remove class sm-temporarily-hidden from these to show again. See HIDDEN_ELEMENTS below. */
         .sm-temporarily-hidden { display: none !important; }
+        /* Article visual components */
+        /* tuned to match original banners exactly: spacing, sizes, colors */
+        .article-hero { @apply bg-white border border-gray-100 rounded-3xl p-10 md:p-14 shadow-[0_20px_60px_-12px_rgba(34,34,34,0.18)] mb-8; }
+        .article-hero .kicker { @apply text-primary font-black uppercase text-sm tracking-widest mb-3; letter-spacing:0.14em; }
+        .article-hero h2 { @apply text-2xl md:text-5xl font-display font-black text-deep-charcoal mb-4; }
+        .article-hero p.lead { @apply text-lg md:text-2xl text-gray-600 leading-relaxed; }
+        .tip-banner { @apply mt-6 p-6 md:p-8 bg-primary/6 border-l-6 border-primary rounded-xl; }
+        .tip-banner strong { @apply text-deep-charcoal font-black; font-size:1.02rem; }
+        .stat-grid { @apply grid grid-cols-1 sm:grid-cols-3 gap-6 my-6; }
+        .stat-card { @apply bg-white border border-gray-100 rounded-2xl p-6 text-center shadow-md; }
+        .blog-prose .btn { @apply inline-flex items-center justify-center gap-2 px-7 py-4 min-h-[56px] rounded-xl font-black uppercase tracking-[0.18em] text-[11px] md:text-[12px] transition-all; }
+        .blog-prose .btn-primary { @apply bg-primary text-white hover:brightness-110 shadow-xl shadow-primary/30; }
       }
     </style>
     {% block head_extras %}{% endblock %}
@@ -108,6 +143,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <a class="text-[11px] font-bold uppercase tracking-widest hover:text-primary transition-colors text-white py-3 min-h-[44px] inline-flex items-center" href="{{ url_for('main.cro') }}">CRO</a>
                 <a class="text-[11px] font-bold uppercase tracking-widest hover:text-primary transition-colors text-white py-3 min-h-[44px] inline-flex items-center" href="{{ url_for('main.analytics') }}">Analytics</a>
                 <a class="text-[11px] font-bold uppercase tracking-widest hover:text-primary transition-colors text-white py-3 min-h-[44px] inline-flex items-center" href="{{ url_for('main.results') }}">Results</a>
+                <a class="text-[11px] font-bold uppercase tracking-widest hover:text-primary transition-colors text-white py-3 min-h-[44px] inline-flex items-center" href="{{ url_for('main.blog_index') }}">Blog</a>
             </div>
             <a class="hidden md:inline-flex px-6 py-3 min-h-[44px] items-center justify-center bg-primary text-white text-xs font-black uppercase rounded hover:brightness-110 transition-all shadow-lg shadow-primary/20" href="{{ url_for('main.schedule_a_call') }}">Talk to us</a>
             <button type="button" id="nav-menu-toggle" class="md:hidden p-3 min-h-[44px] min-w-[44px] flex items-center justify-center text-white hover:bg-white/10 rounded-lg transition-colors -m-2" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
@@ -120,6 +156,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <a class="min-h-[44px] px-4 py-3 flex items-center text-sm font-bold uppercase tracking-widest text-white hover:bg-white/10 rounded-lg transition-colors" href="{{ url_for('main.cro') }}">CRO</a>
             <a class="min-h-[44px] px-4 py-3 flex items-center text-sm font-bold uppercase tracking-widest text-white hover:bg-white/10 rounded-lg transition-colors" href="{{ url_for('main.analytics') }}">Analytics</a>
             <a class="min-h-[44px] px-4 py-3 flex items-center text-sm font-bold uppercase tracking-widest text-white hover:bg-white/10 rounded-lg transition-colors" href="{{ url_for('main.results') }}">Results</a>
+            <a class="min-h-[44px] px-4 py-3 flex items-center text-sm font-bold uppercase tracking-widest text-white hover:bg-white/10 rounded-lg transition-colors" href="{{ url_for('main.blog_index') }}">Blog</a>
             <a class="min-h-[44px] px-4 py-3 flex items-center text-sm font-bold uppercase text-primary bg-primary/10 rounded-lg mt-2" href="{{ url_for('main.schedule_a_call') }}">Talk to us</a>
         </div>
     </div>
@@ -156,6 +193,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     <li><a class="text-sm text-slate-400 hover:text-white transition-colors" href="{{ url_for('main.cro_ebook') }}">Free CRO Ebook</a></li>
                     <li><a class="text-sm text-slate-400 hover:text-white transition-colors" href="{{ url_for('main.analytics') }}">Analytics</a></li>
                     <li><a class="text-sm text-slate-400 hover:text-white transition-colors" href="{{ url_for('main.results') }}">Results</a></li>
+                    <li><a class="text-sm text-slate-400 hover:text-white transition-colors" href="{{ url_for('main.blog_index') }}">Blog</a></li>
                     <li><a class="text-sm text-slate-400 hover:text-white transition-colors" href="{{ url_for('main.schedule_a_call') }}">Schedule a Call</a></li>
                     {% block footer_links %}{% endblock %}
                 </ul>

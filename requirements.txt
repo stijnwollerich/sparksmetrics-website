@@ -11,5 +11,8 @@ python-dotenv>=1.0.0
 # HTTP (Brevo API)
 requests>=2.28.0
 
+# YouTube transcript (no API key; uses captions when available)
+youtube-transcript-api>=0.6.2
+
 # Production WSGI server (optional)
 gunicorn>=21.0.0
