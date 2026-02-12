@@ -80,6 +80,23 @@
     modal.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
     document.getElementById("lead-fname").focus();
+    // debug: push modal open event
+    try {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: "lead_modal_open",
+        modal_type: currentModalType,
+        resource: resource || null,
+        trigger_text: (trigger && (trigger.getAttribute && (trigger.getAttribute('data-title') || trigger.textContent))) || null,
+        path: window.location.pathname,
+        timestamp: new Date().toISOString()
+      });
+      if (window.console && window.console.debug) {
+        window.console.debug("DL push: lead_modal_open", { modal_type: currentModalType, resource: resource });
+      }
+      window._dl_debug = window._dl_debug || [];
+      window._dl_debug.push(['lead_modal_open', currentModalType, resource || null]);
+    } catch (err) {}
   }
 
   function closeModal() {
@@ -110,7 +127,22 @@
         ? "Your ebook is downloading. Pick a time on the left for a free 30-minute strategy session—we can walk through the strategies and your next steps."
         : "We’ll be in touch to schedule your free 24-hour CRO audit. Or pick a time on the left to get on the calendar now.";
     }
-    if (calendlyIframe) calendlyIframe.src = CALENDLY_URL;
+    if (calendlyIframe) {
+      calendlyIframe.src = CALENDLY_URL;
+      try {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: "calendly_open_from_lead",
+          form_id: "lead-form",
+          modal_type: currentModalType,
+          fname: (document.getElementById('lead-fname')||{}).value || null,
+          email: (document.getElementById('lead-email')||{}).value || null,
+          url: CALENDLY_URL,
+          path: window.location.pathname,
+          timestamp: new Date().toISOString()
+        });
+      } catch (err) {}
+    }
   }
 
   function resetModal() {
@@ -130,6 +162,24 @@
     el.addEventListener("click", function (e) {
       e.preventDefault();
       resetModal();
+      // Push a datalayer event when CTA is clicked to open lead modal
+      try {
+        var triggerModalType = el.getAttribute("data-modal-type") || (el.getAttribute("data-resource") ? "resource" : "audit");
+        var triggerResource = el.getAttribute("data-resource") || null;
+        var triggerPayload = {
+          event: triggerModalType === "audit" ? "audit_cta_clicked" : "ebook_cta_clicked",
+          trigger_text: el.getAttribute("data-title") || (el.textContent || "").trim().slice(0, 120),
+          modal_type: triggerModalType,
+          resource: triggerResource,
+          path: window.location.pathname,
+          timestamp: new Date().toISOString()
+        };
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push(triggerPayload);
+        if (window.console && window.console.debug) window.console.debug("DL push:", triggerPayload);
+        window._dl_debug = window._dl_debug || [];
+        window._dl_debug.push([triggerPayload.event, triggerPayload]);
+      } catch (err) {}
       if (el.getAttribute("data-checklist-modal") !== null && !el.getAttribute("data-resource")) {
         el.setAttribute("data-resource", "cro-checklist");
         el.setAttribute("data-title", "13 Bulletproof Strategies to Skyrocket Conversions");
@@ -165,6 +215,27 @@
     submitBtn.disabled = true;
     submitBtn.innerHTML = "Sending…";
 
+    // Push a datalayer event with the raw submission (useful for GTM)
+    try {
+      window.dataLayer = window.dataLayer || [];
+      var submittedPayload = {
+        event: "lead_form_submitted",
+        form_id: "lead-form",
+        modal_type: modalType,
+        resource: resource,
+        fname: fname,
+        email: email,
+        path: window.location.pathname,
+        timestamp: new Date().toISOString(),
+      };
+      window.dataLayer.push(submittedPayload);
+      if (window.console && window.console.debug) window.console.debug("DL push:", submittedPayload);
+      window._dl_debug = window._dl_debug || [];
+      window._dl_debug.push(["lead_form_submitted", submittedPayload]);
+    } catch (err) {
+      // ignore
+    }
+
     var url = modalType === "audit" ? "/request-audit" : "/download-resource";
     var body = modalType === "audit"
       ? { fname: fname, email: email }
@@ -178,9 +249,47 @@
       .then(function (res) { return res.json(); })
       .then(function (data) {
         var hasDownload = modalType === "resource" && data.success && data.download_url;
+        // Push success event with server response
+        try {
+          window.dataLayer = window.dataLayer || [];
+          var successPayload = {
+            event: "lead_form_success",
+            form_id: "lead-form",
+            modal_type: modalType,
+            resource: resource,
+            fname: fname,
+            email: email,
+            success: !!data.success,
+            download_url: data.download_url || null,
+            path: window.location.pathname,
+            timestamp: new Date().toISOString(),
+          };
+          window.dataLayer.push(successPayload);
+          if (window.console && window.console.debug) window.console.debug("DL push:", successPayload);
+          window._dl_debug = window._dl_debug || [];
+          window._dl_debug.push(["lead_form_success", successPayload]);
+        } catch (err) {}
         showThankYou(hasDownload, data.download_url || "#");
       })
       .catch(function () {
+        // Push error event
+        try {
+          window.dataLayer = window.dataLayer || [];
+          var errorPayload = {
+            event: "lead_form_error",
+            form_id: "lead-form",
+            modal_type: modalType,
+            resource: resource,
+            fname: fname,
+            email: email,
+            path: window.location.pathname,
+            timestamp: new Date().toISOString(),
+          };
+          window.dataLayer.push(errorPayload);
+          if (window.console && window.console.debug) window.console.debug("DL push:", errorPayload);
+          window._dl_debug = window._dl_debug || [];
+          window._dl_debug.push(["lead_form_error", errorPayload]);
+        } catch (err) {}
         showThankYou(modalType === "resource", "#");
       })
       .finally(function () {

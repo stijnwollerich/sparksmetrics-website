@@ -431,6 +431,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     modal.classList.remove('hidden');
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    try {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: "schedule_modal_open",
+        source: "header_link",
+        url: CALENDLY_URL,
+        path: window.location.pathname,
+        timestamp: new Date().toISOString()
+      });
+    } catch (err) {}
   }
   function closeScheduleModal(){
     modal.classList.add('hidden');
@@ -448,6 +458,38 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   document.addEventListener('keydown', function(e){
     if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeScheduleModal();
   });
+})();
+</script>
+<script>
+(function(){
+  // Generic form submit datalayer pusher (skips lead-form which is handled separately)
+  try {
+    document.addEventListener('submit', function(e){
+      try {
+        var form = e.target;
+        if (!form || form.id === 'lead-form') return;
+        var formData = {};
+        Array.prototype.slice.call(form.elements || []).forEach(function(el){
+          if (!el.name) return;
+          if (['password', 'csrf_token'].indexOf(el.type) !== -1) return;
+          var v = el.value;
+          if (el.type === 'email' && v) formData.email = v;
+          if (el.name === 'fname' || el.name === 'first_name') formData.fname = v;
+          if (!formData[el.name]) formData[el.name] = v;
+        });
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: 'generic_form_submitted',
+          form_id: form.id || null,
+          form_action: form.getAttribute('action') || null,
+          form_method: (form.getAttribute('method') || 'GET').toUpperCase(),
+          data: formData,
+          path: window.location.pathname,
+          timestamp: new Date().toISOString()
+        });
+      } catch (err) {}
+    }, true);
+  } catch (err) {}
 })();
 </script>
 {% block body_end %}{% endblock %}

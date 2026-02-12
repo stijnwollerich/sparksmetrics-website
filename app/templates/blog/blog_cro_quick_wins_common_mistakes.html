@@ -1,26 +1,50 @@
-{% extends "base.html" %}
-{% block title %}{{ post.title }} | Sparksmetrics{% endblock %}
-{% block meta_description %}{{ post.description or "Ten red flags to watch for when hiring a CRO agency — what to avoid, what to insist on, and the exact tests and contracts that protect your growth." }}{% endblock %}
-{% block og_title %}{{ post.title }}{% endblock %}
-{% block twitter_title %}{{ post.title }}{% endblock %}
-{% block og_description %}{{ post.description or "Ten red flags to watch for when hiring a CRO agency — what to avoid, what to insist on, and the exact tests and contracts that protect your growth." }}{% endblock %}
-{% block twitter_description %}{{ post.description or "Ten red flags to watch for when hiring a CRO agency — what to avoid, what to insist on, and the exact tests and contracts that protect your growth." }}{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}{{ post.title }} | Sparksmetrics{%
+endblock %} {% block meta_description %}{{ post.description or "Ten red flags to
+watch for when hiring a CRO agency — what to avoid, what to insist on, and the
+exact tests and contracts that protect your growth." }}{% endblock %} {% block
+og_title %}{{ post.title }}{% endblock %} {% block twitter_title %}{{ post.title
+}}{% endblock %} {% block og_description %}{{ post.description or "Ten red flags
+to watch for when hiring a CRO agency — what to avoid, what to insist on, and
+the exact tests and contracts that protect your growth." }}{% endblock %} {%
+block twitter_description %}{{ post.description or "Ten red flags to watch for
+when hiring a CRO agency — what to avoid, what to insist on, and the exact tests
+and contracts that protect your growth." }}{% endblock %} {% block content %}
 <section class="bg-light-base py-10 md:py-14 border-b border-gray-100">
   <div class="content-narrow px-6">
-    <a href="{{ url_for('main.blog_index') }}" class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-500 hover:text-primary transition-colors min-h-[44px]">
-      <span class="material-symbols-outlined text-base" aria-hidden="true">arrow_back</span>
+    <a
+      href="{{ url_for('main.blog_index') }}"
+      class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-500 hover:text-primary transition-colors min-h-[44px]"
+    >
+      <span class="material-symbols-outlined text-base" aria-hidden="true"
+        >arrow_back</span
+      >
       Back to blog
     </a>
 
     <header class="mt-6">
-      <p class="text-primary font-bold text-sm uppercase tracking-[0.4em] mb-4">CRO</p>
-      <h1 class="normal-case text-3xl md:text-5xl font-display font-black tracking-tight text-deep-charcoal mb-4">{{ post.title or "10 red flags when hiring a CRO agency (and how to avoid them)" }}</h1>
-      <p class="text-gray-600 text-base md:text-lg mb-0">{{ post.description or "A practical checklist for hiring a CRO agency — avoid common traps like vanity-metric obsession, guaranteed results, and black‑box reporting." }}</p>
+      <p class="text-primary font-bold text-sm uppercase tracking-[0.4em] mb-4">
+        CRO
+      </p>
+      <h1
+        class="normal-case text-3xl md:text-5xl font-display font-black tracking-tight text-deep-charcoal mb-4"
+      >
+        {{ post.title or "10 red flags when hiring a CRO agency (and how to
+        avoid them)" }}
+      </h1>
+      <p class="text-gray-600 text-base md:text-lg mb-0">
+        {{ post.description or "A practical checklist for hiring a CRO agency —
+        avoid common traps like vanity-metric obsession, guaranteed results, and
+        black‑box reporting." }}
+      </p>
       <div class="mt-6 flex flex-wrap gap-2">
-        <span class="inline-flex items-center px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-500 text-[10px] font-bold uppercase tracking-widest">Published {{ post.published_date or "12 Feb 2026" }}</span>
-        <span class="inline-flex items-center px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-500 text-[10px] font-bold uppercase tracking-widest">{{ post.reading_time or "10 min read" }}</span>
+        <span
+          class="inline-flex items-center px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-500 text-[10px] font-bold uppercase tracking-widest"
+          >Published {{ post.published_date or "12 Feb 2026" }}</span
+        >
+        <span
+          class="inline-flex items-center px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-500 text-[10px] font-bold uppercase tracking-widest"
+          >{{ post.reading_time or "10 min read" }}</span
+        >
       </div>
     </header>
   </div>
@@ -28,7 +52,9 @@
 
 <section class="bg-light-base py-12 md:py-16">
   <div class="content-narrow px-6">
-    <div class="aspect-video w-full rounded-2xl overflow-hidden bg-black border border-black/10">
+    <div
+      class="aspect-video w-full rounded-2xl overflow-hidden bg-black border border-black/10"
+    >
       <iframe
         class="w-full h-full"
         src="https://www.youtube.com/embed/{{ post.video_id or 'BKN3rEt45Sk' }}"
@@ -42,87 +68,271 @@
     </div>
 
     <article class="blog-prose mt-10">
-      <script type="application/ld+json">{{ {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": (post.title or "10 red flags when hiring a CRO agency (and how to avoid them)"),
-        "description": (post.description or "Key warning signs to avoid when you hire a CRO agency — and the practical contract and testing steps that keep your growth predictable.")
-      } | tojson }}</script>
+      <script type="application/ld+json">
+        {{ {
+                "@context": "https://schema.org",
+                "@type": "Article",
+                "headline": (post.title or "10 red flags when hiring a CRO agency (and how to avoid them)"),
+                "description": (post.description or "Key warning signs to avoid when you hire a CRO agency — and the practical contract and testing steps that keep your growth predictable.")
+              } | tojson }}
+      </script>
 
-      <p class="lead">This article is written for e‑commerce founders, growth leads, and marketing directors who need a quick, evidence-driven checklist to vet CRO partners. For each red flag we include what to ask, a short verification test, and the likely business impact if left unchecked.</p>
+      <p class="lead">
+        This article is written for e‑commerce founders, growth leads, and
+        marketing directors who need a quick, evidence-driven checklist to vet
+        CRO partners. For each red flag we include what to ask, a short
+        verification test, and the likely business impact if left unchecked.
+      </p>
 
-      <p>The best agencies make your business measurably more money. The worst ones quietly waste your time and budget. Below are the ten red flags we hear about most often — each paired with a practical check you can run before you sign a contract.</p>
+      <p>
+        The best agencies make your business measurably more money. The worst
+        ones quietly waste your time and budget. Below are the ten red flags we
+        hear about most often — each paired with a practical check you can run
+        before you sign a contract.
+      </p>
 
       <h2 id="flag-1">1. Vanity‑metric obsession</h2>
-      <p>Beware agencies that optimize for surface metrics: conversion rate, CTR, product view rate. Those metrics matter only to the degree they move revenue per visitor or lifetime value. A test that reduces conversion rate but increases average order value (AOV) can be a huge net win — don’t reject it because a single metric looks worse.</p>
-      <p>Why this matters: Optimizing the wrong metric can create short-term wins at the expense of long-term revenue. For example, aggressive discounting can lift conversion rate while destroying margin and teaching customers to buy only on sale.</p>
-      <p>Red flag test: ask the agency to show a recent test where conversion rate dropped but revenue per visitor improved. If they can’t produce an example, they may be over-focused on narrow KPIs. Quick action: request experiment exports that show revenue per visitor, AOV, and per-session revenue for each variant.</p>
+      <p>
+        Beware agencies that optimize for surface metrics: conversion rate, CTR,
+        product view rate. Those metrics matter only to the degree they move
+        revenue per visitor or lifetime value. A test that reduces conversion
+        rate but increases average order value (AOV) can be a huge net win —
+        don’t reject it because a single metric looks worse.
+      </p>
+      <p>
+        Why this matters: Optimizing the wrong metric can create short-term wins
+        at the expense of long-term revenue. For example, aggressive discounting
+        can lift conversion rate while destroying margin and teaching customers
+        to buy only on sale.
+      </p>
+      <p>
+        Red flag test: ask the agency to show a recent test where conversion
+        rate dropped but revenue per visitor improved. If they can’t produce an
+        example, they may be over-focused on narrow KPIs. Quick action: request
+        experiment exports that show revenue per visitor, AOV, and per-session
+        revenue for each variant.
+      </p>
 
       <h2 id="flag-2">2. Guaranteed results</h2>
-      <p>No reputable CRO agency can guarantee a specific % uplift. CRO is probabilistic: you can guarantee you’ll run tests and improve the probability of wins, but external factors (seasonality, traffic mix, ad spend) change outcomes after a test goes live.</p>
-      <p>Why this matters: Promises of fixed uplifts often hide a lack of process. Guarantees remove accountability for measurement and can push agencies to game reporting rather than improve customer value.</p>
-      <p>Contract tip: require guarantees around process (number of tests, access to data, knowledge transfer), not percent increases. If an agency promises a fixed uplift, ask them to back it with a refund policy tied to documented, reproducible outcomes. Quick action: require a sample data export and a written test plan for the first 4 tests.</p>
+      <p>
+        No reputable CRO agency can guarantee a specific % uplift. CRO is
+        probabilistic: you can guarantee you’ll run tests and improve the
+        probability of wins, but external factors (seasonality, traffic mix, ad
+        spend) change outcomes after a test goes live.
+      </p>
+      <p>
+        Why this matters: Promises of fixed uplifts often hide a lack of
+        process. Guarantees remove accountability for measurement and can push
+        agencies to game reporting rather than improve customer value.
+      </p>
+      <p>
+        Contract tip: require guarantees around process (number of tests, access
+        to data, knowledge transfer), not percent increases. If an agency
+        promises a fixed uplift, ask them to back it with a refund policy tied
+        to documented, reproducible outcomes. Quick action: require a sample
+        data export and a written test plan for the first 4 tests.
+      </p>
 
       <h2 id="flag-3">3. Vague claims without proof</h2>
-      <p>If the agency says “performance is better” but can’t show the AB test, confidence interval, or raw experiment data, walk away. Every claim should map to a test with a winner, a confidence level, and a clear measurement window.</p>
-      <p>Why this matters: Without raw data you can't verify results or learn from failures. Good agencies share experiment exports, variant URLs, and analysis notes so your internal team can reproduce results.</p>
-      <p>Verification step: insist on read‑only access to the A/B tool (or copies of experiment exports). Check how they calculate significance and whether they account for peeking, segmentation, and false positives. Quick action: ask for two recent experiment exports and the raw metrics they used to calculate the winner.</p>
+      <p>
+        If the agency says “performance is better” but can’t show the AB test,
+        confidence interval, or raw experiment data, walk away. Every claim
+        should map to a test with a winner, a confidence level, and a clear
+        measurement window.
+      </p>
+      <p>
+        Why this matters: Without raw data you can't verify results or learn
+        from failures. Good agencies share experiment exports, variant URLs, and
+        analysis notes so your internal team can reproduce results.
+      </p>
+      <p>
+        Verification step: insist on read‑only access to the A/B tool (or copies
+        of experiment exports). Check how they calculate significance and
+        whether they account for peeking, segmentation, and false positives.
+        Quick action: ask for two recent experiment exports and the raw metrics
+        they used to calculate the winner.
+      </p>
 
       <h2 id="flag-4">4. Design first, data later</h2>
-      <p>Design-driven approaches look pretty, but they’re guesses until proven by data. A redesign without hypothesis testing wastes time and money. CRO should start with analytics and qualitative research to form testable hypotheses, then design and implement experiments to validate them.</p>
-      <p>Why this matters: A full redesign can take months and may reduce conversions if the underlying user problems weren't diagnosed. Start with diagnostic tests and narrow experiments to validate direction before scaling.</p>
-      <p>Hiring tip: ask the agency to show their research → hypothesis → test → learn pipeline. If they demo designs without hypotheses, they’re likely building for vanity, not impact. Quick action: request an example research doc and the corresponding experiment that validated (or invalidated) the proposed change.</p>
+      <p>
+        Design-driven approaches look pretty, but they’re guesses until proven
+        by data. A redesign without hypothesis testing wastes time and money.
+        CRO should start with analytics and qualitative research to form
+        testable hypotheses, then design and implement experiments to validate
+        them.
+      </p>
+      <p>
+        Why this matters: A full redesign can take months and may reduce
+        conversions if the underlying user problems weren't diagnosed. Start
+        with diagnostic tests and narrow experiments to validate direction
+        before scaling.
+      </p>
+      <p>
+        Hiring tip: ask the agency to show their research → hypothesis → test →
+        learn pipeline. If they demo designs without hypotheses, they’re likely
+        building for vanity, not impact. Quick action: request an example
+        research doc and the corresponding experiment that validated (or
+        invalidated) the proposed change.
+      </p>
 
       <h2 id="flag-5">5. Cheap, short‑term tests only</h2>
-      <p>Discounts and coupons convert — but they erode margins and train customers to expect cheap prices. Agencies that rely only on promotional hacks may deliver short wins but no sustainable growth.</p>
-      <p>Why this matters: Short-term fixes can mask product-market mismatches and reduce brand value. Look for agencies that combine quick wins with longer-term experiments focused on AOV and retention.</p>
-      <p>Assessment: request long‑term initiatives (LTV experiments) and examples of tests that improved retention or average order value without discounting. If the portfolio is all coupon wins, be cautious. Quick action: ask for a 6‑month test plan that includes at least one retention or pricing experiment.</p>
+      <p>
+        Discounts and coupons convert — but they erode margins and train
+        customers to expect cheap prices. Agencies that rely only on promotional
+        hacks may deliver short wins but no sustainable growth.
+      </p>
+      <p>
+        Why this matters: Short-term fixes can mask product-market mismatches
+        and reduce brand value. Look for agencies that combine quick wins with
+        longer-term experiments focused on AOV and retention.
+      </p>
+      <p>
+        Assessment: request long‑term initiatives (LTV experiments) and examples
+        of tests that improved retention or average order value without
+        discounting. If the portfolio is all coupon wins, be cautious. Quick
+        action: ask for a 6‑month test plan that includes at least one retention
+        or pricing experiment.
+      </p>
 
       <h2 id="flag-6">6. Not a team player</h2>
-      <p>CRO is cross‑functional: product, design, analytics, engineering, and marketing all need to collaborate. Agencies that expect you to hand over everything and disappear are a liability. Good agencies embed with teams, respect brand boundaries, and have clear handoffs for implementation.</p>
-      <p>Why this matters: Poor collaboration leads to slow implementation and missed learnings. Check who will own experiment implementation, QA, and measurement on both sides.</p>
-      <p>Operational check: confirm the agency’s expected roles and responsibilities, and ensure your internal dev/ops team signs off on implementation complexity before work begins. Quick action: request a RACI for the first sprint.</p>
+      <p>
+        CRO is cross‑functional: product, design, analytics, engineering, and
+        marketing all need to collaborate. Agencies that expect you to hand over
+        everything and disappear are a liability. Good agencies embed with
+        teams, respect brand boundaries, and have clear handoffs for
+        implementation.
+      </p>
+      <p>
+        Why this matters: Poor collaboration leads to slow implementation and
+        missed learnings. Check who will own experiment implementation, QA, and
+        measurement on both sides.
+      </p>
+      <p>
+        Operational check: confirm the agency’s expected roles and
+        responsibilities, and ensure your internal dev/ops team signs off on
+        implementation complexity before work begins. Quick action: request a
+        RACI for the first sprint.
+      </p>
 
       <h2 id="flag-7">7. Lack of business or industry context</h2>
-      <p>Generic playbooks fail in niche markets. A great agency invests time in your industry, competitors, and customer behavior. They ask about margins, offline conversions, channel economics, and product lifecycle — not just "what do you want to test next?"</p>
-      <p>Why this matters: Without context, tests can optimize for vanity outcomes that don't improve profitability. Interview question: ask them to identify three industry‑specific risks and one unique opportunity for your business in their first week. If they can’t, they haven’t done the homework.</p>
-      <p>Quick action: ask for a short market scan or competitor test example relevant to your niche.</p>
+      <p>
+        Generic playbooks fail in niche markets. A great agency invests time in
+        your industry, competitors, and customer behavior. They ask about
+        margins, offline conversions, channel economics, and product lifecycle —
+        not just "what do you want to test next?"
+      </p>
+      <p>
+        Why this matters: Without context, tests can optimize for vanity
+        outcomes that don't improve profitability. Interview question: ask them
+        to identify three industry‑specific risks and one unique opportunity for
+        your business in their first week. If they can’t, they haven’t done the
+        homework.
+      </p>
+      <p>
+        Quick action: ask for a short market scan or competitor test example
+        relevant to your niche.
+      </p>
 
       <h2 id="flag-8">8. Black‑box reporting and lost assets</h2>
-      <p>You must own your data, experiments, and designs. Agencies that lock ownership or provide only PDF summaries create vendor lock‑in and destroy learnings when they leave. Transparent reporting, exportable test assets, and tooling access are non‑negotiable.</p>
-      <p>Why this matters: When an agency leaves, you should retain the playbook and experiments. Ask for monthly exports, variant URLs, analytics queries, and design files in a shared repo.</p>
-      <p>Contract clause: require read‑only access to experiment platforms and that all creative, variants, and test documentation be delivered to you monthly in a shared repository. Quick action: request a sample monthly export and the folder structure you'll receive.</p>
+      <p>
+        You must own your data, experiments, and designs. Agencies that lock
+        ownership or provide only PDF summaries create vendor lock‑in and
+        destroy learnings when they leave. Transparent reporting, exportable
+        test assets, and tooling access are non‑negotiable.
+      </p>
+      <p>
+        Why this matters: When an agency leaves, you should retain the playbook
+        and experiments. Ask for monthly exports, variant URLs, analytics
+        queries, and design files in a shared repo.
+      </p>
+      <p>
+        Contract clause: require read‑only access to experiment platforms and
+        that all creative, variants, and test documentation be delivered to you
+        monthly in a shared repository. Quick action: request a sample monthly
+        export and the folder structure you'll receive.
+      </p>
 
       <h2 id="flag-9">9. Creeping costs and scope confusion</h2>
-      <p>Testing includes design, dev, QA, and analytics. Unexpected change orders are common if scope isn’t clear. Insist on a clear SOW with included tasks, per‑unit costs for extras, and an approval gate for out‑of‑scope work.</p>
-      <p>Why this matters: Ambiguous scope causes delays and hidden costs. Negotiation tip: set a monthly test quota and a budget per sprint. Define who pays for third‑party testing tools or creative assets up front. Quick action: require a sample SOW and one-month sprint plan as part of the proposal.</p>
+      <p>
+        Testing includes design, dev, QA, and analytics. Unexpected change
+        orders are common if scope isn’t clear. Insist on a clear SOW with
+        included tasks, per‑unit costs for extras, and an approval gate for
+        out‑of‑scope work.
+      </p>
+      <p>
+        Why this matters: Ambiguous scope causes delays and hidden costs.
+        Negotiation tip: set a monthly test quota and a budget per sprint.
+        Define who pays for third‑party testing tools or creative assets up
+        front. Quick action: require a sample SOW and one-month sprint plan as
+        part of the proposal.
+      </p>
 
       <h2 id="flag-10">10. Only going for big swings</h2>
-      <p>Big swings can produce dramatic lifts but are high‑risk and slow. A balanced approach — fast micro‑tests to learn + occasional big bets when hypotheses are validated — is the smartest path.</p>
-      <p>Why this matters: Over-investing in large bets without validated learning wastes budget and delays ROI. Strategy: run rapid learning cycles (copy, micro‑layout, trust signals) and only scale to redesigns after multiple validated insights.</p>
-      <p>Quick action: ask for an experimental roadmap that sequences micro‑tests before any major redesign work.</p>
+      <p>
+        Big swings can produce dramatic lifts but are high‑risk and slow. A
+        balanced approach — fast micro‑tests to learn + occasional big bets when
+        hypotheses are validated — is the smartest path.
+      </p>
+      <p>
+        Why this matters: Over-investing in large bets without validated
+        learning wastes budget and delays ROI. Strategy: run rapid learning
+        cycles (copy, micro‑layout, trust signals) and only scale to redesigns
+        after multiple validated insights.
+      </p>
+      <p>
+        Quick action: ask for an experimental roadmap that sequences micro‑tests
+        before any major redesign work.
+      </p>
 
-      <section class="mt-10 p-6 bg-light-base border border-gray-200 rounded-2xl">
+      <section
+        class="mt-10 p-6 bg-light-base border border-gray-200 rounded-2xl"
+      >
         <h3>Quick pre‑hire checklist</h3>
         <ul>
-          <li>Require read‑only access to experiment tool and raw results (always).</li>
+          <li>
+            Require read‑only access to experiment tool and raw results
+            (always).
+          </li>
           <li>Insist on a written SOW with test quotas and deliverables.</li>
-          <li>Verify examples of long‑term wins (AOV, retention), not only coupon lifts.</li>
+          <li>
+            Verify examples of long‑term wins (AOV, retention), not only coupon
+            lifts.
+          </li>
           <li>Confirm ownership of test assets and data on contract exit.</li>
-          <li>Ask for a research plan in week 1 (surveys, session recordings, analytics audit).</li>
-          <li>Request a 4‑week sample sprint with deliverables and a RACI for implementation.</li>
-          <li>Ask for sample exports and variant URLs for the last two months of experiments.</li>
+          <li>
+            Ask for a research plan in week 1 (surveys, session recordings,
+            analytics audit).
+          </li>
+          <li>
+            Request a 4‑week sample sprint with deliverables and a RACI for
+            implementation.
+          </li>
+          <li>
+            Ask for sample exports and variant URLs for the last two months of
+            experiments.
+          </li>
         </ul>
       </section>
 
-      <div class="callout mt-8 p-6 bg-primary/10 rounded-lg border border-primary/20">
-        <p class="callout-title font-semibold text-lg mb-2">Need a second opinion on a CRO contract?</p>
-        <p>We’ll review your SOW and flag potential traps — free. If you want deeper help, we offer a short audit to map the top three experiments that would most likely move revenue.</p>
-        <div class="mt-4 flex gap-3"><a class="btn btn-primary" href="/schedule-a-call/">Request audit</a> <button class="btn btn-outline" data-checklist-modal>Download checklist</button></div>
+      <div
+        class="callout mt-8 p-6 bg-primary/10 rounded-lg border border-primary/20"
+      >
+        <p class="callout-title font-semibold text-lg mb-2">
+          Need a second opinion on a CRO contract?
+        </p>
+        <p>
+          We’ll review your SOW and flag potential traps — free. If you want
+          deeper help, we offer a short audit to map the top three experiments
+          that would most likely move revenue.
+        </p>
+        <div class="mt-4 flex gap-3">
+          <a class="btn btn-primary" href="/schedule-a-call/">Request audit</a>
+          <button class="btn btn-outline" data-checklist-modal>
+            Download checklist
+          </button>
+        </div>
       </div>
-
     </article>
   </div>
 </section>
 {% endblock %}
-
