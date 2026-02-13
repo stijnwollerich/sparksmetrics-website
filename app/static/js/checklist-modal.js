@@ -81,22 +81,17 @@
     document.body.style.overflow = "hidden";
     document.getElementById("lead-fname").focus();
     // debug: push modal open event
-    try {
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({
-        event: "lead_modal_open",
-        modal_type: currentModalType,
-        resource: resource || null,
-        trigger_text: (trigger && (trigger.getAttribute && (trigger.getAttribute('data-title') || trigger.textContent))) || null,
-        path: window.location.pathname,
-        timestamp: new Date().toISOString()
-      });
-      if (window.console && window.console.debug) {
-        window.console.debug("DL push: lead_modal_open", { modal_type: currentModalType, resource: resource });
-      }
-      window._dl_debug = window._dl_debug || [];
-      window._dl_debug.push(['lead_modal_open', currentModalType, resource || null]);
-    } catch (err) {}
+      try {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: "lead_modal_open",
+          modal_type: currentModalType,
+          resource: resource || null,
+          trigger_text: (trigger && (trigger.getAttribute && (trigger.getAttribute('data-title') || trigger.textContent))) || null,
+          path: window.location.pathname,
+          timestamp: new Date().toISOString()
+        });
+      } catch (err) {}
   }
 
   function closeModal() {
@@ -176,9 +171,6 @@
         };
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push(triggerPayload);
-        if (window.console && window.console.debug) window.console.debug("DL push:", triggerPayload);
-        window._dl_debug = window._dl_debug || [];
-        window._dl_debug.push([triggerPayload.event, triggerPayload]);
       } catch (err) {}
       if (el.getAttribute("data-checklist-modal") !== null && !el.getAttribute("data-resource")) {
         el.setAttribute("data-resource", "cro-checklist");
@@ -215,7 +207,21 @@
     submitBtn.disabled = true;
     submitBtn.innerHTML = "Sending…";
 
-    // Push a datalayer event with the raw submission (useful for GTM)
+    // Mask PII before pushing to dataLayer
+    function maskEmail(e) {
+      try {
+        if (!e) return null;
+        var parts = e.split('@');
+        if (parts.length !== 2) return null;
+        return parts[0].charAt(0) + '***@' + parts[1];
+      } catch (err) { return null; }
+    }
+    function maskName(n) {
+      try { return n ? n.charAt(0) : null; } catch (err) { return null; }
+    }
+    var maskedEmail = maskEmail(email);
+    var fnameInitial = maskName(fname);
+    // Push a datalayer event with masked submission (useful for GTM)
     try {
       window.dataLayer = window.dataLayer || [];
       var submittedPayload = {
@@ -223,15 +229,12 @@
         form_id: "lead-form",
         modal_type: modalType,
         resource: resource,
-        fname: fname,
-        email: email,
+        fname_initial: fnameInitial,
+        email_masked: maskedEmail,
         path: window.location.pathname,
         timestamp: new Date().toISOString(),
       };
       window.dataLayer.push(submittedPayload);
-      if (window.console && window.console.debug) window.console.debug("DL push:", submittedPayload);
-      window._dl_debug = window._dl_debug || [];
-      window._dl_debug.push(["lead_form_submitted", submittedPayload]);
     } catch (err) {
       // ignore
     }
@@ -257,17 +260,14 @@
             form_id: "lead-form",
             modal_type: modalType,
             resource: resource,
-            fname: fname,
-            email: email,
+            fname_initial: fnameInitial,
+            email_masked: maskedEmail,
             success: !!data.success,
             download_url: data.download_url || null,
             path: window.location.pathname,
             timestamp: new Date().toISOString(),
           };
           window.dataLayer.push(successPayload);
-          if (window.console && window.console.debug) window.console.debug("DL push:", successPayload);
-          window._dl_debug = window._dl_debug || [];
-          window._dl_debug.push(["lead_form_success", successPayload]);
         } catch (err) {}
         showThankYou(hasDownload, data.download_url || "#");
       })
@@ -280,15 +280,12 @@
             form_id: "lead-form",
             modal_type: modalType,
             resource: resource,
-            fname: fname,
-            email: email,
+            fname_initial: fnameInitial,
+            email_masked: maskedEmail,
             path: window.location.pathname,
             timestamp: new Date().toISOString(),
           };
           window.dataLayer.push(errorPayload);
-          if (window.console && window.console.debug) window.console.debug("DL push:", errorPayload);
-          window._dl_debug = window._dl_debug || [];
-          window._dl_debug.push(["lead_form_error", errorPayload]);
         } catch (err) {}
         showThankYou(modalType === "resource", "#");
       })

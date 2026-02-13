@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html class="scroll-smooth" lang="en">
 <head>
+    {% if ENABLE_GTM %}
     <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-ML2ZDNH2');</script>
+    <script>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
+      var f=d.getElementsByTagName(s)[0], j=d.createElement(s), dl=l!='dataLayer'?'&l='+l:'';
+      j.async=true; j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl; f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-ML2ZDNH2');
+    </script>
     <!-- End Google Tag Manager -->
+    {% endif %}
+    <!-- PostMessage wrapper removed to avoid interfering with third-party embeds -->
+    <!-- Global error suppression removed to avoid hiding root causes -->
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
     <title>{% block title %}Sparksmetrics{% endblock %}</title>
@@ -116,10 +121,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     {% block head_extras %}{% endblock %}
 </head>
 <body class="antialiased selection:bg-primary selection:text-white {% block body_class %}bg-light-base text-gray-800 font-sans leading-relaxed{% endblock %}">
+{% if ENABLE_GTM %}
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-ML2ZDNH2"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
+{% endif %}
 {# HIDDEN_ELEMENTS: primary_bar, audit_bar, homepage_video, video_testimonials, cro_checklist, results_section, cro_video_testimonials, analytics_video_testimonials. To show/hide: add or remove from temporarily_hidden. #}
 {% set temporarily_hidden = ['homepage_video', 'video_testimonials', 'cro_checklist', 'results_section', 'cro_video_testimonials', 'analytics_video_testimonials'] %}
 {% block primary_bar %}
@@ -490,6 +497,54 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       } catch (err) {}
     }, true);
   } catch (err) {}
+})();
+</script>
+<script>
+/* Analytics Mania compatible Calendly listener
+   Uses Calendly's postMessage events and pushes analytics-friendly events to the dataLayer.
+   Keeps origin checks permissive for reliability; tighten to specific origins if desired. */
+(function(){
+  try {
+    window.dataLayer = window.dataLayer || [];
+    function isCalendlyOrigin(origin) {
+      if (!origin) return false;
+      return origin.indexOf('calendly.com') !== -1 || origin.indexOf('assets.calendly.com') !== -1;
+    }
+
+    window.addEventListener('message', function(e){
+      try {
+        // Optional origin guard - Analytics Mania examples often check origin
+        if (!isCalendlyOrigin(e.origin)) return;
+
+        var payload = e.data;
+        // payload may be string or object
+        if (typeof payload === 'string') {
+          // Calendly sometimes sends plain strings like "calendly.event_scheduled"
+          // or JSON strings; leave as-is for event detection.
+        } else if (payload && typeof payload === 'object' && payload.event) {
+          // payload.event expected like "calendly.event_scheduled"
+          payload = payload.event;
+        }
+
+          if (typeof payload === 'string' && payload.indexOf('calendly') === 0) {
+          var parts = payload.split('.');
+          var calendlyEvent = parts.length > 1 ? parts.slice(1).join('.') : payload;
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({
+            event: 'calendly.' + calendlyEvent,
+            calendly_event: calendlyEvent,
+            calendly_origin: e.origin,
+            timestamp: new Date().toISOString()
+          });
+          
+        }
+      } catch (err) {
+        // inner error suppressed
+      }
+    }, false);
+  } catch (err) {
+    // outer listener init error suppressed
+  }
 })();
 </script>
 {% block body_end %}{% endblock %}

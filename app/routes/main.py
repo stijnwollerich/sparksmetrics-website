@@ -11,6 +11,13 @@ BREVO_CONTACTS_URL = "https://api.brevo.com/v3/contacts"
 
 main_bp = Blueprint("main", __name__)
 
+
+@main_bp.context_processor
+def inject_enable_gtm():
+    """Expose ENABLE_GTM config to templates as ENABLE_GTM."""
+    # Default to True so GTM is enabled unless explicitly turned off in config
+    return {"ENABLE_GTM": current_app.config.get("ENABLE_GTM", True)}
+
 # Individual case study data (slug -> case dict for case_study.html)
 CASE_STUDIES = {
     "global-restaurant-bookings": {
@@ -392,8 +399,6 @@ def cro_ebook():
 def schedule_a_call():
     """Schedule a call / booking page."""
     return render_template("schedule_a_call.html")
-
-
 # Downloadable resources: slug -> filename in static/downloads/. Add new resources here.
 RESOURCE_DOWNLOADS = {
     "cro-checklist": {"filename": "13-bulletproof-strategies-conversions-sparksmetrics.pdf"},
@@ -496,6 +501,114 @@ def _notify_slack_lead(
             current_app.logger.warning("Slack webhook failed: HTTP %s – %s", r.status_code, (r.text or "")[:200])
     except Exception as e:
         current_app.logger.warning("Slack notify error: %s", e)
+
+
+@main_bp.route("/client-event", methods=["POST"])
+def client_event():
+    """Receive lightweight client-side diagnostic events (beacon/POST)."""
+    try:
+        data = request.get_json(silent=True) or {}
+        # Log to application logger
+        current_app.logger.info("Client event received: %s", json.dumps(data or {}, ensure_ascii=False))
+        # Persist to a JSONL file for later inspection (append only)
+        try:
+            from pathlib import Path
+
+            log_dir = Path(__file__).resolve().parents[1] / "client_logs"
+            log_dir.mkdir(parents=True, exist_ok=True)
+            fp = log_dir / "client_events.jsonl"
+            with fp.open("a", encoding="utf-8") as fh:
+                fh.write(json.dumps({"ts": datetime.now(timezone.utc).isoformat(), "data": data}, ensure_ascii=False) + "\n")
+        except Exception as e:
+            current_app.logger.warning("Failed to persist client event to file: %s", e)
+    except Exception as e:
+        current_app.logger.warning("Failed to record client event: %s", e)
+    # always return 204 for beacons
+    return ("", 204)
+
+
+@main_bp.route("/webhook/calendly", methods=["POST"])
+def calendly_webhook():
+    """
+    Receive Calendly webhooks (invitee.created, invitee.canceled, etc).
+    Persist to file and optionally save invitee as a lead if email is present.
+    """
+    try:
+        data = request.get_json(silent=True) or {}
+    except Exception:
+        data = {}
+    try:
+        current_app.logger.info("Calendly webhook received: %s", json.dumps(data or {}, ensure_ascii=False)[:2000])
+    except Exception:
+        pass
+    # persist webhook payload
+    try:
+        from pathlib import Path
+
+        log_dir = Path(__file__).resolve().parents[1] / "calendly_logs"
+        log_dir.mkdir(parents=True, exist_ok=True)
+        fp = log_dir / "calendar_webhooks.jsonl"
+        with fp.open("a", encoding="utf-8") as fh:
+            fh.write(json.dumps({"ts": datetime.now(timezone.utc).isoformat(), "payload": data}, ensure_ascii=False) + "\n")
+    except Exception as e:
+        current_app.logger.warning("Failed to persist calendly webhook: %s", e)
+
+    # Attempt to save invitee as a lead if present (non-blocking)
+    try:
+        payload = data.get("payload") if isinstance(data, dict) else None
+        invitee = None
+        # Calendly webhook shapes vary; try common locations
+        if isinstance(payload, dict):
+            invitee = payload.get("invitee") or payload.get("questions_and_answers") or payload.get("event") and payload.get("event").get("invitee")
+        if not invitee and isinstance(data, dict):
+            # fallback older shapes
+            invitee = data.get("invitee") or data.get("resource") or None
+        email = None
+        fname = None
+        if isinstance(invitee, dict):
+            email = (invitee.get("email") or invitee.get("email_address") or invitee.get("contact") or None)
+            fname = invitee.get("name") or invitee.get("first_name") or None
+        # If we have an email, save as a lead record (non-blocking)
+        if email:
+            try:
+                # derive a short fname if absent
+                use_fname = (fname or "").strip() or (email.split("@", 1)[0] if "@" in email else "")
+                _save_lead(use_fname, email, "calendly", resource_slug=None)
+            except Exception as e:
+                current_app.logger.warning("Failed to save calendly lead: %s", e)
+    except Exception:
+        pass
+
+    # Respond to Calendly quickly
+    return jsonify({"status": "ok"})
+
+
+@main_bp.route("/_admin/client-events")
+def admin_client_events():
+    """Return recent client events (only accessible from localhost)."""
+    # Allow access only from localhost for safety
+    try:
+        remote = request.remote_addr or ""
+        if remote not in ("127.0.0.1", "::1", "localhost"):
+            abort(404)
+        from pathlib import Path
+
+        log_dir = Path(__file__).resolve().parents[1] / "client_logs"
+        fp = log_dir / "client_events.jsonl"
+        if not fp.exists():
+            return jsonify({"events": []})
+        lines = fp.read_text(encoding="utf-8", errors="ignore").strip().splitlines()
+        # return last 100 events
+        last = lines[-100:]
+        events = []
+        for l in last:
+            try:
+                events.append(json.loads(l))
+            except Exception:
+                events.append({"raw": l})
+        return jsonify({"events": events})
+    except Exception:
+        abort(500)
 
 
 @main_bp.route("/request-audit", methods=["POST"])
