@@ -120,34 +120,22 @@ block head_extras %}{% endblock %} {% block content %}
 <main>
   <section class="py-16 md:py-24 bg-light-base {{ 'sm-temporarily-hidden' if 'homepage_video' in temporarily_hidden else '' }}">
     <div class="max-w-4xl mx-auto px-6 flex flex-col items-center">
-      <div
-        id="video-container"
-        class="w-full aspect-video bg-black rounded-2xl border border-gray-200 overflow-hidden relative shadow-2xl group cursor-pointer"
-        data-video-id="jNQXAC9IVRw"
-      >
-        <!-- Thumbnail / play overlay (hidden when video plays) -->
-        <div
-          id="video-poster"
-          class="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-primary/5 z-10 flex items-center justify-center"
+      <div class="w-full aspect-video bg-black rounded-2xl border border-gray-200 overflow-hidden relative shadow-2xl group">
+        <a
+          href="#"
+          data-download-modal
+          data-resource="cro-checklist"
+          data-title="13 Bulletproof Strategies to Skyrocket Conversions"
+          data-description="Enter your email and we'll send you the free ebook with 13 actionable CRO strategies used by $10M+ brands."
+          data-button-text="Send me the ebook"
+          class="absolute inset-0 flex items-center justify-center z-10"
         >
-          <div
-            class="w-24 h-24 md:w-32 md:h-32 bg-primary rounded-full flex items-center justify-center shadow-[0_0_60px_rgba(255,77,0,0.4)] group-hover:scale-110 transition-transform duration-500 pointer-events-none"
-          >
-            <span
-              class="material-symbols-outlined text-white text-6xl md:text-7xl translate-x-1"
-              >play_arrow</span
-            >
+          <div class="w-24 h-24 md:w-32 md:h-32 bg-primary rounded-full flex items-center justify-center shadow-[0_0_60px_rgba(255,77,0,0.4)] group-hover:scale-110 transition-transform duration-500">
+            <span class="material-symbols-outlined text-white text-6xl md:text-7xl translate-x-1">play_arrow</span>
           </div>
-        </div>
-        <!-- YouTube iframe (injected on play) -->
-        <div id="video-embed" class="absolute inset-0 hidden">
-          <iframe
-            id="video-iframe"
-            class="w-full h-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-          ></iframe>
-        </div>
+        </a>
+        <div class="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-primary/5 pointer-events-none"></div>
+        <img src="{{ url_for('static', filename='images/ebook-thumbnail.png') }}" alt="Watch: How we find and fix conversion leaks" class="w-full h-full object-cover" loading="lazy" />
       </div>
       <p
         class="mt-8 text-lg font-bold text-gray-500 uppercase tracking-widest flex items-center gap-3"
@@ -595,6 +583,12 @@ block head_extras %}{% endblock %} {% block content %}
           >More on our YouTube channel →</a
         >
       </p>
+      {# Ensure latest video appears first in homepage gallery #}
+      {% set vids = youtube_video_ids or [] %}
+      {% if 'vbUI7BW8PNI' not in vids %}
+        {% set vids = ['vbUI7BW8PNI'] + vids %}
+      {% endif %}
+      {% set youtube_video_ids = vids %}
       {% include '_youtube_gallery.html' %}
     </div>
   </section>
@@ -805,9 +799,6 @@ block head_extras %}{% endblock %} {% block content %}
     </div>
   </section>
   {% endblock %} {% block footer_links %}{% endblock %} {% block body_end %}
-  <script
-    src="{{ url_for('static', filename='js/video-embed.js') }}"
-    defer
-  ></script>
+ 
   {% endblock %}
 </main>

@@ -102,7 +102,7 @@ def create_app(config_object="app.config.Config") -> Flask:
         }
 
     # Default video IDs when nothing is configured (so gallery always shows something)
-    _DEFAULT_YT_IDS = ["BKN3rEt45Sk", "qEd0zrqFYeg"]
+    _DEFAULT_YT_IDS = ["vbUI7BW8PNI", "BKN3rEt45Sk", "qEd0zrqFYeg"]
 
     @app.context_processor
     def inject_youtube_videos():

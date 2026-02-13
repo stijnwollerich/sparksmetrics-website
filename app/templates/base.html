@@ -117,6 +117,85 @@
         .blog-prose .btn { @apply inline-flex items-center justify-center gap-2 px-7 py-4 min-h-[56px] rounded-xl font-black uppercase tracking-[0.18em] text-[11px] md:text-[12px] transition-all; }
         .blog-prose .btn-primary { @apply bg-primary text-white hover:brightness-110 shadow-xl shadow-primary/30; }
       }
+      /* Make modal two-column layouts stack to one column on small screens */
+      @media (max-width: 640px) {
+        /* Force modal flex containers to column */
+        .max-w-5xl .flex.flex-row,
+        .max-w-5xl .flex.md\\:flex-row,
+        #lead-modal-panel,
+        #schedule-modal .max-w-5xl > div,
+        .max-w-5xl > .flex {
+          flex-direction: column !important;
+        }
+
+        /* Ensure any md width utilities expand to full width inside modals */
+        .max-w-5xl [class*="md:w-"],
+        .max-w-5xl [class*="md\\:w-"] {
+          width: 100% !important;
+          max-width: 100% !important;
+        }
+
+        /* Replace left borders with top borders when stacked for visual separation */
+        .max-w-5xl .md\\:border-l {
+          border-left: none !important;
+          border-top: 1px solid rgba(229,231,235,1) !important;
+        }
+
+        /* Reduce large paddings in modal panels on small screens for better fit */
+        .max-w-5xl .md\\:p-12 { padding: 1.25rem !important; }
+        .max-w-5xl .p-8 { padding: 1rem !important; }
+      }
+
+      /* More specific modal stacking rules to prevent overlap on mobile */
+      @media (max-width: 640px) {
+        /* Lead modal: ensure form state stacks cleanly */
+        #lead-modal-panel #lead-form-state {
+          display: flex !important;
+          flex-direction: column !important;
+          gap: 0 !important;
+          align-items: stretch !important;
+        }
+        #lead-modal-panel #lead-form-state > div {
+          width: 100% !important;
+          max-width: 100% !important;
+          min-width: 0 !important;
+        }
+        /* Schedule modal stacking */
+        #schedule-modal .max-w-5xl > .flex {
+          flex-direction: column !important;
+        }
+        #schedule-modal .max-w-5xl > .flex > div {
+          width: 100% !important;
+        }
+        /* Ensure box sizing and remove min-width to avoid overlap */
+        #lead-modal-panel, #lead-modal-panel * {
+          box-sizing: border-box !important;
+          min-width: 0 !important;
+        }
+      }
+      /* Ensure modal inner scroll areas become normal flow on small screens to avoid overlap */
+      @media (max-width: 640px) {
+        #lead-modal-panel, #schedule-modal {
+          max-height: calc(100vh - 2rem) !important;
+          overflow: auto !important;
+        }
+        /* Disable internal overflow scrolling inside modal children so content flows sequentially */
+        #lead-modal-panel .overflow-y-auto,
+        #lead-modal-panel [class*="overflow-y-auto"],
+        #lead-modal-panel .min-h-0,
+        #lead-modal-panel [class*="min-h-"] {
+          overflow: visible !important;
+          max-height: none !important;
+          height: auto !important;
+        }
+        /* same for schedule modal */
+        #schedule-modal .overflow-y-auto,
+        #schedule-modal [class*="overflow-y-auto"] {
+          overflow: visible !important;
+          max-height: none !important;
+          height: auto !important;
+        }
+      }
     </style>
     {% block head_extras %}{% endblock %}
 </head>
@@ -152,7 +231,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <a class="text-[11px] font-bold uppercase tracking-widest hover:text-primary transition-colors text-white py-3 min-h-[44px] inline-flex items-center" href="{{ url_for('main.results') }}">Results</a>
                 <a class="text-[11px] font-bold uppercase tracking-widest hover:text-primary transition-colors text-white py-3 min-h-[44px] inline-flex items-center" href="{{ url_for('main.blog_index') }}">Blog</a>
             </div>
-            <a class="hidden md:inline-flex px-6 py-3 min-h-[44px] items-center justify-center bg-primary text-white text-xs font-black uppercase rounded hover:brightness-110 transition-all shadow-lg shadow-primary/20" href="{{ url_for('main.schedule_a_call') }}">Talk to us</a>
+            <a class="hidden md:inline-flex px-6 py-3 min-h-[44px] items-center justify-center bg-primary text-white text-xs font-black uppercase rounded hover:brightness-110 transition-all shadow-lg shadow-primary/20" href="#" data-audit-modal data-title="Get a FREE 24-Hour CRO Audit" data-description="Enter your email and we’ll get in touch to schedule your free audit. Limited to 3 brands per week." data-button-text="Claim my free audit">Talk to us</a>
             <button type="button" id="nav-menu-toggle" class="md:hidden p-3 min-h-[44px] min-w-[44px] flex items-center justify-center text-white hover:bg-white/10 rounded-lg transition-colors -m-2" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
                 <span class="material-symbols-outlined text-2xl" aria-hidden="true">menu</span>
             </button>
@@ -164,7 +243,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <a class="min-h-[44px] px-4 py-3 flex items-center text-sm font-bold uppercase tracking-widest text-white hover:bg-white/10 rounded-lg transition-colors" href="{{ url_for('main.analytics') }}">Analytics</a>
             <a class="min-h-[44px] px-4 py-3 flex items-center text-sm font-bold uppercase tracking-widest text-white hover:bg-white/10 rounded-lg transition-colors" href="{{ url_for('main.results') }}">Results</a>
             <a class="min-h-[44px] px-4 py-3 flex items-center text-sm font-bold uppercase tracking-widest text-white hover:bg-white/10 rounded-lg transition-colors" href="{{ url_for('main.blog_index') }}">Blog</a>
-            <a class="min-h-[44px] px-4 py-3 flex items-center text-sm font-bold uppercase text-primary bg-primary/10 rounded-lg mt-2" href="{{ url_for('main.schedule_a_call') }}">Talk to us</a>
+            <a class="min-h-[44px] px-4 py-3 flex items-center text-sm font-bold uppercase text-primary bg-primary/10 rounded-lg mt-2" href="#" data-audit-modal data-title="Get a FREE 24-Hour CRO Audit" data-description="Enter your email and we’ll get in touch to schedule your free audit. Limited to 3 brands per week." data-button-text="Claim my free audit">Talk to us</a>
         </div>
     </div>
 </header>
@@ -201,7 +280,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     <li><a class="text-sm text-slate-400 hover:text-white transition-colors" href="{{ url_for('main.analytics') }}">Analytics</a></li>
                     <li><a class="text-sm text-slate-400 hover:text-white transition-colors" href="{{ url_for('main.results') }}">Results</a></li>
                     <li><a class="text-sm text-slate-400 hover:text-white transition-colors" href="{{ url_for('main.blog_index') }}">Blog</a></li>
-                    <li><a class="text-sm text-slate-400 hover:text-white transition-colors" href="{{ url_for('main.schedule_a_call') }}">Schedule a Call</a></li>
+                    <li><a class="text-sm text-slate-400 hover:text-white transition-colors" href="#" data-audit-modal data-title="Get a FREE 24-Hour CRO Audit" data-description="Enter your email and we’ll get in touch to schedule your free audit. Limited to 3 brands per week." data-button-text="Claim my free audit">Schedule a Call</a></li>
                     {% block footer_links %}{% endblock %}
                 </ul>
             </div>
@@ -425,8 +504,89 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   });
 })();
 </script>
+<script>
+// Ensure modal sidebar becomes full-width, static flow on small screens to avoid overlap
+(function(){
+  var MOBILE_BREAK = 640;
+  function adjustModalSidebars() {
+    var isMobile = window.innerWidth <= MOBILE_BREAK;
+    // Lead modal
+    var leadState = document.getElementById('lead-form-state');
+    if (leadState) {
+      var children = leadState.querySelectorAll(':scope > div');
+      if (children.length >= 2) {
+        var formCol = children[0];
+        var sideCol = children[1];
+        if (isMobile) {
+          sideCol.dataset._origStyle = sideCol.getAttribute('style') || '';
+          sideCol.style.width = '100%';
+          sideCol.style.maxWidth = '100%';
+          sideCol.style.minWidth = '0';
+          sideCol.style.overflow = 'visible';
+          sideCol.style.padding = '1rem';
+          sideCol.style.borderLeft = 'none';
+          sideCol.style.borderTop = '1px solid rgba(229,231,235,1)';
+          sideCol.style.borderRadius = '0 0 1rem 1rem';
+          // ensure any absolutely positioned children become static so they don't float over the form
+          Array.prototype.slice.call(sideCol.querySelectorAll('*')).forEach(function(el){
+            var pos = window.getComputedStyle(el).position;
+            if (pos === 'absolute' || pos === 'fixed') {
+              el.dataset._origPos = el.style.position || '';
+              el.style.position = 'static';
+            }
+          });
+        } else {
+          // revert
+          if (sideCol.dataset._origStyle !== undefined) {
+            sideCol.setAttribute('style', sideCol.dataset._origStyle);
+            delete sideCol.dataset._origStyle;
+          } else {
+            sideCol.removeAttribute('style');
+          }
+          Array.prototype.slice.call(sideCol.querySelectorAll('*')).forEach(function(el){
+            if (el.dataset._origPos !== undefined) {
+              el.style.position = el.dataset._origPos;
+              delete el.dataset._origPos;
+            }
+          });
+        }
+      }
+    }
+
+    // Schedule modal (same logic if present)
+    var sched = document.querySelector('#schedule-modal .max-w-5xl > .flex');
+    if (sched) {
+      var kids = sched.querySelectorAll(':scope > div');
+      if (kids.length >= 2) {
+        var left = kids[0], right = kids[1];
+        if (isMobile) {
+          right.dataset._origStyle = right.getAttribute('style') || '';
+          right.style.width = '100%';
+          right.style.maxWidth = '100%';
+          right.style.minWidth = '0';
+          right.style.overflow = 'visible';
+          right.style.padding = '1rem';
+          right.style.borderLeft = 'none';
+          right.style.borderTop = '1px solid rgba(229,231,235,1)';
+          right.style.borderRadius = '0 0 1rem 1rem';
+        } else {
+          if (right.dataset._origStyle !== undefined) {
+            right.setAttribute('style', right.dataset._origStyle);
+            delete right.dataset._origStyle;
+          } else {
+            right.removeAttribute('style');
+          }
+        }
+      }
+    }
+  }
+  window.addEventListener('resize', function(){ adjustModalSidebars(); });
+  document.addEventListener('DOMContentLoaded', adjustModalSidebars);
+})();
+</script>
 <script src="{{ url_for('static', filename='js/audit-bar.js') }}" defer></script>
 <script src="{{ url_for('static', filename='js/checklist-modal.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/video-cta.js') }}" defer></script>
 <script>
 (function(){
   var CALENDLY_URL = 'https://calendly.com/stijnwherever/free-30-minute-strategy-session?hide_gdpr_banner=1';

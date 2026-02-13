@@ -1,171 +1,2396 @@
 <!DOCTYPE html>
 <html class="scroll-smooth" lang="en">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>13 Actionable Conversion Rate Optimization Strategies | Sparksmetrics</title>
-  <link rel="icon" type="image/svg+xml" href="/static/favicon.svg"/>
-  <link href="https://fonts.googleapis.com" rel="preconnect"/>
-  <link crossorigin href="https://fonts.gstatic.com" rel="preconnect"/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Lexend:wght@700;800;900&amp;display=swap" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: "#FF4D00",
-            "deep-charcoal": "#1A1A1B",
-            "light-base": "#F9F9FB",
-          },
-          fontFamily: {
-            display: ["Lexend", "sans-serif"],
-            sans: ["Inter", "sans-serif"],
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      13 Actionable Conversion Rate Optimization Strategies | Sparksmetrics
+    </title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg" />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Lexend:wght@700;800;900&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#FF4D00",
+              "deep-charcoal": "#1A1A1B",
+              "light-base": "#F9F9FB",
+            },
+            fontFamily: {
+              display: ["Lexend", "sans-serif"],
+              sans: ["Inter", "sans-serif"],
+            },
           },
         },
-      },
-    };
-  </script>
-  <style type="text/tailwindcss">
-    @layer base {
-      h1, h2, h3, h4 { @apply font-display font-black uppercase tracking-tighter leading-tight; }
-    }
-    @layer components {
-      .content-narrow { max-width: 800px; margin-left: auto; margin-right: auto; }
-      .material-symbols-outlined.star-filled { font-variation-settings: "FILL" 1, "wght" 400; }
-    }
-  </style>
-</head>
-<body class="antialiased selection:bg-primary selection:text-white bg-light-base text-gray-800 font-sans leading-relaxed">
-  <section class="bg-white py-12 md:py-16 border-b border-gray-100" id="hero">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
-        <div class="order-2 lg:order-1">
+      };
+    </script>
+    <style type="text/tailwindcss">
+      @layer base {
+        h1,
+        h2,
+        h3,
+        h4 {
+          @apply font-display font-black uppercase tracking-tighter leading-tight;
+        }
+      }
+      @layer components {
+        .content-narrow {
+          max-width: 720px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+        .material-symbols-outlined.star-filled {
+          font-variation-settings: "FILL" 1, "wght" 400;
+        }
+        /* Slightly reduce default size for Material Symbols to keep icons compact */
+        .material-symbols-outlined {
+          font-size: 0.92em;
+          line-height: 1;
+          vertical-align: middle;
+          display: inline-block;
+        }
+        /* Urgency progress bar for modal */
+        .urgency-track {
+          @apply w-full bg-gray-200 rounded-full h-2 overflow-hidden;
+        }
+        .urgency-fill {
+          @apply h-2 bg-primary rounded-full;
+          animation: urgencyPulse 3s ease-in-out infinite alternate;
+          width: 45%;
+        }
+        @keyframes urgencyPulse {
+          0% {
+            width: 35%;
+          }
+          50% {
+            width: 55%;
+          }
+          100% {
+            width: 45%;
+          }
+        }
+        /* Justify paragraph copy inside content-narrow (exclude list items) */
+        .content-narrow p {
+          text-align: justify;
+          text-justify: inter-word;
+        }
+        /* Allow specific paragraphs to opt-out of justification (e.g. small badges) */
+        .content-narrow p.text-center {
+          text-align: center;
+          text-justify: none;
+        }
+        .content-narrow ul li,
+        .content-narrow ol li {
+          text-align: left;
+          text-justify: none;
+        }
+        /* Mobile spacing & readability tweaks */
+        @media (max-width: 640px) {
+          /* Ensure page containers keep comfortable side padding on small screens */
+          .max-w-7xl,
+          .content-narrow,
+          .max-w-4xl {
+            padding-left: 1rem;
+            padding-right: 1rem;
+          }
+
+          /* Slightly reduce very large display H1 headings on mobile for better wrapping */
+          h1.font-display {
+            font-size: 1.6rem !important;
+            line-height: 1.15;
+          }
+
+          /* Give sections more breathing room vertically on mobile */
+          section {
+            padding-top: 2.5rem;
+            padding-bottom: 2.5rem;
+          }
+
+          /* Make secondary CTA buttons comfortable to tap */
+          .inline-flex.items-center.justify-center.px-8.py-6,
+          .inline-flex.items-center.justify-center.px-8.py-4 {
+            padding-left: 1rem;
+            padding-right: 1rem;
+            padding-top: 0.9rem;
+            padding-bottom: 0.9rem;
+          }
+
+          /* Ensure centered small badges and privacy lines keep centered and readable */
+          p.text-center {
+            padding-left: 0;
+            padding-right: 0;
+          }
+        }
+        /* Logo slider styles */
+        .logo-slider {
+          position: relative;
+        }
+        .logo-track {
+          display: flex;
+          gap: 1rem;
+          overflow-x: auto;
+          scroll-behavior: smooth;
+          -webkit-overflow-scrolling: touch;
+          padding: 0.5rem 0;
+        }
+        .logo-item {
+          flex: 0 0 auto;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0.75;
+          transition: opacity 0.2s, transform 0.2s;
+          max-width: 120px;
+        }
+        .logo-item img.logo-img {
+          max-height: 40px;
+          width: auto;
+          display: block;
+          filter: grayscale(100%) opacity(0.65);
+          transition: filter 0.22s ease, opacity 0.22s ease,
+            transform 0.22s ease;
+        }
+        .logo-item:hover {
+          opacity: 1;
+          transform: translateY(-3px);
+        }
+        .logo-item:hover img.logo-img {
+          filter: none;
+          opacity: 1;
+          transform: translateY(-2px);
+        }
+        .logo-arrow {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          background: rgba(255, 255, 255, 0.9);
+          border: 1px solid rgba(0, 0, 0, 0.06);
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 8px;
+          cursor: pointer;
+          box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+        }
+        .logo-arrow.left {
+          left: 0.5rem;
+        }
+        .logo-arrow.right {
+          right: 0.5rem;
+        }
+        @media (min-width: 768px) {
+          .logo-item img {
+            max-height: 48px;
+          }
+        }
+        /* Desktop: spread logos across full width (non-slider) */
+        @media (min-width: 1024px) {
+          .logo-track {
+            display: flex;
+            justify-content: space-between;
+            gap: 2rem;
+            overflow: visible;
+            padding: 0.5rem 0;
+          }
+          .logo-item {
+            flex: 1 1 0;
+            max-width: none;
+          }
+          .logo-item img.logo-img {
+            max-height: 56px;
+          }
+          /* hide slider arrows on desktop */
+          .logo-arrow {
+            display: none;
+          }
+        }
+        /* Tighten spacing for the intro section and scale lead paragraph */
+        #intro {
+          padding-top: 2.5rem; /* reduce from large default */
+          padding-bottom: 2.5rem;
+        }
+        @media (min-width: 768px) {
+          #intro {
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+          }
+        }
+        .lead-intro {
+          font-size: 1.15rem; /* ~18.4px */
+          font-weight: 700;
+          margin-bottom: 0.75rem;
+        }
+        @media (min-width: 768px) {
+          .lead-intro {
+            font-size: 1.25rem; /* ~20px */
+          }
+        }
+        /* Fixed bottom CTA that appears after the hero (desktop & mobile) */
+        /* Fixed CTA hidden by default; only shown on mobile */
+        .fixed-cta {
+          display: none;
+          position: fixed;
+          left: 0;
+          right: 0;
+          bottom: 1rem;
+          justify-content: center;
+          z-index: 400;
+          pointer-events: none;
+          transition: opacity 0.28s ease, transform 0.28s ease;
+        }
+        .fixed-cta-inner {
+          pointer-events: auto;
+          background: rgba(26, 26, 27, 0.98);
+          color: #fff;
+          padding: 0.6rem 1rem;
+          border-radius: 12px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.35rem;
+          max-width: 980px;
+          margin: 0 1rem;
+          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+        }
+        .fixed-cta-btn {
+          background: #ff4d00;
+          color: #fff;
+          padding: 0.6rem 1.1rem;
+          font-weight: 800;
+          text-transform: uppercase;
+          border-radius: 10px;
+          text-decoration: none;
+          letter-spacing: 0.6px;
+          box-shadow: 0 8px 28px rgba(255, 77, 0, 0.18);
+          font-size: 0.95rem;
+        }
+        .fixed-cta-note {
+          font-size: 0.78rem;
+          color: #ffffff;
+          opacity: 0.95;
+          margin: 0;
+        }
+        .fixed-cta.hidden {
+          opacity: 0;
+          transform: translateY(12px);
+          pointer-events: none;
+        }
+        .fixed-cta.show {
+          opacity: 1;
+          transform: translateY(0);
+          pointer-events: auto;
+        }
+        @media (max-width: 480px) {
+          .fixed-cta-inner {
+            padding: 0.5rem 0.75rem;
+            border-radius: 10px;
+          }
+          .fixed-cta-btn {
+            padding: 0.55rem 0.9rem;
+            font-size: 0.9rem;
+          }
+        }
+        /* show fixed CTA only on small screens */
+        @media (max-width: 640px) {
+          .fixed-cta {
+            display: flex;
+          }
+        }
+        /* Review collapse for mobile */
+        @media (max-width: 640px) {
+          .review-mobile-hidden {
+            display: none !important;
+          }
+          .show-more-reviews-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1rem;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            color: #1a1a1b;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+          }
+        }
+      }
+    </style>
+  </head>
+  <body
+    class="antialiased selection:bg-primary selection:text-white bg-light-base text-gray-800 font-sans leading-relaxed"
+  >
+    <section class="bg-white py-12 md:py-16 border-b border-gray-100" id="hero">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+          <div class="order-2 lg:order-1">
+            <a
+              href="#"
+              class="block"
+              data-checklist-modal
+              data-resource="cro-checklist"
+              data-title="13 Bulletproof Strategies to Skyrocket Conversions"
+              data-description="Enter your email and we'll send you the free ebook with 13 actionable CRO strategies used by $10M+ brands."
+              data-button-text="Send me the ebook"
+            >
+              <picture>
+                <source
+                  srcset="{{ url_for('static', filename='images/on-how-to-use-all-the-platforms-to-generate-real-profit.png') }}"
+                  type="image/png"
+                />
+                <img
+                  src="{{ url_for('static', filename='images/on-how-to-use-all-the-platforms-to-generate-real-profit.png') }}"
+                  alt="On how to use all the platforms to generate real profit"
+                  class="w-full rounded-2xl border-2 border-gray-200 shadow-xl"
+                />
+              </picture>
+            </a>
+          </div>
+          <div class="order-1 lg:order-2">
+            <!-- Ratings moved below the CTA so they appear centered under buttons -->
+            <p class="text-deep-charcoal font-bold text-sm mb-4 text-left">
+              ⭐⭐⭐⭐⭐ 2540+ downloads
+            </p>
+            <h1
+              class="font-display font-black text-deep-charcoal uppercase tracking-tighter leading-[1.05] mb-6"
+              style="font-size: 3em"
+            >
+              Copy + paste the
+              <span class="text-primary">$23.7M</span> conversion optimization
+              strategy.
+            </h1>
+            <p class="text-deep-charcoal font-medium text-lg mb-5">
+              <strong>In this ebook, you'll learn:</strong>
+            </p>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-start gap-3">
+                <span
+                  class="w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0 mt-0.5"
+                >
+                  <span class="material-symbols-outlined text-primary text-sm"
+                    >check</span
+                  >
+                </span>
+                <span class="text-deep-charcoal"
+                  >How to craft an offer that will guarantee new conversions and
+                  leads</span
+                >
+              </li>
+              <li class="flex items-start gap-3">
+                <span
+                  class="w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0 mt-0.5"
+                >
+                  <span class="material-symbols-outlined text-primary text-sm"
+                    >check</span
+                  >
+                </span>
+                <span class="text-deep-charcoal"
+                  >13 proven strategies you're probably not using (but should
+                  be)</span
+                >
+              </li>
+              <li class="flex items-start gap-3">
+                <span
+                  class="w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0 mt-0.5"
+                >
+                  <span class="material-symbols-outlined text-primary text-sm"
+                    >check</span
+                  >
+                </span>
+                <span class="text-deep-charcoal"
+                  >The dumbest mistakes killing your conversions</span
+                >
+              </li>
+              <li class="flex items-start gap-3">
+                <span
+                  class="w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0 mt-0.5"
+                >
+                  <span class="material-symbols-outlined text-primary text-sm"
+                    >check</span
+                  >
+                </span>
+                <span class="text-deep-charcoal"
+                  >A surprising tactic that makes people say "Yes"</span
+                >
+              </li>
+            </ul>
+            <a
+              class="block w-full text-center px-8 py-5 bg-primary text-white font-display text-xl md:text-2xl font-black rounded-xl shadow-[0_16px_40px_rgba(255,77,0,0.35)] hover:scale-[1.02] transition-all uppercase"
+              href="#"
+              data-checklist-modal
+              >Send me my free ebook now</a
+            >
+
+            <div class="text-center mt-4">
+              <p class="text-deep-charcoal/70 text-sm mt-1">
+                <span class="material-symbols-outlined">lock</span> 100%
+                privacy, no games, no spam
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Client logos (above the fold) — single-row slider -->
+      <div class="border-t border-gray-100 py-4 mt-6">
+        <div class="max-w-7xl mx-auto px-6 logo-slider">
+          <button
+            class="logo-arrow left"
+            aria-label="Scroll logos left"
+            type="button"
+          >
+            <span class="material-symbols-outlined">chevron_left</span>
+          </button>
+          <div class="logo-track" role="list">
+            <!-- Prioritize Canopy and Argenx first (fallback: avoid missing Neil Patel image) -->
+            <div class="logo-item" role="listitem">
+              <img
+                class="logo-img"
+                src="{{ url_for('static', filename='images/logos/alle.png') }}"
+                alt="Neil Patel"
+                loading="lazy"
+              />
+            </div>
+            <div class="logo-item" role="listitem">
+              <img
+                class="logo-img"
+                src="{{ url_for('static', filename='images/logos/canopy.png') }}"
+                alt="Canopy"
+                loading="lazy"
+                onerror="this.closest('.logo-item').style.display='none'"
+              />
+            </div>
+            <div class="logo-item" role="listitem">
+              <img
+                class="logo-img"
+                src="{{ url_for('static', filename='images/logos/argenx.png') }}"
+                alt="Argenx"
+                loading="lazy"
+                onerror="this.closest('.logo-item').style.display='none'"
+              />
+            </div>
+            <div class="logo-item" role="listitem">
+              <img
+                class="logo-img"
+                src="{{ url_for('static', filename='images/logos/lpc.png') }}"
+                alt="Le Petit Chef"
+                loading="lazy"
+                onerror="this.closest('.logo-item').style.display='none'"
+              />
+            </div>
+            <div class="logo-item" role="listitem">
+              <img
+                class="logo-img"
+                src="{{ url_for('static', filename='images/logos/outdoor-research.png') }}"
+                alt="Outdoor Research"
+                loading="lazy"
+                onerror="this.closest('.logo-item').style.display='none'"
+              />
+            </div>
+            <div class="logo-item" role="listitem">
+              <img
+                class="logo-img"
+                src="{{ url_for('static', filename='images/logos/edikted.png') }}"
+                alt="Edikted"
+                loading="lazy"
+                onerror="this.closest('.logo-item').style.display='none'"
+              />
+            </div>
+            <div class="logo-item" role="listitem">
+              <img
+                class="logo-img"
+                src="{{ url_for('static', filename='images/logos/vacation-renter.png') }}"
+                alt="Vacation Renter"
+                loading="lazy"
+                onerror="this.closest('.logo-item').style.display='none'"
+              />
+            </div>
+            <!-- alle.png moved to first position per request; duplicate removed -->
+            <div class="logo-item" role="listitem">
+              <img
+                class="logo-img"
+                src="{{ url_for('static', filename='images/logos/client-2.png') }}"
+                alt="TUSHY"
+                loading="lazy"
+                onerror="this.closest('.logo-item').style.display='none'"
+              />
+            </div>
+          </div>
+          <button
+            class="logo-arrow right"
+            aria-label="Scroll logos right"
+            type="button"
+          >
+            <span class="material-symbols-outlined">chevron_right</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="intro" class="py-24 bg-white border-b border-gray-100">
+      <div class="content-narrow px-6">
+        <p
+          class="text-gray-500 text-xs font-bold uppercase tracking-widest mb-8"
+        >
+          Updated: February 7, 2026
+        </p>
+        <p
+          style="font-size: 22px"
+          class="text-deep-charcoal text-lg leading-relaxed mb-6 lead-intro"
+        >
+          <strong>Dear savvy business owner,</strong>
+        </p>
+        <p class="text-gray-700 text-lg leading-relaxed mb-6">
+          Are you looking for the "<strong>insider trade secrets</strong>" to
+          boost your conversion and sales?
+        </p>
+        <p class="text-gray-700 text-lg leading-relaxed mb-6">
+          Then step forward, and download this free report and get the
+          groundbreaking strategies we've personally used to create millions of
+          dollars' worth of extra sales out of thin air!
+        </p>
+        <p class="text-gray-700 text-lg leading-relaxed mb-6">
+          These 13 bulletproof strategies are the most explosively powerful
+          secrets we've ever discovered from running literally thousands of
+          split-tests and spending millions of dollars on scientific conversion
+          tests for many of the largest, most successful business in Australia.
+        </p>
+        <p class="text-gray-700 text-lg leading-relaxed mb-6">
+          Each of these strategies can easily
+          <strong>boost your conversions by maybe 15%, 25%, 30% or more</strong
+          >. Use them together and the cumulative effect is often an explosion
+          in conversion and sales of 75%, 125%, sometimes even 200% or more.
+        </p>
+        <p class="text-gray-700 text-lg leading-relaxed mb-10">
+          This report is yours free, just enter your details and hit the
+          "download button" in the box below, and these sales-exploding tips
+          will be sent straight to your inbox to boost your conversions on all
+          forms of traffic… Increase your profit margins…outsell your
+          competitors… and leverage every dollar you invest to generate more
+          leads, sales and profits.
+        </p>
+        <div class="text-center">
+          <a
+            class="inline-flex items-center justify-center px-8 py-6 bg-primary text-white font-display text-xl md:text-2xl font-black rounded-xl shadow-[0_20px_50px_rgba(255,77,0,0.3)] hover:scale-[1.02] transition-all uppercase"
+            href="#"
+            data-checklist-modal
+            >Send me my free report now</a
+          >
+          <p class="mt-4 text-gray-500 text-sm font-bold text-center">
+            ⭐⭐⭐⭐⭐ 2540+ downloads
+          </p>
+          <p class="text-gray-500 text-sm mt-1 text-center">
+            100% privacy, no games, no spam
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="pt-12 pb-24 bg-light-base border-b border-gray-100">
+      <div class="content-narrow px-6">
+        <div class="text-center mb-6" style="padding-top:0.25rem;">
           <img
-            src="https://sparksmetrics.com/wp-content/uploads/2025/02/on-how-to-use-all-the-platforms-to-generate-real-profit.png"
-            alt="On how to use all the platforms to generate real profit"
-            class="w-full rounded-2xl border-2 border-gray-200 shadow-xl"
+            src="{{ url_for('static', filename='images/ebook-thumbnail.png') }}"
+            alt="13 Bulletproof Strategies ebook"
+            class="inline-block rounded-lg shadow-lg"
+            style="width:14rem;"
+            loading="lazy"
           />
         </div>
-        <div class="order-1 lg:order-2">
-          <h1 class="text-2xl md:text-3xl lg:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tighter leading-[1.15] mb-6">
-            Copy + paste the $23.7 million dollar conversion optimization strategy.
-          </h1>
-          <p class="text-deep-charcoal font-medium text-lg mb-5"><strong>In this ebook, you'll learn:</strong></p>
-          <ul class="space-y-3 mb-8">
-            <li class="flex items-start gap-3">
-              <span class="w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0 mt-0.5">
-                <span class="material-symbols-outlined text-primary text-sm">check</span>
-              </span>
-              <span class="text-deep-charcoal">How to craft an offer that will guarantee new conversions and leads</span>
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0 mt-0.5">
-                <span class="material-symbols-outlined text-primary text-sm">check</span>
-              </span>
-              <span class="text-deep-charcoal">13 proven strategies you're probably not using (but should be)</span>
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0 mt-0.5">
-                <span class="material-symbols-outlined text-primary text-sm">check</span>
-              </span>
-              <span class="text-deep-charcoal">The dumbest mistakes killing your conversions</span>
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0 mt-0.5">
-                <span class="material-symbols-outlined text-primary text-sm">check</span>
-              </span>
-              <span class="text-deep-charcoal">A surprising tactic that makes people say "Yes"</span>
-            </li>
-          </ul>
-          <a class="block w-full text-center px-8 py-5 bg-primary text-white font-display text-xl md:text-2xl font-black rounded-xl shadow-[0_16px_40px_rgba(255,77,0,0.35)] hover:scale-[1.02] transition-all uppercase" href="#" data-checklist-modal>Send me my free ebook now</a>
-          <p class="text-deep-charcoal/80 text-sm mt-2 text-center">(and unlock an exclusive expert video!)</p>
-          <div class="flex flex-wrap items-center gap-4 mt-6">
-            <div class="flex items-center gap-1">
-              <span class="material-symbols-outlined star-filled text-amber-400 text-xl">star</span>
-              <span class="material-symbols-outlined star-filled text-amber-400 text-xl">star</span>
-              <span class="material-symbols-outlined star-filled text-amber-400 text-xl">star</span>
-              <span class="material-symbols-outlined star-filled text-amber-400 text-xl">star</span>
-              <span class="material-symbols-outlined star-filled text-amber-400 text-xl">star</span>
-            </div>
-            <span class="text-deep-charcoal font-bold text-sm">2540+ downloads</span>
+        <h2 class="text-4xl md:text-5xl mb-4 text-deep-charcoal text-center">
+          Here's Just A Fraction Of What You'll
+          <span class="text-primary">Discover</span> Inside This Free Report...
+        </h2>
+        <ul class="space-y-4 text-gray-700 text-lg mb-12">
+          <li class="flex items-start gap-3">
+            <span
+              class="w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0 mt-0.5"
+              ><span class="material-symbols-outlined text-primary text-sm"
+                >check</span
+              ></span
+            >13 actionable strategies you can implement RIGHT NOW to turn
+            browsers into buyers.
+          </li>
+          <li class="flex items-start gap-3">
+            <span
+              class="w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0 mt-0.5"
+              ><span class="material-symbols-outlined text-primary text-sm"
+                >check</span
+              ></span
+            >How to craft an offer that will <strong>GUARANTEE</strong> new
+            conversions and leads
+          </li>
+          <li class="flex items-start gap-3">
+            <span
+              class="w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0 mt-0.5"
+              ><span class="material-symbols-outlined text-primary text-sm"
+                >check</span
+              ></span
+            >How to convert large new "starving crowds" of prospects who spend
+            like sailors on leave.
+          </li>
+          <li class="flex items-start gap-3">
+            <span
+              class="w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0 mt-0.5"
+              ><span class="material-symbols-outlined text-primary text-sm"
+                >check</span
+              ></span
+            >The inside "trade secrets" other agencies don't want you to know
+          </li>
+          <li class="flex items-start gap-3">
+            <span
+              class="w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0 mt-0.5"
+              ><span class="material-symbols-outlined text-primary text-sm"
+                >check</span
+              ></span
+            >How to build credibility to drive new conversion and sales
+          </li>
+          <li class="flex items-start gap-3">
+            <span
+              class="w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0 mt-0.5"
+              ><span class="material-symbols-outlined text-primary text-sm"
+                >check</span
+              ></span
+            >The greatest conversion secrets ever discovered, and how they can
+            make each of your advertising dollars do the work of nine or ten.
+          </li>
+          <li class="flex items-start gap-3">
+            <span
+              class="w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0 mt-0.5"
+              ><span class="material-symbols-outlined text-primary text-sm"
+                >check</span
+              ></span
+            >And much, much more!
+          </li>
+        </ul>
+        <div class="text-center">
+          <a
+            class="inline-flex items-center justify-center px-8 py-6 bg-primary text-white font-display text-xl md:text-2xl font-black rounded-xl shadow-[0_20px_50px_rgba(255,77,0,0.3)] hover:scale-[1.02] transition-all uppercase"
+            href="#"
+            data-checklist-modal
+            >Send me my free report now</a
+          >
+          <p class="mt-4 text-gray-500 text-sm font-bold text-center">
+            ⭐⭐⭐⭐⭐ 2540+ downloads
+          </p>
+          <p class="text-gray-500 text-sm mt-1 text-center">
+            100% privacy, no games, no spam
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-24 bg-white border-b border-gray-100" id="who">
+      <div class="content-narrow px-6">
+        <h2 class="text-4xl md:text-5xl mb-6 text-deep-charcoal text-center">
+          Who Is Sparksmetrics To Make Such Promises?
+        </h2>
+        <div class="space-y-6 text-gray-700 text-lg">
+          <p>
+            We've worked with over 200 clients across industries and countries,
+            from SaaS giants to Ecommerce innovators. With 8+ years of
+            experience, we've perfected the art of turning data into dollars.
+          </p>
+          <p>
+            Our team of data scientists and CRO experts has
+            <strong>generated over $25 million</strong> in additional revenue.
+            We've conducted thousands of experiments to refine strategies that
+            deliver real, measurable growth.
+          </p>
+          <p>
+            With a <strong>100% success score</strong> on Upwork, clients trust
+            us to deliver results. Whether it's optimizing conversions or
+            scaling profitably, we bring proven methods that work every time.
+          </p>
+          <p>
+            We've built winning strategies for startups, established brands, and
+            everything in between. From crafting irresistible offers to boosting
+            ROI, we've got you covered. And now, we're giving these insights to
+            you—<strong>completely free</strong>.
+          </p>
+        </div>
+        <div class="text-center mt-14">
+          <a
+            class="inline-flex items-center justify-center px-8 py-6 bg-primary text-white font-display text-xl md:text-2xl font-black rounded-xl shadow-[0_20px_50px_rgba(255,77,0,0.3)] hover:scale-[1.02] transition-all uppercase"
+            href="#"
+            data-checklist-modal
+            >Send me my free report now</a
+          >
+          <p class="mt-4 text-gray-500 text-sm font-bold text-center">
+            ⭐⭐⭐⭐⭐ 2540+ downloads
+          </p>
+          <p class="text-gray-500 text-sm mt-1 text-center">
+            100% privacy, no games, no spam
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20 md:py-24 bg-white border-b border-gray-100">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-14">
+          <h2
+            class="text-3xl md:text-5xl font-display font-black text-deep-charcoal uppercase tracking-tighter"
+          >
+            This Is What <span class="text-primary">They Say.</span>
+          </h2>
+          <p
+            class="text-gray-500 font-bold uppercase tracking-widest text-sm mt-4"
+          >
+            Direct feedback from brands we've worked with.
+          </p>
+        </div>
+        <div
+          id="reviews-grid"
+          class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+        >
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Professional and great quality work, thank you"
+            </p>
           </div>
-          <div class="flex items-center gap-2 mt-3 text-deep-charcoal/70 text-sm">
-            <span class="material-symbols-outlined text-base">lock</span>
-            <span>100% privacy, no games, no spam</span>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn is a great go to resource when it comes to building a
+              proper infrastructure for Google Analytics and setting up the
+              dashboard so you get access to your data in a very simple way. You
+              only need to explain the purpose of the project and he will
+              outline a great strategy that can sync with your media buying
+              activities. This is awesome!"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn was a pleasure to work with and he successfully solved the
+              problems we had tracking our Google ads campaigns through Gtags,
+              and set up Google Analytics. He is an excellent communicator and
+              friendly guy. I look forward to working with him again."
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Great experience working with Stijn!"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "I had a very specific situation with GTM and GA4. Stijn helped me
+              to solve the issue quickly and efficiently. Thanks so much!"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "It was a great pleasure working with Stijn. Absolutely recommend
+              him to work with, and I'm sure I'll hire him in the future"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Thanks for checking GTM"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Helped me get relevant insights for a few clients. Highly
+              recommended and will hire again."
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn really knows his stuff. Great working with him."
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn was very helpful in making sure our Google Offline
+              Conversions were set up properly!"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn did a great job on instructing me with GTM!"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "He was great. Would highly recommend to anyone needing a GA4
+              pro!"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Loved this guy, very good experience"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn has provided a great level of professional service,
+              fulfilling the tasks in time and providing initiatives to help the
+              efficient project development."
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn wasn't always available during my working hours but
+              connected server side analytics for us quickly!"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Knowledgeable but we haven't been able to fully wrap this up."
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn has excellent communications skills. He has a solid
+              understanding of Digital Marketing, Google Tag Manager and Google
+              Analytics. He was able to clearly explain to me how to use these
+              tools. He was also very conscious of our time, so that I could
+              stay within my budget. I appreciated that. I would hire him again
+              for future jobs relating to digital marketing!"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "I don't know how to thank Stijn enough for helping our school
+              with this project. Stijn was able to help our school implement a
+              custom Google Analytics tracking code for our LMS system and now
+              we can track e-commerce sales and see which marketing channel
+              helped with the conversion. Stijn is an excellent contractor to
+              work with and I look forward to working with him again soon!"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn did exactly what we asked, would highly recommend him."
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "He has a good commitment and he helped us to better plan the
+              work. He has the skills that he shares in his profile, we did a
+              job related to Google Tag Manager and Analytics, which were done
+              successfully. 100% we will work again with Stijn!"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "He did a good job helping us installing GA4 and old Analytics for
+              our website"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn Wollerich gives me great advice for my business"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "We needed very specific SEO consulting, not just regular
+              consulting with generic reports. We had a problem regarding
+              indexing several pages. What he told us makes sense totally and we
+              will do all his recommendations. I am pretty sure the web
+              positioning and organic visits will increase. I totally recommend
+              him"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "He's great! Very communicative, responsive and knowledgeable, I
+              would 100% hire him in the future if the need comes up"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Excellent communication, great ideas and hard working. Would
+              absolutely recommend him to anyone. Thanks!"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Good SEO skills and cooperation. Stijn did exactly what we
+              expected and was available for the update needed. We recommend
+              Stijn for SEO audits"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Great work. Stijn works fast and knows exactly what to do. He's
+              definitely an expert in tagging analytics!"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Incredibly knowledgeable on Google Tag Manager, Google Analytics,
+              and Google Ads. Had a very specific challenge with GTM that Stijn
+              was able to solve and then became a valuable resource for more
+              projects. Available and flexible. Will work with Stijn again!"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Fantastic work! Will hire again, Stijn absolutely knows what's up
+              and this was a pretty complex job!"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn fixed our issue without any problems."
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Easy to work with, responsive, and executed the job quickly.
+              Would happily continue working with Stijn."
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn was very responsive, could explain very well the concepts
+              of GA4 and helped me to dig into the data and generate two custom
+              reports. Excellent job and exactly what I wanted! If I need help
+              with GA4, I will book Stijn again for sure."
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn was easy to communicate and available. He ran into some
+              issues while setting up my GA but at the end was able to solve the
+              issue and correctly set it up within the budget estimated."
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "A true delight to work with. Happy to have on my roster for work
+              moving forward!"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn was great, helped me figure out why my client's pixels
+              weren't firing correctly and did it in a time-efficient way. Would
+              absolutely work with him again"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Great job! Very good at what he does and also explained
+              everything well. Highly recommended."
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Excellent working with this person"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn was very helpful in consulting us for all things GA4, I can
+              highly recommend him!"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn is very skilled and we had good communication. Would
+              recommend"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn was easy to work and conveyed trust. He responded to my
+              messages within 24 hours. My project was small (update GA4 on
+              website) and the due date was flexible so he squeezed me in. I had
+              some concerns a couple of months later, so he checked everything
+              for me again. I am happy with the work that was done and would
+              absolutely recommend Stijn as a freelancer who can help with GA4"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn helped me with my GTM configuration for stockhawk.io. He
+              quickly got me sorted out. He really knows his domain and I can
+              highly recommend him."
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn is very knowledgeable about google analytics and was very
+              helpful in sorting out discrepancies in our numbers."
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Easy to work with, completed the task quickly, highly recommend
+              Stijn 🙂"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Excellent work"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn is one of the best freelancers on UpWork. He is very
+              knowledgeable in Google Tag Manager, Google Analytics, and
+              WordPress. I would definitely reach out to him in the future as I
+              get more projects related to this type of work. Thank you, Stijn!
+              Five STARZZZ!!!!"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Great work. Would recommend"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "I highly advise you, understands the tasks assigned to them, and
+              strives to provide the best"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "great Job! Thank you"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Great Freelancer, really enjoyed working with him and did exactly
+              what I wanted"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Brilliant experience. Really easy and fast communication,
+              knowledgeable, and completed on time. Impressed with how this
+              project was executed and would use again"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Finding this freelancer was like finding a magic lantern and a
+              genie. He always appeared when I needed him and he always had a
+              solution to my problems. In addition to being fantastically
+              responsive, he was also unobtrusively pro-active–suggesting ways
+              forward and new ideas that did not occur to me. I am truly proud
+              of the digital marketing products we developed together. They have
+              brought the results I hoped for. I highly recommend Stijn. He's a
+              dream come true"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn is wonderful and knowledgeable. If you're considering him,
+              I would recommend hiring him right away. I'll continue to come
+              back to him in the future for all my SEO related work."
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn has excellent communications skills. He has a solid
+              understanding of Digital Marketing, Google Tag Manager and Google
+              Analytics. He was able to clearly explain to me how to use these
+              tools. He was also very conscious of our time, so that I could
+              stay within my budget. I appreciated that. I would hire him again
+              for future jobs relating to digital marketing!"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn was super professional efficient and knowledgeable. He
+              surpassed my expectations and allowed us to achieve more from the
+              project than we had first aimed for. I would highly recommend
+              Stijn."
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn was a star with helping us with a serious tracking issue
+              and saved us hundreds of dollars! Thank you again 😁"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn was very helpful in answering our questions and provided
+              sound insight into Google Analytics and Google Search Console. I
+              would recommend his help and advice to anyone trying to navigate
+              these platforms. He was fluent with all of the terminology,
+              patient, and friendly. Five stars all around."
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn helped us build event tracking in GTM and reporting in GA4,
+              he was extremely knowledgeable and creative to find solutions for
+              all of our unique requests and had the patience to guide us and
+              answer all of our questions."
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "He has a good commitment and he helped us to better plan the
+              work. He has the skills that he shares in his profile, we did a
+              job related to Google Tag Manager and Analytics, which were done
+              successfully. 100% we will work again with Stijn."
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Excellent technical understanding and super helpful"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "A dream to work with, communication fantastic a very cooperative
+              individual, highly recommend them."
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn is great to work with. He is friendly, well versed in
+              everything that has to do with Analytics and Looker studio and was
+              able to give us exactly what we were looking for. He is the real
+              deal."
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "We hired Stijn to support with some quick updates we needed to
+              get our google analytics 4 configured correctly, and he did a
+              great job. We were impressed with his speed of delivery, and his
+              presentation of the work he had completed via loom so that our
+              team could watch the updates and make sure everything was fully
+              understood. I would highly recommend Stijn for his speed, clarity,
+              and expertise in google analytics"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "All amazing!"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn was a pleasure to work with, finished the project on time
+              and in budget. Will be working with Stijn again and would highly
+              recommend."
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Incredible professional. Looking forward to working with him
+              again A+++"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn helped us quickly implement dynamic product schema via
+              Google Tag Manager. He was great at explaining points along the
+              way and did a great job."
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn is WONDERFUL. He is fast, knows his stuff, and always
+              delivers great results. I will continue to use him."
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "First part of the job – fixing Adwords account – was completed
+              perfectly. Stijn knew exactly what to do and how to fix the tag,
+              and actually provided detailed explanations in video which I
+              didn't expect and was so grateful for. This really made me
+              understand the issue thoroughly. Stijn is really nice and helpful"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn is easy to work with and professional. He really knows his
+              GA4 stuff. If you're looking for anything GA4 related, I highly
+              recommend him"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "I had an excellent experience working with Stijn. His GA and tags
+              skill are top notch and he was very patient with dealing with me
+              (a technical luddite) in understanding what I needed and how to
+              execute it. His communication was excellent and he got the job
+              done exactly as I wanted, on a modest budget. I will be working
+              with Stijn again for future jobs of this nature."
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn completed my project quickly and even provided a short
+              tutorial so I could understand the topic better. Would highly
+              recommend and hire again"
+            </p>
+          </div>
+          <div
+            class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+          >
+            <p
+              class="text-gray-700 text-sm md:text-base leading-relaxed mb-4 italic"
+            >
+              "Stijn is super responsive. Very easy to work with. Knows what he
+              is doing. Followed instructions and also provided guidance to
+              complete the project in the best possible way, possibly even
+              better than the original direction. I'm looking forward to working
+              with him again"
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Proven ROI in the Wild (copied from homepage) -->
+    <section class="py-20 md:py-24 bg-deep-charcoal border-t border-white/5">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-14 md:mb-20">
+          <h2
+            class="text-3xl md:text-5xl lg:text-6xl font-display font-black text-white uppercase tracking-tighter"
+          >
+            Proven ROI in the Wild
+          </h2>
+          <p
+            class="text-slate-500 font-bold uppercase tracking-widest text-sm mt-4"
+          >
+            Raw case studies from the front lines.
+          </p>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          {% for slug, case in case_studies_list %}
+          <div
+            class="rounded-3xl overflow-hidden bg-white border border-gray-200 shadow-sm p-0"
+          >
+            <div class="h-56 overflow-hidden">
+              {% if case.main_image %}
+              <img
+                alt="{{ case.card_title|default(case.result_headline) }}"
+                class="w-full h-full object-cover"
+                src="{{ url_for('static', filename=case.main_image) }}"
+                loading="lazy"
+                width="400"
+                height="224"
+              />
+              {% endif %}
+            </div>
+            <div class="p-8">
+              <h4
+                class="text-2xl font-black uppercase tracking-tight mb-6 text-deep-charcoal"
+              >
+                {{ case.card_title|default(case.result_headline) }}
+              </h4>
+              {% if case.card_metrics %}
+              <ul class="space-y-4">
+                {% for m in case.card_metrics %}
+                <li class="flex items-center gap-3 text-gray-700">
+                  <span class="material-symbols-outlined text-primary"
+                    >add_circle</span
+                  >
+                  <span class="font-bold">{{ m.value }} {{ m.label }}</span>
+                </li>
+                {% endfor %}
+              </ul>
+              {% else %} {# no case metrics to display #} {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <!-- WE LIVE, BREATHE, AND SLEEP CRO. (videos placed directly after Proven ROI) -->
+    <section class="py-16 md:py-20 bg-white border-t border-gray-100">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-14 md:mb-20">
+          <h2
+            class="text-3xl md:text-5xl lg:text-6xl font-display font-black text-white uppercase tracking-tighter"
+            style="color: #1a1a1b"
+          >
+            WE LIVE, BREATHE, AND SLEEP CRO.
+          </h2>
+          {# YouTube channel link removed as requested #}
+        </div>
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl mx-auto"
+        >
+          {% set vids = youtube_video_ids or [] %} {% if 'vbUI7BW8PNI' not in
+          vids %} {% set vids = ['vbUI7BW8PNI'] + vids %} {% endif %} {% for
+          video_id in vids %}
+          <div
+            class="aspect-video w-full rounded-xl overflow-hidden bg-black relative"
+          >
+            <a
+              href="#"
+              class="absolute inset-0 z-10 flex items-center justify-center"
+              data-checklist-modal
+              data-resource="cro-checklist"
+              data-title="13 Bulletproof Strategies to Skyrocket Conversions"
+              data-description="Enter your email and we'll send you the free ebook with 13 actionable CRO strategies used by $10M+ brands."
+              data-button-text="Send me the ebook"
+            >
+              <div
+                class="w-16 h-16 bg-primary rounded-full flex items-center justify-center shadow-lg"
+              >
+                <span class="material-symbols-outlined text-white text-3xl"
+                  >play_arrow</span
+                >
+              </div>
+            </a>
+            <img
+              src="https://img.youtube.com/vi/{{ video_id }}/hqdefault.jpg"
+              alt="YouTube thumbnail {{ loop.index }}"
+              class="w-full h-full object-cover"
+              loading="lazy"
+            />
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <!-- Promo block (matches homepage layout) -->
+    <section class="py-24 bg-white border-t border-gray-100">
+      <div class="max-w-7xl mx-auto px-6">
+        <div
+          class="bg-primary rounded-[3rem] p-12 md:p-20 flex flex-col md:flex-row items-center gap-16 relative overflow-hidden shadow-[0_40px_100px_rgba(255,77,0,0.3)]"
+        >
+          <div class="flex-1 text-white relative z-10">
+            <div
+              class="inline-block px-4 py-1.5 bg-black/20 rounded-full text-xs font-black uppercase tracking-widest mb-6"
+            >
+              Free Resource
+            </div>
+            <h2
+              class="text-4xl md:text-6xl font-display font-black uppercase leading-none mb-6"
+            >
+              13 Bulletproof Strategies to
+              <span class="text-white">Skyrocket Conversions</span>
+            </h2>
+            <p class="text-xl text-white/90 font-medium mb-10 leading-relaxed">
+              Download our free ebook: actionable CRO strategies used by $10M+
+              brands. Every leak, every conversion lever, mapped out for you to
+              fix today.
+            </p>
+            <button
+              type="button"
+              class="inline-flex items-center justify-center px-8 py-4 bg-white text-primary font-black uppercase rounded-xl hover:scale-105 transition-all shadow-2xl cursor-pointer"
+              data-download-modal
+              data-resource="cro-checklist"
+              data-title="13 Bulletproof Strategies to Skyrocket Conversions"
+              data-description="Enter your email and we’ll send you the free ebook with 13 actionable CRO strategies used by $10M+ brands."
+              data-button-text="Send me the ebook"
+            >
+              Send Me The Ebook
+              <span class="material-symbols-outlined ml-2">download</span>
+            </button>
+            <p
+              class="mt-4 text-white/80 text-sm font-bold uppercase tracking-widest"
+            >
+              Used by $10M+ brands to find revenue leaks
+            </p>
+          </div>
+          <div class="w-full md:w-1/3 relative z-10">
+            <div class="relative group">
+              <div
+                class="absolute inset-0 bg-black/20 blur-2xl group-hover:scale-110 transition-transform"
+              ></div>
+              <img
+                alt="13 Bulletproof Strategies ebook"
+                class="relative rounded-lg shadow-2xl transform rotate-3 group-hover:rotate-0 transition-transform duration-500"
+                src="{{ url_for('static', filename='images/ebook-thumbnail.png') }}"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ (CRO Ebook) - adapted from homepage FAQ -->
+    <section class="py-24 bg-white border-t border-gray-100" id="faq-ebook">
+      <div class="content-narrow px-6">
+        <h2 class="text-3xl md:text-5xl mb-12 text-center text-deep-charcoal">
+          6 Questions Readers Always Ask
+        </h2>
+        <div class="space-y-4">
+          <details
+            class="group bg-light-base border border-gray-200 rounded-xl overflow-hidden"
+          >
+            <summary
+              class="p-6 cursor-pointer list-none flex justify-between items-center font-bold text-deep-charcoal text-lg"
+            >
+              What's included in the ebook?
+              <span
+                class="material-symbols-outlined group-open:rotate-180 transition-transform text-primary"
+                >expand_more</span
+              >
+            </summary>
+            <div class="p-6 pt-0 text-gray-600">
+              The ebook walks through 13 battle-tested CRO strategies — offer
+              design, persuasive copy patterns, urgency and scarcity tactics,
+              trust-building elements, experiment ideas, and checklists you can
+              apply immediately. Each strategy includes examples and where to
+              test it first.
+            </div>
+          </details>
+
+          <details
+            class="group bg-light-base border border-gray-200 rounded-xl overflow-hidden"
+          >
+            <summary
+              class="p-6 cursor-pointer list-none flex justify-between items-center font-bold text-deep-charcoal text-lg"
+            >
+              Is the ebook really free?
+              <span
+                class="material-symbols-outlined group-open:rotate-180 transition-transform text-primary"
+                >expand_more</span
+              >
+            </summary>
+            <div class="p-6 pt-0 text-gray-600">
+              Yes — it’s free. We ask for your name and email so we can deliver
+              the PDF and follow up with useful resources. No spam, ever; you
+              can unsubscribe at any time.
+            </div>
+          </details>
+
+          <details
+            class="group bg-light-base border border-gray-200 rounded-xl overflow-hidden"
+          >
+            <summary
+              class="p-6 cursor-pointer list-none flex justify-between items-center font-bold text-deep-charcoal text-lg"
+            >
+              Will these tactics work for my business?
+              <span
+                class="material-symbols-outlined group-open:rotate-180 transition-transform text-primary"
+                >expand_more</span
+              >
+            </summary>
+            <div class="p-6 pt-0 text-gray-600">
+              The strategies are broadly applicable across ecommerce, SaaS,
+              lead-gen, and service businesses. Use the hypothesis-and-test
+              approach we recommend — adapt each tactic to your offer and
+              audience, then validate with experiments.
+            </div>
+          </details>
+
+          <details
+            class="group bg-light-base border border-gray-200 rounded-xl overflow-hidden"
+          >
+            <summary
+              class="p-6 cursor-pointer list-none flex justify-between items-center font-bold text-deep-charcoal text-lg"
+            >
+              How long is the ebook and how quickly can I implement ideas?
+              <span
+                class="material-symbols-outlined group-open:rotate-180 transition-transform text-primary"
+                >expand_more</span
+              >
+            </summary>
+            <div class="p-6 pt-0 text-gray-600">
+              The ebook is concise — designed to be read in one sitting. Many
+              tactics can be implemented in hours or days; the book points out
+              quick wins and longer-term experiments so you can prioritize based
+              on impact.
+            </div>
+          </details>
+
+          <details
+            class="group bg-light-base border border-gray-200 rounded-xl overflow-hidden"
+          >
+            <summary
+              class="p-6 cursor-pointer list-none flex justify-between items-center font-bold text-deep-charcoal text-lg"
+            >
+              How do I get the ebook after I submit the form?
+              <span
+                class="material-symbols-outlined group-open:rotate-180 transition-transform text-primary"
+                >expand_more</span
+              >
+            </summary>
+            <div class="p-6 pt-0 text-gray-600">
+              After you submit your name and email in the popup, we’ll deliver
+              the PDF via email and show a thank-you state with a Calendly
+              option to schedule a free 30-minute strategy session if you want
+              personalized advice.
+            </div>
+          </details>
+
+          <details
+            class="group bg-light-base border border-gray-200 rounded-xl overflow-hidden"
+          >
+            <summary
+              class="p-6 cursor-pointer list-none flex justify-between items-center font-bold text-deep-charcoal text-lg"
+            >
+              Can Sparksmetrics implement these strategies for us?
+              <span
+                class="material-symbols-outlined group-open:rotate-180 transition-transform text-primary"
+                >expand_more</span
+              >
+            </summary>
+            <div class="p-6 pt-0 text-gray-600">
+              Absolutely — we offer hands-on CRO services, audits, and test
+              execution. Book a free CRO audit via the modal and we’ll show you
+              how we’d prioritize changes for your funnel.
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lead modal (form → thank you + Calendly) -->
+    <div
+      id="lead-modal"
+      class="fixed inset-0 z-[200] hidden"
+      aria-hidden="true"
+      aria-modal="true"
+      role="dialog"
+      aria-labelledby="lead-modal-title"
+    >
+      <div
+        class="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        data-lead-close
+      ></div>
+      <div
+        class="absolute inset-0 flex items-center justify-center p-4 md:p-6 pointer-events-none"
+      >
+        <div
+          class="bg-white rounded-3xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-auto pointer-events-auto flex flex-col border border-gray-100"
+          id="lead-modal-panel"
+        >
+          <div
+            id="lead-form-state"
+            class="flex flex-col md:flex-row flex-1 min-h-0"
+          >
+            <div
+              class="p-8 md:p-12 md:w-[65%] flex flex-col min-w-0 overflow-y-auto min-h-0"
+            >
+              <div class="flex items-start justify-between gap-4 mb-6">
+                <div
+                  class="flex items-center gap-2 flex-wrap"
+                  id="lead-modal-badges"
+                ></div>
+                <button
+                  type="button"
+                  class="p-3 min-h-[44px] min-w-[44px] -m-2 text-slate-400 hover:text-deep-charcoal rounded-lg transition-colors shrink-0 flex items-center justify-center"
+                  data-lead-close
+                  aria-label="Close"
+                >
+                  <span class="material-symbols-outlined">close</span>
+                </button>
+              </div>
+              <h2
+                id="lead-modal-title"
+                class="text-2xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tighter mb-3"
+              ></h2>
+              <p
+                id="lead-modal-description"
+                class="text-gray-600 text-base md:text-lg mb-4"
+              ></p>
+              <!-- Urgency indicator -->
+              <div class="mb-6">
+                <div
+                  class="text-xs font-black uppercase tracking-widest text-primary mb-2"
+                >
+                  Limited free downloads remaining
+                </div>
+                <div class="urgency-track" aria-hidden="true">
+                  <div class="urgency-fill"></div>
+                </div>
+              </div>
+              <form id="lead-form" class="space-y-6">
+                <input type="hidden" name="resource" id="lead-slug" value="" />
+                <input
+                  type="hidden"
+                  name="modal_type"
+                  id="lead-modal-type"
+                  value="resource"
+                />
+                <div>
+                  <label
+                    for="lead-fname"
+                    class="block text-xs font-black uppercase tracking-widest text-deep-charcoal mb-2"
+                    >First name</label
+                  >
+                  <input
+                    type="text"
+                    id="lead-fname"
+                    name="fname"
+                    required
+                    placeholder="Your first name"
+                    class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl text-deep-charcoal placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
+                    autocomplete="given-name"
+                  />
+                </div>
+                <div>
+                  <label
+                    for="lead-email"
+                    class="block text-xs font-black uppercase tracking-widest text-deep-charcoal mb-2"
+                    >Email</label
+                  >
+                  <input
+                    type="email"
+                    id="lead-email"
+                    name="email"
+                    required
+                    placeholder="you@company.com"
+                    class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl text-deep-charcoal placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
+                    autocomplete="email"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  id="lead-submit"
+                  class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 px-6 py-4 bg-primary text-white font-display text-sm font-black uppercase rounded-xl hover:brightness-110 transition-all shadow-lg shadow-primary/25"
+                >
+                  <span id="lead-submit-text">Send me the resource</span>
+                  <span class="material-symbols-outlined text-lg"
+                    >download</span
+                  >
+                </button>
+              </form>
+              <div class="mt-8 space-y-4 text-center">
+                <p
+                  class="flex items-center gap-2 justify-center text-gray-600 text-sm"
+                >
+                  <span class="material-symbols-outlined text-primary text-lg"
+                    >lock</span
+                  >
+                  <span>Your data is private.</span>
+                </p>
+                <p
+                  class="text-xs text-gray-500 font-bold uppercase tracking-widest"
+                >
+                  Used by 200+ brands · Same process for $10M+ funnels
+                </p>
+              </div>
+            </div>
+            <div
+              class="hidden md:flex bg-light-base border-t md:border-t-0 md:border-l border-gray-100 p-8 md:p-12 md:w-[35%] rounded-b-3xl md:rounded-b-none md:rounded-r-3xl flex-col overflow-y-auto min-h-0"
+            >
+              <div
+                id="lead-sidebar-badge"
+                class="inline-flex items-center gap-2 px-3 py-2 bg-primary/10 rounded-lg w-fit mb-8"
+              >
+                <span class="material-symbols-outlined text-primary text-lg"
+                  >schedule</span
+                >
+                <span
+                  class="text-[10px] font-black uppercase tracking-widest text-primary"
+                  >Instant download</span
+                >
+              </div>
+              <p
+                class="text-[10px] font-black uppercase tracking-widest text-primary mb-4"
+              >
+                What you get
+              </p>
+              <ul
+                id="lead-modal-bullets"
+                class="space-y-5 text-sm text-gray-700 mb-10"
+              >
+                <li class="flex gap-3">
+                  <span class="material-symbols-outlined text-primary shrink-0"
+                    >check_circle</span
+                  >
+                  Every leak and conversion lever we audit for
+                </li>
+                <li class="flex gap-3">
+                  <span class="material-symbols-outlined text-primary shrink-0"
+                    >check_circle</span
+                  >
+                  Prioritized fix list you can use today
+                </li>
+                <li class="flex gap-3">
+                  <span class="material-symbols-outlined text-primary shrink-0"
+                    >check_circle</span
+                  >
+                  Same blueprint used for $10M+ brands
+                </li>
+              </ul>
+              <div class="mt-auto pt-8 border-t border-gray-200 relative">
+                <span
+                  class="absolute top-6 right-0 material-symbols-outlined text-primary text-xl"
+                  >verified</span
+                >
+                <p class="text-deep-charcoal font-bold text-sm mb-1">
+                  Verified partner
+                </p>
+                <p
+                  class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-3"
+                >
+                  CRO &amp; analytics
+                </p>
+                <p class="text-gray-600 text-sm italic leading-snug">
+                  "Stijn is a great go-to resource for building a proper
+                  infrastructure for Google Analytics and setting up the
+                  dashboard so you get access to your data in a simple way. You
+                  only need to explain the purpose and he'll outline a great
+                  strategy."
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            id="lead-thankyou-state"
+            class="hidden flex flex-col md:flex-row flex-1 min-h-0"
+          >
+            <div class="flex flex-col md:w-[65%] bg-gray-50 min-h-0">
+              <div
+                class="flex items-center justify-between p-4 border-b border-gray-200 shrink-0"
+              >
+                <span
+                  class="text-xs font-black uppercase tracking-widest text-primary"
+                  >Pick a time</span
+                >
+                <button
+                  type="button"
+                  class="p-2 -m-2 text-slate-400 hover:text-deep-charcoal rounded-lg transition-colors"
+                  data-lead-close
+                  aria-label="Close"
+                >
+                  <span class="material-symbols-outlined">close</span>
+                </button>
+              </div>
+              <div class="flex-1 min-h-0">
+                <iframe
+                  id="lead-calendly-iframe"
+                  title="Schedule a call"
+                  class="w-full h-full min-h-[500px]"
+                  src="about:blank"
+                ></iframe>
+              </div>
+            </div>
+            <div
+              class="p-8 md:p-12 md:w-[35%] flex flex-col bg-white border-t md:border-t-0 md:border-l border-gray-100 rounded-b-3xl md:rounded-b-none md:rounded-r-3xl overflow-y-auto min-h-0"
+            >
+              <span class="material-symbols-outlined text-primary text-4xl mb-4"
+                >check_circle</span
+              >
+              <h2
+                class="text-xl md:text-3xl font-display font-black text-deep-charcoal uppercase tracking-tighter mb-2"
+              >
+                You’re in. Now let’s talk.
+              </h2>
+              <p
+                id="lead-thankyou-message"
+                class="text-gray-600 text-base mb-8"
+              >
+                Pick a time on the left for a free 30-minute strategy session.
+              </p>
+              <div class="mb-8">
+                <h3
+                  class="text-primary font-display font-black uppercase tracking-tighter text-sm mb-5"
+                >
+                  Why book a call?
+                </h3>
+                <ul class="space-y-5">
+                  <li
+                    class="flex gap-4 p-4 rounded-xl bg-light-base border border-gray-100"
+                  >
+                    <span
+                      class="material-symbols-outlined text-primary shrink-0 mt-0.5"
+                      >check_circle</span
+                    >
+                    <div>
+                      <p class="font-bold text-deep-charcoal mb-1">No pitch.</p>
+                      <p class="text-gray-600 text-sm leading-relaxed mb-0">
+                        We focus on your funnel and your next steps—not a sales
+                        script.
+                      </p>
+                    </div>
+                  </li>
+                  <li
+                    class="flex gap-4 p-4 rounded-xl bg-light-base border border-gray-100"
+                  >
+                    <span
+                      class="material-symbols-outlined text-primary shrink-0 mt-0.5"
+                      >check_circle</span
+                    >
+                    <div>
+                      <p class="font-bold text-deep-charcoal mb-1">
+                        Clear next steps.
+                      </p>
+                      <p class="text-gray-600 text-sm leading-relaxed mb-0">
+                        You’ll leave with a clear picture of where you’re
+                        leaking and what to fix first.
+                      </p>
+                    </div>
+                  </li>
+                  <li
+                    class="flex gap-4 p-4 rounded-xl bg-light-base border border-gray-100"
+                  >
+                    <span
+                      class="material-symbols-outlined text-primary shrink-0 mt-0.5"
+                      >check_circle</span
+                    >
+                    <div>
+                      <p class="font-bold text-deep-charcoal mb-1">
+                        Same process we use for $10M+ brands.
+                      </p>
+                      <p class="text-gray-600 text-sm leading-relaxed mb-0">
+                        Data, audits, and prioritization—not guesswork.
+                      </p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <p
+                class="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-6"
+              >
+                Used by 200+ brands
+              </p>
+              <div class="pt-6 border-t border-gray-200 relative">
+                <span
+                  class="absolute top-6 right-0 material-symbols-outlined text-primary text-lg"
+                  >verified</span
+                >
+                <p class="text-deep-charcoal font-bold text-sm mb-1">
+                  Verified partner
+                </p>
+                <p
+                  class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2"
+                >
+                  CRO &amp; analytics
+                </p>
+                <p class="text-gray-600 text-sm italic leading-snug">
+                  "Stijn is a great go-to resource for building a proper
+                  infrastructure for Google Analytics and setting up the
+                  dashboard so you get access to your data in a simple way."
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </section>
 
-  <section class="py-24 bg-white border-b border-gray-100">
-    <div class="content-narrow px-6">
-      <p class="text-gray-500 text-xs font-bold uppercase tracking-widest mb-8">Updated: February 7, 2026</p>
-      <p class="text-deep-charcoal text-lg leading-relaxed mb-6">Dear savvy business owner,</p>
-      <p class="text-gray-700 text-lg leading-relaxed mb-6">Are you looking for the "<strong>insider trade secrets</strong>" to boost your conversion and sales?</p>
-      <p class="text-gray-700 text-lg leading-relaxed mb-6">Then step forward, and download this free report and get the groundbreaking strategies we've personally used to create millions of dollars' worth of extra sales out of thin air!</p>
-      <p class="text-gray-700 text-lg leading-relaxed mb-6">These 13 bulletproof strategies are the most explosively powerful secrets we've ever discovered from running literally thousands of split-tests and spending millions of dollars on scientific conversion tests for many of the largest, most successful business in Australia.</p>
-      <p class="text-gray-700 text-lg leading-relaxed mb-6">Each of these strategies can easily <strong>boost your conversions by maybe 15%, 25%, 30% or more</strong>. Use them together and the cumulative effect is often an explosion in conversion and sales of 75%, 125%, sometimes even 200% or more.</p>
-      <p class="text-gray-700 text-lg leading-relaxed mb-10">This report is yours free, just enter your details and hit the "download button" in the box below, and these sales-exploding tips will be sent straight to your inbox to boost your conversions on all forms of traffic… Increase your profit margins…outsell your competitors… and leverage every dollar you invest to generate more leads, sales and profits.</p>
-      <div class="text-center">
-        <a class="inline-flex items-center justify-center px-8 py-6 bg-primary text-white font-display text-xl md:text-2xl font-black rounded-xl shadow-[0_20px_50px_rgba(255,77,0,0.3)] hover:scale-[1.02] transition-all uppercase" href="#" data-checklist-modal>Send me my free report now</a>
-        <p class="text-deep-charcoal/80 text-sm mt-2">(and unlock an exclusive expert video!)</p>
-        <p class="mt-4 text-gray-500 text-sm font-bold">⭐⭐⭐⭐⭐ 2540+ downloads</p>
-        <p class="text-gray-500 text-sm mt-1">100% privacy, no games, no spam</p>
+    <script
+      src="{{ url_for('static', filename='js/checklist-modal.js') }}"
+      defer
+    ></script>
+    <!-- Fixed CTA that appears after the fold -->
+    <div id="fixed-cta" class="fixed-cta hidden" aria-hidden="true">
+      <div class="fixed-cta-inner">
+        <a
+          href="#"
+          class="fixed-cta-btn"
+          data-checklist-modal
+          data-resource="cro-checklist"
+          data-title="13 Bulletproof Strategies to Skyrocket Conversions"
+          data-description="Enter your email and we'll send you the free ebook with 13 actionable CRO strategies used by $10M+ brands."
+          data-button-text="Send me the ebook"
+          >Send me the ebook — free</a
+        >
+        <p class="fixed-cta-note">Get it right now — no hoops</p>
       </div>
     </div>
-  </section>
-
-  <section class="py-24 bg-light-base border-b border-gray-100">
-    <div class="content-narrow px-6">
-      <h2 class="text-4xl md:text-5xl mb-4 text-deep-charcoal">Here's Just A Fraction Of What You'll Discover Inside This Free Report...</h2>
-      <ul class="space-y-4 text-gray-700 text-lg mb-12">
-        <li class="flex items-start gap-3"><span class="w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="material-symbols-outlined text-primary text-sm">check</span></span>13 actionable strategies you can implement RIGHT NOW to turn browsers into buyers.</li>
-        <li class="flex items-start gap-3"><span class="w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="material-symbols-outlined text-primary text-sm">check</span></span>How to craft an offer that will <strong>GUARANTEE</strong> new conversions and leads</li>
-        <li class="flex items-start gap-3"><span class="w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="material-symbols-outlined text-primary text-sm">check</span></span>How to convert large new "starving crowds" of prospects who spend like sailors on leave.</li>
-        <li class="flex items-start gap-3"><span class="w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="material-symbols-outlined text-primary text-sm">check</span></span>The inside "trade secrets" other agencies don't want you to know</li>
-        <li class="flex items-start gap-3"><span class="w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="material-symbols-outlined text-primary text-sm">check</span></span>How to build credibility to drive new conversion and sales</li>
-        <li class="flex items-start gap-3"><span class="w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="material-symbols-outlined text-primary text-sm">check</span></span>The greatest conversion secrets ever discovered, and how they can make each of your advertising dollars do the work of nine or ten.</li>
-        <li class="flex items-start gap-3"><span class="w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="material-symbols-outlined text-primary text-sm">check</span></span>And much, much more!</li>
-      </ul>
-      <div class="text-center">
-        <a class="inline-flex items-center justify-center px-8 py-6 bg-primary text-white font-display text-xl md:text-2xl font-black rounded-xl shadow-[0_20px_50px_rgba(255,77,0,0.3)] hover:scale-[1.02] transition-all uppercase" href="#" data-checklist-modal>Send me my free report now</a>
-        <p class="text-deep-charcoal/80 text-sm mt-2">(and unlock an exclusive expert video!)</p>
-        <p class="mt-4 text-gray-500 text-sm font-bold">2540+ downloads</p>
-        <p class="text-gray-500 text-sm mt-1">100% privacy, no games, no spam</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="py-24 bg-white border-b border-gray-100" id="who">
-    <div class="content-narrow px-6">
-      <h2 class="text-4xl md:text-5xl mb-6 text-deep-charcoal">Who Is Sparksmetrics To Make Such Promises?</h2>
-      <div class="space-y-6 text-gray-700 text-lg">
-        <p>We've worked with over 200 clients across industries and countries, from SaaS giants to Ecommerce innovators. With 8+ years of experience, we've perfected the art of turning data into dollars.</p>
-        <p>Our team of data scientists and CRO experts has <strong>generated over $25 million</strong> in additional revenue. We've conducted thousands of experiments to refine strategies that deliver real, measurable growth.</p>
-        <p>With a <strong>100% success score</strong> on Upwork, clients trust us to deliver results. Whether it's optimizing conversions or scaling profitably, we bring proven methods that work every time.</p>
-        <p>We've built winning strategies for startups, established brands, and everything in between. From crafting irresistible offers to boosting ROI, we've got you covered. And now, we're giving these insights to you—<strong>completely free</strong>.</p>
-      </div>
-      <div class="text-center mt-14">
-        <a class="inline-flex items-center justify-center px-8 py-6 bg-primary text-white font-display text-xl md:text-2xl font-black rounded-xl shadow-[0_20px_50px_rgba(255,77,0,0.3)] hover:scale-[1.02] transition-all uppercase" href="#" data-checklist-modal>Send me my free report now</a>
-        <p class="text-deep-charcoal/80 text-sm mt-2">(and unlock an exclusive expert video!)</p>
-        <p class="mt-4 text-gray-500 text-sm font-bold">2540+ downloads</p>
-        <p class="text-gray-500 text-sm mt-1">100% privacy, no games, no spam</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="py-24 bg-light-base border-t border-gray-100" id="cta">
-    <div class="content-narrow px-6 text-center">
-      <h2 class="text-4xl md:text-5xl mb-8 text-deep-charcoal">Download Your Free Ebook + Video Now Before This Page Comes Down</h2>
-      <p class="text-xl text-gray-600 mb-10">This FREE Ebook + Video reveals the most powerful trade secrets for boosting websites conversions and sales. Get for free what others have paid $1000's to receive.</p>
-      <a class="inline-flex items-center justify-center px-10 py-10 bg-primary text-white font-display text-2xl md:text-3xl font-black rounded-2xl shadow-[0_25px_60px_rgba(255,77,0,0.4)] hover:scale-105 transition-all uppercase" href="#" data-checklist-modal>Send me my free report now</a>
-      <p class="text-deep-charcoal/80 text-sm mt-2">(and unlock an exclusive expert video!)</p>
-      <p class="mt-4 text-gray-500 font-bold text-sm">2540+ downloads</p>
-      <p class="mt-1 text-gray-500 text-sm">100% privacy, no games, no spam</p>
-    </div>
-  </section>
-</body>
+    <script>
+      (function () {
+        var fixed = document.getElementById("fixed-cta");
+        var hero = document.getElementById("hero");
+        if (!fixed || !hero) return;
+        var observer = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (e) {
+              if (e.isIntersecting) {
+                fixed.classList.remove("show");
+                fixed.classList.add("hidden");
+                fixed.setAttribute("aria-hidden", "true");
+              } else {
+                fixed.classList.remove("hidden");
+                fixed.classList.add("show");
+                fixed.setAttribute("aria-hidden", "false");
+              }
+            });
+          },
+          { root: null, threshold: 0, rootMargin: "0px" }
+        );
+        observer.observe(hero);
+        // Also hide when modal opens (listen for attribute on body used by modal script if any)
+        document.addEventListener(
+          "click",
+          function (e) {
+            // if user opens the download modal via our fixed CTA, keep it hidden
+            if (
+              e.target &&
+              (e.target.closest("[data-checklist-modal]") ||
+                e.target.closest("[data-download-modal]"))
+            ) {
+              fixed.classList.remove("show");
+              fixed.classList.add("hidden");
+            }
+          },
+          true
+        );
+      })();
+    </script>
+    <script>
+      // Ensure download/privacy lines under CTAs are centered
+      (function () {
+        function ensureCentered(el) {
+          if (!el) return;
+          el.classList.add("text-center");
+        }
+        document.addEventListener("DOMContentLoaded", function () {
+          var selectors =
+            "[data-checklist-modal], [data-download-modal], [data-audit-modal]";
+          document.querySelectorAll(selectors).forEach(function (btn) {
+            // Prefer sibling paragraphs
+            var n = btn.nextElementSibling;
+            var tries = 0;
+            while (n && tries < 6) {
+              if (
+                n.tagName === "P" &&
+                /(downloads|privacy)/i.test(n.textContent || "")
+              ) {
+                ensureCentered(n);
+              }
+              if (n.querySelector) {
+                var p = n.querySelector("p");
+                if (p && /(downloads|privacy)/i.test(p.textContent || "")) {
+                  ensureCentered(n);
+                }
+              }
+              n = n.nextElementSibling;
+              tries++;
+            }
+            // Also center any matching p inside the same parent that appear after the button
+            var parent = btn.parentElement;
+            if (parent) {
+              Array.prototype.slice
+                .call(parent.querySelectorAll("p"))
+                .forEach(function (p) {
+                  if (/(downloads|privacy)/i.test(p.textContent || "")) {
+                    // Only center paragraphs that come after the button in DOM order,
+                    // so above-the-fold copy (before the CTA) stays left-aligned.
+                    if (
+                      btn.compareDocumentPosition(p) &
+                      Node.DOCUMENT_POSITION_FOLLOWING
+                    ) {
+                      ensureCentered(p);
+                    }
+                  }
+                });
+            }
+          });
+          // Additionally, center any downloads/privacy paragraphs that are not in the #hero section
+          Array.prototype.slice
+            .call(document.querySelectorAll("p"))
+            .forEach(function (p) {
+              if (/(downloads|privacy)/i.test(p.textContent || "")) {
+                if (!p.closest("#hero")) {
+                  ensureCentered(p);
+                }
+              }
+            });
+        });
+      })();
+    </script>
+    <script>
+      // Logo slider controls
+      (function () {
+        function initLogoSliders() {
+          var sliders = document.querySelectorAll(".logo-slider");
+          // static ordering only — no dynamic Neil lookup
+          sliders.forEach(function (slider) {
+            var track = slider.querySelector(".logo-track");
+            var btnL = slider.querySelector(".logo-arrow.left");
+            var btnR = slider.querySelector(".logo-arrow.right");
+            if (!track) return;
+            var scrollAmount = Math.max(track.clientWidth * 0.5, 240);
+            if (btnL) {
+              btnL.addEventListener("click", function () {
+                track.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+              });
+            }
+            if (btnR) {
+              btnR.addEventListener("click", function () {
+                track.scrollBy({ left: scrollAmount, behavior: "smooth" });
+              });
+            }
+            // show/hide arrows based on overflow
+            function updateArrows() {
+              if (!btnL || !btnR) return;
+              btnL.style.display = track.scrollLeft > 10 ? "flex" : "none";
+              btnR.style.display =
+                track.scrollWidth - track.clientWidth - track.scrollLeft > 10
+                  ? "flex"
+                  : "none";
+            }
+            track.addEventListener("scroll", updateArrows);
+            window.addEventListener("resize", function () {
+              scrollAmount = Math.max(track.clientWidth * 0.5, 240);
+              updateArrows();
+            });
+            // initial
+            updateArrows();
+          });
+        }
+        document.addEventListener("DOMContentLoaded", initLogoSliders);
+      })();
+    </script>
+    <script>
+      // Collapse long reviews list on small screens and add "Show more" toggle
+      (function () {
+        function initReviewCollapse() {
+          var grid = document.getElementById("reviews-grid");
+          if (!grid) return;
+          var cards = Array.prototype.slice.call(grid.children);
+          var mobileLimit = 10;
+          if (cards.length <= mobileLimit) return;
+          function applyMobileCollapse() {
+            if (window.innerWidth <= 640) {
+              // hide cards after the limit
+              cards.forEach(function (c, i) {
+                if (i >= mobileLimit) c.classList.add("review-mobile-hidden");
+              });
+              // add button if not present
+              if (!document.getElementById("show-more-reviews-btn")) {
+                var btn = document.createElement("button");
+                btn.id = "show-more-reviews-btn";
+                btn.className = "show-more-reviews-btn mt-6";
+                btn.setAttribute("aria-expanded", "false");
+                btn.textContent = "Show more reviews";
+                btn.addEventListener("click", function () {
+                  var expanded = btn.getAttribute("aria-expanded") === "true";
+                  if (expanded) {
+                    // collapse
+                    cards.forEach(function (c, i) {
+                      if (i >= mobileLimit)
+                        c.classList.add("review-mobile-hidden");
+                    });
+                    btn.setAttribute("aria-expanded", "false");
+                    btn.textContent = "Show more reviews";
+                    btn.scrollIntoView({
+                      behavior: "smooth",
+                      block: "nearest",
+                    });
+                  } else {
+                    // expand
+                    cards.forEach(function (c) {
+                      c.classList.remove("review-mobile-hidden");
+                    });
+                    btn.setAttribute("aria-expanded", "true");
+                    btn.textContent = "Show fewer reviews";
+                  }
+                });
+                // insert after grid
+                grid.parentNode.insertBefore(btn, grid.nextSibling);
+              }
+            } else {
+              // desktop: ensure all visible and remove button
+              cards.forEach(function (c) {
+                c.classList.remove("review-mobile-hidden");
+              });
+              var existing = document.getElementById("show-more-reviews-btn");
+              if (existing) existing.parentNode.removeChild(existing);
+            }
+          }
+          applyMobileCollapse();
+          window.addEventListener("resize", applyMobileCollapse);
+        }
+        document.addEventListener("DOMContentLoaded", initReviewCollapse);
+      })();
+    </script>
+  </body>
 </html>
