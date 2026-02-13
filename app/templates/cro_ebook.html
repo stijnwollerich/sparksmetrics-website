@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html class="scroll-smooth" lang="en">
   <head>
+    {% if ENABLE_GTM %}
+    <!-- Google Tag Manager -->
+    <script>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
+      var f=d.getElementsByTagName(s)[0], j=d.createElement(s), dl=l!='dataLayer'?'&l='+l:'';
+      j.async=true; j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl; f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-ML2ZDNH2');
+    </script>
+    <!-- End Google Tag Manager -->
+    {% endif %}
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
@@ -334,6 +344,12 @@
   <body
     class="antialiased selection:bg-primary selection:text-white bg-light-base text-gray-800 font-sans leading-relaxed"
   >
+    {% if ENABLE_GTM %}
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-ML2ZDNH2"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    {% endif %}
     <section class="bg-white py-12 md:py-16 border-b border-gray-100" id="hero">
       <div class="max-w-7xl mx-auto px-6">
         <div class="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
@@ -454,28 +470,91 @@
           </button>
           <div class="logo-track" role="list">
             <div class="logo-item" role="listitem">
-              <img class="logo-img" src="{{ url_for('static', filename='images/logos/alle.png') }}" alt="Alle" loading="lazy" decoding="async" height="48" />
+              <img
+                class="logo-img"
+                src="{{ url_for('static', filename='images/logos/alle.png') }}"
+                alt="Alle"
+                loading="lazy"
+                decoding="async"
+                height="48"
+              />
             </div>
             <div class="logo-item" role="listitem">
-              <img class="logo-img" src="{{ url_for('static', filename='images/logos/canopy.png') }}" alt="Canopy" loading="lazy" decoding="async" height="48" onerror="this.closest('.logo-item').style.display='none'" />
+              <img
+                class="logo-img"
+                src="{{ url_for('static', filename='images/logos/canopy.png') }}"
+                alt="Canopy"
+                loading="lazy"
+                decoding="async"
+                height="48"
+                onerror="this.closest('.logo-item').style.display='none'"
+              />
             </div>
             <div class="logo-item" role="listitem">
-              <img class="logo-img" src="{{ url_for('static', filename='images/logos/argenx.png') }}" alt="Argenx" loading="lazy" decoding="async" height="48" onerror="this.closest('.logo-item').style.display='none'" />
+              <img
+                class="logo-img"
+                src="{{ url_for('static', filename='images/logos/argenx.png') }}"
+                alt="Argenx"
+                loading="lazy"
+                decoding="async"
+                height="48"
+                onerror="this.closest('.logo-item').style.display='none'"
+              />
             </div>
             <div class="logo-item" role="listitem">
-              <img class="logo-img" src="{{ url_for('static', filename='images/logos/lpc.png') }}" alt="Le Petit Chef" loading="lazy" decoding="async" height="48" onerror="this.closest('.logo-item').style.display='none'" />
+              <img
+                class="logo-img"
+                src="{{ url_for('static', filename='images/logos/lpc.png') }}"
+                alt="Le Petit Chef"
+                loading="lazy"
+                decoding="async"
+                height="48"
+                onerror="this.closest('.logo-item').style.display='none'"
+              />
             </div>
             <div class="logo-item" role="listitem">
-              <img class="logo-img" src="{{ url_for('static', filename='images/logos/outdoor-research.png') }}" alt="Outdoor Research" loading="lazy" decoding="async" height="48" onerror="this.closest('.logo-item').style.display='none'" />
+              <img
+                class="logo-img"
+                src="{{ url_for('static', filename='images/logos/outdoor-research.png') }}"
+                alt="Outdoor Research"
+                loading="lazy"
+                decoding="async"
+                height="48"
+                onerror="this.closest('.logo-item').style.display='none'"
+              />
             </div>
             <div class="logo-item" role="listitem">
-              <img class="logo-img" src="{{ url_for('static', filename='images/logos/edikted.png') }}" alt="Edikted" loading="lazy" decoding="async" height="48" onerror="this.closest('.logo-item').style.display='none'" />
+              <img
+                class="logo-img"
+                src="{{ url_for('static', filename='images/logos/edikted.png') }}"
+                alt="Edikted"
+                loading="lazy"
+                decoding="async"
+                height="48"
+                onerror="this.closest('.logo-item').style.display='none'"
+              />
             </div>
             <div class="logo-item" role="listitem">
-              <img class="logo-img" src="{{ url_for('static', filename='images/logos/vacation-renter.png') }}" alt="Vacation Renter" loading="lazy" decoding="async" height="48" onerror="this.closest('.logo-item').style.display='none'" />
+              <img
+                class="logo-img"
+                src="{{ url_for('static', filename='images/logos/vacation-renter.png') }}"
+                alt="Vacation Renter"
+                loading="lazy"
+                decoding="async"
+                height="48"
+                onerror="this.closest('.logo-item').style.display='none'"
+              />
             </div>
             <div class="logo-item" role="listitem">
-              <img class="logo-img" src="{{ url_for('static', filename='images/logos/client-2.png') }}" alt="TUSHY" loading="lazy" decoding="async" height="48" onerror="this.closest('.logo-item').style.display='none'" />
+              <img
+                class="logo-img"
+                src="{{ url_for('static', filename='images/logos/client-2.png') }}"
+                alt="TUSHY"
+                loading="lazy"
+                decoding="async"
+                height="48"
+                onerror="this.closest('.logo-item').style.display='none'"
+              />
             </div>
           </div>
           <button
@@ -550,12 +629,12 @@
 
     <section class="pt-12 pb-24 bg-light-base border-b border-gray-100">
       <div class="content-narrow px-6">
-        <div class="text-center mb-6" style="padding-top:0.25rem;">
+        <div class="text-center mb-6" style="padding-top: 0.25rem">
           <img
             src="{{ url_for('static', filename='images/ebook-thumbnail.png') }}"
             alt="13 Bulletproof Strategies ebook"
             class="inline-block rounded-lg shadow-lg"
-            style="width:14rem;"
+            style="width: 14rem"
             loading="lazy"
             decoding="async"
           />
@@ -2249,7 +2328,11 @@
             if (!track) return;
             var scrollAmount = Math.max(track.clientWidth * 0.5, 240);
             // Ensure track starts at leftmost position so first logo is visible
-            try { track.scrollTo({ left: 0 }); } catch (e) { track.scrollLeft = 0; }
+            try {
+              track.scrollTo({ left: 0 });
+            } catch (e) {
+              track.scrollLeft = 0;
+            }
             if (btnL) {
               btnL.addEventListener("click", function () {
                 track.scrollBy({ left: -scrollAmount, behavior: "smooth" });
@@ -2272,7 +2355,11 @@
             track.addEventListener("scroll", updateArrows);
             window.addEventListener("resize", function () {
               scrollAmount = Math.max(track.clientWidth * 0.5, 240);
-              try { track.scrollTo({ left: 0 }); } catch (e) { /* ignore */ }
+              try {
+                track.scrollTo({ left: 0 });
+              } catch (e) {
+                /* ignore */
+              }
               updateArrows();
             });
             // initial
