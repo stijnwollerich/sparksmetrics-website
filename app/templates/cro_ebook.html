@@ -2298,6 +2298,8 @@
             var btnR = slider.querySelector(".logo-arrow.right");
             if (!track) return;
             var scrollAmount = Math.max(track.clientWidth * 0.5, 240);
+            // Ensure track starts at leftmost position so first logo is visible
+            try { track.scrollTo({ left: 0 }); } catch (e) { track.scrollLeft = 0; }
             if (btnL) {
               btnL.addEventListener("click", function () {
                 track.scrollBy({ left: -scrollAmount, behavior: "smooth" });
@@ -2320,6 +2322,7 @@
             track.addEventListener("scroll", updateArrows);
             window.addEventListener("resize", function () {
               scrollAmount = Math.max(track.clientWidth * 0.5, 240);
+              try { track.scrollTo({ left: 0 }); } catch (e) { /* ignore */ }
               updateArrows();
             });
             // initial
