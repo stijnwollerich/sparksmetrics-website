@@ -347,17 +347,15 @@
               data-description="Enter your email and we'll send you the free ebook with 13 actionable CRO strategies used by $10M+ brands."
               data-button-text="Send me the ebook"
             >
-              <picture>
-                <source
-                  srcset="{{ url_for('static', filename='images/on-how-to-use-all-the-platforms-to-generate-real-profit.png') }}"
-                  type="image/png"
-                />
-                <img
-                  src="{{ url_for('static', filename='images/on-how-to-use-all-the-platforms-to-generate-real-profit.png') }}"
-                  alt="On how to use all the platforms to generate real profit"
-                  class="w-full rounded-2xl border-2 border-gray-200 shadow-xl"
-                />
-              </picture>
+              <img
+                src="{{ url_for('static', filename='images/on-how-to-use-all-the-platforms-to-generate-real-profit.png') }}"
+                alt="On how to use all the platforms to generate real profit"
+                class="w-full rounded-2xl border-2 border-gray-200 shadow-xl"
+                width="900"
+                height="600"
+                loading="lazy"
+                decoding="async"
+              />
             </a>
           </div>
           <div class="order-1 lg:order-2">
@@ -455,78 +453,29 @@
             <span class="material-symbols-outlined">chevron_left</span>
           </button>
           <div class="logo-track" role="list">
-            <!-- Prioritize Canopy and Argenx first (fallback: avoid missing Neil Patel image) -->
             <div class="logo-item" role="listitem">
-              <img
-                class="logo-img"
-                src="{{ url_for('static', filename='images/logos/alle.png') }}"
-                alt="Neil Patel"
-                loading="lazy"
-              />
+              <img class="logo-img" src="{{ url_for('static', filename='images/logos/alle.png') }}" alt="Alle" loading="lazy" decoding="async" height="48" />
             </div>
             <div class="logo-item" role="listitem">
-              <img
-                class="logo-img"
-                src="{{ url_for('static', filename='images/logos/canopy.png') }}"
-                alt="Canopy"
-                loading="lazy"
-                onerror="this.closest('.logo-item').style.display='none'"
-              />
+              <img class="logo-img" src="{{ url_for('static', filename='images/logos/canopy.png') }}" alt="Canopy" loading="lazy" decoding="async" height="48" onerror="this.closest('.logo-item').style.display='none'" />
             </div>
             <div class="logo-item" role="listitem">
-              <img
-                class="logo-img"
-                src="{{ url_for('static', filename='images/logos/argenx.png') }}"
-                alt="Argenx"
-                loading="lazy"
-                onerror="this.closest('.logo-item').style.display='none'"
-              />
+              <img class="logo-img" src="{{ url_for('static', filename='images/logos/argenx.png') }}" alt="Argenx" loading="lazy" decoding="async" height="48" onerror="this.closest('.logo-item').style.display='none'" />
             </div>
             <div class="logo-item" role="listitem">
-              <img
-                class="logo-img"
-                src="{{ url_for('static', filename='images/logos/lpc.png') }}"
-                alt="Le Petit Chef"
-                loading="lazy"
-                onerror="this.closest('.logo-item').style.display='none'"
-              />
+              <img class="logo-img" src="{{ url_for('static', filename='images/logos/lpc.png') }}" alt="Le Petit Chef" loading="lazy" decoding="async" height="48" onerror="this.closest('.logo-item').style.display='none'" />
             </div>
             <div class="logo-item" role="listitem">
-              <img
-                class="logo-img"
-                src="{{ url_for('static', filename='images/logos/outdoor-research.png') }}"
-                alt="Outdoor Research"
-                loading="lazy"
-                onerror="this.closest('.logo-item').style.display='none'"
-              />
+              <img class="logo-img" src="{{ url_for('static', filename='images/logos/outdoor-research.png') }}" alt="Outdoor Research" loading="lazy" decoding="async" height="48" onerror="this.closest('.logo-item').style.display='none'" />
             </div>
             <div class="logo-item" role="listitem">
-              <img
-                class="logo-img"
-                src="{{ url_for('static', filename='images/logos/edikted.png') }}"
-                alt="Edikted"
-                loading="lazy"
-                onerror="this.closest('.logo-item').style.display='none'"
-              />
+              <img class="logo-img" src="{{ url_for('static', filename='images/logos/edikted.png') }}" alt="Edikted" loading="lazy" decoding="async" height="48" onerror="this.closest('.logo-item').style.display='none'" />
             </div>
             <div class="logo-item" role="listitem">
-              <img
-                class="logo-img"
-                src="{{ url_for('static', filename='images/logos/vacation-renter.png') }}"
-                alt="Vacation Renter"
-                loading="lazy"
-                onerror="this.closest('.logo-item').style.display='none'"
-              />
+              <img class="logo-img" src="{{ url_for('static', filename='images/logos/vacation-renter.png') }}" alt="Vacation Renter" loading="lazy" decoding="async" height="48" onerror="this.closest('.logo-item').style.display='none'" />
             </div>
-            <!-- alle.png moved to first position per request; duplicate removed -->
             <div class="logo-item" role="listitem">
-              <img
-                class="logo-img"
-                src="{{ url_for('static', filename='images/logos/client-2.png') }}"
-                alt="TUSHY"
-                loading="lazy"
-                onerror="this.closest('.logo-item').style.display='none'"
-              />
+              <img class="logo-img" src="{{ url_for('static', filename='images/logos/client-2.png') }}" alt="TUSHY" loading="lazy" decoding="async" height="48" onerror="this.closest('.logo-item').style.display='none'" />
             </div>
           </div>
           <button
@@ -608,6 +557,7 @@
             class="inline-block rounded-lg shadow-lg"
             style="width:14rem;"
             loading="lazy"
+            decoding="async"
           />
         </div>
         <h2 class="text-4xl md:text-5xl mb-4 text-deep-charcoal text-center">

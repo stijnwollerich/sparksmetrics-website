@@ -707,6 +707,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   }
 })();
 </script>
+<script>
+  // Disable native lazy-loading by removing loading="lazy" attributes on DOM ready.
+  (function(){
+    try {
+      document.addEventListener('DOMContentLoaded', function(){
+        Array.prototype.slice.call(document.querySelectorAll('img[loading=\"lazy\"]')).forEach(function(img){
+          img.removeAttribute('loading');
+        });
+      });
+    } catch (e) {}
+  })();
+</script>
 {% block body_end %}{% endblock %}
 </body>
 </html>
