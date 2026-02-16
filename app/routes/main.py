@@ -402,6 +402,7 @@ def schedule_a_call():
 
 
 @main_bp.route("/thank-you/")
+@main_bp.route("/thank-you")
 def thank_you():
     """Thank you / VSL page after form submit — no header/footer, Calendly + social proof."""
     return render_template("thank_you.html")
