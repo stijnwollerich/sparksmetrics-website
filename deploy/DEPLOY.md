@@ -32,6 +32,8 @@ sudo systemctl restart sparksmetrics
 
 If you added new DB tables or this is the first deploy: run `python3 tasks/create_tables.py` once (see section 5).
 
+**If you added new routes (e.g. `/thank-you/`):** after `git pull` and `systemctl restart`, the new page is live. To confirm on the server: `curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8000/thank-you/` should return `200`.
+
 **Env / secrets:**  
 - **Local:** `.env` can have `FLASK_DEBUG=1`, `SECRET_KEY=...`, and optionally `DATABASE_URL` if you run Postgres locally. If `DATABASE_URL` is missing, the app runs but lead forms won’t be saved to a DB.  
 - **Server:** `.env` must have `FLASK_DEBUG=0`, `SECRET_KEY=...`, and `DATABASE_URL=postgresql://sparksmetrics:YOUR_PASSWORD@localhost:5432/sparksmetrics`. Use the same password you set in PostgreSQL (section 2). Do not commit `.env`; it is in `.gitignore`.
