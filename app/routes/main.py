@@ -399,6 +399,12 @@ def cro_ebook():
 def schedule_a_call():
     """Schedule a call / booking page."""
     return render_template("schedule_a_call.html")
+
+
+@main_bp.route("/thank-you/")
+def thank_you():
+    """Thank you / VSL page after form submit — no header/footer, Calendly + social proof."""
+    return render_template("thank_you.html")
 # Downloadable resources: slug -> filename in static/downloads/. Add new resources here.
 RESOURCE_DOWNLOADS = {
     "cro-checklist": {"filename": "13-bulletproof-strategies-conversions-sparksmetrics.pdf"},
@@ -718,7 +724,7 @@ def earnings_disclaimer():
 
 @main_bp.route("/sitemap.xml")
 def sitemap():
-    """Generate sitemap XML with all public pages and case study URLs."""
+    """Generate sitemap XML with all public pages and case study URLs. Excludes /thank-you/ (noindex, post-lead redirect)."""
     pages = [
         ("main.index", {}),
         ("main.cro", {}),

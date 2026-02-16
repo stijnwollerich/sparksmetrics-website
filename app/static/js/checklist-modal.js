@@ -269,7 +269,13 @@
           };
           window.dataLayer.push(successPayload);
         } catch (err) {}
-        showThankYou(hasDownload, data.download_url || "#");
+        // Redirect to thank-you page with source (from) and referring page (ref)
+        var fromParam = modalType === "audit" ? "audit" : (resource || "ebook");
+        var thankYouUrl = "/thank-you/?from=" + encodeURIComponent(fromParam) + "&ref=" + encodeURIComponent(window.location.pathname || "");
+        if (hasDownload && data.download_url) {
+          triggerDownload(data.download_url);
+        }
+        window.location.href = thankYouUrl;
       })
       .catch(function () {
         // Push error event
@@ -287,7 +293,10 @@
           };
           window.dataLayer.push(errorPayload);
         } catch (err) {}
-        showThankYou(modalType === "resource", "#");
+        // On error still redirect to thank-you so user can book
+        var fromParam = modalType === "audit" ? "audit" : (resource || "ebook");
+        var thankYouUrl = "/thank-you/?from=" + encodeURIComponent(fromParam) + "&ref=" + encodeURIComponent(window.location.pathname || "");
+        window.location.href = thankYouUrl;
       })
       .finally(function () {
         submitBtn.disabled = false;
