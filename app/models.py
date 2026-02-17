@@ -18,6 +18,7 @@ class Lead(db.Model):
     email: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
     submission_type: Mapped[str] = mapped_column(String(20), nullable=False)  # 'audit' | 'resource'
     resource_slug: Mapped[str | None] = mapped_column(String(80), nullable=True)  # e.g. 'cro-checklist'
+    business_stage: Mapped[str | None] = mapped_column(String(120), nullable=True)  # e.g. '1k orders per month'
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
 
     def __repr__(self) -> str:

@@ -412,7 +412,13 @@ RESOURCE_DOWNLOADS = {
 }
 
 
-def _save_lead(fname: str, email: str, submission_type: str, resource_slug: str | None = None) -> None:
+def _save_lead(
+    fname: str,
+    email: str,
+    submission_type: str,
+    resource_slug: str | None = None,
+    business_stage: str | None = None,
+) -> None:
     """Persist lead to Postgres if DATABASE_URL is set. Logs errors, does not raise."""
     if not current_app.config.get("SQLALCHEMY_DATABASE_URI"):
         return
@@ -422,6 +428,7 @@ def _save_lead(fname: str, email: str, submission_type: str, resource_slug: str 
             email=email,
             submission_type=submission_type,
             resource_slug=resource_slug,
+            business_stage=(business_stage or "").strip() or None,
         )
         db.session.add(lead)
         db.session.commit()
@@ -431,7 +438,11 @@ def _save_lead(fname: str, email: str, submission_type: str, resource_slug: str 
 
 
 def _sync_lead_to_brevo(
-    fname: str, email: str, submission_type: str, resource_slug: str | None = None
+    fname: str,
+    email: str,
+    submission_type: str,
+    resource_slug: str | None = None,
+    business_stage: str | None = None,
 ) -> None:
     """Add or update contact in Brevo if BREVO_API_KEY is set. Logs errors, does not raise."""
     api_key = (current_app.config.get("BREVO_API_KEY") or "").strip()
@@ -447,9 +458,12 @@ def _sync_lead_to_brevo(
         audit_list_id = current_app.config.get("BREVO_AUDIT_LIST_ID")
         if audit_list_id and audit_list_id not in list_ids:
             list_ids.append(audit_list_id)
+    attributes = {"FNAME": fname}
+    if business_stage:
+        attributes["BUSINESS_STAGE"] = business_stage
     payload = {
         "email": email,
-        "attributes": {"FNAME": fname},
+        "attributes": attributes,
         "updateEnabled": True,
     }
     if list_ids:
@@ -479,7 +493,11 @@ def _sync_lead_to_brevo(
 
 
 def _notify_slack_lead(
-    fname: str, email: str, submission_type: str, resource_slug: str | None = None
+    fname: str,
+    email: str,
+    submission_type: str,
+    resource_slug: str | None = None,
+    business_stage: str | None = None,
 ) -> None:
     """Post a short message to Slack when a lead is submitted. Logs errors, does not raise."""
     webhook_url = (current_app.config.get("SLACK_WEBHOOK_URL") or "").strip()
@@ -492,6 +510,8 @@ def _notify_slack_lead(
     else:
         label = "Resource download"
     text = "New lead: *{}* <{}> – {}".format(fname, email, label)
+    if business_stage:
+        text += "\nOrder volume / stage: {}".format(business_stage)
     try:
         import requests
     except ModuleNotFoundError:
@@ -640,6 +660,7 @@ def download_resource():
     fname = (data.get("fname") or "").strip()
     email = (data.get("email") or "").strip()
     slug = (data.get("resource") or "").strip()
+    business_stage = (data.get("business_stage") or "").strip() or None
     if not fname:
         return jsonify({"success": False, "error": "First name required"}), 400
     if not email or not re.match(r"^[^\s@]+@[^\s@]+\.[^\s@]+$", email):
@@ -647,9 +668,9 @@ def download_resource():
     resource = RESOURCE_DOWNLOADS.get(slug) if slug else None
     if not resource:
         return jsonify({"success": False, "error": "Unknown resource"}), 400
-    _save_lead(fname, email, "resource", resource_slug=slug or None)
-    _sync_lead_to_brevo(fname, email, "resource", resource_slug=slug or None)
-    _notify_slack_lead(fname, email, "resource", resource_slug=slug or None)
+    _save_lead(fname, email, "resource", resource_slug=slug or None, business_stage=business_stage)
+    _sync_lead_to_brevo(fname, email, "resource", resource_slug=slug or None, business_stage=business_stage)
+    _notify_slack_lead(fname, email, "resource", resource_slug=slug or None, business_stage=business_stage)
     download_url = url_for("static", filename="downloads/" + resource["filename"])
     return jsonify({"success": True, "download_url": download_url})
 

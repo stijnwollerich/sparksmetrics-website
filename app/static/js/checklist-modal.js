@@ -125,13 +125,24 @@
     if (calendlyIframe) {
       calendlyIframe.src = CALENDLY_URL;
       try {
+        var fnameEl = document.getElementById("lead-fname");
+        var emailEl = document.getElementById("lead-email");
+        var stageEl = document.getElementById("lead-business-stage");
+        var calFormAnswers = {
+          fname_initial: fnameEl && fnameEl.value ? fnameEl.value.charAt(0) : null,
+          email_masked: (function (e) {
+            if (!e || !e.value) return null;
+            var parts = e.value.split("@");
+            return parts.length === 2 ? parts[0].charAt(0) + "***@" + parts[1] : null;
+          })(emailEl),
+        };
+        if (stageEl && stageEl.value) calFormAnswers.business_stage = stageEl.value;
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({
           event: "calendly_open_from_lead",
           form_id: "lead-form",
           modal_type: currentModalType,
-          fname: (document.getElementById('lead-fname')||{}).value || null,
-          email: (document.getElementById('lead-email')||{}).value || null,
+          form_answers: calFormAnswers,
           url: CALENDLY_URL,
           path: window.location.pathname,
           timestamp: new Date().toISOString()
@@ -175,7 +186,7 @@
       if (el.getAttribute("data-checklist-modal") !== null && !el.getAttribute("data-resource")) {
         el.setAttribute("data-resource", "cro-checklist");
         el.setAttribute("data-title", "13 Bulletproof Strategies to Skyrocket Conversions");
-        el.setAttribute("data-description", "Enter your email and we'll send you the free ebook with 13 actionable CRO strategies used by $10M+ brands.");
+        el.setAttribute("data-description", "Enter your email and get the free ebook right away — 13 actionable CRO strategies used by $10M+ brands.");
         el.setAttribute("data-button-text", "Send me the ebook");
       }
       openModal(el);
@@ -197,12 +208,19 @@
     e.preventDefault();
     var fnameInput = document.getElementById("lead-fname");
     var emailInput = document.getElementById("lead-email");
+    var businessStageEl = document.getElementById("lead-business-stage");
     var fname = fnameInput && fnameInput.value ? fnameInput.value.trim() : "";
     var email = emailInput && emailInput.value ? emailInput.value.trim() : "";
+    var businessStage = businessStageEl && businessStageEl.value ? businessStageEl.value.trim() : null;
     var resource = slugInput && slugInput.value ? slugInput.value.trim() : "";
     var modalType = typeInput && typeInput.value ? typeInput.value : "resource";
     if (!fname) return;
     if (!email) return;
+    if (businessStageEl && !businessStage) {
+      businessStageEl.focus();
+      businessStageEl.reportValidity && businessStageEl.reportValidity();
+      return;
+    }
 
     submitBtn.disabled = true;
     submitBtn.innerHTML = "Sending…";
@@ -221,7 +239,14 @@
     }
     var maskedEmail = maskEmail(email);
     var fnameInitial = maskName(fname);
-    // Push a datalayer event with masked submission (useful for GTM)
+    // Form answers for dataLayer (masked PII + non-PII answers)
+    var formAnswers = {
+      fname_initial: fnameInitial,
+      email_masked: maskedEmail,
+    };
+    if (businessStage) formAnswers.business_stage = businessStage;
+
+    // Push a datalayer event with form answers (useful for GTM)
     try {
       window.dataLayer = window.dataLayer || [];
       var submittedPayload = {
@@ -229,8 +254,7 @@
         form_id: "lead-form",
         modal_type: modalType,
         resource: resource,
-        fname_initial: fnameInitial,
-        email_masked: maskedEmail,
+        form_answers: formAnswers,
         path: window.location.pathname,
         timestamp: new Date().toISOString(),
       };
@@ -243,6 +267,7 @@
     var body = modalType === "audit"
       ? { fname: fname, email: email }
       : { resource: resource, fname: fname, email: email };
+    if (modalType === "resource" && businessStage) body.business_stage = businessStage;
 
     fetch(url, {
       method: "POST",
@@ -252,7 +277,7 @@
       .then(function (res) { return res.json(); })
       .then(function (data) {
         var hasDownload = modalType === "resource" && data.success && data.download_url;
-        // Push success event with server response
+        // Push success event with server response and form answers
         try {
           window.dataLayer = window.dataLayer || [];
           var successPayload = {
@@ -260,8 +285,7 @@
             form_id: "lead-form",
             modal_type: modalType,
             resource: resource,
-            fname_initial: fnameInitial,
-            email_masked: maskedEmail,
+            form_answers: formAnswers,
             success: !!data.success,
             download_url: data.download_url || null,
             path: window.location.pathname,
@@ -278,7 +302,7 @@
         window.location.href = thankYouUrl;
       })
       .catch(function () {
-        // Push error event
+        // Push error event with form answers
         try {
           window.dataLayer = window.dataLayer || [];
           var errorPayload = {
@@ -286,8 +310,7 @@
             form_id: "lead-form",
             modal_type: modalType,
             resource: resource,
-            fname_initial: fnameInitial,
-            email_masked: maskedEmail,
+            form_answers: formAnswers,
             path: window.location.pathname,
             timestamp: new Date().toISOString(),
           };
