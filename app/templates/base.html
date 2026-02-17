@@ -71,6 +71,7 @@
         .noise-bg { background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuAI_xj2ntGZEV1hR4DfQjAg37cZcF9JUtaLGhKQsFx5D_tgNDzbWZICSzwLMhkM4hUDV0ITDfJf-yZ-PBYeljwy6d0dv1jJqRa2I3TyNrVSlaFIgE0o0MA80qOXWoX7OsDQPTKUGBNi6F1X2BltrT5K5OqYt7gzQ6vRf7Xp0mWSRI85jKkhidrE3LMI5MIDpjCc3iKFT5MXHn6qfLyluwCjTjlsPBOxaeqgXyLOlCLcTZ0a_DfAga8ZnIH1JCmzviq47iuQIOq9ngY); opacity: 0.03; }
         .concentric-circles { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 250%; aspect-ratio: 1/1; background-image: repeating-radial-gradient(circle at center, transparent, transparent 80px, rgba(255, 87, 34, 0.03) 81px, rgba(255, 87, 34, 0.03) 81.5px); pointer-events: none; z-index: 0; }
         .video-glow { box-shadow: 0 0 60px -10px rgba(255, 87, 34, 0.25); }
+        [data-video-play-overlay][data-playing] .video-play-overlay { opacity: 0; pointer-events: none; }
         .editorial-text p { @apply mb-10 leading-[1.8] text-charcoal text-xl md:text-2xl font-medium; }
         .editorial-text .highlight { @apply bg-primary text-white px-2 py-0.5 rounded font-black; }
         .editorial-text .highlight-soft { @apply bg-primary/20 text-deep-charcoal px-1.5 py-0.5 rounded; }
@@ -207,7 +208,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 {% endif %}
 {# HIDDEN_ELEMENTS: primary_bar, audit_bar, homepage_video, video_testimonials, cro_checklist, results_section, cro_video_testimonials, analytics_video_testimonials. To show/hide: add or remove from temporarily_hidden. #}
-{% set temporarily_hidden = ['homepage_video', 'video_testimonials', 'cro_checklist', 'results_section', 'cro_video_testimonials', 'analytics_video_testimonials'] %}
+{% set temporarily_hidden = ['video_testimonials', 'cro_checklist', 'results_section', 'cro_video_testimonials', 'analytics_video_testimonials'] %}
 {% block primary_bar %}
 <div id="primary_bar" class="bg-primary text-white text-[10px] md:text-xs font-black uppercase tracking-[0.25em] py-3.5 text-center border-b border-black/5 relative z-[110] {{ 'sm-temporarily-hidden' if 'primary_bar' in temporarily_hidden else '' }}">
     Only accepting {{ primary_bar_slots }} more partner{{ 's' if primary_bar_slots != 1 else '' }} for {{ primary_bar_month }}.
@@ -589,6 +590,33 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script src="{{ url_for('static', filename='js/audit-bar.js') }}" defer></script>
 <script src="{{ url_for('static', filename='js/checklist-modal.js') }}?v=2" defer></script>
 <script src="{{ url_for('static', filename='js/video-cta.js') }}" defer></script>
+<script>
+(function(){
+  function initVideoPlayOverlay() {
+    document.querySelectorAll('[data-video-play-overlay]').forEach(function(wrapper) {
+      var video = wrapper.querySelector('video');
+      var btn = wrapper.querySelector('.video-play-overlay');
+      if (!video || !btn) return;
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        video.play();
+        wrapper.setAttribute('data-playing', 'true');
+      });
+      video.addEventListener('click', function() {
+        if (!video.paused) {
+          video.pause();
+          wrapper.removeAttribute('data-playing');
+        }
+      });
+      video.addEventListener('play', function() { wrapper.setAttribute('data-playing', 'true'); });
+      video.addEventListener('pause', function() { wrapper.removeAttribute('data-playing'); });
+      video.addEventListener('ended', function() { wrapper.removeAttribute('data-playing'); });
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initVideoPlayOverlay);
+  else initVideoPlayOverlay();
+})();
+</script>
 <script>
 (function(){
   var CALENDLY_URL = 'https://calendly.com/stijnwherever/free-30-minute-strategy-session?hide_gdpr_banner=1';

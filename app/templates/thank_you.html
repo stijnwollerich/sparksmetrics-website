@@ -34,26 +34,24 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
     </div>
   </section>
 
-  {# 2. Video — single column, simple #}
+  {# 2. Video — self-hosted with play overlay #}
   <section class="px-4 pb-6 md:pb-8">
     <div class="max-w-3xl mx-auto">
-      <div class="aspect-video bg-gray-100 rounded-lg overflow-hidden">
-        <iframe
-          src="https://www.youtube.com/embed/{{ youtube_video_ids[0] if (youtube_video_ids is defined and youtube_video_ids) else 'vbUI7BW8PNI' }}?rel=0"
-          title="Strategy session"
-          allow="
-            accelerometer;
-            autoplay;
-            clipboard-write;
-            encrypted-media;
-            gyroscope;
-            picture-in-picture;
-          "
-          referrerpolicy="strict-origin-when-cross-origin"
-          allowfullscreen
-          class="w-full h-full"
-          loading="lazy"
-        ></iframe>
+      <div class="aspect-video bg-black rounded-lg overflow-hidden relative group" data-video-play-overlay>
+        <video
+          class="w-full h-full object-contain"
+          playsinline
+          preload="metadata"
+          aria-label="Strategy session video"
+        >
+          <source src="{{ url_for('static', filename='video/hero.mp4') }}" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <button type="button" class="video-play-overlay absolute inset-0 z-10 flex items-center justify-center bg-black/30 transition-opacity duration-300 group-data-[playing]:opacity-0 group-data-[playing]:pointer-events-none" aria-label="Play video">
+          <span class="w-20 h-20 md:w-24 md:h-24 rounded-full bg-primary flex items-center justify-center shadow-[0_0_40px_rgba(255,77,0,0.5)] hover:scale-110 transition-transform">
+            <span class="material-symbols-outlined text-white text-4xl md:text-5xl ml-1">play_arrow</span>
+          </span>
+        </button>
       </div>
     </div>
   </section>

@@ -118,24 +118,23 @@ block head_extras %}{% endblock %} {% block content %}
   </div>
 </section>
 <main>
-  <section class="py-16 md:py-24 bg-light-base {{ 'sm-temporarily-hidden' if 'homepage_video' in temporarily_hidden else '' }}">
+  <section class="py-16 md:py-24 bg-light-base">
     <div class="max-w-4xl mx-auto px-6 flex flex-col items-center">
-      <div class="w-full aspect-video bg-black rounded-2xl border border-gray-200 overflow-hidden relative shadow-2xl group">
-        <a
-          href="#"
-          data-download-modal
-          data-resource="cro-checklist"
-          data-title="13 Bulletproof Strategies to Skyrocket Conversions"
-          data-description="Enter your email and we'll send you the free ebook with 13 actionable CRO strategies used by $10M+ brands."
-          data-button-text="Send me the ebook"
-          class="absolute inset-0 flex items-center justify-center z-10"
+      <div class="w-full aspect-video bg-black rounded-2xl border border-gray-200 overflow-hidden shadow-2xl relative group" data-video-play-overlay>
+        <video
+          class="w-full h-full object-contain"
+          playsinline
+          preload="metadata"
+          aria-label="How we find and fix conversion leaks"
         >
-          <div class="w-24 h-24 md:w-32 md:h-32 bg-primary rounded-full flex items-center justify-center shadow-[0_0_60px_rgba(255,77,0,0.4)] group-hover:scale-110 transition-transform duration-500">
-            <span class="material-symbols-outlined text-white text-6xl md:text-7xl translate-x-1">play_arrow</span>
-          </div>
-        </a>
-        <div class="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-primary/5 pointer-events-none"></div>
-        <img src="{{ url_for('static', filename='images/ebook-thumbnail.png') }}" alt="Watch: How we find and fix conversion leaks" class="w-full h-full object-cover" loading="lazy" />
+          <source src="{{ url_for('static', filename='video/hero.mp4') }}" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <button type="button" class="video-play-overlay absolute inset-0 z-10 flex items-center justify-center bg-black/30 transition-opacity duration-300 group-data-[playing]:opacity-0 group-data-[playing]:pointer-events-none" aria-label="Play video">
+          <span class="w-24 h-24 md:w-32 md:h-32 rounded-full bg-primary flex items-center justify-center shadow-[0_0_60px_rgba(255,77,0,0.4)] hover:scale-110 transition-transform duration-300">
+            <span class="material-symbols-outlined text-white text-5xl md:text-7xl ml-1">play_arrow</span>
+          </span>
+        </button>
       </div>
       <p
         class="mt-8 text-lg font-bold text-gray-500 uppercase tracking-widest flex items-center gap-3"
