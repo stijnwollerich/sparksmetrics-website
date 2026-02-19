@@ -18,6 +18,32 @@ def inject_enable_gtm():
     # Default to True so GTM is enabled unless explicitly turned off in config
     return {"ENABLE_GTM": current_app.config.get("ENABLE_GTM", True)}
 
+# Central redirects: (from_paths, target_view_name, status_code). Add new redirects here.
+REDIRECTS = [
+    (["/cro"], "main.cro", 301),
+    (["/30-minute-strategy-session/", "/30-minute-strategy-session"], "main.schedule_a_call", 301),
+    (["/case-studies"], "main.results", 301),
+]
+
+
+def _make_redirect_view(target_view: str, code: int):
+    """Return a view function that redirects to the given target view with the given status code."""
+    def _view():
+        return redirect(url_for(target_view), code=code)
+    return _view
+
+
+def _register_redirects():
+    """Register all REDIRECTS as URL rules."""
+    for paths, target, code in REDIRECTS:
+        view = _make_redirect_view(target, code)
+        for path in paths:
+            endpoint = "redirect_" + path.strip("/").replace("/", "_").replace("-", "_") or "redirect_root"
+            main_bp.add_url_rule(path, endpoint=endpoint, view_func=view, methods=["GET"])
+
+
+_register_redirects()
+
 # Individual case study data (slug -> case dict for case_study.html)
 CASE_STUDIES = {
     "global-restaurant-bookings": {
@@ -377,12 +403,6 @@ def favicon():
     return redirect(url_for("static", filename="favicon.svg"))
 
 
-@main_bp.route("/cro")
-def cro_redirect():
-    """Redirect old /cro URL to full path."""
-    return redirect(url_for("main.cro"), code=301)
-
-
 @main_bp.route("/conversion-rate-optimization")
 def cro():
     """CRO (Conversion Rate Optimization) service landing."""
@@ -694,12 +714,6 @@ def case_study(slug):
     if not case:
         abort(404)
     return render_template("case_study.html", case=case)
-
-
-@main_bp.route("/case-studies")
-def case_studies():
-    """Case studies — redirect to Results."""
-    return redirect(url_for("main.results"), code=301)
 
 
 @main_bp.route("/blog")
