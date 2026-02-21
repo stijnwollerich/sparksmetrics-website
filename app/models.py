@@ -19,6 +19,7 @@ class Lead(db.Model):
     submission_type: Mapped[str] = mapped_column(String(20), nullable=False)  # 'audit' | 'resource'
     resource_slug: Mapped[str | None] = mapped_column(String(80), nullable=True)  # e.g. 'cro-checklist'
     business_stage: Mapped[str | None] = mapped_column(String(120), nullable=True)  # e.g. '1k orders per month'
+    website_url: Mapped[str | None] = mapped_column(String(500), nullable=True)  # e.g. from VSL audit form
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
 
     def __repr__(self) -> str:

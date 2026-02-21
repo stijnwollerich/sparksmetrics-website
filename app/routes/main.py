@@ -431,6 +431,16 @@ RESOURCE_DOWNLOADS = {
     "cro-checklist": {"filename": "13-bulletproof-strategies-conversions-sparksmetrics.pdf"},
 }
 
+@main_bp.route("/how-we-improve-conversions/")
+@main_bp.route("/how-we-improve-conversions")
+def how_we_improve_conversions():
+    """VSL page: video + CTA button → short form (name, email, website) → Calendly. Goal: schedule a meeting."""
+    return render_template("how-we-improve-conversions.html")
+# Downloadable resources: slug -> filename in static/downloads/. Add new resources here.
+RESOURCE_DOWNLOADS = {
+    "cro-checklist": {"filename": "13-bulletproof-strategies-conversions-sparksmetrics.pdf"},
+}
+
 
 def _save_lead(
     fname: str,
@@ -438,6 +448,7 @@ def _save_lead(
     submission_type: str,
     resource_slug: str | None = None,
     business_stage: str | None = None,
+    website_url: str | None = None,
 ) -> None:
     """Persist lead to Postgres if DATABASE_URL is set. Logs errors, does not raise."""
     if not current_app.config.get("SQLALCHEMY_DATABASE_URI"):
@@ -449,6 +460,7 @@ def _save_lead(
             submission_type=submission_type,
             resource_slug=resource_slug,
             business_stage=(business_stage or "").strip() or None,
+            website_url=(website_url or "").strip() or None,
         )
         db.session.add(lead)
         db.session.commit()
@@ -463,6 +475,7 @@ def _sync_lead_to_brevo(
     submission_type: str,
     resource_slug: str | None = None,
     business_stage: str | None = None,
+    website_url: str | None = None,
 ) -> None:
     """Add or update contact in Brevo if BREVO_API_KEY is set. Logs errors, does not raise."""
     api_key = (current_app.config.get("BREVO_API_KEY") or "").strip()
@@ -481,6 +494,8 @@ def _sync_lead_to_brevo(
     attributes = {"FNAME": fname}
     if business_stage:
         attributes["BUSINESS_STAGE"] = business_stage
+    if website_url:
+        attributes["WEBSITE_URL"] = website_url
     payload = {
         "email": email,
         "attributes": attributes,
@@ -518,6 +533,7 @@ def _notify_slack_lead(
     submission_type: str,
     resource_slug: str | None = None,
     business_stage: str | None = None,
+    website_url: str | None = None,
 ) -> None:
     """Post a short message to Slack when a lead is submitted. Logs errors, does not raise."""
     webhook_url = (current_app.config.get("SLACK_WEBHOOK_URL") or "").strip()
@@ -532,6 +548,8 @@ def _notify_slack_lead(
     text = "New lead: *{}* <{}> – {}".format(fname, email, label)
     if business_stage:
         text += "\nOrder volume / stage: {}".format(business_stage)
+    if website_url:
+        text += "\nWebsite: {}".format(website_url)
     try:
         import requests
     except ModuleNotFoundError:
@@ -660,16 +678,18 @@ def admin_client_events():
 
 @main_bp.route("/request-audit", methods=["POST"])
 def request_audit():
-    """Collect fname and email for free CRO audit request; returns success (no file)."""
+    """Collect fname, email, and optional website_url for free CRO audit request; returns success (no file)."""
     data = request.get_json(silent=True) or {}
     fname = (data.get("fname") or "").strip()
     email = (data.get("email") or "").strip()
+    website_url = (data.get("website_url") or "").strip() or None
     if not fname:
         return jsonify({"success": False, "error": "First name required"}), 400
     if not email or not re.match(r"^[^\s@]+@[^\s@]+\.[^\s@]+$", email):
         return jsonify({"success": False, "error": "Invalid email"}), 400
-    _save_lead(fname, email, "audit", resource_slug=None)
-    _sync_lead_to_brevo(fname, email, "audit", resource_slug=None)
+    _save_lead(fname, email, "audit", resource_slug=None, website_url=website_url)
+    _sync_lead_to_brevo(fname, email, "audit", resource_slug=None, website_url=website_url)
+    _notify_slack_lead(fname, email, "audit", resource_slug=None, website_url=website_url)
     return jsonify({"success": True})
 
 
