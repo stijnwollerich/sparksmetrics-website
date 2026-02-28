@@ -45,6 +45,42 @@
       "reading_time": "8 min read",
       "category": "Analytics",
       "template": "blog_ga4_doesnt_match_your_ads.html"
+    },
+    {
+      "slug": "allbirds-conversion-strategy-shopify-cro",
+      "title": "Allbirds Conversion Strategy: 7 Shopify CRO Lessons to Steal",
+      "description": "A fun, data-driven teardown of Allbirds' ecommerce funnel (homepage to checkout) with Shopify CRO tactics you can copy to lift conversion rate and AOV.",
+      "published_date": "16 Feb 2026",
+      "updated_date": "16 Feb 2026",
+      "reading_time": "14 min read",
+      "category": "CRO",
+      "template": "blog_allbirds-conversion-strategy-shopify-cro.html",
+      "video_id": "06bAhn_pMUI",
+      "youtube_url": "https://youtu.be/06bAhn_pMUI"
+    },
+    {
+      "slug": "gruns-shopify-conversion-system",
+      "title": "Grüns Conversion System: How to Increase Shopify Conversion Rate (9 Lessons)",
+      "description": "Learn how Grüns built a $500M Shopify conversion system: homepage optimization, subscription conversion, bundle pricing, cart upsells, Shopify Plus checkout, and mobile CRO tactics you can copy.",
+      "published_date": "17 Feb 2026",
+      "updated_date": "17 Feb 2026",
+      "reading_time": "16 min read",
+      "category": "CRO",
+      "template": "blog_gruns-shopify-conversion-system.html",
+      "video_id": "dx4idmU-Z1s",
+      "youtube_url": "https://youtu.be/dx4idmU-Z1s"
+    },
+    {
+      "slug": "lead-generation-landing-page-formula",
+      "title": "Lead Generation Landing Page Template: The Page Anatomy That Converts",
+      "description": "A fun, data-driven guide to lead gen landing page anatomy (non-ecommerce): above-the-fold structure, trust, social proof, offer design, form optimization, FAQs, and conversion rate best practices.",
+      "published_date": "18 Feb 2026",
+      "updated_date": "18 Feb 2026",
+      "reading_time": "15 min read",
+      "category": "CRO",
+      "template": "blog_lead-generation-landing-page-formula.html",
+      "video_id": "4tw5DNi7ORc",
+      "youtube_url": "https://youtu.be/4tw5DNi7ORc"
     }
   ]
 }

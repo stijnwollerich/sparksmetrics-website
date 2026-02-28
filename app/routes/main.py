@@ -3,7 +3,7 @@ import json
 import re
 from pathlib import Path
 from datetime import datetime, timezone
-from flask import abort, Blueprint, current_app, jsonify, redirect, render_template, request, url_for, Response
+from flask import abort, Blueprint, current_app, jsonify, redirect, render_template, request, url_for, Response, send_file
 
 from app.models import Lead, db
 
@@ -428,7 +428,7 @@ def thank_you():
     return render_template("thank_you.html")
 # Downloadable resources: slug -> filename in static/downloads/. Add new resources here.
 RESOURCE_DOWNLOADS = {
-    "cro-checklist": {"filename": "13-bulletproof-strategies-conversions-sparksmetrics.pdf"},
+    "cro-checklist": {"filename": "sm-cro-ebook.pdf"},
 }
 
 @main_bp.route("/how-we-improve-conversions/")
@@ -436,10 +436,6 @@ RESOURCE_DOWNLOADS = {
 def how_we_improve_conversions():
     """VSL page: video + CTA button → short form (name, email, website) → Calendly. Goal: schedule a meeting."""
     return render_template("how-we-improve-conversions.html")
-# Downloadable resources: slug -> filename in static/downloads/. Add new resources here.
-RESOURCE_DOWNLOADS = {
-    "cro-checklist": {"filename": "13-bulletproof-strategies-conversions-sparksmetrics.pdf"},
-}
 
 
 def _save_lead(
@@ -711,8 +707,29 @@ def download_resource():
     _save_lead(fname, email, "resource", resource_slug=slug or None, business_stage=business_stage)
     _sync_lead_to_brevo(fname, email, "resource", resource_slug=slug or None, business_stage=business_stage)
     _notify_slack_lead(fname, email, "resource", resource_slug=slug or None, business_stage=business_stage)
-    download_url = url_for("static", filename="downloads/" + resource["filename"])
+    download_url = url_for("main.serve_download", slug=slug)
     return jsonify({"success": True, "download_url": download_url})
+
+
+@main_bp.route("/download/<slug>")
+def serve_download(slug: str):
+    """Serve a resource file as attachment. No HTML page—direct download. Not indexed (X-Robots-Tag)."""
+    resource = RESOURCE_DOWNLOADS.get(slug.strip()) if slug else None
+    if not resource:
+        abort(404)
+    filename = resource["filename"]
+    downloads_dir = Path(current_app.static_folder) / "downloads"
+    path = downloads_dir / filename
+    if not path.is_file():
+        abort(404)
+    resp = send_file(
+        path,
+        mimetype="application/pdf",
+        as_attachment=True,
+        download_name=filename,
+    )
+    resp.headers["X-Robots-Tag"] = "noindex, nofollow"
+    return resp
 
 
 @main_bp.route("/analytics")
@@ -736,11 +753,22 @@ def case_study(slug):
     return render_template("case_study.html", case=case)
 
 
+def _parse_blog_date(s: str):
+    """Parse published_date 'DD Mon YYYY' for sorting. Returns datetime or datetime.min on failure."""
+    if not s:
+        return datetime.min
+    try:
+        return datetime.strptime(s.strip(), "%d %b %Y")
+    except (ValueError, TypeError):
+        return datetime.min
+
+
 @main_bp.route("/blog")
 def blog_index():
     """Blog overview page."""
     # Prefer scanning templates/blog/ so the index reflects templates present in templates/blog/.
     posts = _scan_blog_templates() or _load_blog_posts()
+    posts = sorted(posts, key=lambda p: _parse_blog_date(p.get("published_date") or ""), reverse=True)
     return render_template("blog.html", posts=posts)
 
 
@@ -772,12 +800,6 @@ def terms_and_conditions():
     return render_template("terms.html")
 
 
-@main_bp.route("/earnings-disclaimer")
-def earnings_disclaimer():
-    """Earnings disclaimer — placeholder until page is built."""
-    return render_template("placeholder.html", title="Earnings Disclaimer")
-
-
 @main_bp.route("/sitemap.xml")
 def sitemap():
     """Generate sitemap XML with all public pages and case study URLs. Excludes /thank-you/ (noindex, post-lead redirect)."""
@@ -791,7 +813,6 @@ def sitemap():
         ("main.cro_ebook", {}),
         ("main.privacy_policy", {}),
         ("main.terms", {}),
-        ("main.earnings_disclaimer", {}),
     ]
     urls = []
     for endpoint, kwargs in pages:
@@ -830,6 +851,7 @@ def robots():
     base = request.url_root.rstrip("/")
     body = f"""User-agent: *
 Allow: /
+Disallow: /download/
 
 Sitemap: {base}/sitemap.xml
 """

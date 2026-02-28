@@ -50,6 +50,11 @@ gunicorn -w 4 -b 0.0.0.0:5000 "run:app"
 
 Set `FLASK_DEBUG=0` and a strong `SECRET_KEY` in production.
 
+## Blog
+
+- **Manual post creation:** See **docs/BLOG_POSTS.md** for how to add a new post (template in `app/templates/blog/` + entry in `app/blog_posts.json`). Posts appear on `/blog` (newest first) and in the sitemap; the footer links to the blog.
+- **SEO and CTAs:** See **app/SEO_GUIDELINES.md** for content structure and reusable CTA includes.
+
 ## Blog automation (YouTube → Blog → Slack)
 
 This repo supports a cron-friendly script that creates a new blog post when a new YouTube video is published.

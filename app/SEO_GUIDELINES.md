@@ -1,6 +1,8 @@
 SEO Guidelines for blog content (AI / writers)
 =============================================
 
+**How to add a new post (template + metadata):** see **docs/BLOG_POSTS.md** for step-by-step instructions (filename, slug, `blog_posts.json`, template structure, typography, and CTAs).
+
 Purpose
 -------
 Provide a consistent set of requirements and examples so automated processes (AI or humans) produce rich, SEO-friendly articles that match Sparksmetrics' style.
@@ -77,6 +79,30 @@ Prompt hints for AI
 - Ask for examples, numbers, and small experiments where possible.
 - Prefer specific actionable steps (what to measure, how to set up the test, expected output).
 - Avoid placeholder variables like `{{ post.title }}` inside extracted text; if using templates, ensure the metadata source is present.
+
+Reusable blog assets (banners & CTAs)
+-------------------------------------
+All blog CTAs and banners live in one place so you can change copy/links once and reuse in every post.
+
+Location: **app/templates/blog/includes/**
+
+| Include | Use when |
+|---------|----------|
+| **hero_cta_buttons.html** | Top of article body: Schedule a call + Download free ebook. Use once. |
+| **cta_audit.html** | Mid- or end-of-article callout: "Ready to stop guessing?" + Claim free CRO audit + Schedule a call. |
+| **cta_ebook.html** | Mid- or end-of-article: "Get the full playbook" + Download free ebook. |
+| **banner_schedule.html** | Dark banner between sections or at end: "Want us to run the audit?" + Schedule a call. |
+
+**In a blog post template**, drop them in with:
+
+```html
+{% include 'blog/includes/hero_cta_buttons.html' %}
+{% include 'blog/includes/cta_audit.html' %}
+{% include 'blog/includes/cta_ebook.html' %}
+{% include 'blog/includes/banner_schedule.html' %}
+```
+
+Use at least one primary CTA (audit or schedule) and one secondary (ebook) per article. Place 1–2 CTAs or banners in the body (e.g. after a key section and again before the implementation checklist).
 
 Versioning
 ----------

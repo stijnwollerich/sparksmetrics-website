@@ -1,0 +1,392 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }} | Sparksmetrics{% endblock %}
+{% block meta_description %}{{ post.description }}{% endblock %}
+{% block og_title %}{{ post.title }}{% endblock %}
+{% block twitter_title %}{{ post.title }}{% endblock %}
+{% block og_description %}{{ post.description }}{% endblock %}
+{% block twitter_description %}{{ post.description }}{% endblock %}
+
+{% block content %}
+<section class="bg-light-base py-10 md:py-14 border-b border-gray-100">
+  <div class="content-narrow px-6">
+    <a href="{{ url_for('main.blog_index') }}" class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-500 hover:text-primary transition-colors min-h-[44px]">
+      <span class="material-symbols-outlined text-base" aria-hidden="true">arrow_back</span>
+      Back to blog
+    </a>
+
+    <header class="mt-6">
+      <p class="text-primary font-bold text-sm uppercase tracking-[0.4em] mb-4">{{ post.category }}</p>
+      <h1 class="normal-case text-3xl md:text-5xl font-display font-black tracking-tight text-deep-charcoal mb-4">The Exact Lead Gen Landing Page Formula That Converts (Steal This Page Anatomy)</h1>
+      <p class="text-gray-600 text-base md:text-lg mb-0">{{ post.description }}</p>
+      <div class="mt-6 flex flex-wrap gap-2">
+        <span class="inline-flex items-center px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-500 text-[10px] font-bold uppercase tracking-widest">Published {{ post.published_date }}</span>
+        <span class="inline-flex items-center px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-500 text-[10px] font-bold uppercase tracking-widest">{{ post.reading_time }}</span>
+      </div>
+    </header>
+  </div>
+</section>
+
+<section class="bg-light-base py-12 md:py-16">
+  <div class="content-narrow px-6">
+    <div class="aspect-video w-full rounded-2xl overflow-hidden bg-black border border-black/10">
+      <iframe
+        class="w-full h-full"
+        src="https://www.youtube.com/embed/{{ post.video_id or '4tw5DNi7ORc' }}"
+        title="Lead generation landing page formula and page anatomy"
+        frameborder="0"
+        loading="lazy"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <article class="blog-prose mt-10">
+      <script type="application/ld+json">{{ {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": (post.title or "Lead Generation Landing Page Template: The Page Anatomy That Converts"),
+        "description": (post.description or "A data-driven guide to lead gen landing page anatomy: above-the-fold, trust, social proof, form optimization, FAQs, and conversion best practices.")
+      } | tojson }}</script>
+
+      <p class="lead">This post breaks down the exact lead gen landing page structure we use for service businesses (local services, solar, agencies, B2B). Copy the blocks, keep the order, swap the language, then test. Below is a short summary you can skim without watching; the full post goes through each block.</p>
+      <ul class="mb-6">
+        <li><strong>Block 1:</strong> Above the fold (headline + proof + CTA)</li>
+        <li><strong>Block 2:</strong> Immediate social proof (logos or stats)</li>
+        <li><strong>Block 3:</strong> The pain (what they're living with)</li>
+        <li><strong>Block 4:</strong> The solution (how you fix it)</li>
+        <li><strong>Block 5:</strong> Benefits grid (bulletable, skimmable)</li>
+        <li><strong>Block 6:</strong> Differentiation (why you vs alternatives)</li>
+        <li><strong>Block 7:</strong> Proof library (reviews, videos, case studies)</li>
+        <li><strong>Block 8:</strong> Make them feel the outcome (savings, timelines, screenshots)</li>
+        <li><strong>Block 9:</strong> Comparison table + calculator (for “I'm comparing now” visitors)</li>
+        <li><strong>Block 10:</strong> Process + FAQ + final CTA (close the loop)</li>
+      </ul>
+
+      {% include 'blog/includes/hero_cta_buttons.html' %}
+
+      <nav id="toc" class="mb-6 p-4 bg-primary/5 rounded-lg">
+        <strong>Contents</strong>
+        <ul class="ml-4 mt-2">
+          <li><a href="#tldr">TL;DR: Lead gen landing page anatomy in 10 blocks</a></li>
+          <li><a href="#step-zero">Step zero: landing page research</a></li>
+          <li><a href="#block-1">Block 1: Above the fold (hero)</a></li>
+          <li><a href="#block-2">Block 2: Immediate social proof</a></li>
+          <li><a href="#block-3">Block 3: The pain section</a></li>
+          <li><a href="#block-4">Block 4: The solution section</a></li>
+          <li><a href="#block-5">Block 5: Benefits grid</a></li>
+          <li><a href="#block-6">Block 6: Differentiation</a></li>
+          <li><a href="#block-7">Block 7: Proof library</a></li>
+          <li><a href="#block-8">Block 8: Make them feel the outcome</a></li>
+          <li><a href="#block-9">Block 9: Comparison table + calculator</a></li>
+          <li><a href="#block-10">Block 10: Process + FAQ + final CTA</a></li>
+          <li><a href="#form-length">Lead gen form: short vs long</a></li>
+          <li><a href="#copy-paste">Copy-paste landing page template</a></li>
+          <li><a href="#audit-cta">Want me to build or audit yours?</a></li>
+        </ul>
+      </nav>
+
+      <h2 id="tldr">TL;DR: Lead gen landing page anatomy in 10 blocks</h2>
+      <ul>
+        <li>Block 1: Above the fold (headline + proof + CTA)</li>
+        <li>Block 2: Immediate social proof (logos or stats)</li>
+        <li>Block 3: The pain (what they're living with)</li>
+        <li>Block 4: The solution (how you fix it)</li>
+        <li>Block 5: Benefits grid (bulletable, skimmable)</li>
+        <li>Block 6: Differentiation (why you vs alternatives)</li>
+        <li>Block 7: Proof library (reviews, videos, case studies)</li>
+        <li>Block 8: Make them feel the outcome (savings, timelines, screenshots)</li>
+        <li>Block 9: Comparison table + calculator (for “I'm comparing now” visitors)</li>
+        <li>Block 10: Process + FAQ + final CTA (close the loop)</li>
+      </ul>
+      <p>If you want a page that converts, you don't need “more creativity.” You need a sequence that matches how a stranger decides to trust you.</p>
+
+      <h2 id="step-zero">Step zero: landing page research (the part everyone skips)</h2>
+      <p>Before you open Figma, you need to earn the right to write.</p>
+      <p>Most landing pages fail because the copy is written from the inside out. The business says what it does, how long it's been around, and why it's “passionate.” The visitor doesn't care. They care about their situation and the next step.</p>
+      <p>Research is not a one-time exercise. It's the thing that keeps your page relevant even when ads change, markets shift, and competitors copy you.</p>
+      <p><strong>Here are the four questions you need answered before you design:</strong></p>
+      <ol>
+        <li>What is their main pain right now?</li>
+        <li>What outcome do they want most?</li>
+        <li>What are they scared of (spam, being sold, price, risk, time)?</li>
+        <li>What do they need to believe to submit the form?</li>
+      </ol>
+      <p>The best landing pages feel like mind reading because they use the exact words the visitor uses in their own head. If your page sounds like it was written by a committee, you've already lost.</p>
+      <p><strong>Practical way to get this fast:</strong></p>
+      <ul>
+        <li>Read competitor reviews (Google/Yelp/G2). Look for repeated complaints.</li>
+        <li>Read your own sales call notes. The objections are your section headers.</li>
+        <li>Collect 10 “why did you reach out?” answers. That becomes your headline testing pool.</li>
+      </ul>
+      <p>Now we can build the page.</p>
+
+      <h2 id="block-1">Block 1: Above the fold (hero section that doesn't waste the first screen)</h2>
+      <p>Above the fold is where you either earn attention or get bounced. On a lead gen landing page, the hero is not a branding moment. It's a clarity moment.</p>
+      <p>A high-converting hero has five elements:</p>
+      <ol>
+        <li>A specific, emotional headline</li>
+        <li>A short proof-backed supporting sentence</li>
+        <li>A big CTA (or form trigger)</li>
+        <li>One risk reducer (promise/guarantee)</li>
+        <li>A visual that explains the offer fast</li>
+      </ol>
+
+      <h3>Headline formula that works for lead generation</h3>
+      <p>Make it about their problem and their desired state.</p>
+      <p><strong>Example (solar backup):</strong></p>
+      <p>“Keep your family safe, connected, and powered while the neighborhood goes dark.”</p>
+      <p>That's not a feature list. That's a feeling.</p>
+      <p>And yes, it can be long. Short headlines are not automatically better. If the main point matters, put it in the largest text on the page. Most visitors skim. Big text is what they actually read.</p>
+      <p><strong>A simple headline pattern that works across niches:</strong></p>
+      <ul>
+        <li><strong>Pain + outcome:</strong> “Stop X so you can finally Y.”</li>
+        <li><strong>Situation + control:</strong> “Get X without Y.”</li>
+        <li><strong>Fear + safety:</strong> “Protect X when Y happens.”</li>
+      </ul>
+
+      <h3>Supporting paragraph (make the bold claim believable)</h3>
+      <p>Right under the headline, add one short paragraph that turns the big promise into something concrete.</p>
+      <p>This is not your company bio. It's not a story about “our mission.” It's a quick bridge from claim to reality.</p>
+      <p><strong>Example style:</strong></p>
+      <p>“We install a home backup system designed for your neighborhood's outage patterns, handle permits end-to-end, and get you set up in days, not months.”</p>
+      <p>The goal is that the visitor thinks: “Ok, this is specific. This might actually be for me.”</p>
+
+      <h3>CTA button copy (don't use “Submit” like it's 2009)</h3>
+      <p>Your button is not a label. It's a value statement.</p>
+      <p><strong>Good CTA examples:</strong></p>
+      <ul>
+        <li>“Get my free estimate (24h response)”</li>
+        <li>“Check my savings in 2 minutes”</li>
+        <li>“Get the plan for my home”</li>
+      </ul>
+      <p>Then immediately under the CTA, reduce risk:</p>
+      <ul>
+        <li>“No spam. One call. You'll hear back within 24 hours.”</li>
+        <li>“We never share your data.”</li>
+        <li>“No obligation.”</li>
+      </ul>
+      <p>This is lead gen conversion rate optimization 101: people don't fear the form, they fear what happens after the form.</p>
+
+      <h3>The visual trick: “video thumbnail” that unlocks after the form</h3>
+      <p>You don't need a Hollywood video. You need curiosity.</p>
+      <p>A tactic we've tested in lead gen funnels:</p>
+      <ul>
+        <li>Show an image that looks like a video thumbnail (play icon)</li>
+        <li>When they click it, open the form instead</li>
+        <li>After they submit, show the video on the thank-you page</li>
+      </ul>
+      <p>It works because it sequences value. The visitor believes there's something worth seeing, and the form becomes the “ticket” to access it.</p>
+      <p>Keep it honest. If you promise a video, deliver a useful video. The goal is not to trick people. The goal is to create a clean exchange: info for value.</p>
+
+      <h2 id="block-2">Block 2: Immediate social proof (trust, fast)</h2>
+      <p>If you can only add one section below the hero, make it proof.</p>
+      <p>This section is not about vanity. It's about reducing perceived risk. Visitors need quick evidence that other people trusted you and it worked out.</p>
+      <p><strong>Examples that work:</strong></p>
+      <ul>
+        <li>“2,400 homes installed”</li>
+        <li>“4.8 stars from 600+ Google reviews”</li>
+        <li>“Featured in X”</li>
+        <li>“Certified by Y”</li>
+        <li>Client logos (if B2B)</li>
+      </ul>
+      <p>Don't overthink the design. A simple row of logos or a three-stat strip is enough. The job is to make “legit” obvious.</p>
+
+      <h2 id="block-3">Block 3: The pain section (prove you understand their life)</h2>
+      <p>They clicked your ad because it poked a pain.</p>
+      <p>Your landing page should reflect that pain back to them with specificity.</p>
+      <p>Not with drama. With accuracy.</p>
+      <p><strong>Examples:</strong></p>
+      <ul>
+        <li>“Power outages are getting more frequent.”</li>
+        <li>“Your bill keeps going up and you have no control.”</li>
+        <li>“You've tried X and it didn't stick.”</li>
+      </ul>
+      <p>This section does two important things:</p>
+      <ol>
+        <li>It increases relevance (they feel seen).</li>
+        <li>It builds trust (you understand the real problem, not the surface symptoms).</li>
+      </ol>
+      <p>Make it skimmable. Use a grid, icons, short bullets, or bold phrases. If you bury pain points in paragraphs, they will not be read.</p>
+
+      <h2 id="block-4">Block 4: The solution section (explain what you do without corporate fog)</h2>
+      <p>Now that they feel understood, show the solution.</p>
+      <p>This is where visuals win: screenshots, before/after, diagrams, process photos, short clips. In 2026, “text-only explanation” often feels like a scam, even when it's not.</p>
+      <p>Structure this section like a simple chain:</p>
+      <ul>
+        <li>What you do</li>
+        <li>How it works</li>
+        <li>What they get</li>
+      </ul>
+      <p>Then bullet the benefits.</p>
+      <p>If you have to choose between a beautiful paragraph and four bullets that get read, pick the bullets. You can always add depth below, but you need clarity first.</p>
+
+      <h2 id="block-5">Block 5: Benefits grid (scan in 20 seconds)</h2>
+      <p>Your page should be understandable in under 20 seconds for a skimmer.</p>
+      <p>That's not because people are dumb. It's because they're busy, suspicious, and juggling tabs.</p>
+      <p>Use “scan-friendly” blocks:</p>
+      <ul>
+        <li>Headings</li>
+        <li>Bullets</li>
+        <li>Icon lists</li>
+        <li>Pills/tags (like “Certified,” “24h turnaround,” “No spam”)</li>
+      </ul>
+      <p>If everything is text, nothing is text.</p>
+      <p>A strong benefits grid usually answers:</p>
+      <ul>
+        <li><strong>Speed:</strong> how fast does this happen?</li>
+        <li><strong>Risk:</strong> what happens if it's not a fit?</li>
+        <li><strong>Control:</strong> how much effort do I need?</li>
+        <li><strong>Outcome:</strong> what changes after?</li>
+      </ul>
+
+      <h2 id="block-6">Block 6: Differentiation (why you vs alternatives)</h2>
+      <p>At this stage, the visitor is thinking: “Ok, but why you?”</p>
+      <p>This is where you show what you do differently, in terms that matter.</p>
+      <p>A clean format that keeps attention:</p>
+      <ul>
+        <li>A visual on one side</li>
+        <li>A short claim</li>
+        <li>A bullet list or short paragraph</li>
+      </ul>
+      <p>Keep it concrete:</p>
+      <ul>
+        <li>“We handle permits and installation.”</li>
+        <li>“Fixed pricing.”</li>
+        <li>“Install within X days.”</li>
+        <li>“You get a plan before you pay.”</li>
+      </ul>
+      <p>Avoid vague claims like “high quality” unless you attach proof.</p>
+
+      <h2 id="block-7">Block 7: Proof library (reviews, case studies, and especially video)</h2>
+      <p>Text reviews help.</p>
+      <p>Video reviews convert.</p>
+      <p>Because video is expensive to fake.</p>
+      <p>If you can get only three videos, you're already ahead of most lead gen pages.</p>
+      <p>Organize proof by the questions people have:</p>
+      <ul>
+        <li>“Does it work?” (results)</li>
+        <li>“Is it safe?” (trust)</li>
+        <li>“What's the experience like?” (process)</li>
+      </ul>
+      <p>You're preventing the “let me Google you” moment. And if they do Google you anyway, they're now looking for confirmation, not disqualification.</p>
+
+      <h2 id="block-8">Block 8: Make them feel the outcome (create desire with something tangible)</h2>
+      <p>This is where you show the transformation.</p>
+      <p>For solar, it could be a bill comparison.</p>
+      <p>For an agency, it could be:</p>
+      <ul>
+        <li>Lead volume screenshots</li>
+        <li>Pipeline growth</li>
+        <li>Cost per lead changes</li>
+        <li>Timeline to first results</li>
+      </ul>
+      <p>The key: don't just describe the outcome. Put it in front of them.</p>
+      <p>Assume visitors need to be fed the details. Never rely on them to infer. If you can visualize it, you reduce the effort required to believe.</p>
+
+      <h2 id="block-9">Block 9: Comparison table + calculator (for the “I'm comparing now” visitor)</h2>
+      <p>Mid-to-late page, visitors are not learning anymore. They're comparing.</p>
+      <p>A comparison table works because it answers:</p>
+      <p>“What happens if I choose you vs alternatives?”</p>
+      <p>Alternatives could be:</p>
+      <ul>
+        <li>doing nothing</li>
+        <li>DIY</li>
+        <li>competitor</li>
+        <li>cheap option</li>
+      </ul>
+      <p>Make the comparison about what they care about:</p>
+      <ul>
+        <li>speed</li>
+        <li>risk</li>
+        <li>warranty/guarantee</li>
+        <li>results</li>
+        <li>support</li>
+      </ul>
+      <p>Then, if your business allows it, add a simple personalization widget:</p>
+      <ul>
+        <li>“Estimate my savings”</li>
+        <li>“See my timeline”</li>
+        <li>“Check fit for my situation”</li>
+      </ul>
+      <p>Even basic sliders work because they turn the page from generic to “about me.” Personalization increases perceived value without changing your offer.</p>
+
+      <h2 id="block-10">Block 10: Process + FAQ + final CTA (close the loop)</h2>
+
+      <h3>Process: what happens after I submit?</h3>
+      <p>People hesitate because they don't know the next steps.</p>
+      <p>Add a 3-step process section:</p>
+      <ol>
+        <li>Submit the form</li>
+        <li>Quick qualification call</li>
+        <li>Get the plan/quote/blueprint</li>
+      </ol>
+      <p>Add time expectations:</p>
+      <ul>
+        <li>“We respond within 24 hours.”</li>
+        <li>“Call takes 10 minutes.”</li>
+      </ul>
+      <p>This reduces fear and increases form submissions because uncertainty is the real friction.</p>
+
+      <h3>FAQ: answer the objections your sales team hears every week</h3>
+      <p>Your FAQ should not be generic.</p>
+      <p>It should be the exact objections that show up in calls and emails.</p>
+      <p><strong>Examples:</strong></p>
+      <ul>
+        <li>“Will you spam me?”</li>
+        <li>“How much does it cost?”</li>
+        <li>“Do you serve my area?”</li>
+        <li>“How fast can you start?”</li>
+        <li>“What if it's not a fit?”</li>
+      </ul>
+      <p>Long FAQs are fine. Interested people read. Uninterested people bounce anyway.</p>
+
+      <h3>Final CTA: make them choose</h3>
+      <p>At the bottom, there's nothing left to learn.</p>
+      <p>So make the decision obvious:</p>
+      <ul>
+        <li>One strong CTA</li>
+        <li>One last proof stack</li>
+        <li>One last risk reducer</li>
+      </ul>
+      <p>This is where you can repeat the promise, repeat the timeline, repeat the guarantee.</p>
+      <p>Repetition is not annoying when it reduces uncertainty.</p>
+
+      <h2 id="form-length">The lead gen form: short by default, longer only when you need qualification</h2>
+      <p>Form length is a lever.</p>
+      <p>Short forms convert more.</p>
+      <p>Longer forms qualify better.</p>
+      <p>If you're drowning in junk leads, add fields that qualify:</p>
+      <ul>
+        <li>budget range</li>
+        <li>timeline</li>
+        <li>location</li>
+        <li>current situation</li>
+      </ul>
+      <p>A longer form can increase perceived value because it feels like an “application,” not a “newsletter signup.” It can also reduce low-intent submissions because it creates a tiny commitment.</p>
+      <p>But start short unless you have a real reason.</p>
+
+      <h2 id="copy-paste">Copy-paste lead gen landing page template</h2>
+      <p>If you want the simplest version, copy this block order:</p>
+      <ol>
+        <li>Headline (pain → outcome)</li>
+        <li>Proof (rating + count + badges)</li>
+        <li>CTA (value statement) + risk reducer</li>
+        <li>Pain grid</li>
+        <li>Solution overview + bullets</li>
+        <li>Differentiation rows</li>
+        <li>Proof library (reviews/videos)</li>
+        <li>Outcome visuals</li>
+        <li>Comparison table + calculator</li>
+        <li>Process steps</li>
+        <li>FAQ</li>
+        <li>Final CTA</li>
+      </ol>
+
+      <h2 id="audit-cta">Want me to build or audit yours?</h2>
+      <p>If you want, I can do a 15-minute Loom audit of your current landing page and point out the 3 biggest conversion leaks (order-of-information issues, missing trust, weak offer framing).</p>
+      {% include 'blog/includes/cta_audit.html' %}
+    </article>
+  </div>
+</section>
+{% endblock %}
