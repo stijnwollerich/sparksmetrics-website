@@ -5,6 +5,43 @@
 {% block twitter_title %}Your CRO Scan | Sparksmetrics{% endblock %}
 {% block head_extras %}
 <meta name="robots" content="noindex, nofollow" />
+<style>
+  @keyframes scan-progress-shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  @keyframes scan-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.85; }
+  }
+  #scan-progress-bar::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+    animation: scan-progress-shimmer 1.8s ease-in-out infinite;
+  }
+  #scan-progress-bar {
+    position: relative;
+    animation: scan-pulse 1.2s ease-in-out infinite;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  .screenshot-loading-spinner {
+    width: 48px;
+    height: 48px;
+    border: 3px solid rgba(255, 77, 0, 0.2);
+    border-top-color: #FF4D00;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  .screenshot-loading-spinner.screenshot-loading-spinner-sm {
+    width: 36px;
+    height: 36px;
+    border-width: 2px;
+  }
+</style>
 {% endblock %}
 {% block primary_bar %}{% endblock %}
 {% block header %}
@@ -23,90 +60,135 @@
 {% block audit_bar %}{% endblock %}
 {% block body_class %}bg-white text-gray-800 font-sans{% endblock %}
 {% block content %}
+{% if ENABLE_GTM %}
+<script>
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: 'page_view',
+    page_type: 'cro_scan_thank_you',
+    page_path: '{{ request.path }}'
+  });
+</script>
+{% endif %}
 <div class="min-h-screen flex flex-col">
-  {# Progress bar — reinforces "it's working" #}
+  {# Progress bar — loading animation #}
   <section class="border-b border-gray-100 bg-gray-50/60">
-    <div class="max-w-2xl mx-auto px-4 md:px-6 py-4">
+    <div class="max-w-6xl mx-auto px-4 md:px-6 py-4">
       <div class="flex items-center justify-between gap-3 mb-2">
         <p class="text-xs font-bold uppercase tracking-widest text-gray-500">Scanning your store…</p>
-        <span class="text-xs font-bold text-gray-500 tabular-nums" id="scan-progress-pct">82%</span>
+        <span class="text-xs font-bold text-gray-500 tabular-nums" id="scan-progress-pct">0%</span>
       </div>
       <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
-        <div class="h-full bg-primary rounded-full transition-all duration-1000" style="width: 82%;" id="scan-progress-bar"></div>
+        <div class="h-full bg-primary rounded-full transition-all duration-300 ease-out overflow-hidden" style="width: 0%;" id="scan-progress-bar"></div>
       </div>
     </div>
   </section>
+  <script>
+  (function(){
+    var bar = document.getElementById('scan-progress-bar');
+    var pct = document.getElementById('scan-progress-pct');
+    if (!bar || !pct) return;
+    var target = 82;
+    var duration = 2800;
+    var start = null;
+    function step(timestamp) {
+      if (!start) start = timestamp;
+      var elapsed = timestamp - start;
+      var progress = Math.min(elapsed / duration, 1);
+      var easeOut = 1 - Math.pow(1 - progress, 1.8);
+      var current = Math.round(easeOut * target);
+      bar.style.width = current + '%';
+      pct.textContent = current + '%';
+      if (progress < 1) requestAnimationFrame(step);
+      else {
+        var slowCrawl = setInterval(function() {
+          current = parseInt(bar.style.width, 10) || 0;
+          if (current >= 95) { clearInterval(slowCrawl); return; }
+          current = Math.min(current + 1, 95);
+          bar.style.width = current + '%';
+          pct.textContent = current + '%';
+        }, 400);
+      }
+    }
+    requestAnimationFrame(step);
+  })();
+  </script>
 
-  {# Single column: headline → form → preview (click preview to scroll to form) #}
+  {# Hero: 2 columns — left form, right screenshot with loading state #}
   <section class="py-8 md:py-10" id="report-gate">
-    <div class="max-w-2xl mx-auto px-4 md:px-6">
-      <h1 class="text-2xl sm:text-3xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tight leading-tight mb-3 text-center">
-        We’re scanning<br><span class="text-primary break-all block mt-1">{{ store_url | replace('https://', '') | replace('http://', '') }}</span>
-      </h1>
-      <p class="text-gray-600 text-sm leading-relaxed mb-8 text-center">Enter your email and we’ll send your report when it’s ready.</p>
-
-      {# Form first #}
-      <div id="report-form" class="mb-8">
-        <div id="email-form-state" class="bg-gray-50/80 border border-gray-100 rounded-2xl p-6 md:p-7">
-        <h2 class="text-sm font-display font-black text-deep-charcoal uppercase tracking-widest mb-4 text-center">Where should we send your report?</h2>
-        <form id="cro-scan-email-form" class="space-y-4">
-          <input type="hidden" name="url" value="{{ store_url }}" />
-          <div>
-            <label for="report-email" class="block text-[11px] font-bold uppercase tracking-widest text-deep-charcoal mb-1.5">Business email</label>
-            <input
-              type="email"
-              id="report-email"
-              name="email"
-              placeholder="you@company.com"
-              class="w-full px-4 py-3.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary text-deep-charcoal placeholder-gray-400 bg-white"
-              autocomplete="email"
-              required
-            />
+    <div class="max-w-6xl mx-auto px-4 md:px-6">
+      <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+        {# Left: headline + form #}
+        <div id="report-form" class="min-w-0">
+          <h1 class="text-2xl sm:text-3xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tight leading-tight mb-3">
+            We’re scanning<br><span class="text-primary break-all block mt-1">{{ store_url | replace('https://', '') | replace('http://', '') }}</span>
+          </h1>
+          <p class="text-gray-600 text-sm leading-relaxed mb-6">Enter your email and we’ll send your report when it’s ready.</p>
+          <div id="email-form-state" class="bg-gray-50/80 border border-gray-100 rounded-2xl p-6 md:p-7">
+            <h2 class="text-sm font-display font-black text-deep-charcoal uppercase tracking-widest mb-4">Where should we send your report?</h2>
+            <form id="cro-scan-email-form" class="space-y-4">
+              <input type="hidden" name="url" value="{{ store_url }}" />
+              <div>
+                <label for="report-email" class="block text-[11px] font-bold uppercase tracking-widest text-deep-charcoal mb-1.5">Business email</label>
+                <input
+                  type="email"
+                  id="report-email"
+                  name="email"
+                  placeholder="name@yourcompany.com"
+                  class="w-full px-4 py-3.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary text-deep-charcoal placeholder-gray-400 bg-white"
+                  autocomplete="email"
+                  required
+                />
+              </div>
+              <div>
+                <label for="orders-per-month" class="block text-[11px] font-bold uppercase tracking-widest text-deep-charcoal mb-1.5">Orders per month</label>
+                <select
+                  id="orders-per-month"
+                  name="orders_per_month"
+                  class="w-full px-4 py-3.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary text-deep-charcoal bg-white"
+                >
+                  <option value="">Select range…</option>
+                  <option value="Under 100">Under 100</option>
+                  <option value="100–500">100–500</option>
+                  <option value="500–1,000">500–1,000</option>
+                  <option value="1,000–5,000">1,000–5,000</option>
+                  <option value="5,000+">5,000+</option>
+                </select>
+              </div>
+              <p class="text-gray-500 text-xs">Used by 300+ Shopify brands</p>
+              <p id="report-email-error" class="text-red-500 text-sm font-bold hidden mt-1 min-h-[1.25rem]" role="alert"></p>
+              <button type="submit" id="report-email-submit" class="w-full min-h-[52px] px-6 py-3.5 bg-primary text-white font-display font-black uppercase tracking-wide rounded-xl hover:brightness-110 transition-all shadow-lg shadow-primary/20">
+                Unlock My CRO Report
+              </button>
+              <p class="text-gray-500 text-xs leading-relaxed pt-1 text-center">No need to wait—close this tab anytime. We’ll email your report when it’s ready.</p>
+            </form>
           </div>
-          <div>
-            <label for="orders-per-month" class="block text-[11px] font-bold uppercase tracking-widest text-deep-charcoal mb-1.5">Orders per month</label>
-            <select
-              id="orders-per-month"
-              name="orders_per_month"
-              class="w-full px-4 py-3.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary text-deep-charcoal bg-white"
-            >
-              <option value="">Select range…</option>
-              <option value="Under 100">Under 100</option>
-              <option value="100–500">100–500</option>
-              <option value="500–1,000">500–1,000</option>
-              <option value="1,000–5,000">1,000–5,000</option>
-              <option value="5,000+">5,000+</option>
-            </select>
+          <div id="email-success-state" class="hidden bg-gray-50/80 border border-gray-100 rounded-2xl p-6 md:p-7 text-center">
+            <span class="material-symbols-outlined text-primary text-5xl mb-3">check_circle</span>
+            <h2 class="text-lg font-display font-black text-deep-charcoal uppercase tracking-tight mb-2">You’re on the list</h2>
+            <p class="text-gray-600 text-sm mb-2">We’re finishing your scan and will send the report to the email you provided.</p>
+            <p class="text-gray-500 text-xs">You can leave this page. We’ll email your report when it’s ready.</p>
           </div>
-          <p class="text-gray-500 text-xs">Used by 300+ Shopify brands</p>
-          <p id="report-email-error" class="text-red-500 text-sm font-bold hidden" role="alert"></p>
-          <button type="submit" id="report-email-submit" class="w-full min-h-[52px] px-6 py-3.5 bg-primary text-white font-display font-black uppercase tracking-wide rounded-xl hover:brightness-110 transition-all shadow-lg shadow-primary/20">
-            Unlock My CRO Report
-          </button>
-          <p class="text-gray-500 text-xs leading-relaxed pt-1 text-center">No need to wait—close this tab anytime. We’ll email your report when it’s ready.</p>
-        </form>
         </div>
-        <div id="email-success-state" class="hidden bg-gray-50/80 border border-gray-100 rounded-2xl p-6 md:p-7 text-center">
-          <span class="material-symbols-outlined text-primary text-5xl mb-3">check_circle</span>
-          <h2 class="text-lg font-display font-black text-deep-charcoal uppercase tracking-tight mb-2">You’re on the list</h2>
-          <p class="text-gray-600 text-sm mb-2">We’re finishing your scan and will send the report to the email you provided.</p>
-          <p class="text-gray-500 text-xs">You can leave this page. We’ll email your report when it’s ready.</p>
-        </div>
-      </div>
 
-      {# Preview — click to scroll to form #}
-      <a href="#report-form" id="scan-preview-section" class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-2xl">
-        <div class="bg-gray-50/80 border border-gray-100 rounded-2xl p-4 md:p-5 hover:border-gray-200 transition-colors cursor-pointer">
-          <p class="text-[11px] font-bold uppercase tracking-widest text-gray-500 mb-3 text-center">Live preview of your store <span class="text-primary font-normal">— click to go to form</span></p>
-          <div id="preview-desktop-wrapper" class="preview-device-wrapper w-full max-w-lg mx-auto">
-            <div class="rounded-xl overflow-hidden border border-gray-200 bg-white aspect-video max-h-[320px] relative shadow-sm">
+        {# Right: page screenshot with loading state #}
+        <div class="min-w-0 lg:pt-[3.5rem]">
+          <h2 class="text-sm font-display font-black text-deep-charcoal uppercase tracking-widest mb-4">Live preview of your store</h2>
+          <div id="preview-desktop-wrapper" class="preview-device-wrapper w-full">
+            <div class="rounded-xl overflow-hidden border border-gray-200 bg-gray-100 aspect-video max-h-[360px] relative shadow-sm">
+              <div id="screenshot-loading-desktop" class="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gray-100 text-gray-500 z-10">
+                <div class="screenshot-loading-spinner" aria-hidden="true"></div>
+                <span class="text-sm font-medium">Loading screenshot…</span>
+              </div>
               <img
+                id="screenshot-img-desktop"
                 src="https://image.thum.io/get/width/1280/{{ store_url }}"
-                alt="Preview of your store — click to go to form"
-                class="w-full h-full object-cover object-top"
-                onerror="var t=this; var n=t.nextElementSibling; if(n){ t.style.display='none'; n.style.display='flex'; }"
+                alt="Preview of your store"
+                class="w-full h-full object-cover object-top opacity-0 transition-opacity duration-300"
+                onload="var loading=document.getElementById('screenshot-loading-desktop'); var img=this; if(loading){ loading.classList.add('hidden'); } img.classList.remove('opacity-0'); img.classList.add('opacity-100');"
+                onerror="var t=this; var loading=document.getElementById('screenshot-loading-desktop'); if(loading){ loading.classList.add('hidden'); } var n=t.nextElementSibling; if(n){ t.style.display='none'; n.style.display='flex'; }"
               />
-              <span class="hidden w-full h-full min-h-[200px] items-center justify-center text-gray-500 text-sm bg-gray-100" style="display: none;">Preview unavailable</span>
+              <span class="hidden absolute inset-0 w-full h-full min-h-[200px] items-center justify-center text-gray-500 text-sm bg-gray-100" style="display: none;">Preview unavailable</span>
               <div class="absolute inset-0 flex flex-col justify-end p-4 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none">
                 <span class="inline-block text-white text-xs font-bold bg-black/40 backdrop-blur-sm px-2 py-1 rounded mb-1 w-fit">CTA below fold on mobile</span>
                 <span class="inline-block text-white/95 text-xs font-bold bg-black/40 backdrop-blur-sm px-2 py-1 rounded w-fit">Trust signals missing above fold</span>
@@ -118,15 +200,21 @@
               </div>
             </div>
           </div>
-          <div id="preview-mobile-wrapper" class="preview-device-wrapper hidden w-full max-w-[200px] mx-auto">
-            <div class="rounded-xl overflow-hidden border border-gray-200 bg-white aspect-[9/16] max-h-[300px] relative shadow-sm">
+          <div id="preview-mobile-wrapper" class="preview-device-wrapper hidden w-full max-w-[200px] mx-auto mt-4">
+            <div class="rounded-xl overflow-hidden border border-gray-200 bg-gray-100 aspect-[9/16] max-h-[300px] relative shadow-sm">
+              <div id="screenshot-loading-mobile" class="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gray-100 text-gray-500 z-10">
+                <div class="screenshot-loading-spinner screenshot-loading-spinner-sm" aria-hidden="true"></div>
+                <span class="text-xs font-medium">Loading…</span>
+              </div>
               <img
+                id="screenshot-img-mobile"
                 src="https://image.thum.io/get/width/400/{{ store_url }}"
-                alt="Preview of your store — click to go to form"
-                class="w-full h-full object-cover object-top"
-                onerror="var t=this; var n=t.nextElementSibling; if(n){ t.style.display='none'; n.style.display='flex'; }"
+                alt="Preview of your store"
+                class="w-full h-full object-cover object-top opacity-0 transition-opacity duration-300"
+                onload="var loading=document.getElementById('screenshot-loading-mobile'); var img=this; if(loading){ loading.classList.add('hidden'); } img.classList.remove('opacity-0'); img.classList.add('opacity-100');"
+                onerror="var t=this; var loading=document.getElementById('screenshot-loading-mobile'); if(loading){ loading.classList.add('hidden'); } var n=t.nextElementSibling; if(n){ t.style.display='none'; n.style.display='flex'; }"
               />
-              <span class="hidden w-full h-full min-h-[200px] items-center justify-center text-gray-500 text-sm bg-gray-100" style="display: none;">Preview unavailable</span>
+              <span class="hidden absolute inset-0 w-full h-full min-h-[200px] items-center justify-center text-gray-500 text-sm bg-gray-100" style="display: none;">Preview unavailable</span>
               <div class="absolute inset-0 flex flex-col justify-end p-3 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none">
                 <span class="inline-block text-white text-[10px] font-bold bg-black/40 backdrop-blur-sm px-1.5 py-0.5 rounded mb-1 w-fit">Hero message lacks clarity</span>
                 <span class="inline-block text-white/90 text-[10px] font-bold bg-black/40 backdrop-blur-sm px-1.5 py-0.5 rounded w-fit">Full list in report</span>
@@ -139,7 +227,7 @@
             </div>
           </div>
         </div>
-      </a>
+      </div>
     </div>
   </section>
 
@@ -147,8 +235,7 @@
   <section class="py-8 md:py-10 border-t border-gray-100 bg-gray-50/40">
     <div class="max-w-2xl mx-auto px-4 md:px-6">
       <div>
-        <p class="text-[11px] font-bold uppercase tracking-widest text-gray-500 mb-2">What happens next</p>
-        <p class="text-gray-600 text-sm mb-4">No need to wait here. You can close this page.</p>
+        <p class="text-[11px] font-bold uppercase tracking-widest text-gray-500 mb-4">What happens next</p>
         <ol class="text-sm text-gray-700 space-y-3 list-decimal list-inside">
           <li class="pl-1">We finish analyzing your store</li>
           <li class="pl-1">You receive your detailed CRO breakdown by email</li>
@@ -186,6 +273,13 @@
   var successState = document.getElementById('email-success-state');
   if (!form || !emailInput) return;
 
+  var personalEmailDomains = ['gmail.com', 'googlemail.com', 'yahoo.com', 'outlook.com', 'hotmail.com', 'live.com', 'msn.com', 'icloud.com', 'me.com', 'mac.com', 'aol.com', 'protonmail.com', 'proton.me', 'mail.com', 'zoho.com', 'gmx.com', 'yandex.com', 'mail.ru', 'tutanota.com', 'fastmail.com', 'hey.com'];
+  function isPersonalEmail(email) {
+    var part = (email || '').split('@')[1];
+    if (!part) return false;
+    return personalEmailDomains.indexOf(part.trim().toLowerCase()) !== -1;
+  }
+
   function setError(msg) {
     if (errEl) {
       errEl.textContent = msg || '';
@@ -199,6 +293,10 @@
     var email = (emailInput.value || '').trim();
     if (!email) {
       setError('Please enter your email address.');
+      return;
+    }
+    if (isPersonalEmail(email)) {
+      setError('Please use your company or work email. We don\'t accept personal email addresses.');
       return;
     }
     var url = (form.querySelector('input[name="url"]') || {}).value || '';
@@ -218,8 +316,10 @@
     .then(function(r) { return r.json().then(function(data) { return { ok: r.ok, data: data }; }); })
     .then(function(result) {
       if (result.ok) {
-        if (formState) formState.classList.add('hidden');
-        if (successState) successState.classList.remove('hidden');
+        if (window.dataLayer) {
+          window.dataLayer.push({ event: 'cro_scan_email_submitted', page_type: 'cro_scan_thank_you' });
+        }
+        window.location.href = '{{ url_for("main.thank_you") }}?from=cro_scan';
         return;
       }
       setError(result.data.error || 'Something went wrong. Please try again.');

@@ -13,7 +13,30 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
 <meta name="robots" content="noindex, follow" />
 {% endblock %} {% block body_class %}bg-white text-gray-800 font-sans{% endblock
 %} {% block content %}
+{% if ENABLE_GTM %}
+<script>
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: 'page_view',
+    page_type: 'thank_you',
+    page_path: '{{ request.path }}',
+    from_param: '{{ from_param|default("", true) }}'
+  });
+</script>
+{% endif %}
 <div class="min-h-screen flex flex-col">
+  {% if (from_param|default('')) == 'cro_scan' %}
+  <section class="bg-primary/10 border-b border-primary/20 py-4">
+    <div class="max-w-2xl mx-auto px-4 text-center">
+      <p class="text-deep-charcoal text-sm md:text-base font-medium mb-1">
+        Your CRO report is being prepared.
+      </p>
+      <p class="text-gray-600 text-xs md:text-sm">
+        Due to high demand we're still scanning your store. We'll send the full report to your email as soon as it's ready—no need to wait on this page.
+      </p>
+    </div>
+  </section>
+  {% endif %}
   {# 1. Headline — one focus #}
   <section class="pt-10 pb-6 md:pt-14 md:pb-8">
     <div class="max-w-2xl mx-auto px-4 text-center">

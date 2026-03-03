@@ -12,6 +12,16 @@
 {% block audit_bar %}{% endblock %}
 {% block body_class %}bg-white text-gray-800 font-sans{% endblock %}
 {% block content %}
+{% if ENABLE_GTM %}
+<script>
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: 'page_view',
+    page_type: 'cro_scan_landing',
+    page_path: '{{ request.path }}'
+  });
+</script>
+{% endif %}
 <div class="min-h-screen flex flex-col">
   {# Hero — row 1: headline + description left, report mockup right (aligned top); row 2: full-width input; row 3: logos #}
   <section class="pt-10 pb-12 md:pt-14 md:pb-16 lg:pb-20">

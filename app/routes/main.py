@@ -421,11 +421,29 @@ def schedule_a_call():
     return render_template("schedule_a_call.html")
 
 
+# Personal email domains we do not accept for CRO scan (company/work email only).
+PERSONAL_EMAIL_DOMAINS = frozenset({
+    "gmail.com", "googlemail.com", "yahoo.com", "yahoo.co.uk", "yahoo.fr", "outlook.com",
+    "hotmail.com", "hotmail.co.uk", "live.com", "msn.com", "icloud.com", "me.com", "mac.com",
+    "aol.com", "protonmail.com", "proton.me", "mail.com", "zoho.com", "gmx.com", "gmx.net",
+    "yandex.com", "inbox.com", "mail.ru", "tutanota.com", "fastmail.com", "hey.com",
+})
+
+
+def _is_personal_email_domain(email: str) -> bool:
+    """Return True if email is from a known personal/free provider (not company)."""
+    if not email or "@" not in email:
+        return False
+    domain = email.split("@", 1)[1].strip().lower()
+    return domain in PERSONAL_EMAIL_DOMAINS
+
+
 @main_bp.route("/thank-you/")
 @main_bp.route("/thank-you")
 def thank_you():
     """Thank you / VSL page after form submit — no header/footer, Calendly + social proof."""
-    return render_template("thank_you.html")
+    from_param = request.args.get("from", "").strip()
+    return render_template("thank_you.html", from_param=from_param)
 
 
 # --- CRO Scan (lead gen, noindex) ---
@@ -525,6 +543,11 @@ def cro_scan_submit_email():
     orders_per_month = (data.get("orders_per_month") or "").strip() or None
     if not email or not re.match(r"^[^\s@]+@[^\s@]+\.[^\s@]+$", email):
         return jsonify({"success": False, "error": "Please enter a valid email address."}), 400
+    if _is_personal_email_domain(email):
+        return jsonify({
+            "success": False,
+            "error": "Please use your company or work email. We don't accept personal email addresses.",
+        }), 400
     if not store_url:
         return jsonify({"success": False, "error": "Missing store URL."}), 400
     store_url = _normalize_shopify_url(store_url) or store_url
