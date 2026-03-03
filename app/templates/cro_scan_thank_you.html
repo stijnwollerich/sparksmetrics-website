@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+{% block title %}Your CRO Scan | Sparksmetrics{% endblock %}
+{% block meta_description %}Your AI CRO scan is being prepared. Enter your email to receive the report.{% endblock %}
+{% block og_title %}Your CRO Scan | Sparksmetrics{% endblock %}
+{% block twitter_title %}Your CRO Scan | Sparksmetrics{% endblock %}
+{% block head_extras %}
+<meta name="robots" content="noindex, nofollow" />
+{% endblock %}
+{% block primary_bar %}{% endblock %}
+{% block header %}
+<header class="sticky top-0 left-0 right-0 z-[100] bg-white border-b border-gray-100">
+  <div class="max-w-6xl mx-auto px-4 md:px-6 h-14 flex items-center">
+    <a href="{{ url_for('main.index') }}" class="flex items-center gap-2 min-h-[44px]">
+      <div class="w-8 h-8 bg-primary rounded flex items-center justify-center rotate-3">
+        <span class="text-white font-black text-lg">S</span>
+      </div>
+      <span class="font-display text-base tracking-tighter uppercase font-extrabold text-deep-charcoal">Sparksmetrics</span>
+    </a>
+  </div>
+</header>
+{% endblock %}
+{% block footer %}{% endblock %}
+{% block audit_bar %}{% endblock %}
+{% block body_class %}bg-white text-gray-800 font-sans{% endblock %}
+{% block content %}
+<div class="min-h-screen flex flex-col">
+  {# Progress bar — reinforces "it's working" #}
+  <section class="border-b border-gray-100 bg-gray-50/60">
+    <div class="max-w-2xl mx-auto px-4 md:px-6 py-4">
+      <div class="flex items-center justify-between gap-3 mb-2">
+        <p class="text-xs font-bold uppercase tracking-widest text-gray-500">Scanning your store…</p>
+        <span class="text-xs font-bold text-gray-500 tabular-nums" id="scan-progress-pct">82%</span>
+      </div>
+      <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div class="h-full bg-primary rounded-full transition-all duration-1000" style="width: 82%;" id="scan-progress-bar"></div>
+      </div>
+    </div>
+  </section>
+
+  {# Single column: headline → form → preview (click preview to scroll to form) #}
+  <section class="py-8 md:py-10" id="report-gate">
+    <div class="max-w-2xl mx-auto px-4 md:px-6">
+      <h1 class="text-2xl sm:text-3xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tight leading-tight mb-3 text-center">
+        We’re scanning<br><span class="text-primary break-all block mt-1">{{ store_url | replace('https://', '') | replace('http://', '') }}</span>
+      </h1>
+      <p class="text-gray-600 text-sm leading-relaxed mb-8 text-center">Enter your email and we’ll send your report when it’s ready.</p>
+
+      {# Form first #}
+      <div id="report-form" class="mb-8">
+        <div id="email-form-state" class="bg-gray-50/80 border border-gray-100 rounded-2xl p-6 md:p-7">
+        <h2 class="text-sm font-display font-black text-deep-charcoal uppercase tracking-widest mb-4 text-center">Where should we send your report?</h2>
+        <form id="cro-scan-email-form" class="space-y-4">
+          <input type="hidden" name="url" value="{{ store_url }}" />
+          <div>
+            <label for="report-email" class="block text-[11px] font-bold uppercase tracking-widest text-deep-charcoal mb-1.5">Business email</label>
+            <input
+              type="email"
+              id="report-email"
+              name="email"
+              placeholder="you@company.com"
+              class="w-full px-4 py-3.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary text-deep-charcoal placeholder-gray-400 bg-white"
+              autocomplete="email"
+              required
+            />
+          </div>
+          <div>
+            <label for="orders-per-month" class="block text-[11px] font-bold uppercase tracking-widest text-deep-charcoal mb-1.5">Orders per month</label>
+            <select
+              id="orders-per-month"
+              name="orders_per_month"
+              class="w-full px-4 py-3.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary text-deep-charcoal bg-white"
+            >
+              <option value="">Select range…</option>
+              <option value="Under 100">Under 100</option>
+              <option value="100–500">100–500</option>
+              <option value="500–1,000">500–1,000</option>
+              <option value="1,000–5,000">1,000–5,000</option>
+              <option value="5,000+">5,000+</option>
+            </select>
+          </div>
+          <p class="text-gray-500 text-xs">Used by 300+ Shopify brands</p>
+          <p id="report-email-error" class="text-red-500 text-sm font-bold hidden" role="alert"></p>
+          <button type="submit" id="report-email-submit" class="w-full min-h-[52px] px-6 py-3.5 bg-primary text-white font-display font-black uppercase tracking-wide rounded-xl hover:brightness-110 transition-all shadow-lg shadow-primary/20">
+            Unlock My CRO Report
+          </button>
+          <p class="text-gray-500 text-xs leading-relaxed pt-1 text-center">No need to wait—close this tab anytime. We’ll email your report when it’s ready.</p>
+        </form>
+        </div>
+        <div id="email-success-state" class="hidden bg-gray-50/80 border border-gray-100 rounded-2xl p-6 md:p-7 text-center">
+          <span class="material-symbols-outlined text-primary text-5xl mb-3">check_circle</span>
+          <h2 class="text-lg font-display font-black text-deep-charcoal uppercase tracking-tight mb-2">You’re on the list</h2>
+          <p class="text-gray-600 text-sm mb-2">We’re finishing your scan and will send the report to the email you provided.</p>
+          <p class="text-gray-500 text-xs">You can leave this page. We’ll email your report when it’s ready.</p>
+        </div>
+      </div>
+
+      {# Preview — click to scroll to form #}
+      <a href="#report-form" id="scan-preview-section" class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-2xl">
+        <div class="bg-gray-50/80 border border-gray-100 rounded-2xl p-4 md:p-5 hover:border-gray-200 transition-colors cursor-pointer">
+          <p class="text-[11px] font-bold uppercase tracking-widest text-gray-500 mb-3 text-center">Live preview of your store <span class="text-primary font-normal">— click to go to form</span></p>
+          <div id="preview-desktop-wrapper" class="preview-device-wrapper w-full max-w-lg mx-auto">
+            <div class="rounded-xl overflow-hidden border border-gray-200 bg-white aspect-video max-h-[320px] relative shadow-sm">
+              <img
+                src="https://image.thum.io/get/width/1280/{{ store_url }}"
+                alt="Preview of your store — click to go to form"
+                class="w-full h-full object-cover object-top"
+                onerror="var t=this; var n=t.nextElementSibling; if(n){ t.style.display='none'; n.style.display='flex'; }"
+              />
+              <span class="hidden w-full h-full min-h-[200px] items-center justify-center text-gray-500 text-sm bg-gray-100" style="display: none;">Preview unavailable</span>
+              <div class="absolute inset-0 flex flex-col justify-end p-4 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none">
+                <span class="inline-block text-white text-xs font-bold bg-black/40 backdrop-blur-sm px-2 py-1 rounded mb-1 w-fit">CTA below fold on mobile</span>
+                <span class="inline-block text-white/95 text-xs font-bold bg-black/40 backdrop-blur-sm px-2 py-1 rounded w-fit">Trust signals missing above fold</span>
+              </div>
+              <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div class="w-16 h-16 rounded-full bg-primary flex items-center justify-center shadow-xl ring-4 ring-white/40" aria-hidden="true">
+                  <span class="material-symbols-outlined text-white text-4xl" style="font-size: 36px;">download</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="preview-mobile-wrapper" class="preview-device-wrapper hidden w-full max-w-[200px] mx-auto">
+            <div class="rounded-xl overflow-hidden border border-gray-200 bg-white aspect-[9/16] max-h-[300px] relative shadow-sm">
+              <img
+                src="https://image.thum.io/get/width/400/{{ store_url }}"
+                alt="Preview of your store — click to go to form"
+                class="w-full h-full object-cover object-top"
+                onerror="var t=this; var n=t.nextElementSibling; if(n){ t.style.display='none'; n.style.display='flex'; }"
+              />
+              <span class="hidden w-full h-full min-h-[200px] items-center justify-center text-gray-500 text-sm bg-gray-100" style="display: none;">Preview unavailable</span>
+              <div class="absolute inset-0 flex flex-col justify-end p-3 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none">
+                <span class="inline-block text-white text-[10px] font-bold bg-black/40 backdrop-blur-sm px-1.5 py-0.5 rounded mb-1 w-fit">Hero message lacks clarity</span>
+                <span class="inline-block text-white/90 text-[10px] font-bold bg-black/40 backdrop-blur-sm px-1.5 py-0.5 rounded w-fit">Full list in report</span>
+              </div>
+              <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div class="w-14 h-14 rounded-full bg-primary flex items-center justify-center shadow-xl ring-4 ring-white/40" aria-hidden="true">
+                  <span class="material-symbols-outlined text-white text-3xl" style="font-size: 32px;">download</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  {# What happens next #}
+  <section class="py-8 md:py-10 border-t border-gray-100 bg-gray-50/40">
+    <div class="max-w-2xl mx-auto px-4 md:px-6">
+      <div>
+        <p class="text-[11px] font-bold uppercase tracking-widest text-gray-500 mb-2">What happens next</p>
+        <p class="text-gray-600 text-sm mb-4">No need to wait here. You can close this page.</p>
+        <ol class="text-sm text-gray-700 space-y-3 list-decimal list-inside">
+          <li class="pl-1">We finish analyzing your store</li>
+          <li class="pl-1">You receive your detailed CRO breakdown by email</li>
+          <li class="pl-1">You get prioritized quick wins</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-8 border-t border-gray-100">
+    <div class="max-w-2xl mx-auto px-4 md:px-6 text-center">
+      <p class="text-gray-500 text-sm">Questions? <a href="{{ url_for('main.schedule_a_call') }}" class="text-primary font-bold underline hover:no-underline">Book a free call</a>.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+  // Show only the preview that matches the user's device (desktop vs mobile)
+  var desktopWrap = document.getElementById('preview-desktop-wrapper');
+  var mobileWrap = document.getElementById('preview-mobile-wrapper');
+  function setPreviewDevice() {
+    var isMobile = window.matchMedia('(max-width: 767px)').matches;
+    if (desktopWrap) desktopWrap.classList.toggle('hidden', isMobile);
+    if (mobileWrap) mobileWrap.classList.toggle('hidden', !isMobile);
+  }
+  setPreviewDevice();
+  window.addEventListener('resize', setPreviewDevice);
+
+  var form = document.getElementById('cro-scan-email-form');
+  var emailInput = document.getElementById('report-email');
+  var submitBtn = document.getElementById('report-email-submit');
+  var errEl = document.getElementById('report-email-error');
+  var formState = document.getElementById('email-form-state');
+  var successState = document.getElementById('email-success-state');
+  if (!form || !emailInput) return;
+
+  function setError(msg) {
+    if (errEl) {
+      errEl.textContent = msg || '';
+      errEl.classList.toggle('hidden', !msg);
+    }
+  }
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    setError('');
+    var email = (emailInput.value || '').trim();
+    if (!email) {
+      setError('Please enter your email address.');
+      return;
+    }
+    var url = (form.querySelector('input[name="url"]') || {}).value || '';
+    var ordersEl = document.getElementById('orders-per-month');
+    var ordersPerMonth = (ordersEl && ordersEl.value) ? ordersEl.value.trim() : '';
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+
+    var payload = { email: email, url: url, website_url: url };
+    if (ordersPerMonth) payload.orders_per_month = ordersPerMonth;
+
+    fetch('{{ url_for("main.cro_scan_submit_email") }}', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(function(r) { return r.json().then(function(data) { return { ok: r.ok, data: data }; }); })
+    .then(function(result) {
+      if (result.ok) {
+        if (formState) formState.classList.add('hidden');
+        if (successState) successState.classList.remove('hidden');
+        return;
+      }
+      setError(result.data.error || 'Something went wrong. Please try again.');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Unlock My CRO Report';
+    })
+    .catch(function() {
+      setError('Network error. Please try again.');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Unlock My CRO Report';
+    });
+  });
+})();
+</script>
+{% endblock %}

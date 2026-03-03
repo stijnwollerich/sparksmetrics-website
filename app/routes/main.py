@@ -426,6 +426,113 @@ def schedule_a_call():
 def thank_you():
     """Thank you / VSL page after form submit — no header/footer, Calendly + social proof."""
     return render_template("thank_you.html")
+
+
+# --- CRO Scan (lead gen, noindex) ---
+def _normalize_shopify_url(raw: str) -> str | None:
+    """Extract and normalize a store URL for validation. Returns None if unparseable."""
+    raw = (raw or "").strip()
+    if not raw:
+        return None
+    raw = raw.replace(" ", "")
+    if not raw.startswith(("http://", "https://")):
+        raw = "https://" + raw
+    try:
+        from urllib.parse import urlparse
+        p = urlparse(raw)
+        if not p.netloc or not p.scheme:
+            return None
+        # Allow both custom domains and myshopify.com
+        return f"{p.scheme}://{p.netloc.lower()}"
+    except Exception:
+        return None
+
+
+def _is_shopify_site(url: str) -> bool:
+    """Check if URL is a Shopify store: myshopify.com or HEAD/GET reveals Shopify headers or body."""
+    if not url:
+        return False
+    from urllib.parse import urlparse
+    try:
+        p = urlparse(url)
+        host = (p.netloc or "").lower()
+        # *.myshopify.com is always Shopify
+        if host.endswith(".myshopify.com") or host == "myshopify.com":
+            return True
+    except Exception:
+        pass
+    # For custom domains: fetch and look for Shopify indicators
+    try:
+        import requests
+        r = requests.get(
+            url,
+            timeout=8,
+            headers={"User-Agent": "Mozilla/5.0 (compatible; Sparksmetrics-CRO-Scan/1.0)"},
+            allow_redirects=True,
+        )
+        if r.status_code != 200:
+            return False
+        # Shopify stores often send these headers or contain in body
+        text = (r.headers.get("X-Shopify-Stage") or "") + (r.text[:20000] if r.text else "")
+        return "shopify" in text.lower() or "cdn.shopify.com" in (r.text or "")[:20000]
+    except Exception:
+        return False
+
+
+@main_bp.route("/cro-scan/", methods=["GET"])
+@main_bp.route("/cro-scan", methods=["GET"])
+def cro_scan_landing():
+    """CRO scan lead-gen landing (noindex). Single field: Shopify store URL."""
+    return render_template("cro_scan_landing.html")
+
+
+@main_bp.route("/cro-scan/check", methods=["POST"])
+def cro_scan_check():
+    """Validate Shopify URL; redirect to thank-you with url param or return JSON error."""
+    data = request.get_json(silent=True) or request.form or {}
+    raw = (data.get("website_url") or data.get("url") or "").strip()
+    normalized = _normalize_shopify_url(raw)
+    if not normalized:
+        return jsonify({"success": False, "error": "Please enter a valid website URL."}), 400
+    if not _is_shopify_site(normalized):
+        return jsonify({"success": False, "error": "This doesn't look like a Shopify store. Please enter your Shopify store URL (e.g. yourstore.com or yourstore.myshopify.com)."}), 400
+    _notify_slack_cro_scan_url(normalized)
+    from urllib.parse import quote
+    thank_you_url = url_for("main.cro_scan_thank_you", url=quote(normalized, safe=""))
+    return jsonify({"success": True, "redirect": thank_you_url})
+
+
+@main_bp.route("/cro-scan/thank-you/", methods=["GET"])
+@main_bp.route("/cro-scan/thank-you", methods=["GET"])
+def cro_scan_thank_you():
+    """Thank you page: show store URL, desktop/mobile preview, email gate for report."""
+    from urllib.parse import unquote
+    url_param = request.args.get("url", "").strip()
+    store_url = unquote(url_param) if url_param else None
+    if not store_url:
+        return redirect(url_for("main.cro_scan_landing"))
+    normalized = _normalize_shopify_url(store_url)
+    store_url = normalized or store_url
+    return render_template("cro_scan_thank_you.html", store_url=store_url)
+
+
+@main_bp.route("/cro-scan/submit-email", methods=["POST"])
+def cro_scan_submit_email():
+    """Save email + store URL + orders per month for CRO scan report; return success."""
+    data = request.get_json(silent=True) or request.form or {}
+    email = (data.get("email") or "").strip()
+    store_url = (data.get("website_url") or data.get("url") or "").strip() or None
+    orders_per_month = (data.get("orders_per_month") or "").strip() or None
+    if not email or not re.match(r"^[^\s@]+@[^\s@]+\.[^\s@]+$", email):
+        return jsonify({"success": False, "error": "Please enter a valid email address."}), 400
+    if not store_url:
+        return jsonify({"success": False, "error": "Missing store URL."}), 400
+    store_url = _normalize_shopify_url(store_url) or store_url
+    fname = (email.split("@", 1)[0] or "").strip() or "Store owner"
+    _save_lead(fname, email, "cro_scan", resource_slug=None, business_stage=orders_per_month, website_url=store_url)
+    _sync_lead_to_brevo(fname, email, "cro_scan", resource_slug=None, business_stage=orders_per_month, website_url=store_url)
+    _notify_slack_lead(fname, email, "cro_scan", resource_slug=None, business_stage=orders_per_month, website_url=store_url)
+    return jsonify({"success": True})
 # Downloadable resources: slug -> filename in static/downloads/. Add new resources here.
 RESOURCE_DOWNLOADS = {
     "cro-checklist": {"filename": "sm-cro-ebook.pdf"},
@@ -487,6 +594,10 @@ def _sync_lead_to_brevo(
         audit_list_id = current_app.config.get("BREVO_AUDIT_LIST_ID")
         if audit_list_id and audit_list_id not in list_ids:
             list_ids.append(audit_list_id)
+    if submission_type == "cro_scan":
+        cro_scan_list_id = current_app.config.get("BREVO_CRO_SCAN_LIST_ID")
+        if cro_scan_list_id and cro_scan_list_id not in list_ids:
+            list_ids.append(cro_scan_list_id)
     attributes = {"FNAME": fname}
     if business_stage:
         attributes["BUSINESS_STAGE"] = business_stage
@@ -523,6 +634,30 @@ def _sync_lead_to_brevo(
         current_app.logger.warning("Brevo contact sync error: %s", e)
 
 
+def _notify_slack_cro_scan_url(store_url: str) -> None:
+    """Post to Slack when someone submits the CRO scan URL successfully. Logs errors, does not raise."""
+    webhook_url = (current_app.config.get("SLACK_WEBHOOK_URL") or "").strip()
+    if not webhook_url:
+        return
+    text = "CRO scan URL submitted: {}".format(store_url)
+    try:
+        import requests
+    except ModuleNotFoundError:
+        current_app.logger.warning("Slack notify skipped: install requests (pip install requests)")
+        return
+    try:
+        r = requests.post(
+            webhook_url,
+            json={"text": text},
+            headers={"Content-Type": "application/json"},
+            timeout=5,
+        )
+        if r.status_code != 200:
+            current_app.logger.warning("Slack webhook failed: HTTP %s – %s", r.status_code, (r.text or "")[:200])
+    except Exception as e:
+        current_app.logger.warning("Slack notify error: %s", e)
+
+
 def _notify_slack_lead(
     fname: str,
     email: str,
@@ -539,11 +674,16 @@ def _notify_slack_lead(
         label = "Free CRO audit"
     elif submission_type == "resource" and resource_slug == "cro-checklist":
         label = "CRO ebook download"
+    elif submission_type == "cro_scan":
+        label = "CRO scan (Shopify)"
     else:
         label = "Resource download"
     text = "New lead: *{}* <{}> – {}".format(fname, email, label)
     if business_stage:
-        text += "\nOrder volume / stage: {}".format(business_stage)
+        if submission_type == "cro_scan":
+            text += "\nOrders per month: {}".format(business_stage)
+        else:
+            text += "\nOrder volume / stage: {}".format(business_stage)
     if website_url:
         text += "\nWebsite: {}".format(website_url)
     try:
@@ -852,6 +992,7 @@ def robots():
     body = f"""User-agent: *
 Allow: /
 Disallow: /download/
+Disallow: /cro-scan/
 
 Sitemap: {base}/sitemap.xml
 """
