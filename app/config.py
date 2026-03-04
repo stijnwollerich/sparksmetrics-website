@@ -131,9 +131,9 @@ class Config:
     # Free CRO audit list (id 11): contacts who request the audit are added to this list.
     _audit_list = (os.environ.get("BREVO_AUDIT_LIST_ID") or "11").strip()
     BREVO_AUDIT_LIST_ID = int(_audit_list) if _audit_list.isdigit() else 11
-    # CRO scan (Shopify) lead list: optional list ID for cro-scan signups.
-    _cro_scan_list = (os.environ.get("BREVO_CRO_SCAN_LIST_ID") or "").strip()
-    BREVO_CRO_SCAN_LIST_ID = int(_cro_scan_list) if _cro_scan_list.isdigit() else None
+    # CRO scan (Shopify) lead list: list ID for cro-scan thank-you signups (default 12).
+    _cro_scan_list = (os.environ.get("BREVO_CRO_SCAN_LIST_ID") or "12").strip()
+    BREVO_CRO_SCAN_LIST_ID = int(_cro_scan_list) if _cro_scan_list.isdigit() else 12
 
     # Slack: webhook URL for lead notifications. If set, every lead submission posts to Slack.
     SLACK_WEBHOOK_URL = os.environ.get("SLACK_WEBHOOK_URL", "").strip()
