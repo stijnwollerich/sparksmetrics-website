@@ -148,6 +148,12 @@ class Config:
     BREVO_SENDER_NAME = os.environ.get("BREVO_SENDER_NAME", "Sparksmetrics").strip() or "Sparksmetrics"
     # Base URL for the site (used for report view links in email). No trailing slash.
     SITE_URL = (os.environ.get("SITE_URL", "").strip() or "https://sparksmetrics.com").rstrip("/")
+    # Scrapfly: when set, CRO scan uses Scrapfly screenshot API (Cloudflare bypass). ~60 credits/screenshot; 100 screenshots/mo fits free or low tier.
+    SCRAPFLY_API_KEY = os.environ.get("SCRAPFLY_API_KEY", "").strip()
+    # Browserless: when set, CRO scan uses Browserless /unblock (Cloudflare bypass). 1000 free requests/mo. Takes precedence over Scrapfly if both set.
+    BROWSERLESS_API_TOKEN = os.environ.get("BROWSERLESS_API_TOKEN", "").strip()
+    # Thank-you page preview: when True (default), run Cloudflare/challenge check (adds ~5–10s). Set to False for faster preview (may sometimes show challenge).
+    CRO_PREVIEW_CHECK_CHALLENGE = os.environ.get("CRO_PREVIEW_CHECK_CHALLENGE", "true").strip().lower() in ("1", "true", "yes")
 
 
 class ProductionConfig(Config):

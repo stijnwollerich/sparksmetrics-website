@@ -29,9 +29,11 @@ def run_scan(store_url: str, email: str, fname: str) -> None:
     except RuntimeError:
         pass
 
-    # 1. Screenshot URLs (mobile)
+    # 1. Screenshot URLs (mobile). Uses Browserless when BROWSERLESS_API_TOKEN set, else thum.io.
     try:
         screenshot_urls = get_screenshot_urls(store_url)
+        provider = "Browserless" if current_app.config.get("BROWSERLESS_API_TOKEN") else "Scrapfly" if current_app.config.get("SCRAPFLY_API_KEY") else "thum.io"
+        current_app.logger.info("CRO scan: screenshot provider=%s for %s", provider, store_url[:50])
     except Exception as e:
         current_app.logger.warning("CRO scan: screenshot discovery failed: %s", e)
         screenshot_urls = {"homepage": f"https://image.thum.io/get/width/400/{store_url}", "collection": "", "product": ""}
@@ -47,13 +49,16 @@ def run_scan(store_url: str, email: str, fname: str) -> None:
     if "report_date" not in report or not report.get("report_date"):
         report["report_date"] = datetime.utcnow().strftime("%B %d, %Y")
 
-    # Ensure all three pages exist (dict) and inject screenshot URLs so the report always shows homepage, collection, product
+    # Ensure all three pages exist; only set screenshot_url when we don't have embedded screenshot_data_uri
+    # (valid screenshots are embedded by ai_analysis to avoid "Image not authorized" when viewing later)
     from app.cro_scan.ai_analysis import _empty_page_dict
     for page_key in ("homepage", "collection", "product"):
         if report.get("pages") is None:
             report["pages"] = {}
         if not isinstance(report["pages"].get(page_key), dict):
             report["pages"][page_key] = _empty_page_dict()
+        if report["pages"][page_key].get("screenshot_data_uri"):
+            continue
         url = screenshot_urls.get(page_key) or ""
         if url:
             report["pages"][page_key]["screenshot_url"] = url

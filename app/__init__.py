@@ -37,7 +37,7 @@ def create_app(config_object="app.config.Config") -> Flask:
     app = Flask(__name__, template_folder="templates", static_folder="static")
     app.config.from_object(config_object)
 
-    # Ensure BREVO/Slack/OpenAI from .env (avoids import-order issues with config module)
+    # Ensure BREVO/Slack/OpenAI/Browserless from .env (avoids import-order issues with config module)
     if not (app.config.get("BREVO_API_KEY") or "").strip():
         app.config["BREVO_API_KEY"] = _read_env_var(_env_path, "BREVO_API_KEY")
     if not (app.config.get("SLACK_WEBHOOK_URL") or "").strip():
@@ -48,6 +48,8 @@ def create_app(config_object="app.config.Config") -> Flask:
     if _openai:
         app.config["OPENAI_API_KEY"] = _openai
         app.config["OPEN_AI_KEY"] = _openai
+    if not (app.config.get("BROWSERLESS_API_TOKEN") or "").strip():
+        app.config["BROWSERLESS_API_TOKEN"] = _read_env_var(_env_path, "BROWSERLESS_API_TOKEN")
 
     # Ensure DATABASE_URL is set when running from script/certain environments (config may load from elsewhere)
     if not app.config.get("SQLALCHEMY_DATABASE_URI") and _env_path.exists():

@@ -241,10 +241,12 @@
       margin: 0 0 1rem;
       width: 100%;
       max-width: 340px;
+      max-height: 70vh;
       margin-left: auto;
       margin-right: auto;
       border-radius: 1.5rem;
-      overflow: hidden;
+      overflow-y: auto; /* scroll to see full-page screenshot (same image the AI sees) */
+      overflow-x: hidden;
       border: 8px solid var(--deep-charcoal);
       border-top-width: 28px;
       border-bottom-width: 28px;
@@ -257,14 +259,13 @@
       height: auto;
       vertical-align: top;
     }
-    .page-card .screenshot-caption {
-      font-size: 0.7rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--gray-500);
-      margin-top: 0.5rem;
-      text-align: center;
+    .page-card .screenshot-wrap.screenshot-unavailable {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 180px;
+      padding: 1rem;
     }
     .page-card .insight-block { margin-top: 1rem; }
     .page-card .insight-block h4 {
@@ -565,11 +566,18 @@
 
           <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start;">
             <div style="flex: 1; min-width: 200px;">
-              {% if page_data.get('screenshot_url') %}
+              {% if page_data.get('screenshot_data_uri') %}
+              <div class="screenshot-wrap">
+                <img src="{{ page_data.screenshot_data_uri }}" alt="Mobile screenshot: {{ page_key }}" loading="lazy"/>
+              </div>
+              {% elif page_data.get('screenshot_url') %}
               <div class="screenshot-wrap">
                 <img src="{{ page_data.screenshot_url }}" alt="Mobile screenshot: {{ page_key }}" loading="lazy"/>
               </div>
-              <p class="screenshot-caption">Mobile view</p>
+              {% else %}
+              <div class="screenshot-wrap screenshot-unavailable">
+                <p style="margin: 0; font-size: 0.85rem; color: var(--gray-500);">Screenshot unavailable (page may be protected)</p>
+              </div>
               {% endif %}
             </div>
           </div>

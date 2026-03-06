@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>CRO Scan Report – Outdoor Research</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Lexend:wght@700;800;900&amp;display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary: #FF4D00;
+      --primary-rgb: 255, 77, 0;
+      --deep-charcoal: #1A1A1B;
+      --light-base: #F9F9FB;
+      --gray-200: #e5e7eb;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--deep-charcoal);
+      margin: 0;
+      padding: 0;
+      background: #fff;
+    }
+    .report { max-width: 800px; margin: 0 auto; }
+
+    /* Intro hero (CRO page style: dark, no nav/footer) */
+    .hero {
+      background: var(--deep-charcoal);
+      color: #fff;
+      padding: 2.5rem 1.5rem 2rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .hero .kicker {
+      font-family: 'Lexend', sans-serif;
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.35em;
+      color: var(--primary);
+      margin: 0 0 1rem;
+    }
+    .hero h1 {
+      font-family: 'Lexend', sans-serif;
+      font-weight: 900;
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin: 0 0 0.5rem;
+    }
+    .hero .store {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.85);
+      margin: 0 0 0.25rem;
+    }
+    .hero .store-url {
+      font-size: 0.8rem;
+      color: var(--gray-500);
+      word-break: break-all;
+    }
+
+    /* Score block */
+    .score-section {
+      background: var(--light-base);
+      padding: 2rem 1.5rem;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .score-section .section-title {
+      font-family: 'Lexend', sans-serif;
+      font-weight: 800;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--gray-500);
+      margin: 0 0 1rem;
+      text-align: center;
+    }
+    .score-big-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    .score-big {
+      font-family: 'Lexend', sans-serif;
+      font-weight: 900;
+      font-size: 4rem;
+      line-height: 1;
+      color: var(--primary);
+    }
+    .score-label {
+      font-size: 0.85rem;
+      color: var(--gray-600);
+      margin-top: 0.25rem;
+    }
+    /* Score bar (gauge) */
+    .score-gauge {
+      max-width: 320px;
+      margin: 0 auto 0.5rem;
+      height: 12px;
+      background: var(--gray-200);
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+    .score-gauge-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 9999px;
+      width: 75%;
+      max-width: 100%;
+    }
+    .score-legend { font-size: 0.75rem; color: var(--gray-500); text-align: center; }
+
+    /* Score breakdown chart (SVG bar) */
+    .chart-card {
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-radius: 1rem;
+      padding: 1.25rem;
+      margin-top: 1.5rem;
+    }
+    .chart-card .chart-title {
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gray-400);
+      margin: 0 0 0.5rem;
+    }
+    .chart-card .chart-subtitle {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--deep-charcoal);
+      margin: 0 0 1rem;
+    }
+    .chart-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .chart-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .chart-bar-label {
+      width: 90px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--gray-700);
+      text-transform: capitalize;
+    }
+    .chart-bar-track {
+      flex: 1;
+      height: 20px;
+      background: var(--light-base);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .chart-bar-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 6px;
+      min-width: 4px;
+    }
+    .chart-bar-value {
+      width: 2.5rem;
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--deep-charcoal);
+      text-align: right;
+    }
+
+    /* Section headings (CRO page style) */
+    .section {
+      padding: 2rem 1.5rem;
+      border-bottom: 1px solid var(--gray-200);
+      break-inside: avoid;
+    }
+    .section:nth-child(even) { background: var(--light-base); }
+    .section:nth-child(odd) { background: #fff; }
+    .section h2 {
+      font-family: 'Lexend', sans-serif;
+      font-weight: 900;
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      color: var(--deep-charcoal);
+      margin: 0 0 0.5rem;
+    }
+    .section .section-kicker {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--gray-500);
+      margin: 0 0 1.25rem;
+    }
+
+    /* Page cards (CRO page card style) */
+    .page-grid { display: flex; flex-direction: column; gap: 1rem; }
+    .page-card {
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-radius: 1rem;
+      padding: 1.25rem 1.5rem;
+      position: relative;
+      break-inside: avoid;
+    }
+    .section:nth-child(even) .page-card { background: #fff; }
+    .page-card h3 {
+      font-family: 'Lexend', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      text-transform: uppercase;
+      color: var(--deep-charcoal);
+      margin: 0 0 0.75rem;
+    }
+    .page-card .page-score {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--primary);
+      margin-bottom: 0.75rem;
+    }
+    .page-card p { margin: 0 0 0.5rem; font-size: 0.9rem; color: var(--gray-700); }
+    .page-card p strong { color: var(--deep-charcoal); }
+    .page-card ul { margin: 0.5rem 0 0; padding-left: 1.25rem; font-size: 0.9rem; color: var(--gray-700); }
+    .page-card li { margin-bottom: 0.25rem; }
+    .page-card .screenshot-wrap {
+      margin: 0 0 1rem;
+      width: 100%;
+      max-width: 340px;
+      margin-left: auto;
+      margin-right: auto;
+      border-radius: 1.5rem;
+      overflow: hidden;
+      border: 8px solid var(--deep-charcoal);
+      border-top-width: 28px;
+      border-bottom-width: 28px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      background: var(--deep-charcoal);
+    }
+    .page-card .screenshot-wrap img {
+      display: block;
+      width: 100%;
+      height: auto;
+      vertical-align: top;
+    }
+    .page-card .screenshot-caption {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gray-500);
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+    .page-card .insight-block { margin-top: 1rem; }
+    .page-card .insight-block h4 {
+      font-family: 'Lexend', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gray-600);
+      margin: 0 0 0.4rem;
+    }
+    .page-card .insight-block ul {
+      margin: 0 0 0.75rem;
+      padding-left: 1.1rem;
+      font-size: 0.85rem;
+      color: var(--gray-700);
+    }
+    .page-card .insight-block ul:last-child { margin-bottom: 0; }
+    .page-card .insight-block li { margin-bottom: 0.2rem; }
+    .insight-good h4 { color: #059669; }
+    .insight-improve h4 { color: var(--primary); }
+    .insight-testing h4 { color: #2563eb; }
+
+    /* Top issues (border-l-primary callout style) */
+    .issue-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .issue {
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-left: 4px solid var(--primary);
+      border-radius: 0 0.5rem 0.5rem 0;
+      padding: 1rem 1.25rem;
+      break-inside: avoid;
+    }
+    .section:nth-child(even) .issue { background: #fff; }
+    .issue strong {
+      display: block;
+      font-family: 'Lexend', sans-serif;
+      font-size: 0.95rem;
+      margin-bottom: 0.25rem;
+    }
+    .issue .issue-desc { font-size: 0.9rem; color: var(--gray-700); margin: 0; }
+    .issue .issue-meta { font-size: 0.75rem; color: var(--gray-500); margin-top: 0.35rem; }
+    .issue .issue-meta span { margin-right: 0.75rem; }
+    .issue .experiment-block { margin-top: 0.6rem; padding-top: 0.5rem; border-top: 1px solid var(--gray-200); font-size: 0.85rem; color: var(--gray-700); }
+    .issue .experiment-block strong { color: var(--deep-charcoal); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .fold-block { margin: 0.75rem 0; padding: 0.75rem; background: var(--light-base); border-radius: 0.5rem; border-left: 3px solid var(--primary); }
+    .fold-block h4 { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray-600); margin: 0 0 0.35rem; }
+    .fold-block p { margin: 0; font-size: 0.85rem; }
+
+    .ugly-truth { background: var(--deep-charcoal); color: #fff; padding: 1.25rem 1.5rem; border-radius: 0.75rem; margin: 1rem 0; }
+    .ugly-truth .kicker { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.15em; color: var(--primary); margin: 0 0 0.4rem; }
+    .ugly-truth p { margin: 0; font-size: 0.95rem; font-weight: 600; }
+
+    .callout-box { padding: 1rem 1.25rem; border: 2px solid var(--primary); border-radius: 0.75rem; background: rgba(255,77,0,0.06); margin: 1rem 0; }
+    .callout-box h3 { font-size: 0.85rem; margin: 0 0 0.5rem; color: var(--primary); }
+    .callout-box ul { margin: 0.35rem 0 0; padding-left: 1.1rem; font-size: 0.85rem; }
+
+    .roadmap-month { margin-bottom: 1rem; }
+    .roadmap-month h4 { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--gray-600); margin: 0 0 0.35rem; }
+    .roadmap-month ul { margin: 0; padding-left: 1.1rem; font-size: 0.85rem; }
+
+    .benchmark-grid { display: flex; flex-wrap: wrap; gap: 1rem; margin: 0.5rem 0; }
+    .benchmark-item { flex: 1; min-width: 140px; padding: 0.6rem; background: var(--light-base); border-radius: 0.5rem; font-size: 0.85rem; }
+    .benchmark-item strong { display: block; font-size: 0.7rem; text-transform: uppercase; color: var(--gray-500); margin-bottom: 0.2rem; }
+
+    .page-anatomy { margin: 1rem 0; padding: 1rem 1.25rem; background: var(--light-base); border-radius: 0.5rem; border: 1px solid var(--gray-200); }
+    .page-anatomy h4 { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray-600); margin: 0 0 0.35rem; }
+    .page-anatomy .anatomy-intro { font-size: 0.9rem; color: var(--gray-700); margin: 0 0 0.75rem; line-height: 1.5; }
+    .anatomy-grid { display: grid; gap: 0.4rem; font-size: 0.85rem; }
+    .anatomy-row { display: flex; align-items: flex-start; gap: 0.5rem; }
+    .anatomy-label { flex: 0 0 10rem; font-weight: 600; color: var(--gray-700); }
+    .anatomy-value { flex: 1; color: var(--gray-700); }
+    .anatomy-value .badge { display: inline-block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; padding: 0.15rem 0.4rem; border-radius: 0.25rem; margin-right: 0.35rem; }
+    .anatomy-value .badge-present { background: #d1fae5; color: #065f46; }
+    .anatomy-value .badge-weak { background: #fef3c7; color: #92400e; }
+    .anatomy-value .badge-missing { background: #fee2e2; color: #991b1b; }
+
+    .page-card .block-label { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray-500); margin: 0.75rem 0 0.25rem; }
+    .page-card .block-label:first-of-type { margin-top: 0; }
+    .page-card .block-value { font-size: 0.9rem; color: var(--gray-700); margin: 0 0 0.5rem; }
+    .page-card .ui-ux-notes { margin-top: 0.75rem; }
+    .page-card .ui-ux-notes ul { margin: 0.25rem 0 0; padding-left: 1.1rem; font-size: 0.85rem; color: var(--gray-700); }
+    .page-card .ui-ux-notes li { margin-bottom: 0.2rem; }
+    .page-card .compact-line { font-size: 0.85rem; color: var(--gray-700); margin: 0.25rem 0; padding-left: 0.5rem; border-left: 2px solid var(--gray-200); }
+    .page-card .testing-summary { margin-top: 1.25rem; padding: 1rem; background: var(--deep-charcoal); color: #fff; border-radius: 0.5rem; }
+    .page-card .testing-summary h4 { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary); margin: 0 0 0.5rem; }
+    .page-card .testing-summary ul { margin: 0; padding-left: 1.1rem; font-size: 0.9rem; line-height: 1.5; color: #fff; }
+    .page-card .testing-summary li { margin-bottom: 0.25rem; color: #fff; }
+    .page-card .no-analysis { font-size: 0.85rem; color: var(--gray-500); font-style: italic; }
+
+    /* Recommendations */
+    .rec-list { padding-left: 1.25rem; margin: 0; }
+    .rec-list li {
+      margin-bottom: 0.6rem;
+      font-size: 0.95rem;
+      color: var(--gray-700);
+    }
+    .rec-list li::marker { color: var(--primary); }
+
+    /* Footer */
+    .report-footer {
+      padding: 1.5rem 1.5rem 2rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--gray-500);
+    }
+    .report-footer a { color: var(--primary); font-weight: 600; text-decoration: none; }
+
+    /* CTA sections */
+    .cta-section {
+      padding: 2rem 1.5rem;
+      text-align: center;
+      background: var(--light-base);
+      border-bottom: 1px solid var(--gray-200);
+      break-inside: avoid;
+    }
+    .cta-section.cta-dark {
+      background: var(--deep-charcoal);
+      color: #fff;
+      border-bottom-color: rgba(255,255,255,0.08);
+    }
+    .cta-section h2 {
+      font-family: 'Lexend', sans-serif;
+      font-weight: 900;
+      font-size: 1.35rem;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      margin: 0 0 0.5rem;
+    }
+    .cta-section.cta-dark h2 { color: #fff; }
+    .cta-section p { margin: 0 0 1rem; font-size: 0.95rem; max-width: 32em; margin-left: auto; margin-right: auto; }
+    .cta-section.cta-dark p { color: rgba(255,255,255,0.85); }
+    .cta-section .cta-btn {
+      display: inline-block;
+      padding: 0.85rem 1.75rem;
+      background: var(--primary);
+      color: #fff;
+      font-family: 'Lexend', sans-serif;
+      font-weight: 800;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      border-radius: 0.75rem;
+      margin-top: 0.25rem;
+      box-shadow: 0 10px 30px rgba(255, 77, 0, 0.25);
+    }
+    .cta-section .cta-btn:hover { opacity: 0.95; }
+    .cta-section .cta-note { font-size: 0.7rem; color: var(--gray-500); margin-top: 0.5rem; }
+    .cta-section.cta-dark .cta-note { color: var(--gray-400); }
+    .about-text { text-align: left; max-width: 36em; margin: 0 auto 1rem; font-size: 0.9rem; line-height: 1.6; color: var(--gray-700); }
+
+    @media print {
+      .report { max-width: 100%; }
+      .section, .page-card, .issue { break-inside: avoid; }
+      body { font-size: 11pt; }
+    }
+  </style>
+</head>
+<body>
+  <div class="report">
+    <!-- 1. Cover -->
+    <header class="hero">
+      <p class="kicker">CRO Scan Report</p>
+      <h1>Outdoor Research</h1>
+      <p class="store-url">https://outdoorresearch.com</p>
+      <p class="store" style="margin-top: 0.5rem; font-size: 0.9rem;">March 06, 2026</p>
+    </header>
+
+    <!-- 2. Your Conversion Health Check -->
+    <section class="section">
+      <p class="section-kicker">Introduction</p>
+      <h2>Your Conversion Health Check</h2>
+      <p style="font-size: 0.95rem; color: var(--gray-700); margin: 0;">This is a rapid CRO scan designed to identify the biggest conversion opportunities on your site. We analyzed your key pages (homepage, collection, product) and summarized what&rsquo;s working, what&rsquo;s hurting, and where to focus first.</p>
+    </section>
+
+    <!-- 3. Overall Conversion Score -->
+    <section class="score-section">
+      <p class="section-title">Overall conversion score (mobile)</p>
+      <div class="score-big-wrap">
+        <div>
+          <div class="score-big">75/100</div>
+          <div class="score-label">Conversion health</div>
+        </div>
+        <div style="flex: 1; min-width: 200px;">
+          <div class="score-gauge">
+            <div class="score-gauge-fill" style="width: 75%;"></div>
+          </div>
+          <p class="score-legend">0–50: needs work · 50–75: good · 75–100: strong</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Executive Summary -->
+    
+    <section class="section">
+      <p class="section-kicker">Summary</p>
+      <h2>Executive summary</h2>
+      
+      <p style="margin: 0 0 0.5rem;"><strong>What is working</strong></p>
+      <p style="font-size: 0.95rem; color: var(--gray-700); margin: 0 0 1rem;">The homepage effectively showcases the Summit Sale, providing a clear invitation for users to shop both men&#39;s and women&#39;s items. The collection page offers extensive filtering options, promoting user engagement and tailored searching. The product page displays critical information concisely, enhancing user experience and enabling quicker decision-making.</p>
+      
+      
+      <p style="margin: 0 0 0.5rem;"><strong>What is hurting conversions</strong></p>
+      <p style="font-size: 0.95rem; color: var(--gray-700); margin: 0 0 1rem;">While the homepage has a strong visual impact, the CTA buttons lack contrast, making them less noticeable. The collection page features a cluttered layout with many options that could overwhelm users, leading to potential navigation issues. On the product page, the copy is dense, which could deter users from reading vital information and completing purchases.</p>
+      
+      
+      <p style="margin: 0 0 0.5rem;"><strong>Where the biggest opportunity is</strong></p>
+      <p style="font-size: 0.95rem; color: var(--gray-700); margin: 0;">Improving the visual hierarchy and clarity of key CTAs across all pages could significantly enhance conversion rates. Specifically, simplifying layout elements and employing more prominent CTAs can reduce friction and encourage customer action.</p>
+      
+    </section>
+    
+
+    <!-- 5. How To Read This Report -->
+    <section class="section">
+      <p class="section-kicker">Structure</p>
+      <h2>How to read this report</h2>
+      <p style="font-size: 0.95rem; color: var(--gray-700); margin: 0 0 0.5rem;">This document is structured as follows:</p>
+      <ul style="font-size: 0.9rem; color: var(--gray-700); margin: 0; padding-left: 1.25rem;">
+        <li><strong>Page analysis</strong> — Homepage, collection, and product page with score, anatomy, and testing ideas.</li>
+        <li><strong>Conversion issues</strong> — The ugly truth and biggest opportunity.</li>
+        <li><strong>Testing ideas</strong> — Fast wins, 90-day roadmap, and experiment backlog.</li>
+        <li><strong>Prioritized roadmap</strong> — Month-by-month focus (homepage, product page, AOV/cart).</li>
+      </ul>
+    </section>
+
+    <!-- 6. Customer and Market Research -->
+    
+    <section class="section">
+      <p class="section-kicker">Context</p>
+      <h2>Customer and market research</h2>
+      <p style="font-size: 0.9rem; color: var(--gray-600); margin: 0 0 0.75rem;">Strategic context inferred from your products, pricing, and positioning. This helps explain why certain CRO changes matter.</p>
+      
+      <p style="margin: 0 0 0.35rem;"><strong>Target audience hypothesis</strong></p>
+      <p style="font-size: 0.9rem; color: var(--gray-700); margin: 0 0 0.75rem;">Outdoor enthusiasts, particularly those interested in premium gear for seasonal activities.</p>
+      
+      
+      <p style="margin: 0 0 0.35rem;"><strong>Customer motivations</strong></p>
+      <p style="font-size: 0.9rem; color: var(--gray-700); margin: 0 0 0.75rem;">Quality and durability in outdoor gear; seeking great style and functionality.</p>
+      
+      
+      <p style="margin: 0 0 0.35rem;"><strong>Customer fears / frustrations</strong></p>
+      <p style="font-size: 0.9rem; color: var(--gray-700); margin: 0 0 0.75rem;">Concerns over product performance, fit, and value for money, especially during sale events. Potential frustration with navigation and information overload.</p>
+      
+      
+      <p style="margin: 0 0 0.35rem;"><strong>Desired outcomes</strong></p>
+      <p style="font-size: 0.9rem; color: var(--gray-700); margin: 0;">Customers want a seamless shopping experience, clarity on product options, and confidence in their purchasing decisions.</p>
+      
+    </section>
+    
+
+    <!-- 7. Page-by-Page Analysis -->
+    <section class="section">
+      <p class="section-kicker">Analysis</p>
+      <h2>Page-by-page analysis</h2>
+      <div class="page-grid">
+        
+        
+        <div class="page-card">
+          <h3>homepage</h3>
+          <div class="page-score">70/100</div>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start;">
+            <div style="flex: 1; min-width: 200px;">
+              
+              <div class="screenshot-wrap">
+                <img src="https://image.thum.io/get/width/600/https://outdoorresearch.com" alt="Mobile screenshot: homepage" loading="lazy"/>
+              </div>
+              <p class="screenshot-caption">Mobile view</p>
+              
+            </div>
+          </div>
+
+          <!-- Page anatomy: promise, offer, pain_point, solution, social_proof, trust_signals, cta, visual_hierarchy -->
+          <div class="page-anatomy">
+            <h4>Page anatomy</h4>
+            <p class="anatomy-intro">Page anatomy breaks down how well each key conversion element appears on this page. We evaluate: Promise, Offer, Pain point, Solution, Social proof, Trust signals, CTA, and Visual hierarchy.</p>
+            <div class="anatomy-grid">
+              
+              
+              
+              
+              
+              
+              <div class="anatomy-row">
+                <span class="anatomy-label">Promise</span>
+                <span class="anatomy-value">
+                  
+                  <span class="badge badge-present">Present</span> Clear value proposition highlighting the Summit Sale.
+                  
+                </span>
+              </div>
+              
+              
+              
+              
+              
+              
+              <div class="anatomy-row">
+                <span class="anatomy-label">Offer</span>
+                <span class="anatomy-value">
+                  
+                  <span class="badge badge-present">Good</span> Promotions are clearly outlined and presented attractively.
+                  
+                </span>
+              </div>
+              
+              
+              
+              
+              
+              
+              <div class="anatomy-row">
+                <span class="anatomy-label">Pain Point</span>
+                <span class="anatomy-value">
+                  
+                  <span class="badge badge-present">Present</span> Recognizes the need for quality outdoor gear at discounted prices.
+                  
+                </span>
+              </div>
+              
+              
+              
+              
+              
+              
+              <div class="anatomy-row">
+                <span class="anatomy-label">Solution</span>
+                <span class="anatomy-value">
+                  
+                  <span class="badge badge-present">Present</span> Offers a range of past season styles as a solution to budget concerns.
+                  
+                </span>
+              </div>
+              
+              
+              
+              
+              
+              
+              <div class="anatomy-row">
+                <span class="anatomy-label">Social Proof</span>
+                <span class="anatomy-value">
+                  
+                  <span class="badge badge-missing">Missing</span> Lacks testimonials or reviews that could reinforce product quality.
+                  
+                </span>
+              </div>
+              
+              
+              
+              
+              
+              
+              <div class="anatomy-row">
+                <span class="anatomy-label">Trust Signals</span>
+                <span class="anatomy-value">
+                  
+                  <span class="badge badge-weak">Weak</span> Few trust badges or indicators of secure shopping.
+                  
+                </span>
+              </div>
+              
+              
+              
+              
+              
+              
+              <div class="anatomy-row">
+                <span class="anatomy-label">CTA</span>
+                <span class="anatomy-value">
+                  
+                  <span class="badge badge-weak">Weak</span> Primary CTAs blend in with the background and could be more prominent.
+                  
+                </span>
+              </div>
+              
+              
+              
+              
+              
+              
+              <div class="anatomy-row">
+                <span class="anatomy-label">Visual Hierarchy</span>
+                <span class="anatomy-value">
+                  
+                  <span class="badge badge-weak">Weak</span> Some key elements lack sufficient contrast to draw attention.
+                  
+                </span>
+              </div>
+              
+            </div>
+          </div>
+
+          
+          <div class="block-label">Motivation</div>
+          <p class="block-value">The page creates desire through attractive visuals of the products.</p>
+          
+          
+          <div class="block-label">Clarity</div>
+          <p class="block-value">Value proposition is somewhat evident but clutter detracts from focus.</p>
+          
+          
+          <div class="block-label">Friction</div>
+          <ul class="block-value" style="margin-top: 0.25rem;">
+            <li>CTA blends in with background</li><li>Lack of social proof</li><li>Visual hierarchy could be improved</li>
+          </ul>
+          
+          
+          <div class="block-label">Page summary</div>
+          <p class="block-value">The homepage has strong promotional elements but suffers from blending CTAs and lack of trust signals that could enhance conversion.</p>
+          
+
+          
+          <div class="ui-ux-notes">
+            <div class="block-label">UI/UX notes</div>
+            <ul>
+              <li>Hero image is impactful but CTAs need to be visually differentiated.</li><li>Consider using larger text for body and CTAs.</li><li>Spacing around elements could be improved for better scannability.</li>
+            </ul>
+          </div>
+          
+
+          
+
+          
+          <div class="testing-summary">
+            <h4>Testing ideas (2–4 experiments)</h4>
+            <ul>
+              
+              <li>A/B test different CTA colors for better contrast.</li>
+              
+              <li>Introduce user reviews section on the homepage.</li>
+              
+              <li>Test a simplified layout with fewer options in the hero section.</li>
+              
+            </ul>
+          </div>
+          
+        </div>
+        
+        
+        <div class="page-card">
+          <h3>collection</h3>
+          <div class="page-score">75/100</div>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start;">
+            <div style="flex: 1; min-width: 200px;">
+              
+              <div class="screenshot-wrap">
+                <img src="https://image.thum.io/get/width/600/https://outdoorresearch.com/collections/all" alt="Mobile screenshot: collection" loading="lazy"/>
+              </div>
+              <p class="screenshot-caption">Mobile view</p>
+              
+            </div>
+          </div>
+
+          <!-- Page anatomy: promise, offer, pain_point, solution, social_proof, trust_signals, cta, visual_hierarchy -->
+          <div class="page-anatomy">
+            <h4>Page anatomy</h4>
+            <p class="anatomy-intro">Page anatomy breaks down how well each key conversion element appears on this page. We evaluate: Promise, Offer, Pain point, Solution, Social proof, Trust signals, CTA, and Visual hierarchy.</p>
+            <div class="anatomy-grid">
+              
+              
+              
+              
+              
+              
+              <div class="anatomy-row">
+                <span class="anatomy-label">Promise</span>
+                <span class="anatomy-value">
+                  
+                  <span class="badge badge-present">Present</span> Clear focus on the Summit Sale collection.
+                  
+                </span>
+              </div>
+              
+              
+              
+              
+              
+              
+              <div class="anatomy-row">
+                <span class="anatomy-label">Offer</span>
+                <span class="anatomy-value">
+                  
+                  <span class="badge badge-present">Good</span> Diverse product options showcased effectively.
+                  
+                </span>
+              </div>
+              
+              
+              
+              
+              
+              
+              <div class="anatomy-row">
+                <span class="anatomy-label">Pain Point</span>
+                <span class="anatomy-value">
+                  
+                  <span class="badge badge-present">Present</span> Addresses the need for affordable outdoor gear.
+                  
+                </span>
+              </div>
+              
+              
+              
+              
+              
+              
+              <div class="anatomy-row">
+                <span class="anatomy-label">Solution</span>
+                <span class="anatomy-value">
+                  
+                  <span class="badge badge-present">Present</span> Provides extensive filtering options to simplify searching.
+                  
+                </span>
+              </div>
+              
+              
+              
+              
+              
+              
+              <div class="anatomy-row">
+                <span class="anatomy-label">Social Proof</span>
+                <span class="anatomy-value">
+                  
+                  <span class="badge badge-missing">Missing</span> Lacks customer reviews or ratings for products.
+                  
+                </span>
+              </div>
+              
+              
+              
+              
+              
+              
+              <div class="anatomy-row">
+                <span class="anatomy-label">Trust Signals</span>
+                <span class="anatomy-value">
+                  
+                  <span class="badge badge-weak">Weak</span> Minimal trust badges present, which could enhance credibility.
+                  
+                </span>
+              </div>
+              
+              
+              
+              
+              
+              
+              <div class="anatomy-row">
+                <span class="anatomy-label">CTA</span>
+                <span class="anatomy-value">
+                  
+                  <span class="badge badge-present">Good</span> Prominent &#39;Shop Now&#39; buttons but could be more visually striking.
+                  
+                </span>
+              </div>
+              
+              
+              
+              
+              
+              
+              <div class="anatomy-row">
+                <span class="anatomy-label">Visual Hierarchy</span>
+                <span class="anatomy-value">
+                  
+                  <span class="badge badge-weak">Weak</span> Cluttered layout makes it difficult to focus on key products.
+                  
+                </span>
+              </div>
+              
+            </div>
+          </div>
+
+          
+          <div class="block-label">Motivation</div>
+          <p class="block-value">The collection page encourages exploration of sale items.</p>
+          
+          
+          <div class="block-label">Clarity</div>
+          <p class="block-value">Offers are clear, but the interface can feel overwhelming due to too many options.</p>
+          
+          
+          <div class="block-label">Friction</div>
+          <ul class="block-value" style="margin-top: 0.25rem;">
+            <li>Overwhelming number of filters may deter navigation.</li><li>Cluttered layout reduces product visibility.</li><li>Social proof is missing, which could secure buyer confidence.</li>
+          </ul>
+          
+          
+          <div class="block-label">Page summary</div>
+          <p class="block-value">The collection page effectively presents a wide range of products but suffers from layout clutter that complicates the shopping experience.</p>
+          
+
+          
+          <div class="ui-ux-notes">
+            <div class="block-label">UI/UX notes</div>
+            <ul>
+              <li>Improve spacing around filters for better usability.</li><li>Consider reducing filter options or consolidating categories.</li><li>Enhance visual differentiation between products.</li>
+            </ul>
+          </div>
+          
+
+          
+
+          
+          <div class="testing-summary">
+            <h4>Testing ideas (2–4 experiments)</h4>
+            <ul>
+              
+              <li>A/B test a simplified filtering system.</li>
+              
+              <li>Introduce customer ratings on product listings.</li>
+              
+              <li>Experiment with a layout that highlights fewer items for better focus.</li>
+              
+            </ul>
+          </div>
+          
+        </div>
+        
+        
+        <div class="page-card">
+          <h3>product</h3>
+          <div class="page-score">80/100</div>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start;">
+            <div style="flex: 1; min-width: 200px;">
+              
+              <div class="screenshot-wrap">
+                <img src="https://image.thum.io/get/width/600/https://outdoorresearch.com/products/mens-astroman-ls-sun-shirt-282279" alt="Mobile screenshot: product" loading="lazy"/>
+              </div>
+              <p class="screenshot-caption">Mobile view</p>
+              
+            </div>
+          </div>
+
+          <!-- Page anatomy: promise, offer, pain_point, solution, social_proof, trust_signals, cta, visual_hierarchy -->
+          <div class="page-anatomy">
+            <h4>Page anatomy</h4>
+            <p class="anatomy-intro">Page anatomy breaks down how well each key conversion element appears on this page. We evaluate: Promise, Offer, Pain point, Solution, Social proof, Trust signals, CTA, and Visual hierarchy.</p>
+            <div class="anatomy-grid">
+              
+              
+              
+              
+              
+              
+              <div class="anatomy-row">
+                <span class="anatomy-label">Promise</span>
+                <span class="anatomy-value">
+                  
+                  <span class="badge badge-present">Present</span> Clearly states what the product is and its benefits.
+                  
+                </span>
+              </div>
+              
+              
+              
+              
+              
+              
+              <div class="anatomy-row">
+                <span class="anatomy-label">Offer</span>
+                <span class="anatomy-value">
+                  
+                  <span class="badge badge-present">Good</span> Detailed product information is available.
+                  
+                </span>
+              </div>
+              
+              
+              
+              
+              
+              
+              <div class="anatomy-row">
+                <span class="anatomy-label">Pain Point</span>
+                <span class="anatomy-value">
+                  
+                  <span class="badge badge-present">Present</span> Identifies the need for specific product features.
+                  
+                </span>
+              </div>
+              
+              
+              
+              
+              
+              
+              <div class="anatomy-row">
+                <span class="anatomy-label">Solution</span>
+                <span class="anatomy-value">
+                  
+                  <span class="badge badge-present">Present</span> Highlights the product’s capabilities effectively.
+                  
+                </span>
+              </div>
+              
+              
+              
+              
+              
+              
+              <div class="anatomy-row">
+                <span class="anatomy-label">Social Proof</span>
+                <span class="anatomy-value">
+                  
+                  <span class="badge badge-present">Present</span> Includes customer ratings and reviews.
+                  
+                </span>
+              </div>
+              
+              
+              
+              
+              
+              
+              <div class="anatomy-row">
+                <span class="anatomy-label">Trust Signals</span>
+                <span class="anatomy-value">
+                  
+                  <span class="badge badge-weak">Weak</span> Limited visual indicators of product durability or features.
+                  
+                </span>
+              </div>
+              
+              
+              
+              
+              
+              
+              <div class="anatomy-row">
+                <span class="anatomy-label">CTA</span>
+                <span class="anatomy-value">
+                  
+                  <span class="badge badge-present">Good</span> CTA is present and prominent but could use enhancement.
+                  
+                </span>
+              </div>
+              
+              
+              
+              
+              
+              
+              <div class="anatomy-row">
+                <span class="anatomy-label">Visual Hierarchy</span>
+                <span class="anatomy-value">
+                  
+                  <span class="badge badge-present">Good</span> Layout effectively emphasizes critical product information.
+                  
+                </span>
+              </div>
+              
+            </div>
+          </div>
+
+          
+          <div class="block-label">Motivation</div>
+          <p class="block-value">Product page encourages purchase through clear info and visuals.</p>
+          
+          
+          <div class="block-label">Clarity</div>
+          <p class="block-value">Value proposition for purchasing the product is clear.</p>
+          
+          
+          <div class="block-label">Friction</div>
+          <ul class="block-value" style="margin-top: 0.25rem;">
+            <li>Dense copy might overwhelm users.</li><li>Some images may require better sizing for better mobile visibility.</li><li>Small tap targets could hinder mobile interactions.</li>
+          </ul>
+          
+          
+          <div class="block-label">Page summary</div>
+          <p class="block-value">The product page effectively communicates value but dense copy and small interaction targets can create user pain points.</p>
+          
+
+          
+          <div class="ui-ux-notes">
+            <div class="block-label">UI/UX notes</div>
+            <ul>
+              <li>Consider breaking up dense paragraphs for easier readability.</li><li>Tap targets need to be larger for enhanced mobile usability.</li><li>Ensure product images are optimally sized for all devices.</li>
+            </ul>
+          </div>
+          
+
+          
+
+          
+          <div class="testing-summary">
+            <h4>Testing ideas (2–4 experiments)</h4>
+            <ul>
+              
+              <li>A/B test product description formats for clarity.</li>
+              
+              <li>Implement larger images or carousels for better product visualization.</li>
+              
+              <li>Test different button placements to improve tap target accessibility.</li>
+              
+            </ul>
+          </div>
+          
+        </div>
+        
+      </div>
+    </section>
+
+    <!-- 8. The Ugly Truth -->
+    
+    <section class="section">
+      <div class="ugly-truth">
+        <p class="kicker">The ugly truth</p>
+        <p>Key calls-to-action throughout the site do not stand out enough, resulting in potential lost conversions.</p>
+      </div>
+    </section>
+    
+
+    <!-- 9. Biggest Opportunity -->
+    
+    <section class="section">
+      <p class="section-kicker">Focus</p>
+      <h2>Biggest opportunity</h2>
+      <div class="callout-box">
+        <h3>Enhance Key CTAs Visibility</h3>
+        <p style="margin: 0 0 0.5rem; font-size: 0.9rem;">Making primary CTAs more prominent can reduce friction and significantly improve conversion rates.</p>
+        <p style="margin: 0 0 0.5rem; font-size: 0.9rem;"><strong>Why it matters:</strong> Clear CTAs guide user behavior, leading to higher engagement and reduced bounce rates.</p>
+        
+        <p style="margin: 0 0 0.25rem; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: var(--gray-600);">Example tests</p>
+        <ul><li>Change button colors and weights.</li><li>Reposition buttons in more noticeable areas.</li><li>Employ hover effects to make CTAs stand out.</li></ul>
+        
+      </div>
+    </section>
+    
+
+    <!-- 10. Fast Wins -->
+    
+    <section class="section">
+      <p class="section-kicker">Quick wins</p>
+      <h2>Fast wins</h2>
+      <p style="font-size: 0.9rem; color: var(--gray-600); margin: 0 0 0.75rem;">3–5 improvements you can implement quickly without testing.</p>
+      <ul class="rec-list">
+        <li>Increase contrast of primary buttons.</li><li>Add customer reviews and ratings across collection and product pages.</li><li>Simplify language in product descriptions for better readability.</li>
+      </ul>
+    </section>
+    
+
+    <!-- 11. 90 Day Testing Roadmap -->
+    
+    <section class="section">
+      <p class="section-kicker">Plan</p>
+      <h2>90‑day testing roadmap</h2>
+      
+      <div class="roadmap-month"><h4>Month 1</h4><ul><li>Conduct a thorough heatmap analysis to identify user behavior on key pages.</li><li>Implement improvements in button visibility across the site.</li></ul></div>
+      
+      
+      <div class="roadmap-month"><h4>Month 2</h4><ul><li>Introduce a customer review section on the homepage.</li><li>A/B test layout changes on the collection page to improve clarity.</li></ul></div>
+      
+      
+      <div class="roadmap-month"><h4>Month 3</h4><ul><li>Review mobile user feedback to optimize the product page further.</li><li>Test new filtering options based on user needs.</li></ul></div>
+      
+    </section>
+    
+
+    <!-- 12. Experiment Backlog -->
+    
+    <section class="section">
+      <p class="section-kicker">Backlog</p>
+      <h2>Experiment backlog</h2>
+      <p style="font-size: 0.9rem; color: var(--gray-600); margin: 0 0 0.75rem;">10 potential A/B tests across the funnel.</p>
+      <ul class="rec-list">
+        <li>A/B test CTA color variations.</li><li>Implement image carousel on product pages for better visualization.</li><li>Test removing some filter categories to evaluate user engagement changes.</li><li>Experiment with placement of trust badges on key pages.</li><li>A/B test shorter product descriptions versus detailed descriptions.</li><li>Implement mobile-first design tweaks for better usability.</li><li>Introduce personalization based on user behavior.</li><li>Test urgent messaging against lifestyle-focused messaging for different promotions.</li><li>Evaluate performance with and without popups or overlays.</li><li>Experiment with varying layouts for the collection page.</li>
+      </ul>
+    </section>
+    
+
+    <!-- 13. What Good Looks Like -->
+    
+    <section class="section">
+      <p class="section-kicker">Reference</p>
+      <h2>What good looks like</h2>
+      <p style="font-size: 0.95rem; color: var(--gray-700);">High-converting pages feature clear CTAs, well-organized content, ample social proof, and minimal visual clutter, providing an intuitive user experience overall.</p>
+    </section>
+    
+
+    <!-- 14. Next Steps -->
+    
+    <section class="section">
+      <p class="section-kicker">Actions</p>
+      <h2>Next steps</h2>
+      <p style="font-size: 0.95rem; color: var(--gray-700);">Focus on enhancing the visibility of CTAs, simplifying content across pages, and providing robust social proof to build trust and encourage conversions.</p>
+    </section>
+    
+
+    <!-- 15. Work With Us -->
+    <section class="section">
+      <p class="section-kicker">Our process</p>
+      <h2>Work with us</h2>
+      <p style="font-size: 0.95rem; color: var(--gray-700); margin: 0 0 0.5rem;">Our CRO process includes:</p>
+      <ul style="font-size: 0.9rem; color: var(--gray-700); margin: 0; padding-left: 1.25rem;">
+        <li>Audits and opportunity mapping</li>
+        <li>Test prioritization by impact</li>
+        <li>Experiment execution and reporting</li>
+      </ul>
+    </section>
+
+    <!-- 16. Call To Action -->
+    <section class="cta-section">
+      <h2>Book a strategy call</h2>
+      <p>We invite you to book a free 30‑minute strategy call. We&rsquo;ll review your funnel and discuss testing opportunities—no pitch, just next steps.</p>
+      <a class="cta-btn" href="https://sparksmetrics.com/thank-you">Book your free call</a>
+      <p class="cta-note">30‑minute session · Review your funnel · Discuss testing opportunities</p>
+    </section>
+
+    <!-- 17. About Sparksmetrics -->
+    <section class="cta-section cta-dark">
+      <h2>About Sparksmetrics</h2>
+      <p class="about-text">We&rsquo;re Sparksmetrics. We audit your funnel, find the leaks, prioritize what moves the needle, and run real A/B tests. You get data that says &ldquo;this works&rdquo; or &ldquo;this doesn&rsquo;t.&rdquo; Same process we use for $10M+ brands. Positive ROI guarantee within 150 days.</p>
+      <a class="cta-btn" href="https://sparksmetrics.com/thank-you">Schedule your free call</a>
+    </section>
+
+    <footer class="report-footer">
+      Generated by <a href="https://sparksmetrics.com">Sparksmetrics</a> · sparksmetrics.com
+    </footer>
+  </div>
+</body>
+</html>

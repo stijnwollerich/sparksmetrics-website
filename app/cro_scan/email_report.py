@@ -34,7 +34,7 @@ EMAIL_SIGNATURE_HTML = """
         </tr>
         <tr>
           <td style="padding: 0;">
-            <a href="https://sparksmetrics.com/schedule-a-call/" style="color: #ff4d00; font-weight: 700; text-decoration: none; font-size: 12px;">Book a call</a>
+            <a href="https://sparksmetrics.com/how-we-improve-conversions" style="color: #ff4d00; font-weight: 700; text-decoration: none; font-size: 12px;">Book a call</a>
           </td>
         </tr>
       </tbody></table>
@@ -70,20 +70,23 @@ def send_report_email(
         return False
 
     subject = f"Your CRO Scan Report: {store_name}"
+    greeting_name = (fname or "").strip() or "there"
+    report_cta_url = "https://sparksmetrics.com/how-we-improve-conversions"
     if report_view_url:
         html_body = f"""
-    <p>Hi {fname or 'there'},</p>
+    <p>Hi {greeting_name},</p>
     <p>Your CRO scan report for <strong>{store_name}</strong> is ready.</p>
-    <p><a href="{report_view_url}" style="display:inline-block;padding:12px 24px;background:#FF4D00;color:#fff;font-weight:bold;text-decoration:none;border-radius:8px;">View your report online</a></p>
-    <p>You can review it on our site and book a call when you're ready to discuss next steps.</p>
-    <p>If you have any questions, reply to this email or <a href="https://sparksmetrics.com/schedule-a-call/">book a free call</a>.</p>
+    <p><a href="{report_view_url}" style="display:inline-block;padding:12px 24px;background:#FF4D00;color:#ffffff !important;font-weight:bold;text-decoration:none;border-radius:8px;">View your report online</a></p>
+    <p>Take your time exploring the report. When you’re ready to turn these insights into real growth, discover our risk-free CRO program—guaranteed results, or your money back. <a href="{report_cta_url}">See how we improve conversions</a>.</p>
+    <p>Questions? Reply to this email or <a href="{report_cta_url}">learn more here</a>.</p>
     {EMAIL_SIGNATURE_HTML}
     """
     else:
         html_body = f"""
-    <p>Hi {fname or 'there'},</p>
+    <p>Hi {greeting_name},</p>
     <p>Your CRO scan report for <strong>{store_name}</strong> is ready. Please find the PDF attached.</p>
-    <p>If you have any questions or want to discuss next steps, reply to this email or <a href="https://sparksmetrics.com/schedule-a-call/">book a free call</a>.</p>
+    <p>If you&rsquo;d like to turn these insights into results, we offer a guaranteed CRO program&mdash;or your money back. <a href="{report_cta_url}">See how we improve conversions</a>.</p>
+    <p>Questions? Reply to this email or <a href="{report_cta_url}">learn more here</a>.</p>
     {EMAIL_SIGNATURE_HTML}
     """
 

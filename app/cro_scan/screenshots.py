@@ -1,17 +1,19 @@
-"""Discover Shopify pages and build mobile screenshot URLs (thum.io)."""
+"""Discover Shopify pages and build mobile screenshot URLs (thum.io or Scrapfly)."""
 from __future__ import annotations
 
 import re
-from urllib.parse import urljoin, urlparse
+from urllib.parse import quote, urljoin, urlparse
 
 
 # Mobile viewport width for thum.io (larger = better detail in report; display is ~340px)
 MOBILE_WIDTH = 600
+# Viewport height in px (crop). Works on free tier; fullpage/ needs paid. Docs don't state a max for crop; 3k captures a good chunk of page.
+CRO_SCREENSHOT_HEIGHT = 3000
 
 
-def mobile_screenshot_url(page_url: str, width: int = MOBILE_WIDTH) -> str:
-    """Return thum.io URL for a mobile screenshot of the given page."""
-    return f"https://image.thum.io/get/width/{width}/{page_url}"
+def mobile_screenshot_url(page_url: str, width: int = MOBILE_WIDTH, height: int = CRO_SCREENSHOT_HEIGHT) -> str:
+    """Return thum.io URL for a mobile screenshot (width x height viewport; no fullpage so free tier works)."""
+    return f"https://image.thum.io/get/width/{width}/crop/{height}/{page_url}"
 
 
 def discover_pages(store_url: str) -> dict[str, str]:
@@ -137,12 +139,32 @@ def discover_pages(store_url: str) -> dict[str, str]:
     return out
 
 
+def scrapfly_screenshot_api_url(page_url: str, api_key: str) -> str:
+    """
+    Return Scrapfly screenshot API URL for the given page (Cloudflare bypass).
+    Caller must pass api_key; do not log the returned URL (contains key).
+    """
+    base = "https://api.scrapfly.io/screenshot"
+    # Mobile viewport, full page, PNG. Timeout 60s. Doc: capture=fullpage, resolution=375x812
+    encoded_url = quote(page_url, safe="")
+    return f"{base}?url={encoded_url}&key={quote(api_key, safe='')}&format=png&capture=fullpage&resolution=375x812&timeout=60000"
+
+
 def get_screenshot_urls(store_url: str) -> dict[str, str]:
     """
-    Return dict of page_name -> screenshot_image_url for homepage, collection, product.
-    Uses thum.io for mobile screenshots. Keys: homepage, collection, product.
+    Return dict of page_name -> URL for homepage, collection, product.
+    When BROWSERLESS_API_TOKEN or SCRAPFLY_API_KEY is set: returns raw page URLs (fetched via that provider in ai_analysis).
+    Otherwise: returns thum.io screenshot URLs. Keys: homepage, collection, product.
     """
+    from flask import current_app
+
     pages = discover_pages(store_url)
+    if current_app.config.get("BROWSERLESS_API_TOKEN") or current_app.config.get("SCRAPFLY_API_KEY"):
+        return {
+            "homepage": pages["homepage"],
+            "collection": pages.get("collection") or "",
+            "product": pages.get("product") or "",
+        }
     return {
         "homepage": mobile_screenshot_url(pages["homepage"]),
         "collection": mobile_screenshot_url(pages["collection"]) if pages.get("collection") else "",

@@ -1,10 +1,60 @@
 """Run AI (OpenAI vision) on store screenshots and return structured report JSON."""
 from __future__ import annotations
 
+import base64
 import json
 import re
+import struct
+from urllib.parse import quote
 
 from flask import current_app
+
+# Min dimensions to treat as a real screenshot (not thum.io "Image not authorized" etc.)
+MIN_SCREENSHOT_WIDTH = 380
+MIN_SCREENSHOT_HEIGHT = 400
+
+
+def _image_dimensions_from_bytes(raw: bytes) -> tuple[int, int] | None:
+    """Return (width, height) from PNG, JPEG, or WebP bytes, or None if unreadable."""
+    if not raw or len(raw) < 24:
+        return None
+    if raw[:8] == b"\x89PNG\r\n\x1a\n":
+        try:
+            w, h = struct.unpack(">II", raw[16:24])
+            return (w, h)
+        except Exception:
+            return None
+    if raw[:2] == b"\xff\xd8":
+        i = 2
+        while i < len(raw) - 9:
+            if raw[i] != 0xFF:
+                i += 1
+                continue
+            marker = raw[i + 1]
+            i += 2
+            if marker == 0xC0 or marker == 0xC1 or marker == 0xC2:
+                try:
+                    h, w = struct.unpack(">HH", raw[i + 5 : i + 9])
+                    return (w, h)
+                except Exception:
+                    return None
+            if marker == 0xD9 or marker == 0xDA:
+                break
+            try:
+                length = struct.unpack(">H", raw[i : i + 2])[0]
+                i += 2 + length
+            except Exception:
+                break
+    # WebP: RIFF....WEBP then VP8X chunk has width-1 (24b LE) at 20-22, height-1 at 23-25
+    if len(raw) >= 26 and raw[:4] == b"RIFF" and raw[8:12] == b"WEBP":
+        try:
+            w = 1 + (raw[20] | (raw[21] << 8) | (raw[22] << 16))
+            h = 1 + (raw[23] | (raw[24] << 8) | (raw[25] << 16))
+            if 0 < w <= 10000 and 0 < h <= 10000:
+                return (w, h)
+        except Exception:
+            pass
+    return None
 
 
 REPORT_JSON_SCHEMA = """
@@ -50,8 +100,7 @@ Rules: Each page has page_anatomy. For every page_anatomy field (promise, offer,
 
 
 def _fetch_image_as_base64(url: str, timeout: int = 50, retries: int = 2) -> str | None:
-    """Download image from URL and return as data URL (data:image/...;base64,...). Retries on timeout or failure."""
-    import base64
+    """Download image from URL and return as data URL. Retries on timeout or failure."""
     import requests
     last_error: Exception | None = None
     for attempt in range(max(1, retries)):
@@ -77,6 +126,106 @@ def _fetch_image_as_base64(url: str, timeout: int = 50, retries: int = 2) -> str
     if last_error:
         current_app.logger.warning("CRO scan: failed to fetch image %s: %s", url[:60], last_error)
     return None
+
+
+def _fetch_screenshot_browserless(
+    page_url: str, token: str, timeout: int = 90, retries: int = 2
+) -> tuple[str | None, bool]:
+    """Fetch full-page screenshot via Browserless /unblock (bypass). Returns (data_uri, is_valid)."""
+    import requests
+    api_url = "https://production-sfo.browserless.io/unblock"
+    # screenshot: true returns full-page screenshot by default (per Browserless docs)
+    payload = {
+        "url": page_url,
+        "content": False,
+        "cookies": False,
+        "screenshot": True,
+        "browserWSEndpoint": False,
+    }
+    last_error: Exception | None = None
+    for attempt in range(max(1, retries)):
+        try:
+            r = requests.post(
+                f"{api_url}?token={quote(token, safe='')}",
+                json=payload,
+                headers={"Content-Type": "application/json"},
+                timeout=timeout,
+            )
+            r.raise_for_status()
+            data = r.json()
+            b64 = (data.get("screenshot") or "").strip()
+            if not b64:
+                current_app.logger.info("CRO scan: Browserless returned no screenshot for %s", page_url[:50])
+                continue
+            raw = base64.standard_b64decode(b64)
+            dims = _image_dimensions_from_bytes(raw)
+            if dims:
+                w, h = dims
+                if w < MIN_SCREENSHOT_WIDTH or h < MIN_SCREENSHOT_HEIGHT:
+                    current_app.logger.info(
+                        "CRO scan: Browserless image too small (%sx%s): %s", w, h, page_url[:50]
+                    )
+                    return None, False
+            elif len(raw) < 30000:
+                current_app.logger.info(
+                    "CRO scan: Browserless image too small (%s bytes), skipping: %s", len(raw), page_url[:50]
+                )
+                continue
+            else:
+                current_app.logger.info(
+                    "CRO scan: Browserless returned image (%s KB), dimensions unreadable, accepting: %s",
+                    len(raw) / 1024, page_url[:50],
+                )
+            mime = "image/webp" if raw[8:12] == b"WEBP" else "image/png"
+            return f"data:{mime};base64,{b64}", True
+        except Exception as e:
+            last_error = e
+            if attempt < retries - 1:
+                current_app.logger.info("CRO scan: Browserless retry %s for %s", attempt + 2, page_url[:50])
+    if last_error:
+        current_app.logger.warning("CRO scan: Browserless failed for %s: %s", page_url[:50], last_error)
+    return None, False
+
+
+def _fetch_and_validate_screenshot(
+    url: str, timeout: int = 50, retries: int = 2
+) -> tuple[str | None, bool]:
+    """Fetch image; return (data_uri, is_valid). Valid = real screenshot dimensions, not thum.io error image."""
+    import requests
+    last_error: Exception | None = None
+    for attempt in range(max(1, retries)):
+        try:
+            r = requests.get(
+                url,
+                timeout=timeout,
+                headers={"User-Agent": "Mozilla/5.0 (compatible; Sparksmetrics-CRO-Scan/1.0)"},
+            )
+            r.raise_for_status()
+            raw = r.content
+            if not raw:
+                continue
+            dims = _image_dimensions_from_bytes(raw)
+            if not dims:
+                current_app.logger.info("CRO scan: could not read image dimensions for %s", url[:50])
+                return None, False
+            w, h = dims
+            if w < MIN_SCREENSHOT_WIDTH or h < MIN_SCREENSHOT_HEIGHT:
+                current_app.logger.info(
+                    "CRO scan: image too small (%sx%s), likely error image: %s", w, h, url[:50]
+                )
+                return None, False
+            ct = (r.headers.get("Content-Type") or "image/png").split(";")[0].strip()
+            if ct not in ("image/png", "image/jpeg", "image/gif", "image/webp"):
+                ct = "image/png"
+            b64 = base64.standard_b64encode(raw).decode("ascii")
+            return f"data:{ct};base64,{b64}", True
+        except Exception as e:
+            last_error = e
+            if attempt < retries - 1:
+                current_app.logger.info("CRO scan: retry %s for image (attempt %s)", attempt + 2, url[:50])
+    if last_error:
+        current_app.logger.warning("CRO scan: failed to fetch image %s: %s", url[:60], last_error)
+    return None, False
 
 
 def _call_openai_vision(
@@ -122,6 +271,22 @@ def _call_openai_vision(
     return {"raw": raw, "data": data}
 
 
+def _is_challenge_page(data_uri: str, api_key: str, timeout: int = 15) -> bool:
+    """Return True if the image shows a CAPTCHA, Cloudflare challenge, or similar bot-blocking page."""
+    prompt = (
+        "Does this screenshot show a CAPTCHA, 'Checking your browser', 'Just a moment', "
+        "Cloudflare challenge, 'Access denied', 'Please complete the security check', "
+        "or any other bot/challenge page instead of real website content? Reply with only YES or NO."
+    )
+    try:
+        resp = _call_openai_vision([data_uri], prompt, api_key, model="gpt-4o-mini", timeout=timeout)
+        raw = (resp.get("raw") or "").strip().upper()
+        return "YES" in raw[:10]
+    except Exception as e:
+        current_app.logger.info("CRO scan: challenge check failed (treating as valid): %s", e)
+        return False
+
+
 def analyze_screenshots(store_url: str, screenshot_urls: dict[str, str]) -> dict:
     """
     Run OpenAI vision on the given screenshot URLs and return a report dict.
@@ -136,38 +301,75 @@ def analyze_screenshots(store_url: str, screenshot_urls: dict[str, str]) -> dict
         current_app.logger.warning("CRO scan: OPENAI_API_KEY / OPEN_AI_KEY not set, skipping AI analysis")
         return _mock_report(store_url)
 
-    urls = [
-        screenshot_urls.get("homepage") or "",
-        screenshot_urls.get("collection") or "",
-        screenshot_urls.get("product") or "",
-    ]
-    urls = [u for u in urls if u]
-
-    if not urls:
-        return _mock_report(store_url)
-
-    # Download images to base64 (longer timeout + retries; thum.io can be slow)
-    image_payloads: list[str] = []
-    for url in urls:
+    keys_in_order = ("homepage", "collection", "product")
+    browserless_token = (current_app.config.get("BROWSERLESS_API_TOKEN") or "").strip()
+    scrapfly_key = (current_app.config.get("SCRAPFLY_API_KEY") or "").strip()
+    # Fetch each screenshot and validate dimensions (skip thum.io "Image not authorized" etc.)
+    valid_screenshots: dict[str, str] = {}
+    for key in keys_in_order:
+        url = (screenshot_urls.get(key) or "").strip()
+        if not url:
+            continue
         if url.startswith("data:"):
-            image_payloads.append(url)
+            valid_screenshots[key] = url
+            continue
+        # Browserless (bypass) takes precedence; then Scrapfly; then thum.io GET
+        if browserless_token and "image.thum.io" not in url:
+            data_uri, is_valid = _fetch_screenshot_browserless(url, browserless_token, timeout=90, retries=2)
+        elif scrapfly_key and "image.thum.io" not in url:
+            from app.cro_scan.screenshots import scrapfly_screenshot_api_url
+            fetch_url = scrapfly_screenshot_api_url(url, scrapfly_key)
+            data_uri, is_valid = _fetch_and_validate_screenshot(fetch_url, timeout=70, retries=2)
         else:
-            data_url = _fetch_image_as_base64(url, timeout=50, retries=2)
-            if data_url:
-                image_payloads.append(data_url)
+            data_uri, is_valid = _fetch_and_validate_screenshot(url, timeout=50, retries=2)
+        if is_valid and data_uri:
+            valid_screenshots[key] = data_uri
+
+    # Exclude screenshots that are Cloudflare/captcha challenge pages (not the real store).
+    # Skip this when we used Browserless (already bypasses Cloudflare; avoids false positives).
+    if not browserless_token:
+        for key in list(valid_screenshots.keys()):
+            if _is_challenge_page(valid_screenshots[key], api_key):
+                current_app.logger.info("CRO scan: excluding %s screenshot (challenge/captcha page detected)", key)
+                del valid_screenshots[key]
+
+    # Build ordered image list and mapping for prompt (only pages that passed)
+    image_payloads: list[str] = []
+    keys_passed: list[str] = []
+    for key in keys_in_order:
+        if key in valid_screenshots:
+            image_payloads.append(valid_screenshots[key])
+            keys_passed.append(key)
+
     if not image_payloads:
-        current_app.logger.warning("CRO scan: could not fetch any screenshot images (thum.io may be slow or down)")
+        current_app.logger.warning(
+            "CRO scan: no valid screenshots after filtering (thum.io error images or challenge pages)"
+        )
         return _mock_report(store_url, api_failed=True)
+
+    # Tell the AI which image is which page and which pages have no screenshot
+    page_labels = {"homepage": "HOMEPAGE", "collection": "COLLECTION", "product": "PRODUCT"}
+    image_mapping = " ".join(
+        f"Image {i + 1} is the {page_labels[k]}." for i, k in enumerate(keys_passed)
+    )
+    missing = [page_labels[k] for k in keys_in_order if k not in valid_screenshots]
+    missing_phrase = (
+        f" No screenshot was provided for: {', '.join(missing)} (unavailable, e.g. bot protection)."
+        if missing
+        else ""
+    )
 
     prompt = f"""You are an expert in both conversion rate optimization (CRO) and UI/UX for e-commerce. Your audit should combine:
 - **CRO lens**: conversion intent, value clarity, trust and social proof, CTAs, page anatomy (promise, offer, pain point, solution, etc.), and friction that blocks purchase.
 - **UI/UX lens**: visual hierarchy and scannability, readability (type size, contrast, line length), consistency (patterns, spacing, alignment), mobile usability (tap targets, thumb reach, clear next step), and perceived complexity. Call out when layout or interaction design hurts clarity or trust.
 
+**Prioritization**: Design is important and can be wrong—call that out when it is (e.g. poor hierarchy, unreadable text, confusing layout). But **information and clarity usually matter more than design alone**. Prioritize recommendations that (1) **raise perceived value**: USPs, benefits, how compelling the offer and store feel (not just product catalog but how good they make the offer seem), and (2) **lower risk**: guarantees, social proof, trust signals, clear policies. Simple design tweaks (e.g. changing colors, minor styling) are easy but often low benefit—mention them only when design is clearly wrong or hurting conversion. Lead with clarity, motivation, and risk reduction; treat pure cosmetic design as secondary unless it is genuinely broken.
+
 Analyze only what you see in these mobile screenshots. Do not invent metrics or funnel data. Tailor every recommendation to the brand: no countdown timers or heavy discount urgency for premium/luxury sites; suggest tactics that fit (e.g. quality, trust, real scarcity). Be accurate, not generic.
 
-The first image is the HOMEPAGE, the second (if present) is a COLLECTION page, the third (if present) is a PRODUCT page.
+{image_mapping}.{missing_phrase} For any page without a screenshot, set page_summary to note that the screenshot was unavailable (e.g. site may use bot protection) and leave other fields minimal.
 
-Important: The executive_summary must synthesize findings across all three pages (homepage, collection, product). Do not write it as if only the homepage was analyzed—mention collection and product page strengths and issues where relevant. Weave in both conversion and UI/UX where they matter (e.g. "Product page has strong social proof but dense copy and small tap targets hurt mobile conversion").
+Important: The executive_summary must synthesize findings across all pages that have screenshots (and note if any page was unavailable). Do not write it as if only the homepage was analyzed—mention collection and product page strengths and issues where relevant. Weave in both conversion and UI/UX where they matter (e.g. "Product page has strong social proof but dense copy and small tap targets hurt mobile conversion").
 
 If a popup, modal, or overlay (e.g. email signup, cookie banner) is visible in a screenshot, base your assessment of that page on the main page content behind it. Treat the overlay as secondary; you may note "popup visible" in the relevant page_summary or anatomy if it affects clarity, but score and anatomy should reflect the actual page structure and conversion elements, not the overlay.
 
@@ -185,6 +387,9 @@ For each page, use friction for both conversion blockers and UI/UX issues (e.g. 
             raw = re.sub(r"\s*```\s*$", "", raw)
         report = json.loads(raw)
         report["store_url"] = store_url
+        for key, data_uri in valid_screenshots.items():
+            if report.get("pages") and isinstance(report["pages"].get(key), dict):
+                report["pages"][key]["screenshot_data_uri"] = data_uri
         return _normalize_report(report)
     except json.JSONDecodeError as e:
         current_app.logger.warning("CRO scan: AI returned invalid JSON: %s", e)

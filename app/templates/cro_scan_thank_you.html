@@ -42,6 +42,8 @@
     border-width: 2px;
   }
   .preview-failed .preview-overlay { display: none !important; }
+  .preview-failed#preview-container-desktop,
+  .preview-failed#preview-container-mobile { background: #000 !important; }
 </style>
 <script>
   window._croPreviewOnError = function(img, which) {
@@ -59,7 +61,11 @@
     var container = document.getElementById('preview-container-' + which);
     if (loading) loading.classList.add('hidden');
     if (img) {
-      if (img.naturalWidth < 100 || img.naturalHeight < 100) {
+      var w = img.naturalWidth || 0;
+      var h = img.naturalHeight || 0;
+      var minW = which === 'mobile' ? 380 : 800;
+      var minH = which === 'mobile' ? 500 : 400;
+      if (w < minW || h < minH) {
         img.style.display = 'none';
         if (fallback) fallback.classList.remove('hidden');
         if (container) container.classList.add('preview-failed');
@@ -201,7 +207,6 @@
 
         {# Right: page screenshot with loading state #}
         <div class="min-w-0 lg:pt-[3.5rem]">
-          <h2 class="text-sm font-display font-black text-deep-charcoal uppercase tracking-widest mb-4">Live preview of your store</h2>
           <div id="preview-desktop-wrapper" class="preview-device-wrapper w-full">
             <div id="preview-container-desktop" class="rounded-xl overflow-hidden border border-gray-200 bg-gray-100 aspect-video max-h-[360px] relative shadow-sm">
               <div id="screenshot-loading-desktop" class="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gray-100 text-gray-500 z-10">
@@ -210,16 +215,13 @@
               </div>
               <img
                 id="screenshot-img-desktop"
-                src="https://image.thum.io/get/width/1280/{{ store_url }}"
+                src="{{ url_for('main.cro_scan_preview_image', url=store_url, width=1280) }}"
                 alt="Preview of your store"
                 class="w-full h-full object-cover object-top opacity-0 transition-opacity duration-300"
                 onload="window._croPreviewOnLoad(this, 'desktop');"
                 onerror="window._croPreviewOnError(this, 'desktop');"
               />
-              <div id="screenshot-fallback-desktop" class="hidden absolute inset-0 flex flex-col items-center justify-center text-gray-500 text-sm bg-gray-100 z-10">
-                <span class="material-symbols-outlined text-4xl text-gray-300 mb-2" aria-hidden="true">image_not_supported</span>
-                <span>Preview unavailable</span>
-              </div>
+              <div id="screenshot-fallback-desktop" class="hidden absolute inset-0 bg-black z-10" aria-hidden="true"></div>
               <div class="preview-overlay absolute inset-0 flex flex-col justify-end p-4 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none">
                 <span class="inline-block text-white text-xs font-bold bg-black/40 backdrop-blur-sm px-2 py-1 rounded mb-1 w-fit">CTA below fold on mobile</span>
                 <span class="inline-block text-white/95 text-xs font-bold bg-black/40 backdrop-blur-sm px-2 py-1 rounded w-fit">Trust signals missing above fold</span>
@@ -239,16 +241,13 @@
               </div>
               <img
                 id="screenshot-img-mobile"
-                src="https://image.thum.io/get/width/400/{{ store_url }}"
+                src="{{ url_for('main.cro_scan_preview_image', url=store_url, width=400) }}"
                 alt="Preview of your store"
                 class="w-full h-full object-cover object-top opacity-0 transition-opacity duration-300"
                 onload="window._croPreviewOnLoad(this, 'mobile');"
                 onerror="window._croPreviewOnError(this, 'mobile');"
               />
-              <div id="screenshot-fallback-mobile" class="hidden absolute inset-0 flex flex-col items-center justify-center text-gray-500 text-xs bg-gray-100 z-10 p-4 text-center">
-                <span class="material-symbols-outlined text-3xl text-gray-300 mb-1" aria-hidden="true">image_not_supported</span>
-                <span>Preview unavailable</span>
-              </div>
+              <div id="screenshot-fallback-mobile" class="hidden absolute inset-0 bg-black z-10" aria-hidden="true"></div>
               <div class="preview-overlay absolute inset-0 flex flex-col justify-end p-3 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none">
                 <span class="inline-block text-white text-[10px] font-bold bg-black/40 backdrop-blur-sm px-1.5 py-0.5 rounded mb-1 w-fit">Hero message lacks clarity</span>
                 <span class="inline-block text-white/90 text-[10px] font-bold bg-black/40 backdrop-blur-sm px-1.5 py-0.5 rounded w-fit">Full list in report</span>

@@ -4,7 +4,7 @@ End-to-end flow after a user submits their email on the cro-scan thank-you page:
 
 1. **User flow**: User enters store URL → thank-you page → submits email (company only).
 2. **Background job** (runs in a daemon thread right after the API responds):
-   - **Screenshots**: Discover homepage, one collection page, one product page; build mobile (400px) screenshot URLs via [thum.io](https://image.thum.io/).
+   - **Screenshots**: Discover homepage, one collection page, one product page. If `BROWSERLESS_API_TOKEN` is set, use [Browserless](https://www.browserless.io/) /unblock (Cloudflare bypass, 1000 free/mo); else if `SCRAPFLY_API_KEY` is set, use [Scrapfly](https://scrapfly.io/screenshot-api); otherwise use [thum.io](https://image.thum.io/).
    - **AI analysis**: Send screenshot image URLs to OpenAI Vision (e.g. `gpt-4o-mini`); prompt returns structured JSON (motivation, friction, clarity, page anatomy, top issues, recommendations).
    - **Report**: Render `app/templates/cro_scan_report.html` with the JSON → HTML → PDF via [WeasyPrint](https://weasyprint.org/).
    - **Email**: Send the PDF as an attachment via [Brevo transactional API](https://developers.brevo.com/reference/send-transac-email).
@@ -18,6 +18,8 @@ End-to-end flow after a user submits their email on the cro-scan thank-you page:
 | `BREVO_SENDER_EMAIL` | For email | Verified sender email in Brevo (transactional). |
 | `BREVO_SENDER_NAME` | Optional | Sender name (default: Sparksmetrics). |
 | `OPENAI_BASE_URL` | Optional | Default `https://api.openai.com/v1`. |
+| `BROWSERLESS_API_TOKEN` | Optional | When set, screenshots use Browserless /unblock (Cloudflare bypass). 1000 free requests/mo. Takes precedence over Scrapfly. |
+| `SCRAPFLY_API_KEY` | Optional | When set (and no Browserless), screenshots use Scrapfly. ~60 credits/screenshot. |
 
 ## Report JSON shape
 

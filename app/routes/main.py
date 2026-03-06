@@ -1,4 +1,5 @@
 """Main (public) routes."""
+import base64
 import json
 import re
 from pathlib import Path
@@ -671,6 +672,55 @@ def cro_scan_thank_you():
     normalized = _normalize_shopify_url(store_url)
     store_url = normalized or store_url
     return render_template("cro_scan_thank_you.html", store_url=store_url)
+
+
+@main_bp.route("/cro-scan/preview-image", methods=["GET"])
+def cro_scan_preview_image():
+    """
+    Return screenshot for thank-you page preview. When BROWSERLESS_API_TOKEN is set,
+    use Browserless (works on Cloudflare-protected sites). Otherwise thum.io.
+    Cap total at 10s; skip challenge check when using Browserless (image is already real).
+    """
+    from urllib.parse import unquote
+    from app.cro_scan.ai_analysis import _fetch_and_validate_screenshot, _fetch_screenshot_browserless, _is_challenge_page
+
+    url_param = request.args.get("url", "").strip()
+    width_param = request.args.get("width", "1280").strip()
+    width = 400 if width_param == "400" else 1280
+    store_url = unquote(url_param) if url_param else None
+    if not store_url or not store_url.startswith("http"):
+        abort(404)
+    store_url = _normalize_shopify_url(store_url) or store_url
+
+    browserless_token = (current_app.config.get("BROWSERLESS_API_TOKEN") or "").strip()
+    if browserless_token:
+        # Use Browserless so protected sites (e.g. cghunter.com) show a real preview; 8s to stay under 10s
+        data_uri, is_valid = _fetch_screenshot_browserless(store_url, browserless_token, timeout=8, retries=0)
+        check_challenge = False  # Browserless bypasses Cloudflare, no need to check
+    else:
+        thum_url = f"https://image.thum.io/get/width/{width}/{store_url}"
+        data_uri, is_valid = _fetch_and_validate_screenshot(thum_url, timeout=6, retries=0)
+        check_challenge = current_app.config.get("CRO_PREVIEW_CHECK_CHALLENGE", True)
+
+    if not is_valid or not data_uri:
+        abort(404)
+    if check_challenge:
+        api_key = (
+            (current_app.config.get("OPENAI_API_KEY") or "")
+            or (current_app.config.get("OPEN_AI_KEY") or "")
+            or ""
+        ).strip()
+        if api_key and _is_challenge_page(data_uri, api_key, timeout=4):
+            abort(404)
+    # Return image bytes (data_uri is "data:image/png;base64,...")
+    try:
+        b64 = data_uri.split(",", 1)[1] if "," in data_uri else ""
+        raw = base64.standard_b64decode(b64)
+    except Exception:
+        abort(404)
+    resp = Response(raw, mimetype="image/png")
+    resp.headers["Cache-Control"] = "private, max-age=60"
+    return resp
 
 
 def _enqueue_cro_scan(store_url: str, email: str, fname: str) -> None:
