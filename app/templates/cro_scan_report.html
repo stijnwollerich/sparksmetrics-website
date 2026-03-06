@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Lexend:wght@700;800;900&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL@24,400,0&amp;display=swap" rel="stylesheet"/>
   <style>
     :root {
       --primary: #FF4D00;
@@ -332,6 +333,57 @@
     .benchmark-item { flex: 1; min-width: 140px; padding: 0.6rem; background: var(--light-base); border-radius: 0.5rem; font-size: 0.85rem; }
     .benchmark-item strong { display: block; font-size: 0.7rem; text-transform: uppercase; color: var(--gray-500); margin-bottom: 0.2rem; }
 
+    /* Audit bar (fixed bottom) + Lead modal (report page) */
+    #audit-bar {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 90;
+      background: #fff; border-top: 1px solid var(--gray-200);
+      padding: 0.5rem 1rem; box-shadow: 0 -10px 40px rgba(0,0,0,0.08);
+      transition: transform 0.3s ease; display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 0.5rem; max-width: 1280px; margin: 0 auto; box-sizing: border-box;
+    }
+    #audit-bar .audit-bar-inner { display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 0.5rem; width: 100%; max-width: 1280px; margin: 0 auto; }
+    @media (min-width: 768px) { #audit-bar .audit-bar-inner { flex-direction: row; } }
+    #audit-bar .audit-bar-text { display: flex; align-items: center; gap: 0.5rem; }
+    #audit-bar .audit-bar-icon { width: 28px; height: 28px; background: rgba(255,77,0,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    #audit-bar .audit-bar-icon .material-symbols-outlined { color: var(--primary); font-size: 1rem; }
+    #audit-bar .audit-bar-heading { font-weight: 800; font-size: 0.75rem; text-transform: uppercase; color: var(--deep-charcoal); margin: 0; line-height: 1.2; }
+    #audit-bar .audit-bar-sub { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; color: var(--gray-500); margin: 0; line-height: 1.2; }
+    #audit-bar .audit-bar-actions { display: flex; align-items: center; gap: 0.5rem; }
+    #audit-bar button[data-audit-modal] { padding: 0.5rem 1.25rem; background: var(--primary); color: #fff; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; border: none; border-radius: 0.375rem; cursor: pointer; box-shadow: 0 4px 14px rgba(255,77,0,0.3); }
+    #audit-bar button[data-audit-modal]:hover { filter: brightness(1.1); }
+    #audit-bar-close { padding: 0.375rem; color: var(--gray-500); background: none; border: none; border-radius: 0.25rem; cursor: pointer; }
+    #audit-bar-close:hover { color: var(--deep-charcoal); background: var(--gray-200); }
+    #lead-modal { position: fixed; inset: 0; z-index: 200; display: none; }
+    #lead-modal:not(.hidden) { display: flex; align-items: center; justify-content: center; padding: 1rem; box-sizing: border-box; }
+    #lead-modal .lead-modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
+    #lead-modal .lead-modal-center { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 1rem; pointer-events: none; }
+    #lead-modal .lead-modal-panel { pointer-events: auto; background: #fff; border-radius: 1.5rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); max-width: 64rem; width: 100%; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; border: 1px solid var(--gray-200); }
+    #lead-form-state, #lead-thankyou-state { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+    @media (min-width: 768px) { #lead-form-state, #lead-thankyou-state { flex-direction: row; } }
+    #lead-form-state .lead-form-col { padding: 2rem; flex: 1; min-width: 0; overflow-y: auto; }
+    @media (min-width: 768px) { #lead-form-state .lead-form-col { width: 55%; padding: 3rem; } }
+    #lead-form-state .lead-sidebar { background: var(--light-base); border-top: 1px solid var(--gray-200); padding: 2rem; }
+    @media (min-width: 768px) { #lead-form-state .lead-sidebar { border-top: none; border-left: 1px solid var(--gray-200); width: 45%; padding: 3rem; border-radius: 0 1.5rem 1.5rem 0; } }
+    #lead-modal-title { font-family: 'Lexend', sans-serif; font-weight: 800; font-size: clamp(1.25rem, 3vw, 2.25rem); text-transform: uppercase; letter-spacing: -0.02em; color: var(--deep-charcoal); margin: 0 0 0.75rem; }
+    #lead-modal-description { color: var(--gray-600); font-size: 1rem; margin: 0 0 2rem; }
+    #lead-form label { display: block; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--deep-charcoal); margin-bottom: 0.5rem; }
+    #lead-form input[type="text"], #lead-form input[type="email"] { width: 100%; padding: 1rem 1.25rem; border: 2px solid var(--gray-200); border-radius: 0.75rem; font-size: 1rem; box-sizing: border-box; }
+    #lead-form input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(255,77,0,0.2); }
+    #lead-submit { width: 100%; min-height: 48px; padding: 1rem 1.5rem; background: var(--primary); color: #fff; font-family: 'Lexend', sans-serif; font-weight: 800; font-size: 0.875rem; text-transform: uppercase; border: none; border-radius: 0.75rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 10px 15px -3px rgba(255,77,0,0.25); }
+    #lead-submit:hover:not(:disabled) { filter: brightness(1.1); }
+    #lead-modal-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+    #lead-modal-badges span { display: inline-block; padding: 0.375rem 0.75rem; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; border-radius: 9999px; }
+    #lead-modal-bullets { list-style: none; margin: 0 0 2.5rem; padding: 0; font-size: 0.875rem; color: var(--gray-700); }
+    #lead-modal-bullets li { display: flex; gap: 0.75rem; margin-bottom: 1.25rem; }
+    #lead-modal-bullets .material-symbols-outlined { color: var(--primary); flex-shrink: 0; }
+    #lead-thankyou-state .lead-form-col { min-height: 70vh; }
+    @media (min-width: 768px) { #lead-thankyou-state .lead-form-col { min-height: 80vh; } }
+    #lead-calendly-iframe { width: 100%; height: 100%; min-height: 500px; border: 0; }
+    #lead-form-state.hidden { display: none !important; }
+    #lead-thankyou-state.hidden { display: none !important; }
+    #lead-thankyou-state:not(.hidden) { display: flex !important; }
+    .report { padding-bottom: 5rem; }
+
     .page-anatomy { margin: 1rem 0; padding: 1rem 1.25rem; background: var(--light-base); border-radius: 0.5rem; border: 1px solid var(--gray-200); }
     .page-anatomy h4 { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray-600); margin: 0 0 0.35rem; }
     .page-anatomy .anatomy-intro { font-size: 0.9rem; color: var(--gray-700); margin: 0 0 0.75rem; line-height: 1.5; }
@@ -491,11 +543,33 @@
             <div class="score-gauge-fill" style="width: {{ [report.overall_score or 0, 100]|min }}%;"></div>
           </div>
           <p class="score-legend">0–50: needs work · 50–75: good · 75–100: strong</p>
+          {% if report.get('score_components') %}
+          <p class="score-components" style="font-size: 0.8rem; color: var(--gray-500); margin: 0.75rem 0 0;">{{ report.score_components }}</p>
+          {% endif %}
         </div>
       </div>
     </section>
 
-    <!-- 4. Executive Summary -->
+    <!-- 4. Three biggest conversion leaks -->
+    {% if report.get('biggest_conversion_leaks') and report.biggest_conversion_leaks|length > 0 %}
+    <section class="section" style="background: var(--light-base); border: 1px solid var(--gray-200); border-radius: 0.75rem; margin: 0 1rem 1.5rem;">
+      <p class="section-kicker">Priority</p>
+      <h2>Biggest conversion leaks</h2>
+      <p style="font-size: 0.9rem; color: var(--gray-600); margin: 0 0 1.25rem;">The main issues that are likely costing you conversions. Fix these first.</p>
+      <ul style="list-style: none; padding: 0; margin: 0;">
+        {% for leak in report.biggest_conversion_leaks %}
+        {% if leak.get('title') or leak.get('explanation') %}
+        <li style="margin-bottom: 1.25rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--gray-200);{% if loop.last %} margin-bottom: 0; padding-bottom: 0; border-bottom: none;{% endif %}">
+          <strong style="display: block; font-family: 'Lexend', sans-serif; font-size: 0.95rem; color: var(--deep-charcoal); margin-bottom: 0.35rem;">{{ leak.title }}</strong>
+          <p style="font-size: 0.9rem; color: var(--gray-700); margin: 0; line-height: 1.5;">{{ leak.explanation }}</p>
+        </li>
+        {% endif %}
+        {% endfor %}
+      </ul>
+    </section>
+    {% endif %}
+
+    <!-- 5. Executive Summary -->
     {% if report.get('executive_summary') and (report.executive_summary.get('what_is_working') or report.executive_summary.get('what_is_hurting') or report.executive_summary.get('biggest_opportunity')) %}
     <section class="section">
       <p class="section-kicker">Summary</p>
@@ -515,7 +589,7 @@
     </section>
     {% endif %}
 
-    <!-- 5. How To Read This Report -->
+    <!-- 6. How To Read This Report -->
     <section class="section">
       <p class="section-kicker">Structure</p>
       <h2>How to read this report</h2>
@@ -528,7 +602,7 @@
       </ul>
     </section>
 
-    <!-- 6. Customer and Market Research -->
+    <!-- 7. Customer and Market Research -->
     {% if report.get('customer_research') and (report.customer_research.get('target_audience_hypothesis') or report.customer_research.get('customer_motivations')) %}
     <section class="section">
       <p class="section-kicker">Context</p>
@@ -553,7 +627,7 @@
     </section>
     {% endif %}
 
-    <!-- 7. Page-by-Page Analysis -->
+    <!-- 8. Page-by-Page Analysis -->
     <section class="section">
       <p class="section-kicker">Analysis</p>
       <h2>Page-by-page analysis</h2>
@@ -566,7 +640,8 @@
 
           <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start;">
             <div style="flex: 1; min-width: 200px;">
-              {% if page_data.get('screenshot_data_uri') %}
+              {% set _uri = page_data.get('screenshot_data_uri') or '' %}
+              {% if _uri[:5] == 'data:' and _uri|length > 100 %}
               <div class="screenshot-wrap">
                 <img src="{{ page_data.screenshot_data_uri }}" alt="Mobile screenshot: {{ page_key }}" loading="lazy"/>
               </div>
@@ -774,5 +849,118 @@
       Generated by <a href="https://sparksmetrics.com">Sparksmetrics</a> · sparksmetrics.com
     </footer>
   </div>
+
+  <!-- Audit bar: Get a FREE 24-HOUR CRO AUDIT -->
+  <div id="audit-bar" role="banner" aria-label="Free CRO audit offer" style="transform: translateY(100%); visibility: hidden;">
+    <div class="audit-bar-inner">
+      <div class="audit-bar-text">
+        <div class="audit-bar-icon"><span class="material-symbols-outlined">analytics</span></div>
+        <div>
+          <p class="audit-bar-heading">Get a FREE 24-HOUR CRO AUDIT</p>
+          <p class="audit-bar-sub">Limited to 3 brands per week. Secure yours now.</p>
+        </div>
+      </div>
+      <div class="audit-bar-actions">
+        <button type="button" id="audit-bar-cta" data-audit-modal data-title="Get a FREE 24-Hour CRO Audit" data-description="Enter your email and we'll get in touch to schedule your free audit. Limited to 3 brands per week." data-button-text="Claim my free audit">Claim Audit Now</button>
+        <button type="button" id="audit-bar-close" class="p-1.5 text-slate-400 hover:text-charcoal rounded transition-colors" aria-label="Close audit bar">
+          <span class="material-symbols-outlined" style="font-size: 1.125rem;">close</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lead modal: audit form → thank you + Calendly -->
+  <div id="lead-modal" class="hidden" aria-hidden="true" aria-modal="true" role="dialog" aria-labelledby="lead-modal-title">
+    <div class="lead-modal-backdrop" data-lead-close></div>
+    <div class="lead-modal-center">
+      <div class="lead-modal-panel" id="lead-modal-panel">
+        <div id="lead-form-state" class="flex flex-col md:flex-row flex-1 min-h-0">
+          <div class="lead-form-col">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 1.5rem;">
+              <div id="lead-modal-badges"></div>
+              <button type="button" style="padding: 0.75rem; min-width: 44px; min-height: 44px; color: var(--gray-500); background: none; border: none; border-radius: 0.5rem; cursor: pointer;" data-lead-close aria-label="Close">
+                <span class="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            <h2 id="lead-modal-title" class="text-2xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tighter mb-3"></h2>
+            <p id="lead-modal-description" class="text-gray-600 text-base md:text-lg mb-8"></p>
+            <form id="lead-form" class="space-y-6">
+              <input type="hidden" name="resource" id="lead-slug" value=""/>
+              <input type="hidden" name="modal_type" id="lead-modal-type" value="resource"/>
+              <div style="margin-bottom: 1.5rem;">
+                <label for="lead-fname">First name</label>
+                <input type="text" id="lead-fname" name="fname" required placeholder="Your first name" autocomplete="given-name"/>
+              </div>
+              <div style="margin-bottom: 1.5rem;">
+                <label for="lead-email">Email</label>
+                <input type="email" id="lead-email" name="email" required placeholder="you@company.com" autocomplete="email"/>
+              </div>
+              <button type="submit" id="lead-submit">
+                <span id="lead-submit-text">Send me the resource</span>
+                <span class="material-symbols-outlined" style="font-size: 1.125rem;">download</span>
+              </button>
+            </form>
+            <p style="margin-top: 2rem; font-size: 0.875rem; color: var(--gray-600); display: flex; align-items: center; gap: 0.5rem;">
+              <span class="material-symbols-outlined" style="color: var(--primary); font-size: 1.125rem;">lock</span>
+              Your data is private.
+            </p>
+            <p style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gray-500); margin-top: 1rem;">Used by 200+ brands · Same process for $10M+ funnels</p>
+          </div>
+          <div class="lead-sidebar">
+            <div id="lead-sidebar-badge" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem; background: rgba(255,77,0,0.1); border-radius: 0.5rem; margin-bottom: 2rem;"></div>
+            <p style="font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary); margin-bottom: 1rem;">What you get</p>
+            <ul id="lead-modal-bullets" class="space-y-5 text-sm text-gray-700 mb-10"></ul>
+            <div style="margin-top: auto; padding-top: 2rem; border-top: 1px solid var(--gray-200); position: relative;">
+              <span class="material-symbols-outlined" style="position: absolute; top: 1.5rem; right: 0; color: var(--primary); font-size: 1.25rem;">verified</span>
+              <p style="font-weight: 700; font-size: 0.875rem; color: var(--deep-charcoal); margin-bottom: 0.25rem;">Verified partner</p>
+              <p style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gray-500); margin-bottom: 0.75rem;">CRO &amp; analytics</p>
+              <p style="font-size: 0.875rem; color: var(--gray-600); font-style: italic; line-height: 1.4;">"Stijn is a great go-to resource for building a proper infrastructure for Google Analytics and setting up the dashboard so you get access to your data in a simple way."</p>
+            </div>
+          </div>
+        </div>
+        <div id="lead-thankyou-state" class="hidden" style="flex-direction: column; flex: 1; min-height: 0;">
+          <div style="flex: 1; min-height: 70vh; background: var(--gray-200);">
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; border-bottom: 1px solid var(--gray-200); flex-shrink: 0;">
+              <span style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary);">Pick a time</span>
+              <button type="button" style="padding: 0.5rem; color: var(--gray-500); background: none; border: none; border-radius: 0.5rem; cursor: pointer;" data-lead-close aria-label="Close">
+                <span class="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            <iframe id="lead-calendly-iframe" title="Schedule a call" style="width: 100%; height: 100%; min-height: 500px; border: 0;" src="about:blank"></iframe>
+          </div>
+          <div style="padding: 2rem 3rem; flex: 1; overflow-y: auto; background: #fff; border-top: 1px solid var(--gray-200);">
+            <span class="material-symbols-outlined" style="color: var(--primary); font-size: 2.5rem; margin-bottom: 1rem;">check_circle</span>
+            <h2 style="font-family: 'Lexend', sans-serif; font-weight: 800; font-size: clamp(1.25rem, 2.5vw, 1.875rem); text-transform: uppercase; letter-spacing: -0.02em; color: var(--deep-charcoal); margin-bottom: 0.5rem;">You're in. Now let's talk.</h2>
+            <p id="lead-thankyou-message" style="color: var(--gray-600); font-size: 1rem; margin-bottom: 2rem;">Pick a time on the left for a free 30-minute strategy session.</p>
+            <h3 style="color: var(--primary); font-family: 'Lexend', sans-serif; font-weight: 800; text-transform: uppercase; font-size: 0.875rem; margin-bottom: 1.25rem;">Why book a call?</h3>
+            <ul style="list-style: none; padding: 0; margin: 0 0 2rem;">
+              <li style="display: flex; gap: 1rem; padding: 1rem; border-radius: 0.75rem; background: var(--light-base); border: 1px solid var(--gray-200); margin-bottom: 1rem;">
+                <span class="material-symbols-outlined" style="color: var(--primary); flex-shrink: 0;">check_circle</span>
+                <div><p style="font-weight: 700; color: var(--deep-charcoal); margin: 0 0 0.25rem;">No pitch.</p><p style="font-size: 0.875rem; color: var(--gray-600); margin: 0;">We focus on your funnel and your next steps—not a sales script.</p></div>
+              </li>
+              <li style="display: flex; gap: 1rem; padding: 1rem; border-radius: 0.75rem; background: var(--light-base); border: 1px solid var(--gray-200); margin-bottom: 1rem;">
+                <span class="material-symbols-outlined" style="color: var(--primary); flex-shrink: 0;">check_circle</span>
+                <div><p style="font-weight: 700; color: var(--deep-charcoal); margin: 0 0 0.25rem;">Clear next steps.</p><p style="font-size: 0.875rem; color: var(--gray-600); margin: 0;">You'll leave with a clear picture of where you're leaking and what to fix first.</p></div>
+              </li>
+              <li style="display: flex; gap: 1rem; padding: 1rem; border-radius: 0.75rem; background: var(--light-base); border: 1px solid var(--gray-200); margin-bottom: 1rem;">
+                <span class="material-symbols-outlined" style="color: var(--primary); flex-shrink: 0;">check_circle</span>
+                <div><p style="font-weight: 700; color: var(--deep-charcoal); margin: 0 0 0.25rem;">Same process we use for $10M+ brands.</p><p style="font-size: 0.875rem; color: var(--gray-600); margin: 0;">Data, audits, and prioritization—not guesswork.</p></div>
+              </li>
+            </ul>
+            <p style="font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gray-500); margin-bottom: 1.5rem;">Used by 200+ brands</p>
+            <div style="padding-top: 1.5rem; border-top: 1px solid var(--gray-200); position: relative;">
+              <span class="material-symbols-outlined" style="position: absolute; top: 1.5rem; right: 0; color: var(--primary);">verified</span>
+              <p style="font-weight: 700; font-size: 0.875rem; color: var(--deep-charcoal); margin-bottom: 0.25rem;">Verified partner</p>
+              <p style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gray-500); margin-bottom: 0.5rem;">CRO &amp; analytics</p>
+              <p style="font-size: 0.875rem; color: var(--gray-600); font-style: italic; line-height: 1.4;">"Stijn is a great go-to resource for building a proper infrastructure for Google Analytics and setting up the dashboard so you get access to your data in a simple way."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/audit-bar.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/checklist-modal.js') }}?v=2" defer></script>
 </body>
 </html>

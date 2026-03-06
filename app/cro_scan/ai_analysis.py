@@ -58,13 +58,19 @@ def _image_dimensions_from_bytes(raw: bytes) -> tuple[int, int] | None:
 
 
 REPORT_JSON_SCHEMA = """
-Return a single JSON object (no markdown, no code fence). Only describe what you see. Do not invent metrics. Tailor to brand (e.g. no countdown timers for premium).
+Return a single JSON object (no markdown, no code fence). Only describe what you see. Do not invent metrics. Tailor to brand (e.g. no countdown timers for premium). Be specific to this site—reference actual buttons, copy, and layout; avoid generic phrasing.
 {
   "store_name": "<brand name>",
   "overall_score": <0-100>,
+  "score_components": "<Short line explaining how the score is derived, e.g. 'Score reflects: Clarity, Motivation, Trust, Friction, Mobile usability.'>",
+  "biggest_conversion_leaks": [
+    { "title": "<Short leak name, e.g. Product differentiation is unclear>", "explanation": "<1-2 sentences. Reference exact UI where possible; e.g. Visitors do not immediately understand why [product] is better than [alternative].>" },
+    { "title": "...", "explanation": "..." },
+    { "title": "...", "explanation": "..." }
+  ],
   "executive_summary": {
-    "what_is_working": "<2-4 sentences. Synthesize across all three pages (homepage, collection, product); do not focus only on the homepage.>",
-    "what_is_hurting": "<2-4 sentences. Include collection and product page issues where relevant.>",
+    "what_is_working": "<2-4 sentences. Synthesize across all three pages; reference specific elements.>",
+    "what_is_hurting": "<2-4 sentences. Include collection and product issues; name what you see.>",
     "biggest_opportunity": "<2-3 sentences. Draw from the full funnel.>"
   },
   "customer_research": {
@@ -76,26 +82,25 @@ Return a single JSON object (no markdown, no code fence). Only describe what you
   "pages": {
     "homepage": {
       "score": <0-100>,
-      "page_anatomy": { "promise": "<Status>: <short explanation>. Status must be exactly one of: Present, Good, Weak, Missing. E.g. Present: Clear value prop. Or Weak: CTA blends in. Or Missing: No reviews.>", "offer": "...", "pain_point": "...", "solution": "...", "social_proof": "...", "trust_signals": "...", "cta": "...", "visual_hierarchy": "..." },
-      "motivation": "<Does the page create desire to buy?>",
-      "clarity": "<Is value proposition obvious?>",
-      "friction": ["<CRO or UI/UX issue>", ...],
-      "page_summary": "<Short paragraph: conversion and UX biggest weakness>",
-      "ui_ux_notes": ["<2-5 short UI/UX observations: hierarchy, readability, consistency, mobile usability>", ...],
-      "testing_ideas": ["<2-4 experiment ideas>", ...]
+      "page_anatomy": { "promise": "<Status>: <explanation>. Status: Present, Good, Weak, or Missing. For pain_point: if no explicit pain copy, reframe as missing benefit/differentiation (e.g. why this product vs alternatives).>", "offer": "...", "pain_point": "...", "solution": "...", "social_proof": "...", "trust_signals": "...", "cta": "...", "visual_hierarchy": "..." },
+      "motivation": "...", "clarity": "...",
+      "friction": ["<CRO or UI/UX issue; reference specific UI when possible>", ...],
+      "page_summary": "<Short paragraph: reference what you see; conversion and UX weakness>",
+      "ui_ux_notes": ["<2-5 specific observations: name elements, hierarchy, readability, mobile>", ...],
+      "testing_ideas": ["<2-4 ecommerce-specific ideas: lifestyle imagery, size reference, bundles, comparison, endorsements—not only generic 'add testimonials'>", ...]
     },
     "collection": { "score": <0-100>, "page_anatomy": {...}, "motivation": "...", "clarity": "...", "friction": [], "page_summary": "...", "ui_ux_notes": [], "testing_ideas": [] },
     "product": { "score": <0-100>, "above_the_fold": "<optional>", "below_the_fold": "<optional>", "page_anatomy": {...}, "motivation": "...", "clarity": "...", "friction": [], "page_summary": "...", "ui_ux_notes": [], "testing_ideas": [] }
   },
-  "ugly_truth": "<One clear statement: biggest strategic weakness>",
+  "ugly_truth": "<One direct, memorable sentence—biggest strategic weakness. Not soft or polite; e.g. site looks premium but does not justify the price, so visitors will compare elsewhere.>",
   "biggest_opportunity": { "title": "...", "explanation": "...", "why_it_matters": "...", "example_tests": [] },
-  "fast_wins": ["<3-5 quick improvements; can include UI/UX>", ...],
-  "roadmap_90_days": { "month1": [], "month2": [], "month3": [] },
-  "experiment_backlog": ["<10 A/B tests across funnel>", ...],
+  "fast_wins": ["<3-5 quick improvements; specific to this site. Prefer value, trust, clarity, offer—not generic 'test button color' or 'test CTA'>", ...],
+  "roadmap_90_days": { "month1": ["<concrete actionable item, e.g. Increase CTA contrast across PDPs; Add trust badges under Add to Cart; Break product descriptions into bullet benefits>", ...], "month2": [...], "month3": [...] },
+  "experiment_backlog": ["<10 A/B tests; ecommerce-specific (e.g. Test 'recommended by dermatologists' above hero; Test before/after visual; Test comparison vs traditional product; Test bundle offers). Not generic 'test CTA positioning' or 'test lifestyle imagery'>", ...],
   "what_good_looks_like": "<What high-converting, good-UX pages include>",
   "next_steps": "<Summary of recommended actions>"
 }
-Rules: Each page has page_anatomy. For every page_anatomy field (promise, offer, pain_point, solution, social_proof, trust_signals, cta, visual_hierarchy) you must start the value with exactly one of: Present, Good, Weak, Missing—then a colon and space—then a short explanation. Example: "Present: Clear sale messaging" or "Weak: CTA blends with background" or "Missing: No trust badges". Never output only a description without the status word. Also include page_summary, testing_ideas (2-4), and optionally ui_ux_notes. Include executive_summary, customer_research, ugly_truth, biggest_opportunity, fast_wins (3-5), roadmap_90_days, experiment_backlog (10), what_good_looks_like, next_steps. If page missing use null. Keep concise.
+Rules: biggest_conversion_leaks: exactly 3 items. Each title is a short leak name; explanation references what you see (e.g. "The Add to Cart button blends with the interface and competes with other UI elements"). score_components: one short line (e.g. "Score reflects: Clarity, Motivation, Trust, Friction, Mobile usability."). page_anatomy: each value must start with Present, Good, Weak, or Missing—then ": "—then explanation. For pain_point: do NOT say "Missing: homepage does not address health frustrations". Reframe as differentiation: "Missing: Homepage focuses on lifestyle imagery but does not quickly explain why this [product] is better than a standard [alternative]." ugly_truth: bold, not polite; create urgency (e.g. "The site looks premium but does not explain why the product is worth the price. Many visitors will compare alternatives before purchasing."). When describing issues use UI-specific language: name the exact element (Add to Cart button, Shop Pay button, product description), its problem (blends with palette, uses similar color to surrounding UI), and what should be true (primary action should visually dominate). Roadmap: actionable bullets (Increase CTA contrast across PDPs; Add trust badges under Add to Cart), not vague ("Begin integrating testimonials"). testing_ideas and experiment_backlog: ecommerce-specific experiments (Test "recommended by X" above hero; Test before/after visual; Test comparison vs traditional; Test bundle offers with replacement parts). Scores: conservative; when in doubt score lower. Include all required keys. If page missing use null. Keep concise but specific.
 """
 
 
@@ -134,7 +139,6 @@ def _fetch_screenshot_browserless(
     """Fetch full-page screenshot via Browserless /unblock (bypass). Returns (data_uri, is_valid)."""
     import requests
     api_url = "https://production-sfo.browserless.io/unblock"
-    # screenshot: true returns full-page screenshot by default (per Browserless docs)
     payload = {
         "url": page_url,
         "content": False,
@@ -365,7 +369,17 @@ def analyze_screenshots(store_url: str, screenshot_urls: dict[str, str]) -> dict
 
 **Prioritization**: Design is important and can be wrong—call that out when it is (e.g. poor hierarchy, unreadable text, confusing layout). But **information and clarity usually matter more than design alone**. Prioritize recommendations that (1) **raise perceived value**: USPs, benefits, how compelling the offer and store feel (not just product catalog but how good they make the offer seem), and (2) **lower risk**: guarantees, social proof, trust signals, clear policies. Simple design tweaks (e.g. changing colors, minor styling) are easy but often low benefit—mention them only when design is clearly wrong or hurting conversion. Lead with clarity, motivation, and risk reduction; treat pure cosmetic design as secondary unless it is genuinely broken.
 
-Analyze only what you see in these mobile screenshots. Do not invent metrics or funnel data. Tailor every recommendation to the brand: no countdown timers or heavy discount urgency for premium/luxury sites; suggest tactics that fit (e.g. quality, trust, real scarcity). Be accurate, not generic.
+**Specificity and tone (critical)**: The report should feel like a $500 expert audit, not a generic template. The reader should think "they really understood my site."
+- **Reference the actual UI—never generic**: A CRO expert always references exact things on the page. Bad: "The CTA lacks prominence." Good: "The Add to Cart button blends into the design palette; it uses a similar color to surrounding UI elements; the primary action does not visually dominate the page." Name specific elements (Add to Cart, Shop Pay, product description block), what is wrong (blends with beige, dense paragraph), and competing elements (e.g. Shop Pay button draws more attention than Add to Cart). Where useful, use a "spotted in screenshot" style: "Issue: Add to Cart button blends with surrounding color. Competing element: Shop Pay button draws more attention. Primary action should visually dominate."
+- **Differentiation, not pain-point checklist**: Most ecommerce sites do not explicitly state "pain points". Do NOT write things like "Missing: The homepage does not clearly address potential health frustrations regarding air quality." Instead reframe as differentiation: "The homepage focuses on lifestyle imagery but does not quickly explain why this humidifier is better than a standard one." Or: "Missing: Page does not highlight why [product] beats [alternative] (e.g. benefits)."
+- **Bold tone, create urgency**: Avoid polite, forgettable language. Bad: "The site could benefit from clearer product differentiation." Good: "The site looks premium, but it does not clearly explain why the product is worth the price. Many visitors will compare alternatives before purchasing." Ugly truth and biggest leaks should feel direct and create urgency.
+- **Testing ideas—ecommerce-specific, not blog advice**: Avoid generic "A/B test CTA positioning" or "Test lifestyle imagery." Prefer experiments that feel like real CRO thinking: e.g. "Test showing 'recommended by dermatologists' above the hero", "Test a before/after air quality visual", "Test comparison vs traditional humidifiers", "Test bundle offers with replacement filters". Product-specific, trust-specific, differentiation-specific.
+- **Roadmap—actionable, not vague**: Bad: "Begin integrating testimonials." Good: "Increase CTA contrast across PDPs", "Add trust badges under Add to Cart", "Break product descriptions into bullet benefits." Each item should be a concrete action someone can execute.
+- **Score components**: Output score_components as one short line so the number does not feel arbitrary, e.g. "Score reflects: Clarity, Motivation, Trust, Friction, Mobile usability."
+- **Three biggest conversion leaks**: Output exactly 3 items in biggest_conversion_leaks. Each has a short title (e.g. "Product differentiation is unclear", "Primary CTA lacks visual dominance") and an explanation that references what you see (e.g. "The Add to Cart button blends with the interface and competes with other UI elements"). This section makes the report feel much smarter.
+- **Scores**: Be conservative; when in doubt score lower so the reader is motivated to improve.
+
+Analyze only what you see in these mobile screenshots. Do not invent metrics or funnel data. Tailor every recommendation to the brand: no countdown timers or heavy discount urgency for premium/luxury sites; suggest tactics that fit (e.g. quality, trust, real scarcity). Be accurate and specific, not generic.
 
 {image_mapping}.{missing_phrase} For any page without a screenshot, set page_summary to note that the screenshot was unavailable (e.g. site may use bot protection) and leave other fields minimal.
 
@@ -448,6 +462,18 @@ def _normalize_report(report: dict) -> dict:
         report["overall_score"] = 0
     if "store_name" not in report:
         report["store_name"] = "Store"
+    if "score_components" not in report or not isinstance(report.get("score_components"), str):
+        report["score_components"] = (report.get("score_components") or "Score reflects: Clarity, Motivation, Trust, Friction, Mobile usability.") if isinstance(report.get("score_components"), str) else "Score reflects: Clarity, Motivation, Trust, Friction, Mobile usability."
+    if "biggest_conversion_leaks" not in report or not isinstance(report.get("biggest_conversion_leaks"), list):
+        report["biggest_conversion_leaks"] = report.get("biggest_conversion_leaks") if isinstance(report.get("biggest_conversion_leaks"), list) else []
+    for i, leak in enumerate(report["biggest_conversion_leaks"]):
+        if not isinstance(leak, dict):
+            report["biggest_conversion_leaks"][i] = {"title": "", "explanation": ""}
+        else:
+            if "title" not in leak:
+                leak["title"] = ""
+            if "explanation" not in leak:
+                leak["explanation"] = ""
     if "executive_summary" not in report or not isinstance(report.get("executive_summary"), dict):
         report["executive_summary"] = report.get("executive_summary") if isinstance(report.get("executive_summary"), dict) else {}
     for k in ("what_is_working", "what_is_hurting", "biggest_opportunity"):
