@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>CRO Scan Report – {{ report.store_name }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Lexend:wght@700;800;900&amp;display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary: #FF4D00;
+      --primary-rgb: 255, 77, 0;
+      --deep-charcoal: #1A1A1B;
+      --light-base: #F9F9FB;
+      --gray-200: #e5e7eb;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--deep-charcoal);
+      margin: 0;
+      padding: 0;
+      background: #fff;
+    }
+    .report { max-width: 800px; margin: 0 auto; padding: 0 1rem; }
+
+    /* Intro hero (CRO page style: dark, no nav/footer) */
+    .hero {
+      background: var(--deep-charcoal);
+      color: #fff;
+      padding: 2.5rem 1.5rem 2rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .hero .kicker {
+      font-family: 'Lexend', sans-serif;
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.35em;
+      color: var(--primary);
+      margin: 0 0 1rem;
+    }
+    .hero h1 {
+      font-family: 'Lexend', sans-serif;
+      font-weight: 900;
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin: 0 0 0.5rem;
+    }
+    .hero .store {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.85);
+      margin: 0 0 0.25rem;
+    }
+    .hero .store-url {
+      font-size: 0.8rem;
+      color: var(--gray-500);
+      word-break: break-all;
+    }
+
+    /* Score block */
+    .score-section {
+      background: var(--light-base);
+      padding: 2rem 1.5rem;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .score-section .section-title {
+      font-family: 'Lexend', sans-serif;
+      font-weight: 800;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--gray-500);
+      margin: 0 0 1rem;
+      text-align: center;
+    }
+    .score-big-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    .score-big {
+      font-family: 'Lexend', sans-serif;
+      font-weight: 900;
+      font-size: 4rem;
+      line-height: 1;
+      color: var(--primary);
+    }
+    .score-label {
+      font-size: 0.85rem;
+      color: var(--gray-600);
+      margin-top: 0.25rem;
+    }
+    /* Score bar (gauge) */
+    .score-gauge {
+      max-width: 320px;
+      margin: 0 auto 0.5rem;
+      height: 12px;
+      background: var(--gray-200);
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+    .score-gauge-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 9999px;
+      width: {{ report.overall_score }}%;
+      max-width: 100%;
+    }
+    .score-legend { font-size: 0.75rem; color: var(--gray-500); text-align: center; }
+
+    /* Score breakdown chart (SVG bar) */
+    .chart-card {
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-radius: 1rem;
+      padding: 1.25rem;
+      margin-top: 1.5rem;
+    }
+    .chart-card .chart-title {
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gray-400);
+      margin: 0 0 0.5rem;
+    }
+    .chart-card .chart-subtitle {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--deep-charcoal);
+      margin: 0 0 1rem;
+    }
+    .chart-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .chart-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .chart-bar-label {
+      width: 90px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--gray-700);
+      text-transform: capitalize;
+    }
+    .chart-bar-track {
+      flex: 1;
+      height: 20px;
+      background: var(--light-base);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .chart-bar-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 6px;
+      min-width: 4px;
+    }
+    .chart-bar-value {
+      width: 2.5rem;
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--deep-charcoal);
+      text-align: right;
+    }
+
+    /* Section headings (CRO page style) */
+    .section {
+      padding: 2rem 1.5rem;
+      border-bottom: 1px solid var(--gray-200);
+      break-inside: avoid;
+    }
+    .section:nth-child(even) { background: var(--light-base); }
+    .section:nth-child(odd) { background: #fff; }
+    .section h2 {
+      font-family: 'Lexend', sans-serif;
+      font-weight: 900;
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      color: var(--deep-charcoal);
+      margin: 0 0 0.5rem;
+    }
+    .section .section-kicker {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--gray-500);
+      margin: 0 0 1.25rem;
+    }
+
+    /* Page cards (CRO page card style) */
+    .page-grid { display: flex; flex-direction: column; gap: 1rem; }
+    .page-card {
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-radius: 1rem;
+      padding: 1.25rem 1.5rem;
+      position: relative;
+      break-inside: avoid;
+    }
+    .section:nth-child(even) .page-card { background: #fff; }
+    .page-card h3 {
+      font-family: 'Lexend', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      text-transform: uppercase;
+      color: var(--deep-charcoal);
+      margin: 0 0 0.75rem;
+    }
+    .page-card .page-score {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--primary);
+      margin-bottom: 0.75rem;
+    }
+    .page-card p { margin: 0 0 0.5rem; font-size: 0.9rem; color: var(--gray-700); }
+    .page-card p strong { color: var(--deep-charcoal); }
+    .page-card ul { margin: 0.5rem 0 0; padding-left: 1.25rem; font-size: 0.9rem; color: var(--gray-700); }
+    .page-card li { margin-bottom: 0.25rem; }
+    .page-card .screenshot-wrap {
+      margin: 0 0 1rem;
+      width: 100%;
+      max-width: 340px;
+      margin-left: auto;
+      margin-right: auto;
+      border-radius: 1.5rem;
+      overflow: hidden;
+      border: 8px solid var(--deep-charcoal);
+      border-top-width: 28px;
+      border-bottom-width: 28px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      background: var(--deep-charcoal);
+    }
+    .page-card .screenshot-wrap img {
+      display: block;
+      width: 100%;
+      height: auto;
+      vertical-align: top;
+    }
+    .page-card .screenshot-caption {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gray-500);
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+    .page-card .insight-block { margin-top: 1rem; }
+    .page-card .insight-block h4 {
+      font-family: 'Lexend', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gray-600);
+      margin: 0 0 0.4rem;
+    }
+    .page-card .insight-block ul {
+      margin: 0 0 0.75rem;
+      padding-left: 1.1rem;
+      font-size: 0.85rem;
+      color: var(--gray-700);
+    }
+    .page-card .insight-block ul:last-child { margin-bottom: 0; }
+    .page-card .insight-block li { margin-bottom: 0.2rem; }
+    .insight-good h4 { color: #059669; }
+    .insight-improve h4 { color: var(--primary); }
+    .insight-testing h4 { color: #2563eb; }
+
+    /* Top issues (border-l-primary callout style) */
+    .issue-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .issue {
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-left: 4px solid var(--primary);
+      border-radius: 0 0.5rem 0.5rem 0;
+      padding: 1rem 1.25rem;
+      break-inside: avoid;
+    }
+    .section:nth-child(even) .issue { background: #fff; }
+    .issue strong {
+      display: block;
+      font-family: 'Lexend', sans-serif;
+      font-size: 0.95rem;
+      margin-bottom: 0.25rem;
+    }
+    .issue .issue-desc { font-size: 0.9rem; color: var(--gray-700); margin: 0; }
+    .issue .issue-meta { font-size: 0.75rem; color: var(--gray-500); margin-top: 0.35rem; }
+    .issue .issue-meta span { margin-right: 0.75rem; }
+    .issue .experiment-block { margin-top: 0.6rem; padding-top: 0.5rem; border-top: 1px solid var(--gray-200); font-size: 0.85rem; color: var(--gray-700); }
+    .issue .experiment-block strong { color: var(--deep-charcoal); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .fold-block { margin: 0.75rem 0; padding: 0.75rem; background: var(--light-base); border-radius: 0.5rem; border-left: 3px solid var(--primary); }
+    .fold-block h4 { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray-600); margin: 0 0 0.35rem; }
+    .fold-block p { margin: 0; font-size: 0.85rem; }
+
+    .ugly-truth { background: var(--deep-charcoal); color: #fff; padding: 1.25rem 1.5rem; border-radius: 0.75rem; margin: 1rem 0; }
+    .ugly-truth .kicker { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.15em; color: var(--primary); margin: 0 0 0.4rem; }
+    .ugly-truth p { margin: 0; font-size: 0.95rem; font-weight: 600; }
+
+    .callout-box { padding: 1rem 1.25rem; border: 2px solid var(--primary); border-radius: 0.75rem; background: rgba(255,77,0,0.06); margin: 1rem 0; }
+    .callout-box h3 { font-size: 0.85rem; margin: 0 0 0.5rem; color: var(--primary); }
+    .callout-box ul { margin: 0.35rem 0 0; padding-left: 1.1rem; font-size: 0.85rem; }
+
+    .roadmap-month { margin-bottom: 1rem; }
+    .roadmap-month h4 { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--gray-600); margin: 0 0 0.35rem; }
+    .roadmap-month ul { margin: 0; padding-left: 1.1rem; font-size: 0.85rem; }
+
+    .benchmark-grid { display: flex; flex-wrap: wrap; gap: 1rem; margin: 0.5rem 0; }
+    .benchmark-item { flex: 1; min-width: 140px; padding: 0.6rem; background: var(--light-base); border-radius: 0.5rem; font-size: 0.85rem; }
+    .benchmark-item strong { display: block; font-size: 0.7rem; text-transform: uppercase; color: var(--gray-500); margin-bottom: 0.2rem; }
+
+    .page-anatomy { margin: 1rem 0; padding: 1rem 1.25rem; background: var(--light-base); border-radius: 0.5rem; border: 1px solid var(--gray-200); }
+    .page-anatomy h4 { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray-600); margin: 0 0 0.35rem; }
+    .page-anatomy .anatomy-intro { font-size: 0.9rem; color: var(--gray-700); margin: 0 0 0.75rem; line-height: 1.5; }
+    .anatomy-grid { display: grid; gap: 0.4rem; font-size: 0.85rem; }
+    .anatomy-row { display: flex; align-items: flex-start; gap: 0.5rem; }
+    .anatomy-label { flex: 0 0 10rem; font-weight: 600; color: var(--gray-700); }
+    .anatomy-value { flex: 1; color: var(--gray-700); }
+    .anatomy-value .badge { display: inline-block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; padding: 0.15rem 0.4rem; border-radius: 0.25rem; margin-right: 0.35rem; }
+    .anatomy-value .badge-present { background: #d1fae5; color: #065f46; }
+    .anatomy-value .badge-weak { background: #fef3c7; color: #92400e; }
+    .anatomy-value .badge-missing { background: #fee2e2; color: #991b1b; }
+
+    .page-card .block-label { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray-500); margin: 0.75rem 0 0.25rem; }
+    .page-card .block-label:first-of-type { margin-top: 0; }
+    .page-card .block-value { font-size: 0.9rem; color: var(--gray-700); margin: 0 0 0.5rem; }
+    .page-card .ui-ux-notes { margin-top: 0.75rem; }
+    .page-card .ui-ux-notes ul { margin: 0.25rem 0 0; padding-left: 1.1rem; font-size: 0.85rem; color: var(--gray-700); }
+    .page-card .ui-ux-notes li { margin-bottom: 0.2rem; }
+    .page-card .compact-line { font-size: 0.85rem; color: var(--gray-700); margin: 0.25rem 0; padding-left: 0.5rem; border-left: 2px solid var(--gray-200); }
+    .page-card .testing-summary { margin-top: 1.25rem; padding: 1rem; background: var(--deep-charcoal); color: #fff; border-radius: 0.5rem; }
+    .page-card .testing-summary h4 { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary); margin: 0 0 0.5rem; }
+    .page-card .testing-summary ul { margin: 0; padding-left: 1.1rem; font-size: 0.9rem; line-height: 1.5; color: #fff; }
+    .page-card .testing-summary li { margin-bottom: 0.25rem; color: #fff; }
+    .page-card .no-analysis { font-size: 0.85rem; color: var(--gray-500); font-style: italic; }
+
+    /* Recommendations */
+    .rec-list { padding-left: 1.25rem; margin: 0; }
+    .rec-list li {
+      margin-bottom: 0.6rem;
+      font-size: 0.95rem;
+      color: var(--gray-700);
+    }
+    .rec-list li::marker { color: var(--primary); }
+
+    /* Footer */
+    .report-footer {
+      padding: 1.5rem 1.5rem 2rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--gray-500);
+    }
+    .report-footer a { color: var(--primary); font-weight: 600; text-decoration: none; }
+
+    /* CTA sections */
+    .cta-section {
+      padding: 2rem 1.5rem;
+      text-align: center;
+      background: var(--light-base);
+      border-bottom: 1px solid var(--gray-200);
+      break-inside: avoid;
+    }
+    .cta-section.cta-dark {
+      background: var(--deep-charcoal);
+      color: #fff;
+      border-bottom-color: rgba(255,255,255,0.08);
+    }
+    .cta-section h2 {
+      font-family: 'Lexend', sans-serif;
+      font-weight: 900;
+      font-size: 1.35rem;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      margin: 0 0 0.5rem;
+    }
+    .cta-section.cta-dark h2 { color: #fff; }
+    .cta-section p { margin: 0 0 1rem; font-size: 0.95rem; max-width: 32em; margin-left: auto; margin-right: auto; }
+    .cta-section.cta-dark p { color: rgba(255,255,255,0.85); }
+    .cta-section .cta-btn {
+      display: inline-block;
+      padding: 0.85rem 1.75rem;
+      background: var(--primary);
+      color: #fff;
+      font-family: 'Lexend', sans-serif;
+      font-weight: 800;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      border-radius: 0.75rem;
+      margin-top: 0.25rem;
+      box-shadow: 0 10px 30px rgba(255, 77, 0, 0.25);
+    }
+    .cta-section .cta-btn:hover { opacity: 0.95; }
+    .cta-section .cta-note { font-size: 0.7rem; color: var(--gray-500); margin-top: 0.5rem; }
+    .cta-section.cta-dark .cta-note { color: var(--gray-400); }
+    .about-text { text-align: left; max-width: 36em; margin: 0 auto 1rem; font-size: 0.9rem; line-height: 1.6; color: var(--gray-700); }
+
+    /* Mobile: tighter padding, stacked/readable layout */
+    @media (max-width: 640px) {
+      .report { padding: 0 0.75rem; }
+      .hero { padding: 1.5rem 1rem 1.5rem; }
+      .hero h1 { font-size: 1.5rem; }
+      .hero .kicker { letter-spacing: 0.2em; font-size: 0.65rem; }
+      .score-section { padding: 1.25rem 1rem; }
+      .score-big { font-size: 3rem; }
+      .score-big-wrap { gap: 1rem; margin-bottom: 1rem; }
+      .score-gauge { max-width: 100%; }
+      .section { padding: 1.25rem 1rem; }
+      .section h2 { font-size: 1.25rem; }
+      .page-card { padding: 1rem 1rem; }
+      .page-card .screenshot-wrap { max-width: 100%; border-width: 6px; border-top-width: 20px; border-bottom-width: 20px; }
+      .page-anatomy { padding: 0.75rem 1rem; }
+      .anatomy-row { flex-direction: column; gap: 0.2rem; align-items: flex-start; }
+      .anatomy-label { flex: none; }
+      .anatomy-value { flex: none; }
+      .chart-bar-label { width: 80px; font-size: 0.75rem; }
+      .chart-bar-row { flex-wrap: wrap; }
+      .ugly-truth { padding: 1rem 1rem; }
+      .callout-box { padding: 0.75rem 1rem; }
+      .cta-section { padding: 1.5rem 1rem; }
+      .cta-section h2 { font-size: 1.1rem; }
+      .cta-section .cta-btn { display: block; width: 100%; max-width: 280px; margin-left: auto; margin-right: auto; text-align: center; padding: 1rem; font-size: 0.8rem; }
+      .report-footer { padding: 1rem 1rem 1.5rem; font-size: 0.75rem; }
+      .benchmark-item { min-width: 100%; }
+    }
+
+    @media (max-width: 480px) {
+      .report { padding: 0 0.5rem; }
+      .hero h1 { font-size: 1.35rem; }
+      .score-big { font-size: 2.5rem; }
+    }
+
+    @media print {
+      .report { max-width: 100%; padding: 0; }
+      .section, .page-card, .issue { break-inside: avoid; }
+      body { font-size: 11pt; }
+    }
+  </style>
+</head>
+<body>
+  <div class="report">
+    <!-- 1. Cover -->
+    <header class="hero">
+      <p class="kicker">CRO Scan Report</p>
+      <h1>{{ report.store_name }}</h1>
+      <p class="store-url">{{ report.store_url }}</p>
+      <p class="store" style="margin-top: 0.5rem; font-size: 0.9rem;">{{ report.get('report_date') or '—' }}</p>
+    </header>
+
+    <!-- 2. Your Conversion Health Check -->
+    <section class="section">
+      <p class="section-kicker">Introduction</p>
+      <h2>Your Conversion Health Check</h2>
+      <p style="font-size: 0.95rem; color: var(--gray-700); margin: 0;">This is a rapid CRO scan designed to identify the biggest conversion opportunities on your site. We analyzed your key pages (homepage, collection, product) and summarized what&rsquo;s working, what&rsquo;s hurting, and where to focus first.</p>
+    </section>
+
+    <!-- 3. Overall Conversion Score -->
+    <section class="score-section">
+      <p class="section-title">Overall conversion score (mobile)</p>
+      <div class="score-big-wrap">
+        <div>
+          <div class="score-big">{% if report.overall_score is not none %}{{ report.overall_score }}{% else %}—{% endif %}{% if report.overall_score is not none %}/100{% endif %}</div>
+          <div class="score-label">Conversion health</div>
+        </div>
+        <div style="flex: 1; min-width: 200px;">
+          <div class="score-gauge">
+            <div class="score-gauge-fill" style="width: {{ [report.overall_score or 0, 100]|min }}%;"></div>
+          </div>
+          <p class="score-legend">0–50: needs work · 50–75: good · 75–100: strong</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Executive Summary -->
+    {% if report.get('executive_summary') and (report.executive_summary.get('what_is_working') or report.executive_summary.get('what_is_hurting') or report.executive_summary.get('biggest_opportunity')) %}
+    <section class="section">
+      <p class="section-kicker">Summary</p>
+      <h2>Executive summary</h2>
+      {% if report.executive_summary.get('what_is_working') %}
+      <p style="margin: 0 0 0.5rem;"><strong>What is working</strong></p>
+      <p style="font-size: 0.95rem; color: var(--gray-700); margin: 0 0 1rem;">{{ report.executive_summary.what_is_working }}</p>
+      {% endif %}
+      {% if report.executive_summary.get('what_is_hurting') %}
+      <p style="margin: 0 0 0.5rem;"><strong>What is hurting conversions</strong></p>
+      <p style="font-size: 0.95rem; color: var(--gray-700); margin: 0 0 1rem;">{{ report.executive_summary.what_is_hurting }}</p>
+      {% endif %}
+      {% if report.executive_summary.get('biggest_opportunity') %}
+      <p style="margin: 0 0 0.5rem;"><strong>Where the biggest opportunity is</strong></p>
+      <p style="font-size: 0.95rem; color: var(--gray-700); margin: 0;">{{ report.executive_summary.biggest_opportunity }}</p>
+      {% endif %}
+    </section>
+    {% endif %}
+
+    <!-- 5. How To Read This Report -->
+    <section class="section">
+      <p class="section-kicker">Structure</p>
+      <h2>How to read this report</h2>
+      <p style="font-size: 0.95rem; color: var(--gray-700); margin: 0 0 0.5rem;">This document is structured as follows:</p>
+      <ul style="font-size: 0.9rem; color: var(--gray-700); margin: 0; padding-left: 1.25rem;">
+        <li><strong>Page analysis</strong> — Homepage, collection, and product page with score, anatomy, and testing ideas.</li>
+        <li><strong>Conversion issues</strong> — The ugly truth and biggest opportunity.</li>
+        <li><strong>Testing ideas</strong> — Fast wins, 90-day roadmap, and experiment backlog.</li>
+        <li><strong>Prioritized roadmap</strong> — Month-by-month focus (homepage, product page, AOV/cart).</li>
+      </ul>
+    </section>
+
+    <!-- 6. Customer and Market Research -->
+    {% if report.get('customer_research') and (report.customer_research.get('target_audience_hypothesis') or report.customer_research.get('customer_motivations')) %}
+    <section class="section">
+      <p class="section-kicker">Context</p>
+      <h2>Customer and market research</h2>
+      <p style="font-size: 0.9rem; color: var(--gray-600); margin: 0 0 0.75rem;">Strategic context inferred from your products, pricing, and positioning. This helps explain why certain CRO changes matter.</p>
+      {% if report.customer_research.get('target_audience_hypothesis') %}
+      <p style="margin: 0 0 0.35rem;"><strong>Target audience hypothesis</strong></p>
+      <p style="font-size: 0.9rem; color: var(--gray-700); margin: 0 0 0.75rem;">{{ report.customer_research.target_audience_hypothesis }}</p>
+      {% endif %}
+      {% if report.customer_research.get('customer_motivations') %}
+      <p style="margin: 0 0 0.35rem;"><strong>Customer motivations</strong></p>
+      <p style="font-size: 0.9rem; color: var(--gray-700); margin: 0 0 0.75rem;">{{ report.customer_research.customer_motivations }}</p>
+      {% endif %}
+      {% if report.customer_research.get('customer_fears_frustrations') %}
+      <p style="margin: 0 0 0.35rem;"><strong>Customer fears / frustrations</strong></p>
+      <p style="font-size: 0.9rem; color: var(--gray-700); margin: 0 0 0.75rem;">{{ report.customer_research.customer_fears_frustrations }}</p>
+      {% endif %}
+      {% if report.customer_research.get('desired_outcomes') %}
+      <p style="margin: 0 0 0.35rem;"><strong>Desired outcomes</strong></p>
+      <p style="font-size: 0.9rem; color: var(--gray-700); margin: 0;">{{ report.customer_research.desired_outcomes }}</p>
+      {% endif %}
+    </section>
+    {% endif %}
+
+    <!-- 7. Page-by-Page Analysis -->
+    <section class="section">
+      <p class="section-kicker">Analysis</p>
+      <h2>Page-by-page analysis</h2>
+      <div class="page-grid">
+        {% for page_key in ['homepage', 'collection', 'product'] %}
+        {% set page_data = report.pages.get(page_key) or {} %}
+        <div class="page-card">
+          <h3>{{ page_key }}</h3>
+          <div class="page-score">{% if page_data.get('score') is not none %}{{ page_data.get('score', 0) }}/100{% else %}—{% endif %}</div>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start;">
+            <div style="flex: 1; min-width: 200px;">
+              {% if page_data.get('screenshot_url') %}
+              <div class="screenshot-wrap">
+                <img src="{{ page_data.screenshot_url }}" alt="Mobile screenshot: {{ page_key }}" loading="lazy"/>
+              </div>
+              <p class="screenshot-caption">Mobile view</p>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Page anatomy: promise, offer, pain_point, solution, social_proof, trust_signals, cta, visual_hierarchy -->
+          <div class="page-anatomy">
+            <h4>Page anatomy</h4>
+            <p class="anatomy-intro">Page anatomy breaks down how well each key conversion element appears on this page. We evaluate: Promise, Offer, Pain point, Solution, Social proof, Trust signals, CTA, and Visual hierarchy.</p>
+            <div class="anatomy-grid">
+              {% for crit in ['promise', 'offer', 'pain_point', 'solution', 'social_proof', 'trust_signals', 'cta', 'visual_hierarchy'] %}
+              {% set val = (page_data.get('page_anatomy') or {}).get(crit) or '' %}
+              {% set label = 'CTA' if crit == 'cta' else (crit.replace('_', ' ')|title) %}
+              {% set parts = val.split(':', 1) if val else [] %}
+              {% set status_word = (parts[0]|trim|lower) if parts else '' %}
+              {% set desc = (parts[1]|trim) if parts|length > 1 else '' %}
+              <div class="anatomy-row">
+                <span class="anatomy-label">{{ label }}</span>
+                <span class="anatomy-value">
+                  {% if val %}
+                  {% if parts|length > 1 and (status_word == 'present' or status_word == 'good' or status_word == 'strong') %}<span class="badge badge-present">{{ parts[0]|trim }}</span> {{ desc }}{% elif parts|length > 1 and status_word == 'weak' %}<span class="badge badge-weak">Weak</span> {{ desc }}{% elif parts|length > 1 and status_word == 'missing' %}<span class="badge badge-missing">Missing</span> {{ desc }}{% elif val.lower().startswith('present') %}<span class="badge badge-present">Present</span> {{ val[7:]|trim }}{% elif val.lower().startswith('weak') %}<span class="badge badge-weak">Weak</span> {{ val[4:]|trim }}{% elif val.lower().startswith('missing') %}<span class="badge badge-missing">Missing</span> {{ val[7:]|trim }}{% else %}{{ val }}{% endif %}
+                  {% else %}<span class="no-analysis">—</span>{% endif %}
+                </span>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          {% if page_data.get('motivation') %}
+          <div class="block-label">Motivation</div>
+          <p class="block-value">{{ page_data.motivation }}</p>
+          {% endif %}
+          {% if page_data.get('clarity') %}
+          <div class="block-label">Clarity</div>
+          <p class="block-value">{{ page_data.clarity }}</p>
+          {% endif %}
+          {% if page_data.get('friction') and page_data.friction|length > 0 %}
+          <div class="block-label">Friction</div>
+          <ul class="block-value" style="margin-top: 0.25rem;">
+            {% for item in page_data.friction %}<li>{{ item }}</li>{% endfor %}
+          </ul>
+          {% endif %}
+          {% if page_data.get('page_summary') %}
+          <div class="block-label">Page summary</div>
+          <p class="block-value">{{ page_data.page_summary }}</p>
+          {% endif %}
+
+          {% if page_data.get('ui_ux_notes') and page_data.ui_ux_notes|length > 0 %}
+          <div class="ui-ux-notes">
+            <div class="block-label">UI/UX notes</div>
+            <ul>
+              {% for note in page_data.ui_ux_notes %}<li>{{ note }}</li>{% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+
+          {% if page_key == 'product' and (page_data.get('above_the_fold') or page_data.get('below_the_fold')) %}
+          {% if page_data.get('above_the_fold') %}
+          <div class="fold-block"><h4>Above the fold</h4><p>{{ page_data.above_the_fold }}</p></div>
+          {% endif %}
+          {% if page_data.get('below_the_fold') %}
+          <div class="fold-block"><h4>Below the fold</h4><p>{{ page_data.below_the_fold }}</p></div>
+          {% endif %}
+          {% endif %}
+
+          {% if page_data.get('testing_ideas') and page_data.testing_ideas|length > 0 %}
+          <div class="testing-summary">
+            <h4>Testing ideas (2–4 experiments)</h4>
+            <ul>
+              {% for item in page_data.testing_ideas %}
+              <li>{{ item }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- 8. The Ugly Truth -->
+    {% if report.get('ugly_truth') %}
+    <section class="section">
+      <div class="ugly-truth">
+        <p class="kicker">The ugly truth</p>
+        <p>{{ report.ugly_truth }}</p>
+      </div>
+    </section>
+    {% endif %}
+
+    <!-- 9. Biggest Opportunity -->
+    {% if report.get('biggest_opportunity') and (report.biggest_opportunity.get('title') or report.biggest_opportunity.get('explanation')) %}
+    <section class="section">
+      <p class="section-kicker">Focus</p>
+      <h2>Biggest opportunity</h2>
+      <div class="callout-box">
+        {% if report.biggest_opportunity.get('title') %}<h3>{{ report.biggest_opportunity.title }}</h3>{% endif %}
+        {% if report.biggest_opportunity.get('explanation') %}<p style="margin: 0 0 0.5rem; font-size: 0.9rem;">{{ report.biggest_opportunity.explanation }}</p>{% endif %}
+        {% if report.biggest_opportunity.get('why_it_matters') %}<p style="margin: 0 0 0.5rem; font-size: 0.9rem;"><strong>Why it matters:</strong> {{ report.biggest_opportunity.why_it_matters }}</p>{% endif %}
+        {% if report.biggest_opportunity.get('example_tests') and report.biggest_opportunity.example_tests|length > 0 %}
+        <p style="margin: 0 0 0.25rem; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: var(--gray-600);">Example tests</p>
+        <ul>{% for t in report.biggest_opportunity.example_tests %}<li>{{ t }}</li>{% endfor %}</ul>
+        {% endif %}
+      </div>
+    </section>
+    {% endif %}
+
+    <!-- 10. Fast Wins -->
+    {% if report.get('fast_wins') and report.fast_wins|length > 0 %}
+    <section class="section">
+      <p class="section-kicker">Quick wins</p>
+      <h2>Fast wins</h2>
+      <p style="font-size: 0.9rem; color: var(--gray-600); margin: 0 0 0.75rem;">3–5 improvements you can implement quickly without testing.</p>
+      <ul class="rec-list">
+        {% for item in report.fast_wins %}<li>{{ item }}</li>{% endfor %}
+      </ul>
+    </section>
+    {% endif %}
+
+    <!-- 11. 90 Day Testing Roadmap -->
+    {% if report.get('roadmap_90_days') and (report.roadmap_90_days.get('month1') or report.roadmap_90_days.get('month2') or report.roadmap_90_days.get('month3')) %}
+    <section class="section">
+      <p class="section-kicker">Plan</p>
+      <h2>90‑day testing roadmap</h2>
+      {% if report.roadmap_90_days.get('month1') and report.roadmap_90_days.month1|length > 0 %}
+      <div class="roadmap-month"><h4>Month 1</h4><ul>{% for item in report.roadmap_90_days.month1 %}<li>{{ item }}</li>{% endfor %}</ul></div>
+      {% endif %}
+      {% if report.roadmap_90_days.get('month2') and report.roadmap_90_days.month2|length > 0 %}
+      <div class="roadmap-month"><h4>Month 2</h4><ul>{% for item in report.roadmap_90_days.month2 %}<li>{{ item }}</li>{% endfor %}</ul></div>
+      {% endif %}
+      {% if report.roadmap_90_days.get('month3') and report.roadmap_90_days.month3|length > 0 %}
+      <div class="roadmap-month"><h4>Month 3</h4><ul>{% for item in report.roadmap_90_days.month3 %}<li>{{ item }}</li>{% endfor %}</ul></div>
+      {% endif %}
+    </section>
+    {% endif %}
+
+    <!-- 12. Experiment Backlog -->
+    {% if report.get('experiment_backlog') and report.experiment_backlog|length > 0 %}
+    <section class="section">
+      <p class="section-kicker">Backlog</p>
+      <h2>Experiment backlog</h2>
+      <p style="font-size: 0.9rem; color: var(--gray-600); margin: 0 0 0.75rem;">10 potential A/B tests across the funnel.</p>
+      <ul class="rec-list">
+        {% for item in report.experiment_backlog %}<li>{{ item }}</li>{% endfor %}
+      </ul>
+    </section>
+    {% endif %}
+
+    <!-- 13. What Good Looks Like -->
+    {% if report.get('what_good_looks_like') %}
+    <section class="section">
+      <p class="section-kicker">Reference</p>
+      <h2>What good looks like</h2>
+      <p style="font-size: 0.95rem; color: var(--gray-700);">{{ report.what_good_looks_like }}</p>
+    </section>
+    {% endif %}
+
+    <!-- 14. Next Steps -->
+    {% if report.get('next_steps') %}
+    <section class="section">
+      <p class="section-kicker">Actions</p>
+      <h2>Next steps</h2>
+      <p style="font-size: 0.95rem; color: var(--gray-700);">{{ report.next_steps }}</p>
+    </section>
+    {% endif %}
+
+    <!-- 15. Work With Us -->
+    <section class="section">
+      <p class="section-kicker">Our process</p>
+      <h2>Work with us</h2>
+      <p style="font-size: 0.95rem; color: var(--gray-700); margin: 0 0 0.5rem;">Our CRO process includes:</p>
+      <ul style="font-size: 0.9rem; color: var(--gray-700); margin: 0; padding-left: 1.25rem;">
+        <li>Audits and opportunity mapping</li>
+        <li>Test prioritization by impact</li>
+        <li>Experiment execution and reporting</li>
+      </ul>
+    </section>
+
+    <!-- 16. Call To Action -->
+    <section class="cta-section">
+      <h2>Book a strategy call</h2>
+      <p>We invite you to book a free 30‑minute strategy call. We&rsquo;ll review your funnel and discuss testing opportunities—no pitch, just next steps.</p>
+      <a class="cta-btn" href="https://sparksmetrics.com/thank-you">Book your free call</a>
+      <p class="cta-note">30‑minute session · Review your funnel · Discuss testing opportunities</p>
+    </section>
+
+    <!-- 17. About Sparksmetrics -->
+    <section class="cta-section cta-dark">
+      <h2>About Sparksmetrics</h2>
+      <p class="about-text">We&rsquo;re Sparksmetrics. We audit your funnel, find the leaks, prioritize what moves the needle, and run real A/B tests. You get data that says &ldquo;this works&rdquo; or &ldquo;this doesn&rsquo;t.&rdquo; Same process we use for $10M+ brands. Positive ROI guarantee within 150 days.</p>
+      <a class="cta-btn" href="https://sparksmetrics.com/thank-you">Schedule your free call</a>
+    </section>
+
+    <footer class="report-footer">
+      Generated by <a href="https://sparksmetrics.com">Sparksmetrics</a> · sparksmetrics.com
+    </footer>
+  </div>
+</body>
+</html>

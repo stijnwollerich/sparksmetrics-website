@@ -3,9 +3,9 @@ import json
 import re
 from pathlib import Path
 from datetime import datetime, timezone
-from flask import abort, Blueprint, current_app, jsonify, redirect, render_template, request, url_for, Response, send_file
+from flask import abort, Blueprint, current_app, jsonify, make_response, redirect, render_template, request, Response, url_for, send_file
 
-from app.models import Lead, db
+from app.models import Lead, CroScanReport, db
 
 BREVO_CONTACTS_URL = "https://api.brevo.com/v3/contacts"
 
@@ -520,6 +520,145 @@ def cro_scan_check():
     return jsonify({"success": True, "redirect": thank_you_url})
 
 
+def _sample_report_for_preview() -> dict:
+    """Sample report dict for the HTML preview route (no PDF/email)."""
+    return {
+        "store_url": "https://example-store.com",
+        "store_name": "Example Store",
+        "overall_score": 72,
+        "executive_summary": {
+            "what_is_working": "Clear sale messaging and hero imagery. Product grid supports browsing. Add-to-cart is prominent on the product page.",
+            "what_is_hurting": "Primary CTA is below the fold. Trust signals are buried in the footer. Product page could surface reviews and delivery info earlier.",
+            "biggest_opportunity": "The biggest opportunity is product discovery and above-the-fold persuasion: shorten the path from homepage to product and surface trust earlier.",
+        },
+        "customer_research": {
+            "target_audience_hypothesis": "Likely value-conscious shoppers; pricing and imagery suggest a mid-market, lifestyle-oriented audience.",
+            "customer_motivations": "Quality, simplicity, and clear value. The site speaks to convenience and product appeal.",
+            "customer_fears_frustrations": "Uncertainty about fit, returns, or delivery—not clearly addressed above the fold.",
+            "desired_outcomes": "Easy choice, confidence in the purchase, smooth path from browsing to checkout.",
+        },
+        "pages": {
+            "homepage": {
+                "score": 68,
+                "motivation": "Clear sale messaging and hero CTA invite action; trust badges support conversion.",
+                "friction": ["Primary CTA is below the fold on mobile", "Trust signals (reviews, guarantees) not visible above fold"],
+                "clarity": "Value proposition is present but could be stronger above the fold.",
+                "anatomy": "Hero with banner; CTA appears after scroll. Consider moving primary CTA higher.",
+                "page_anatomy": {"promise": "weak Could be stronger above the fold", "offer": "present Sale/CTA visible", "pain_point": "missing Not clearly stated", "solution": "present Hero and CTA", "social_proof": "weak In footer", "trust_signals": "weak In footer", "cta": "weak CTA below fold", "visual_hierarchy": "present Strong hero"},
+                "page_summary": "The homepage's biggest weakness is that the primary CTA and trust elements are below the fold on mobile.",
+                "ui_ux_notes": ["Clear visual hierarchy; hero and CTA stand out once in view.", "Body copy is scannable; consider shorter paragraphs for mobile.", "Primary button has good contrast; ensure tap target is at least 44px."],
+                "testing_ideas": ["A/B test CTA copy (e.g. Shop Sale vs Get 20% Off)", "Test moving trust badges above fold", "Test hero with single CTA vs multiple links"],
+                "screenshot_url": "https://image.thum.io/get/width/400/https://www.allbirds.com",
+            },
+            "collection": {
+                "score": 74,
+                "motivation": "Product grid and filters support browsing.",
+                "friction": ["Filter options may overwhelm on mobile", "No sticky add-to-cart for quick actions"],
+                "clarity": "Collection title and product count are clear.",
+                "anatomy": "Standard grid; filters in drawer/sheet. Consider simplifying filter set on mobile.",
+                "page_anatomy": {"promise": "present Browsing focus", "offer": "present Product grid", "pain_point": "missing", "solution": "present", "social_proof": "missing", "trust_signals": "missing", "cta": "weak", "visual_hierarchy": "present Clear grid"},
+                "page_summary": "Collection page is functional but could reduce friction with a simpler filter set and quick-add option.",
+                "ui_ux_notes": ["Product grid is consistent; card layout supports quick scanning.", "Filter controls may be small on mobile; consider larger tap targets."],
+                "testing_ideas": ["A/B test number of products per row", "Test filter drawer vs inline filters", "Test Sort by default (e.g. Best selling vs New)"],
+                "screenshot_url": "https://image.thum.io/get/width/400/https://www.allbirds.com/collections/all",
+            },
+            "product": {
+                "score": 76,
+                "above_the_fold": "Hero image, title and price are clear; add-to-cart is visible. Variant selector is present. Missing: reviews and delivery info in first viewport.",
+                "below_the_fold": "Reviews and delivery/returns appear on scroll. Trust and secondary CTAs are present but could be surfaced higher.",
+                "motivation": "Add to cart is prominent; images and price are clear.",
+                "friction": ["Reviews section could be higher", "Delivery/returns info not immediately visible"],
+                "clarity": "Product name and price are clear; benefit copy could be stronger.",
+                "anatomy": "Gallery, title, price, ATC. Trust and delivery info further down.",
+                "page_anatomy": {"promise": "present Product benefits", "offer": "present Price and ATC", "pain_point": "missing", "solution": "present", "social_proof": "weak Below fold", "trust_signals": "weak Below fold", "cta": "present Clear ATC", "visual_hierarchy": "present Strong gallery"},
+                "page_summary": "The product page's biggest weakness is that reviews and delivery info are below the fold, which can increase doubt and bounce.",
+                "ui_ux_notes": ["Gallery and price have strong hierarchy; ATC is easy to find.", "Variant selector is clear; ensure swatches are large enough on mobile.", "Reviews and delivery copy could use more spacing for readability."],
+                "testing_ideas": ["A/B test ATC button copy (Add to bag vs Buy now)", "Test reviews placement (above vs below fold)", "Test sticky ATC bar on scroll"],
+                "screenshot_url": "https://image.thum.io/get/width/400/https://www.allbirds.com/products/womens-wool-runners",
+            },
+        },
+        "top_issues": [
+            {
+                "priority": 1, "page": "homepage", "title": "Primary CTA below fold on mobile",
+                "description": "Move the main action button into the first viewport to reduce friction.",
+                "impact": "High", "confidence": "High", "effort": "Low",
+                "hypothesis": "If we move the primary CTA above the fold, add-to-cart and click-through will increase because fewer users will bounce before seeing the action.",
+                "test_setup": "Variant A: control. Variant B: hero with primary CTA in first viewport.",
+                "success_metric": "CTA click rate and add-to-cart rate from homepage.",
+            },
+            {
+                "priority": 2, "page": "homepage", "title": "Trust signals missing above fold",
+                "description": "Add reviews, guarantees or security badges near the hero to build confidence.",
+                "impact": "Medium", "confidence": "Medium", "effort": "Low",
+                "hypothesis": "If we surface trust badges above the fold, conversion will improve because doubt is reduced earlier.",
+                "test_setup": "Variant A: control. Variant B: add 1–2 trust elements (e.g. star rating, guarantee) in hero.",
+                "success_metric": "Add-to-cart rate and checkout rate.",
+            },
+            {
+                "priority": 3, "page": "product", "title": "Reviews and delivery info lower on page",
+                "description": "Surface key decision-making content higher to reduce scroll and doubt.",
+                "impact": "High", "confidence": "High", "effort": "Medium",
+                "hypothesis": "If we move reviews and delivery info into the first two viewports, we will see higher add-to-cart and lower bounce.",
+                "test_setup": "Variant A: control. Variant B: reviews + delivery block above the fold or in expandable section.",
+                "success_metric": "Add-to-cart rate and time to first interaction.",
+            },
+        ],
+        "recommendations": [
+            "Raise the primary CTA on the homepage so it’s visible without scrolling.",
+            "Add 1–2 trust elements (e.g. star rating, guarantee) in the hero or just below.",
+            "On product pages, move reviews and delivery/returns into the first two viewports.",
+        ],
+        "ugly_truth": "The biggest conversion leak is likely product discovery friction—too many steps between homepage and product, and key trust content is buried below the fold.",
+        "fast_wins": [
+            "Add trust badges (e.g. secure checkout, guarantee) near the hero or ATC.",
+            "Improve product thumbnails (clear, consistent aspect ratio) on collection pages.",
+            "Add shipping or returns info near the add-to-cart button.",
+        ],
+        "roadmap_90_days": {
+            "month1": ["Navigation and homepage tests", "Above-the-fold CTA and trust tests"],
+            "month2": ["PDP persuasion tests (reviews, delivery, sticky ATC)", "Collection quick-add and filters"],
+            "month3": ["AOV and bundling tests", "Checkout simplification and urgency tests"],
+        },
+        "biggest_opportunity": {
+            "title": "Product discovery",
+            "explanation": "Too many steps between homepage and product; key trust content is buried. Featured products and clearer CTAs could shorten the path.",
+            "why_it_matters": "Reducing friction and surfacing trust earlier typically lifts add-to-cart and checkout rates.",
+            "example_tests": ["Featured products above the fold", "Quick add on collection", "Category shortcuts on homepage"],
+        },
+        "experiment_backlog": [
+            "Sticky add-to-cart on PDP scroll", "Price anchoring", "Bundles on product page",
+            "Social proof near CTA", "Quick add on collection", "Free-shipping threshold messaging",
+            "Urgency near ATC", "Category shortcuts on homepage", "Featured products above the fold", "Simplified checkout",
+        ],
+        "next_steps": "Prioritize the fast wins, then run Month 1 roadmap tests. Use the experiment backlog to queue tests. Book a strategy call if you want help prioritizing and running experiments.",
+        "what_good_looks_like": "A strong PDP has a sticky ATC, clear urgency (stock or delivery), and trust (reviews, guarantee) near the CTA. One high-converting pattern: hero image + title + price + ATC in the first viewport, with expandable reviews and delivery.",
+    }
+
+
+@main_bp.route("/cro-scan/report-preview/", methods=["GET"])
+@main_bp.route("/cro-scan/report-preview", methods=["GET"])
+def cro_scan_report_preview():
+    """Preview the CRO report HTML template with sample data (for design/dev)."""
+    from app.cro_scan.ai_analysis import _normalize_report
+    report = _normalize_report(_sample_report_for_preview())
+    return render_template("cro_scan_report.html", report=report)
+
+
+@main_bp.route("/cro-scan/report/<token>", methods=["GET"])
+def cro_scan_report_view(token):
+    """Serve a stored CRO report by secret token. Only link holders can view; not listed or indexed."""
+    rec = CroScanReport.query.filter_by(token=(token or "").strip()).first()
+    if not rec:
+        abort(404)
+    try:
+        report = json.loads(rec.report_json)
+    except (TypeError, ValueError):
+        abort(404)
+    resp = make_response(render_template("cro_scan_report.html", report=report))
+    resp.headers["X-Robots-Tag"] = "noindex, nofollow"
+    return resp
+
+
 @main_bp.route("/cro-scan/thank-you/", methods=["GET"])
 @main_bp.route("/cro-scan/thank-you", methods=["GET"])
 def cro_scan_thank_you():
@@ -532,6 +671,23 @@ def cro_scan_thank_you():
     normalized = _normalize_shopify_url(store_url)
     store_url = normalized or store_url
     return render_template("cro_scan_thank_you.html", store_url=store_url)
+
+
+def _enqueue_cro_scan(store_url: str, email: str, fname: str) -> None:
+    """Start the CRO scan pipeline in a background thread (screenshots → AI → PDF → email)."""
+    import threading
+    app = current_app._get_current_object()
+
+    def _run():
+        with app.app_context():
+            try:
+                from app.cro_scan import run_scan
+                run_scan(store_url=store_url, email=email, fname=fname)
+            except Exception as e:
+                app.logger.warning("CRO scan background job failed: %s", e)
+
+    t = threading.Thread(target=_run, daemon=True)
+    t.start()
 
 
 @main_bp.route("/cro-scan/submit-email", methods=["POST"])
@@ -555,6 +711,8 @@ def cro_scan_submit_email():
     _save_lead(fname, email, "cro_scan", resource_slug=None, business_stage=orders_per_month, website_url=store_url)
     _sync_lead_to_brevo(fname, email, "cro_scan", resource_slug=None, business_stage=orders_per_month, website_url=store_url)
     _notify_slack_lead(fname, email, "cro_scan", resource_slug=None, business_stage=orders_per_month, website_url=store_url)
+    # Run scan pipeline in background (screenshots → AI → PDF → email)
+    _enqueue_cro_scan(store_url, email, fname)
     return jsonify({"success": True})
 # Downloadable resources: slug -> filename in static/downloads/. Add new resources here.
 RESOURCE_DOWNLOADS = {

@@ -2,10 +2,26 @@
 from datetime import datetime
 
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import DateTime, String
+from sqlalchemy import DateTime, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 db = SQLAlchemy()
+
+
+class CroScanReport(db.Model):
+    """A CRO scan report stored for private link viewing. Accessible only via the secret token."""
+
+    __tablename__ = "cro_scan_reports"
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    token: Mapped[str] = mapped_column(String(64), unique=True, nullable=False, index=True)
+    report_json: Mapped[str] = mapped_column(Text, nullable=False)
+    store_url: Mapped[str] = mapped_column(String(500), nullable=False)
+    store_name: Mapped[str] = mapped_column(String(255), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+
+    def __repr__(self) -> str:
+        return f"<CroScanReport {self.store_name} ({self.token[:8]}…)>"
 
 
 class Lead(db.Model):

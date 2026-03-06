@@ -41,7 +41,35 @@
     height: 36px;
     border-width: 2px;
   }
+  .preview-failed .preview-overlay { display: none !important; }
 </style>
+<script>
+  window._croPreviewOnError = function(img, which) {
+    var loading = document.getElementById('screenshot-loading-' + which);
+    var fallback = document.getElementById('screenshot-fallback-' + which);
+    var container = document.getElementById('preview-container-' + which);
+    if (loading) loading.classList.add('hidden');
+    if (img) img.style.display = 'none';
+    if (fallback) fallback.classList.remove('hidden');
+    if (container) container.classList.add('preview-failed');
+  };
+  window._croPreviewOnLoad = function(img, which) {
+    var loading = document.getElementById('screenshot-loading-' + which);
+    var fallback = document.getElementById('screenshot-fallback-' + which);
+    var container = document.getElementById('preview-container-' + which);
+    if (loading) loading.classList.add('hidden');
+    if (img) {
+      if (img.naturalWidth < 100 || img.naturalHeight < 100) {
+        img.style.display = 'none';
+        if (fallback) fallback.classList.remove('hidden');
+        if (container) container.classList.add('preview-failed');
+      } else {
+        img.classList.remove('opacity-0');
+        img.classList.add('opacity-100');
+      }
+    }
+  };
+</script>
 {% endblock %}
 {% block primary_bar %}{% endblock %}
 {% block header %}
@@ -175,7 +203,7 @@
         <div class="min-w-0 lg:pt-[3.5rem]">
           <h2 class="text-sm font-display font-black text-deep-charcoal uppercase tracking-widest mb-4">Live preview of your store</h2>
           <div id="preview-desktop-wrapper" class="preview-device-wrapper w-full">
-            <div class="rounded-xl overflow-hidden border border-gray-200 bg-gray-100 aspect-video max-h-[360px] relative shadow-sm">
+            <div id="preview-container-desktop" class="rounded-xl overflow-hidden border border-gray-200 bg-gray-100 aspect-video max-h-[360px] relative shadow-sm">
               <div id="screenshot-loading-desktop" class="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gray-100 text-gray-500 z-10">
                 <div class="screenshot-loading-spinner" aria-hidden="true"></div>
                 <span class="text-sm font-medium">Loading screenshot…</span>
@@ -185,15 +213,18 @@
                 src="https://image.thum.io/get/width/1280/{{ store_url }}"
                 alt="Preview of your store"
                 class="w-full h-full object-cover object-top opacity-0 transition-opacity duration-300"
-                onload="var loading=document.getElementById('screenshot-loading-desktop'); var img=this; if(loading){ loading.classList.add('hidden'); } img.classList.remove('opacity-0'); img.classList.add('opacity-100');"
-                onerror="var t=this; var loading=document.getElementById('screenshot-loading-desktop'); if(loading){ loading.classList.add('hidden'); } var n=t.nextElementSibling; if(n){ t.style.display='none'; n.style.display='flex'; }"
+                onload="window._croPreviewOnLoad(this, 'desktop');"
+                onerror="window._croPreviewOnError(this, 'desktop');"
               />
-              <span class="hidden absolute inset-0 w-full h-full min-h-[200px] items-center justify-center text-gray-500 text-sm bg-gray-100" style="display: none;">Preview unavailable</span>
-              <div class="absolute inset-0 flex flex-col justify-end p-4 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none">
+              <div id="screenshot-fallback-desktop" class="hidden absolute inset-0 flex flex-col items-center justify-center text-gray-500 text-sm bg-gray-100 z-10">
+                <span class="material-symbols-outlined text-4xl text-gray-300 mb-2" aria-hidden="true">image_not_supported</span>
+                <span>Preview unavailable</span>
+              </div>
+              <div class="preview-overlay absolute inset-0 flex flex-col justify-end p-4 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none">
                 <span class="inline-block text-white text-xs font-bold bg-black/40 backdrop-blur-sm px-2 py-1 rounded mb-1 w-fit">CTA below fold on mobile</span>
                 <span class="inline-block text-white/95 text-xs font-bold bg-black/40 backdrop-blur-sm px-2 py-1 rounded w-fit">Trust signals missing above fold</span>
               </div>
-              <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div class="preview-overlay absolute inset-0 flex items-center justify-center pointer-events-none">
                 <div class="w-16 h-16 rounded-full bg-primary flex items-center justify-center shadow-xl ring-4 ring-white/40" aria-hidden="true">
                   <span class="material-symbols-outlined text-white text-4xl" style="font-size: 36px;">download</span>
                 </div>
@@ -201,7 +232,7 @@
             </div>
           </div>
           <div id="preview-mobile-wrapper" class="preview-device-wrapper hidden w-full max-w-[200px] mx-auto mt-4">
-            <div class="rounded-xl overflow-hidden border border-gray-200 bg-gray-100 aspect-[9/16] max-h-[300px] relative shadow-sm">
+            <div id="preview-container-mobile" class="rounded-xl overflow-hidden border border-gray-200 bg-gray-100 aspect-[9/16] max-h-[300px] relative shadow-sm">
               <div id="screenshot-loading-mobile" class="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gray-100 text-gray-500 z-10">
                 <div class="screenshot-loading-spinner screenshot-loading-spinner-sm" aria-hidden="true"></div>
                 <span class="text-xs font-medium">Loading…</span>
@@ -211,15 +242,18 @@
                 src="https://image.thum.io/get/width/400/{{ store_url }}"
                 alt="Preview of your store"
                 class="w-full h-full object-cover object-top opacity-0 transition-opacity duration-300"
-                onload="var loading=document.getElementById('screenshot-loading-mobile'); var img=this; if(loading){ loading.classList.add('hidden'); } img.classList.remove('opacity-0'); img.classList.add('opacity-100');"
-                onerror="var t=this; var loading=document.getElementById('screenshot-loading-mobile'); if(loading){ loading.classList.add('hidden'); } var n=t.nextElementSibling; if(n){ t.style.display='none'; n.style.display='flex'; }"
+                onload="window._croPreviewOnLoad(this, 'mobile');"
+                onerror="window._croPreviewOnError(this, 'mobile');"
               />
-              <span class="hidden absolute inset-0 w-full h-full min-h-[200px] items-center justify-center text-gray-500 text-sm bg-gray-100" style="display: none;">Preview unavailable</span>
-              <div class="absolute inset-0 flex flex-col justify-end p-3 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none">
+              <div id="screenshot-fallback-mobile" class="hidden absolute inset-0 flex flex-col items-center justify-center text-gray-500 text-xs bg-gray-100 z-10 p-4 text-center">
+                <span class="material-symbols-outlined text-3xl text-gray-300 mb-1" aria-hidden="true">image_not_supported</span>
+                <span>Preview unavailable</span>
+              </div>
+              <div class="preview-overlay absolute inset-0 flex flex-col justify-end p-3 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none">
                 <span class="inline-block text-white text-[10px] font-bold bg-black/40 backdrop-blur-sm px-1.5 py-0.5 rounded mb-1 w-fit">Hero message lacks clarity</span>
                 <span class="inline-block text-white/90 text-[10px] font-bold bg-black/40 backdrop-blur-sm px-1.5 py-0.5 rounded w-fit">Full list in report</span>
               </div>
-              <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div class="preview-overlay absolute inset-0 flex items-center justify-center pointer-events-none">
                 <div class="w-14 h-14 rounded-full bg-primary flex items-center justify-center shadow-xl ring-4 ring-white/40" aria-hidden="true">
                   <span class="material-symbols-outlined text-white text-3xl" style="font-size: 32px;">download</span>
                 </div>

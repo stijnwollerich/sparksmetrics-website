@@ -138,6 +138,17 @@ class Config:
     # Slack: webhook URL for lead notifications. If set, every lead submission posts to Slack.
     SLACK_WEBHOOK_URL = os.environ.get("SLACK_WEBHOOK_URL", "").strip()
 
+    # CRO scan report pipeline: OpenAI for analysis, Brevo for sending the PDF. Either key name works.
+    _openai_key = os.environ.get("OPENAI_API_KEY", "").strip() or os.environ.get("OPEN_AI_KEY", "").strip()
+    OPENAI_API_KEY = _openai_key
+    OPEN_AI_KEY = _openai_key
+    OPENAI_BASE_URL = os.environ.get("OPENAI_BASE_URL", "").strip() or "https://api.openai.com/v1"
+    # Sender for transactional email (CRO report). Must be a verified sender in Brevo.
+    BREVO_SENDER_EMAIL = os.environ.get("BREVO_SENDER_EMAIL", "").strip() or os.environ.get("BREVO_TRANSACTIONAL_SENDER_EMAIL", "").strip()
+    BREVO_SENDER_NAME = os.environ.get("BREVO_SENDER_NAME", "Sparksmetrics").strip() or "Sparksmetrics"
+    # Base URL for the site (used for report view links in email). No trailing slash.
+    SITE_URL = (os.environ.get("SITE_URL", "").strip() or "https://sparksmetrics.com").rstrip("/")
+
 
 class ProductionConfig(Config):
     """Production configuration."""
