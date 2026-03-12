@@ -1,4 +1,4 @@
-"""Orchestrate CRO scan pipeline: screenshots → AI → PDF → store → email."""
+"""Orchestrate CRO scan pipeline: screenshots → AI → PDF → store → email → Slack."""
 from __future__ import annotations
 
 import json
@@ -6,6 +6,34 @@ import secrets
 from datetime import datetime
 
 from flask import current_app
+
+
+def _notify_slack_report_ready(report_view_url: str, store_name: str, to_email: str) -> None:
+    """Post report link to Slack when CRO scan is done and email was sent. Logs errors, does not raise."""
+    webhook_url = (current_app.config.get("SLACK_WEBHOOK_URL") or "").strip()
+    if not webhook_url:
+        return
+    text = "CRO scan report ready: *{}* – sent to {} – <{}|View report>".format(
+        store_name, to_email, report_view_url
+    )
+    try:
+        import requests
+    except ModuleNotFoundError:
+        current_app.logger.warning("Slack notify skipped: install requests (pip install requests)")
+        return
+    try:
+        r = requests.post(
+            webhook_url,
+            json={"text": text},
+            headers={"Content-Type": "application/json"},
+            timeout=5,
+        )
+        if r.status_code != 200:
+            current_app.logger.warning(
+                "Slack webhook failed: HTTP %s – %s", r.status_code, (r.text or "")[:200]
+            )
+    except Exception as e:
+        current_app.logger.warning("Slack notify error: %s", e)
 
 
 def run_scan(store_url: str, email: str, fname: str) -> None:
@@ -99,3 +127,7 @@ def run_scan(store_url: str, email: str, fname: str) -> None:
         report_view_url=report_view_url,
         pdf_bytes=pdf_bytes,
     )
+
+    # 6. Slack: post report link to channel (same webhook as lead notifications)
+    if report_view_url:
+        _notify_slack_report_ready(report_view_url, store_name, email)
