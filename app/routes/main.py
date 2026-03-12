@@ -514,6 +514,7 @@ def cro_scan_check():
     if not normalized:
         return jsonify({"success": False, "error": "Please enter a valid website URL."}), 400
     if not _is_shopify_site(normalized):
+        _notify_slack_cro_scan_non_shopify(normalized)
         return jsonify({"success": False, "error": "This doesn't look like a Shopify store. Please enter your Shopify store URL (e.g. yourstore.com or yourstore.myshopify.com)."}), 400
     _notify_slack_cro_scan_url(normalized)
     from urllib.parse import quote
@@ -660,6 +661,15 @@ def cro_scan_report_view(token):
     return resp
 
 
+def _cro_scan_submissions_today() -> int:
+    """Return a number 0–40 that increases evenly over the day (by hour). Used for social proof copy."""
+    from datetime import datetime
+    now = datetime.utcnow()
+    fraction_of_day = (now.hour * 60 + now.minute) / (24 * 60)
+    count = int(fraction_of_day * 40)
+    return min(max(count, 0), 40)
+
+
 @main_bp.route("/cro-scan/thank-you/", methods=["GET"])
 @main_bp.route("/cro-scan/thank-you", methods=["GET"])
 def cro_scan_thank_you():
@@ -671,7 +681,8 @@ def cro_scan_thank_you():
         return redirect(url_for("main.cro_scan_landing"))
     normalized = _normalize_shopify_url(store_url)
     store_url = normalized or store_url
-    return render_template("cro_scan_thank_you.html", store_url=store_url)
+    submissions_today = _cro_scan_submissions_today()
+    return render_template("cro_scan_thank_you.html", store_url=store_url, submissions_today=submissions_today)
 
 
 @main_bp.route("/cro-scan/preview-image", methods=["GET"])
@@ -863,6 +874,30 @@ def _sync_lead_to_brevo(
             )
     except Exception as e:
         current_app.logger.warning("Brevo contact sync error: %s", e)
+
+
+def _notify_slack_cro_scan_non_shopify(store_url: str) -> None:
+    """Post to Slack when someone submits a URL that is not detected as Shopify. Logs errors, does not raise."""
+    webhook_url = (current_app.config.get("SLACK_WEBHOOK_URL") or "").strip()
+    if not webhook_url:
+        return
+    text = "CRO scan: non-Shopify URL submitted (user was not sent to thank-you): {}".format(store_url)
+    try:
+        import requests
+    except ModuleNotFoundError:
+        current_app.logger.warning("Slack notify skipped: install requests (pip install requests)")
+        return
+    try:
+        r = requests.post(
+            webhook_url,
+            json={"text": text},
+            headers={"Content-Type": "application/json"},
+            timeout=5,
+        )
+        if r.status_code != 200:
+            current_app.logger.warning("Slack webhook failed: HTTP %s – %s", r.status_code, (r.text or "")[:200])
+    except Exception as e:
+        current_app.logger.warning("Slack notify error: %s", e)
 
 
 def _notify_slack_cro_scan_url(store_url: str) -> None:
