@@ -21,7 +21,13 @@
   <div class="max-w-7xl mx-auto px-6">
     <div class="grid md:grid-cols-2 gap-6 md:gap-8">
       {% for post in posts %}
-      <a href="{{ url_for('main.blog_post', slug=post.slug) }}" class="group block bg-white border border-gray-200 rounded-3xl p-7 md:p-8 shadow-sm hover:shadow-md transition-shadow">
+      <a href="{{ url_for('main.blog_post', slug=post.slug) }}" class="group block bg-white border border-gray-200 rounded-3xl shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+        {% if post.thumbnail %}
+        <div class="aspect-video w-full rounded-t-3xl overflow-hidden bg-gray-100">
+          <img src="{{ url_for('static', filename=post.thumbnail) }}" alt="" class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300" loading="lazy"/>
+        </div>
+        {% endif %}
+        <div class="p-7 md:p-8 {% if not post.thumbnail %}rounded-t-3xl {% endif %}">
         <div class="flex flex-wrap items-center gap-2 mb-4">
           <span class="inline-flex items-center px-3 py-2 rounded-lg bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest">{{ post.category }}</span>
           <span class="inline-flex items-center px-3 py-2 rounded-lg bg-gray-50 border border-gray-200 text-gray-500 text-[10px] font-bold uppercase tracking-widest">{{ post.reading_time }}</span>
@@ -31,6 +37,7 @@
         <div class="mt-6 flex items-center justify-between gap-3">
           <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Published {{ post.published_date }}</span>
           <span class="text-[10px] font-black uppercase tracking-widest text-primary">Read →</span>
+        </div>
         </div>
       </a>
       {% endfor %}

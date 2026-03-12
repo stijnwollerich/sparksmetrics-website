@@ -22,6 +22,7 @@
     <meta property="og:title" content="{% block og_title %}Sparksmetrics{% endblock %}"/>
     <meta property="og:description" content="{% block og_description %}Results-driven CRO and analytics for brands that scale. Free conversion audit and data-driven optimization.{% endblock %}"/>
     <meta property="og:url" content="{{ request.url }}"/>
+    {% block og_image_meta %}{% endblock %}
     <meta name="twitter:card" content="summary_large_image"/>
     <meta name="twitter:title" content="{% block twitter_title %}Sparksmetrics{% endblock %}"/>
     <meta name="twitter:description" content="{% block twitter_description %}Results-driven CRO and analytics for brands that scale. Free conversion audit and data-driven optimization.{% endblock %}"/>

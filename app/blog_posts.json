@@ -1,6 +1,19 @@
 {
   "posts": [
     {
+      "slug": "cro-audit-step-by-step-process",
+      "title": "How to Do a CRO Audit (Step‑by‑Step Process That Turns Into Real Tests)",
+      "description": "The exact CRO audit process we use: data analysis, behavior insights, structured page review, and a prioritized testing roadmap—for ecommerce, SaaS, and lead gen.",
+      "published_date": "12 Mar 2026",
+      "updated_date": "12 Mar 2026",
+      "reading_time": "14 min read",
+      "category": "CRO",
+      "template": "blog_cro-audit-step-by-step-process.html",
+      "video_id": "WXndZHSscFw",
+      "youtube_url": "https://www.youtube.com/watch?v=WXndZHSscFw",
+      "thumbnail": "images/blog/cro-audit-thumbnail.png"
+    },
+    {
       "slug": "qed0zrqfyeg",
       "title": "qEd0zrqFYeg",
       "description": "Conversion rate optimization is still one of the best ways to improve the performance of your e-commerce store. Every day we see agencies and brands come to ...",

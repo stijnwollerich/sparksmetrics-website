@@ -383,6 +383,7 @@ def _scan_blog_templates() -> list[dict]:
             # include any explicit video_id or youtube_url from metadata so templates can use them
             **({"video_id": metadata_by_slug[slug].get("video_id")} if slug in metadata_by_slug and metadata_by_slug[slug].get("video_id") else {}),
             **({"youtube_url": metadata_by_slug[slug].get("youtube_url")} if slug in metadata_by_slug and metadata_by_slug[slug].get("youtube_url") else {}),
+            **({"thumbnail": metadata_by_slug[slug]["thumbnail"]} if slug in metadata_by_slug and metadata_by_slug[slug].get("thumbnail") else {}),
         }
         posts.append(post)
     return posts

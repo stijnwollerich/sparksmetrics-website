@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }} | Sparksmetrics{% endblock %}
+{% block meta_description %}{{ post.description }}{% endblock %}
+{% block og_title %}{{ post.title }}{% endblock %}
+{% block twitter_title %}{{ post.title }}{% endblock %}
+{% block og_description %}{{ post.description }}{% endblock %}
+{% block twitter_description %}{{ post.description }}{% endblock %}
+{% block og_image_meta %}
+{% if post.thumbnail %}
+<meta property="og:image" content="{{ url_for('static', filename=post.thumbnail, _external=True) }}"/>
+<meta name="twitter:image" content="{{ url_for('static', filename=post.thumbnail, _external=True) }}"/>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<section class="bg-light-base py-10 md:py-14 border-b border-gray-100">
+  <div class="content-narrow px-6">
+    <a href="{{ url_for('main.blog_index') }}" class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-500 hover:text-primary transition-colors min-h-[44px]">
+      <span class="material-symbols-outlined text-base" aria-hidden="true">arrow_back</span>
+      Back to blog
+    </a>
+
+    <header class="mt-6">
+      <p class="text-primary font-bold text-sm uppercase tracking-[0.4em] mb-4">{{ post.category }}</p>
+      <h1 class="normal-case text-3xl md:text-5xl font-display font-black tracking-tight text-deep-charcoal mb-4">{{ post.title }}</h1>
+      <p class="text-gray-600 text-base md:text-lg mb-0">{{ post.description }}</p>
+      <div class="mt-6 flex flex-wrap gap-2">
+        <span class="inline-flex items-center px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-500 text-[10px] font-bold uppercase tracking-widest">Published {{ post.published_date }}</span>
+        <span class="inline-flex items-center px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-500 text-[10px] font-bold uppercase tracking-widest">{{ post.reading_time }}</span>
+      </div>
+    </header>
+  </div>
+</section>
+
+<section class="bg-light-base py-12 md:py-16">
+  <div class="content-narrow px-6">
+    <div class="aspect-video w-full rounded-2xl overflow-hidden bg-black border border-black/10">
+      <iframe
+        class="w-full h-full"
+        src="https://www.youtube.com/embed/{{ post.video_id or 'WXndZHSscFw' }}"
+        title="How to Do a CRO Audit - Step-by-Step Process"
+        frameborder="0"
+        loading="lazy"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <article class="blog-prose mt-10">
+      <script type="application/ld+json">{{ {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": (post.title or "How to Do a CRO Audit (Step-by-Step Process That Turns Into Real Tests)"),
+        "description": (post.description or "The exact CRO audit process we use: data analysis, behavior insights, structured page review, and a prioritized testing roadmap.")
+      } | tojson }}</script>
+
+      <p class="lead">A CRO audit answers one thing: why visitors don't convert. No guesswork. You use data, behavior, and a structured look at the pages to see where people drop off and what to test next. Most audits flop because they hand you a fat PDF of opinions and zero clarity on what to do first. Below is the exact process we use to turn any site into a prioritized test list. We've run it on 100+ audits across ecommerce, SaaS, and lead gen.</p>
+
+      <ul class="mb-6">
+        <li><strong>What a CRO audit is</strong> and why the output should be a testing roadmap, not just a report</li>
+        <li><strong>An 8-step process:</strong> workspace, data-first analysis, product conversion rates, funnels, heatmaps, structured page review, mobile, and prioritization</li>
+        <li><strong>A simple page-review framework:</strong> clarity, motivation, trust, and friction</li>
+      </ul>
+
+      {% include 'blog/includes/hero_cta_buttons.html' %}
+
+      <nav id="toc" class="mb-6 p-4 bg-primary/5 rounded-lg">
+        <strong>Contents</strong>
+        <ul class="ml-4 mt-2">
+          <li><a href="#what-is-cro-audit">What Is a CRO Audit</a></li>
+          <li><a href="#why-cro-audits-matter">Why CRO Audits Matter</a></li>
+          <li><a href="#cro-audit-process">The CRO Audit Process We Use</a></li>
+          <li><a href="#step-1-workspace">Step 1: Combine Everything Into One Workspace</a></li>
+          <li><a href="#step-2-data">Step 2: Start With Data, Not Opinions</a></li>
+          <li><a href="#step-3-conversion-rates">Step 3: Analyze Conversion Rates by Product</a></li>
+          <li><a href="#step-4-funnel">Step 4: Use Funnel Reports to Identify Drop-Off</a></li>
+          <li><a href="#step-5-heatmaps">Step 5: Use Heatmaps to Understand Behavior</a></li>
+          <li><a href="#step-6-page-review">Step 6: Perform a Structured Page Review</a></li>
+          <li><a href="#step-7-mobile">Step 7: Always Review Mobile Separately</a></li>
+          <li><a href="#step-8-prioritization">Step 8: Turn Insights Into a Testing Roadmap</a></li>
+          <li><a href="#why-cro-drives-growth">Why Conversion Rate Optimization Drives Growth</a></li>
+          <li><a href="#final-thoughts">Final Thoughts</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <h2 id="what-is-cro-audit">What Is a CRO Audit</h2>
+      <p>A CRO audit is a structured look at your site to answer: why aren't people converting, and what could we test to fix it? No fluff. Just a clear path from "conversion is broken" to "here's what to test first."</p>
+      <p>A solid audit leans on three things:</p>
+      <ul>
+        <li>Analytics (where the numbers leak)</li>
+        <li>Behaviour (what people actually do on the page)</li>
+        <li>A structured page review (why the page might be losing them)</li>
+      </ul>
+      <div class="callout mt-6 p-4 bg-primary/5 rounded-lg border border-primary/20">
+        <p class="callout-title font-semibold mb-2">The real output</p>
+        <p>Nobody needs another 40-page PDF that sits in a drawer. The goal is a <strong>prioritized testing roadmap</strong>: a short list of experiments, in order, so you know what to ship next.</p>
+      </div>
+
+      <h2 id="why-cro-audits-matter">Why CRO Audits Matter</h2>
+      <p>Lots of brands try to grow by turning up the traffic tap. But if the site converts like a sieve, you're just pouring more water in. Better conversion flips the maths: same traffic, more revenue. Lower cost per customer. Better payback on ads.</p>
+      <p>So the rule of thumb: fix the leak before you scale the spend. CRO before you double the budget.</p>
+
+      <h2 id="cro-audit-process">The CRO Audit Process We Use</h2>
+      <p>We break it into four chunks: data, behavior, page review, then prioritization. Below we walk through each step so you can copy the playbook.</p>
+
+      <h2 id="step-1-workspace">Step 1: Combine Everything Into One Workspace</h2>
+      <p>First we get everything in one place. No 80-page PDF. We use something like FigJam so the whole team can see the same board: homepage, category pages, product pages, checkout. Desktop and mobile, side by side.</p>
+      <p>Then we annotate. Each note says: "this might be the problem, here's what we could test." Slowly you get a map of ideas pinned to the exact spot on the page. But before we scribble ideas everywhere, we answer one question: <strong>where are people actually struggling?</strong> That comes from data.</p>
+      <figure class="my-8">
+        <img src="{{ url_for('static', filename='images/blog/cro-audit-figma-workspace.png') }}" alt="Bringing CRO audit findings together in a Figma or FigJam workspace with annotated screenshots" class="w-full rounded-xl border border-gray-200 shadow-sm" loading="lazy"/>
+        <figcaption class="mt-2 text-sm text-gray-500">Bringing it all together in one workspace: annotated screenshots and experiment ideas linked to the page.</figcaption>
+      </figure>
+
+      <h2 id="step-2-data">Step 2: Start With Data, Not Opinions</h2>
+      <p>Plenty of audits start with someone staring at the site and saying "that button looks wrong." That's the wrong order. You need to know <strong>where the biggest leaks are</strong> before you start redesigning buttons.</p>
+      <p>GA4 (or whatever you use) can tell you. For ecommerce, the <strong>product performance</strong> table is gold: views, add-to-carts, purchases. Don't fixate on your bestsellers. Look for the opposite: products that get tons of views and almost no add-to-carts. Those pages are usually where the low-hanging fruit lives.</p>
+      <p>You can slice this by product, category, or variant. Rule of thumb: high traffic, low conversion = optimize there first. You only have so much dev time; spend it where the volume is.</p>
+      <figure class="my-8">
+        <img src="{{ url_for('static', filename='images/blog/cro-audit-ga4-product-performance.png') }}" alt="GA4 product performance report showing views, add to carts, and purchases" class="w-full rounded-xl border border-gray-200 shadow-sm" loading="lazy"/>
+        <figcaption class="mt-2 text-sm text-gray-500">The product performance report in GA4 helps you spot high-traffic pages with low conversion.</figcaption>
+      </figure>
+
+      <h2 id="step-3-conversion-rates">Step 3: Analyze Conversion Rates by Product</h2>
+      <p>Out of the box, GA4 gives you big numbers. What you want is ratios. Lots of teams pipe GA4 into Looker Studio or BigQuery so they can see view-to-cart rate, cart-to-purchase rate, and full product conversion. Those percentages tell you where the funnel is healthy and where it's choking.</p>
+      <p>Simple read: if a product gets 10,000 views and 50 add-to-carts, the problem is probably on the product page (messaging, trust, or "add to cart" itself). If add-to-carts are strong but purchases tank, the leak is likely in checkout. You're just narrowing the search.</p>
+
+      <h2 id="step-4-funnel">Step 4: Use Funnel Reports to Find Where People Bail</h2>
+      <p>Think of the funnel as a pipe: session, product view, add to cart, checkout, purchase. Where the pipe narrows the most is where you look first. GA4's funnel report shows you exactly that.</p>
+      <p>If 80% of people never see a product page, your navigation or homepage is the suspect. If they add to cart then vanish at checkout, the problem is in the last mile (forms, trust, or payment). Segment the funnel by device, country, or traffic source and you'll often spot big gaps. Mobile and desktop behave like different sites; that's where a lot of quick wins hide.</p>
+      <figure class="my-8">
+        <img src="{{ url_for('static', filename='images/blog/cro-audit-ga4-funnel-report.png') }}" alt="GA4 funnel report showing drop-off between session, product view, add to cart, checkout, and purchase" class="w-full rounded-xl border border-gray-200 shadow-sm" loading="lazy"/>
+        <figcaption class="mt-2 text-sm text-gray-500">Funnel reports show where users drop off so you can focus optimization on the right step.</figcaption>
+      </figure>
+
+      <h2 id="step-5-heatmaps">Step 5: Use Heatmaps to See What People Actually Do</h2>
+      <p>Analytics tells you what happened. Heatmaps show you where people clicked, how far they scrolled, and what got their attention. It's like an X-ray of the page. Microsoft Clarity does this for free; fancier tools can tie clicks to revenue so you see which elements actually convert.</p>
+      <p>Classic find: a nav item that gets thousands of clicks and zero purchases. Maybe it doesn't deserve prime real estate. Or you spot people hammering something that isn't clickable. That's a usability leak. Heatmaps turn "we think the layout is wrong" into "here's the evidence."</p>
+      <figure class="my-8">
+        <img src="{{ url_for('static', filename='images/blog/cro-audit-heatmap.png') }}" alt="Heatmap overlay showing where users click and scroll on a page" class="w-full rounded-xl border border-gray-200 shadow-sm" loading="lazy"/>
+        <figcaption class="mt-2 text-sm text-gray-500">Heatmaps reveal where users click, how far they scroll, and which elements get attention.</figcaption>
+      </figure>
+
+      <h2 id="step-6-page-review">Step 6: Run a Structured Page Review</h2>
+      <p>Data tells you where it hurts. The page review tells you why. We use four lenses: clarity, motivation, trust, and friction. Run through them on any key page and you'll have a short list of "might be wrong" in minutes.</p>
+      <figure class="my-8">
+        <img src="{{ url_for('static', filename='images/blog/cro-audit-ui-ux-review.png') }}" alt="Structured UI/UX page review using clarity, motivation, trust, and friction" class="w-full rounded-xl border border-gray-200 shadow-sm" loading="lazy"/>
+        <figcaption class="mt-2 text-sm text-gray-500">A structured page review: clarity, motivation, trust, and friction.</figcaption>
+      </figure>
+
+      <h3>Clarity</h3>
+      <p>Can someone land on the page and in a few seconds get: what is this, who it's for, and why it's worth it? If not, the page is working too hard. Bullets, a clear headline, and a one-line value prop go a long way.</p>
+
+      <h3>Motivation</h3>
+      <p>Why should they act now? Stock running low, free shipping, a discount, or "ends Sunday" all nudge people off the fence. Without a reason to move, they'll bounce and "come back later" (they won't).</p>
+
+      <h3>Trust</h3>
+      <p>Do they believe you? Reviews, ratings, guarantees, and familiar logos answer that. A product page with no social proof is like a stranger asking for your card details. Add proof where the doubt is.</p>
+
+      <h3>Friction</h3>
+      <p>Anything that makes the next step harder. Confusing size guides, slow load, a checkout that feels like a tax form, or key info buried in tabs. Fix friction first; it's usually the fastest win.</p>
+
+      <h2 id="step-7-mobile">Step 7: Treat Mobile as Its Own Beast</h2>
+      <p>On most stores, mobile is half the traffic or more. But the experience is nothing like desktop. Stuff is in accordions, images swipe, and the CTA might be three scrolls down. So we always review mobile on its own. Often the biggest gains live there: one tap instead of three, a sticky add-to-cart, or copy that actually fits the screen.</p>
+
+      <h2 id="step-8-prioritization">Step 8: Turn Ideas Into a Testing Roadmap</h2>
+      <p>By now you've got a pile of ideas. You can't test them all. So you rank. We score each one on two things: how big could the impact be, and how much effort to ship? Big impact, low effort = top of the list. That's your roadmap for the next few weeks. The audit stops being a document and becomes the backlog.</p>
+
+      <div class="callout mt-6 p-4 bg-primary/5 rounded-lg border border-primary/20">
+        <p class="callout-title font-semibold mb-2">Why this bit matters</p>
+        <p>Without prioritization, everyone picks their favorite idea and nothing gets done. A clear list gets alignment: "we're testing these five next." Score by impact and effort, then lock in the next 4 to 8 weeks of tests.</p>
+      </div>
+
+      {% include 'blog/includes/cta_audit.html' %}
+
+      <h2 id="why-cro-drives-growth">Why CRO Actually Moves the Needle</h2>
+      <p>Traffic is expensive. Conversion is a multiplier. Lift the rate and you get more revenue from the same spend, better ROAS, and often higher AOV and repeat buys. That's why brands that scale invest in CRO before they double down on ads.</p>
+
+      <h2 id="final-thoughts">Wrap-Up</h2>
+      <p>A good CRO audit doesn't end in a deck. It ends in a short list: "test this, then this, then this." Data tells you where to look, behavior tells you what's wrong, and the page review tells you what to change. Do that and the audit becomes the first sprint of a real CRO program.</p>
+
+      <h2 id="faq">FAQ</h2>
+
+      <h3>What is a CRO audit?</h3>
+      <p>A structured look at your site to find why people don't convert and what you could test to fix it. The output should be a prioritized list of experiments, not just a report.</p>
+
+      <h3>How long does a CRO audit take?</h3>
+      <p>Anywhere from a few hours to a few days, depending on site size and how deep you go. A single funnel can be audited in an afternoon; a full store takes longer.</p>
+
+      <h3>What tools do you use?</h3>
+      <p>GA4 (or similar), product performance and funnel reports, heatmaps (e.g. Clarity), and sometimes session replays. The exact stack depends on what you already have.</p>
+
+      <h3>What do you get at the end?</h3>
+      <p>A testing roadmap: a ranked list of experiments so you know what to ship first. Optionally a shared workspace (e.g. FigJam) with the key pages and ideas pinned to them.</p>
+    </article>
+  </div>
+</section>
+{% endblock %}
