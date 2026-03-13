@@ -511,6 +511,8 @@ def cro_scan_check():
     """Validate Shopify URL; redirect to thank-you with url param or return JSON error."""
     data = request.get_json(silent=True) or request.form or {}
     raw = (data.get("website_url") or data.get("url") or "").strip()
+    # Notify Slack on every submit (so you see every button press and value)
+    _notify_slack_cro_scan_submit(raw)
     normalized = _normalize_shopify_url(raw)
     if not normalized:
         return jsonify({"success": False, "error": "Please enter a valid website URL."}), 400
@@ -875,6 +877,31 @@ def _sync_lead_to_brevo(
             )
     except Exception as e:
         current_app.logger.warning("Brevo contact sync error: %s", e)
+
+
+def _notify_slack_cro_scan_submit(raw_value: str) -> None:
+    """Post to Slack every time someone submits the CRO scan form (button press + value). Logs errors, does not raise."""
+    webhook_url = (current_app.config.get("SLACK_WEBHOOK_URL") or "").strip()
+    if not webhook_url:
+        return
+    display = (raw_value or "(empty)").strip() or "(empty)"
+    text = "CRO scan form submitted: {}".format(display)
+    try:
+        import requests
+    except ModuleNotFoundError:
+        current_app.logger.warning("Slack notify skipped: install requests (pip install requests)")
+        return
+    try:
+        r = requests.post(
+            webhook_url,
+            json={"text": text},
+            headers={"Content-Type": "application/json"},
+            timeout=5,
+        )
+        if r.status_code != 200:
+            current_app.logger.warning("Slack webhook failed: HTTP %s – %s", r.status_code, (r.text or "")[:200])
+    except Exception as e:
+        current_app.logger.warning("Slack notify error: %s", e)
 
 
 def _notify_slack_cro_scan_non_shopify(store_url: str) -> None:
