@@ -1,87 +1,137 @@
-{% extends "base.html" %}
-{% block title %}Free CRO Scan for Shopify | Sparksmetrics{% endblock %}
-{% block meta_description %}Free AI-powered CRO scan for Shopify. Get an instant conversion report—score, issues, and next steps. In busy times delivery may be delayed.{% endblock %}
-{% block og_title %}Free CRO Scan for Shopify | Sparksmetrics{% endblock %}
-{% block og_description %}Free AI-powered CRO scan for Shopify. Get an instant conversion report—score, issues, and next steps.{% endblock %}
-{% block twitter_title %}Free CRO Scan for Shopify | Sparksmetrics{% endblock %}
-{% block twitter_description %}Check the health and conversion score of your Shopify store. Free CRO scan—detect issues and get a prioritized report.{% endblock %}
-{% block head_extras %}
+{% extends "base.html" %} {% block title %}Free CRO Scan for Ecommerce |
+Sparksmetrics{% endblock %} {% block meta_description %}Free AI-powered CRO scan
+for your ecommerce store. Get an instant conversion report—score, issues, and next steps. In
+busy times delivery may be delayed.{% endblock %} {% block og_title %}Free CRO
+Scan for Ecommerce | Sparksmetrics{% endblock %} {% block og_description %}Free
+AI-powered CRO scan for your ecommerce store. Get an instant conversion report—score, issues,
+and next steps.{% endblock %} {% block twitter_title %}Free CRO Scan for Ecommerce
+| Sparksmetrics{% endblock %} {% block twitter_description %}Check the health
+and conversion score of your online store. Free CRO scan—detect issues and get
+a prioritized report.{% endblock %} {% block head_extras %}
 <meta name="robots" content="noindex, nofollow" />
-{% endblock %}
-{% block footer %}{% endblock %}
-{% block audit_bar %}{% endblock %}
-{% block body_class %}bg-white text-gray-800 font-sans{% endblock %}
-{% block content %}
-{% if ENABLE_GTM %}
+<style>
+  .cro-scan-btn-spinner {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    margin-right: 0.4em;
+    vertical-align: -0.2em;
+    animation: cro-scan-spin 0.7s linear infinite;
+  }
+  @keyframes cro-scan-spin {
+    to { transform: rotate(360deg); }
+  }
+  .cro-scan-btn-loading {
+    cursor: wait;
+  }
+</style>
+{% endblock %} {% block footer %}{% endblock %} {% block primary_bar %}{%
+endblock %} {% block audit_bar %}{% endblock %} {% block body_class %}bg-white
+text-gray-800 font-sans{% endblock %} {% block content %} {% if ENABLE_GTM %}
 <script>
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({
-    event: 'page_view',
-    page_type: 'cro_scan_landing',
-    page_path: '{{ request.path }}'
+    event: "page_view",
+    page_type: "cro_scan_landing",
+    page_path: "{{ request.path }}",
   });
 </script>
 {% endif %}
-<div class="min-h-screen flex flex-col">
-  {# Hero — row 1: headline + description left, report mockup right (aligned top); row 2: full-width input; row 3: logos #}
-  <section class="pt-10 pb-12 md:pt-14 md:pb-16 lg:pb-20">
+<div class="min-h-screen flex flex-col pb-28 md:pb-0">
+  {# Above-the-fold hero: left = social proof + headline + form; right = report
+  preview with context #}
+  <section
+    class="pt-6 pb-10 md:pt-8 md:pb-12 lg:pt-10 lg:pb-14 min-h-[85vh] flex flex-col justify-center"
+  >
     <div class="max-w-6xl mx-auto px-4 md:px-6">
-      {# Row 1: headline + description | report mockup (mockup higher up, items-start) #}
-      <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
-        <div>
-          {# Social proof at top (ebook-style) #}
-          <div class="flex flex-wrap items-center gap-2 mb-4">
-            <span class="flex text-primary">
-              <span class="material-symbols-outlined star-filled text-lg">star</span>
-              <span class="material-symbols-outlined star-filled text-lg">star</span>
-              <span class="material-symbols-outlined star-filled text-lg">star</span>
-              <span class="material-symbols-outlined star-filled text-lg">star</span>
-              <span class="material-symbols-outlined star-filled text-lg">star</span>
+      <div
+        class="grid lg:grid-cols-2 gap-8 lg:gap-10 xl:gap-12 items-center lg:items-start"
+      >
+        <div class="order-1 lg:order-1">
+          <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mb-3">
+            <span class="flex text-primary" aria-hidden="true">
+              <span
+                class="material-symbols-outlined star-filled text-base md:text-lg"
+                >star</span
+              >
+              <span
+                class="material-symbols-outlined star-filled text-base md:text-lg"
+                >star</span
+              >
+              <span
+                class="material-symbols-outlined star-filled text-base md:text-lg"
+                >star</span
+              >
+              <span
+                class="material-symbols-outlined star-filled text-base md:text-lg"
+                >star</span
+              >
+              <span
+                class="material-symbols-outlined star-filled text-base md:text-lg"
+                >star</span
+              >
             </span>
-            <span class="text-gray-600 text-sm font-bold">200+ brands · Same process for $10M+ funnels</span>
+            <span class="text-gray-600 text-xs md:text-sm font-normal"
+              >$61M+ revenue from A/B testing</span
+            >
           </div>
-          {# Multi-line headline with orange highlight (ebook-style) #}
-          <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-display font-black text-deep-charcoal uppercase tracking-tight leading-tight mb-5">
-            Get a <span class="text-primary">free AI-powered CRO scan</span> of your Shopify store.
+          <h1
+            class="text-[2.5rem] sm:text-3xl md:text-4xl lg:text-5xl font-display font-black text-deep-charcoal uppercase tracking-tight leading-tight mb-3"
+          >
+            Instant Free <span class="text-primary">AI CRO scan</span> for your
+            store.
           </h1>
-          <p class="text-gray-600 text-sm md:text-base mb-3">Stop guessing what’s hurting conversion. Get a clear list of what to fix first and what to test next, so you can act instead of wonder.</p>
-          <p class="text-deep-charcoal font-bold text-sm md:text-base mb-3">In your report, you’ll get:</p>
-          <ul class="space-y-2 mb-6">
-            <li class="flex gap-3 text-gray-700 text-sm md:text-base"><span class="material-symbols-outlined text-primary shrink-0 mt-0.5">check_circle</span> A conversion score for your homepage and key pages</li>
-            <li class="flex gap-3 text-gray-700 text-sm md:text-base"><span class="material-symbols-outlined text-primary shrink-0 mt-0.5">check_circle</span> A prioritized list of issues killing your conversions</li>
-            <li class="flex gap-3 text-gray-700 text-sm md:text-base"><span class="material-symbols-outlined text-primary shrink-0 mt-0.5">check_circle</span> Clear next steps you can implement right away</li>
+          <p class="text-gray-600 text-sm md:text-base mb-2 max-w-xl">
+            Stop guessing what's hurting conversion. Get a clear list of what to
+            fix first.
+          </p>
+          <p class="text-deep-charcoal font-bold text-sm md:text-base mb-3">
+            In your report you'll get:
+          </p>
+          <ul class="space-y-2 mb-4">
+            <li class="flex gap-3 text-gray-700 text-sm md:text-base">
+              <span
+                class="material-symbols-outlined text-primary shrink-0 mt-0.5"
+                >check_circle</span
+              >
+              Instant report. No waiting
+            </li>
+            <li class="flex gap-3 text-gray-700 text-sm md:text-base">
+              <span
+                class="material-symbols-outlined text-primary shrink-0 mt-0.5"
+                >check_circle</span
+              >
+              Exactly why you're losing money and how to improve CVR
+            </li>
+            <li class="flex gap-3 text-gray-700 text-sm md:text-base">
+              <span
+                class="material-symbols-outlined text-primary shrink-0 mt-0.5"
+                >check_circle</span
+              >
+              A prioritized list of tests and improvements to run
+            </li>
           </ul>
-        </div>
-        {# Hero GIF — place your file at app/static/images/cro_scan_hero.gif (run scripts/compress_cro_hero_gif.sh to compress) #}
-        <div class="relative lg:pl-4 lg:pt-12 xl:pt-16">
-          <div class="relative rounded-2xl overflow-hidden max-w-md mx-auto lg:max-w-none lg:mx-0 shadow-xl border border-gray-200 bg-gray-50">
-            <img
-              src="{{ url_for('static', filename='images/cro_scan_hero.gif') }}"
-              alt="CRO Scan Report — see your conversion score and issues"
-              class="w-full h-auto block hero-gif-img"
-              width="600"
-              height="400"
-              loading="eager"
-              decoding="async"
-              onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');"
-            />
-            <div class="hidden hero-gif-fallback absolute inset-0 flex flex-col items-center justify-center p-6 text-center text-gray-500">
-              <span class="material-symbols-outlined text-4xl text-gray-300 mb-2">image</span>
-              <p class="text-sm font-medium">Add <code class="bg-gray-200 px-1.5 py-0.5 rounded text-xs">app/static/images/cro_scan_hero.gif</code> to show your hero GIF.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {# Row 2: URL bar in card with checkmark row below #}
-      <div class="mt-10 lg:mt-12 max-w-2xl mx-auto">
-        <div class="rounded-2xl bg-gray-50 border border-gray-200 p-6 md:p-8 shadow-lg">
-          <h2 class="text-deep-charcoal font-display font-black text-lg md:text-xl uppercase tracking-tight text-center mb-5">What’s your homepage?</h2>
-          <form id="cro-scan-form" class="space-y-4" action="{{ url_for('main.cro_scan_check') }}" method="post">
-            <div class="flex flex-col sm:flex-row gap-3">
-              <label for="website_url" class="sr-only">Your Shopify store URL</label>
-              <div class="flex flex-1 min-w-0 rounded-xl border-2 border-gray-200 bg-white focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 min-h-[52px]">
-                <span class="inline-flex items-center px-4 text-gray-500 text-base shrink-0 border-r border-gray-200 bg-gray-50 rounded-l-xl" aria-hidden="true">https://</span>
+          <form
+            id="cro-scan-form"
+            class="space-y-2"
+            action="{{ url_for('main.cro_scan_check') }}"
+            method="post"
+          >
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
+              <label for="website_url" class="sr-only"
+                >Your store URL</label
+              >
+              <div
+                class="flex flex-1 min-w-0 rounded-xl border-2 border-gray-200 bg-white focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 min-h-[50px]"
+              >
+                <span
+                  class="inline-flex items-center px-3 md:px-4 text-gray-500 text-sm md:text-base shrink-0 border-r border-gray-200 bg-gray-50 rounded-l-xl"
+                  aria-hidden="true"
+                  >https://</span
+                >
                 <input
                   type="text"
                   id="website_url"
@@ -89,65 +139,213 @@
                   placeholder="yourstore.com"
                   inputmode="url"
                   autocomplete="url"
-                  class="flex-1 min-w-0 min-h-[52px] px-4 py-3 rounded-r-xl border-0 bg-transparent text-deep-charcoal placeholder-gray-400 text-base focus:outline-none focus:ring-0"
+                  class="flex-1 min-w-0 min-h-[50px] px-3 md:px-4 py-2.5 rounded-r-xl border-0 bg-transparent text-deep-charcoal placeholder-gray-400 text-base focus:outline-none focus:ring-0"
                   required
                 />
               </div>
-              <button type="submit" id="cro-scan-submit" class="w-full sm:w-auto min-h-[52px] px-6 py-4 bg-primary text-white font-display font-black text-sm uppercase rounded-xl hover:brightness-110 transition-all shrink-0">
+              <button
+                type="submit"
+                id="cro-scan-submit"
+                class="w-full sm:w-auto min-h-[50px] px-5 py-3 bg-primary text-white font-display font-black text-sm uppercase rounded-xl hover:brightness-110 transition-all shrink-0"
+              >
                 Get your report
               </button>
             </div>
-            <p id="cro-scan-error" class="text-red-500 text-sm font-bold hidden" role="alert"></p>
-            <div class="flex flex-wrap justify-center gap-6 md:gap-8 pt-2">
-              <span class="flex items-center gap-2 text-gray-700 text-sm">
-                <span class="flex items-center justify-center w-5 h-5 rounded-full border-2 border-primary text-primary shrink-0">
-                  <span class="material-symbols-outlined text-sm" style="font-size: 14px;">check</span>
-                </span>
-                711+ sites scanned
-              </span>
-              <span class="flex items-center gap-2 text-gray-700 text-sm">
-                <span class="flex items-center justify-center w-5 h-5 rounded-full border-2 border-primary text-primary shrink-0">
-                  <span class="material-symbols-outlined text-sm" style="font-size: 14px;">check</span>
-                </span>
+            <p
+              id="cro-scan-error"
+              class="text-red-500 text-sm font-bold hidden"
+              role="alert"
+            ></p>
+            <div
+              class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-gray-600 text-xs md:text-sm"
+            >
+              <span class="flex items-center gap-1.5">
+                <span
+                  class="material-symbols-outlined text-primary text-base"
+                  style="font-size: 16px"
+                  >check_circle</span
+                >
                 Results in under a minute
               </span>
-              <span class="flex items-center gap-2 text-gray-700 text-sm">
-                <span class="flex items-center justify-center w-5 h-5 rounded-full border-2 border-primary text-primary shrink-0">
-                  <span class="material-symbols-outlined text-sm" style="font-size: 14px;">check</span>
-                </span>
+              <span class="flex items-center gap-1.5">
+                <span
+                  class="material-symbols-outlined text-primary text-base"
+                  style="font-size: 16px"
+                  >check_circle</span
+                >
                 100% free
+              </span>
+              <span class="hidden md:flex items-center gap-1.5">
+                <span
+                  class="material-symbols-outlined text-primary text-base"
+                  style="font-size: 16px"
+                  >check_circle</span
+                >
+                711+ stores scanned
               </span>
             </div>
           </form>
-          <p class="text-gray-500 text-xs text-center mt-4">Shopify only. During busy times delivery may be delayed.</p>
+        </div>
+        {# Report preview: below CTA on mobile (order-2), right column on
+        desktop #}
+        <div class="order-2 lg:order-2 lg:pl-2">
+          <div
+            class="relative rounded-2xl overflow-hidden max-w-md mx-auto lg:max-w-none lg:mx-0 shadow-xl border border-gray-200 bg-gray-50"
+          >
+            <div class="px-4 pt-4 flex items-center justify-center">
+              <span
+                class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/80 backdrop-blur-sm border border-gray-200/80 text-gray-600 text-[11px] font-semibold uppercase tracking-widest shadow-sm"
+                >Sample report</span
+              >
+            </div>
+            <div
+              class="px-2 pb-2 relative rounded-lg overflow-hidden bg-gray-900 isolate"
+            >
+              <video
+                id="cro-scan-hero-video"
+                class="js-skip-video-cta w-full h-auto block rounded-lg"
+                width="600"
+                height="400"
+                preload="metadata"
+                playsinline
+                controlsList="nodownload nofullscreen noremoteplayback"
+                disablePictureInPicture
+                aria-label="Sample CRO report preview"
+              >
+                <source
+                  src="{{ url_for('static', filename='videos/cro_scan_hero.mp4') }}"
+                  type="video/mp4"
+                />
+              </video>
+              <div
+                id="cro-scan-hero-overlay"
+                class="absolute inset-0 bg-black/30 rounded-lg flex flex-col items-center justify-center gap-2 hover:bg-black/40 transition-colors cursor-pointer"
+              >
+                <button
+                  type="button"
+                  id="cro-scan-hero-play"
+                  class="flex flex-col items-center justify-center gap-2 group"
+                  aria-label="See sample report"
+                >
+                  <span
+                    class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-primary flex items-center justify-center shadow-xl group-hover:scale-105 transition-transform"
+                  >
+                    <span
+                      class="material-symbols-outlined text-white text-4xl md:text-5xl ml-1"
+                      style="font-size: 2.5rem"
+                      >play_arrow</span
+                    >
+                  </span>
+                  <span class="text-white text-sm font-semibold drop-shadow-sm"
+                    >See sample</span
+                  >
+                </button>
+              </div>
+            </div>
+          </div>
+          {% if submissions_today is defined and submissions_today > 0 %}
+          <div
+            id="cro-scan-today-badge"
+            class="flex justify-center mt-3 opacity-0 transition-opacity duration-300"
+          >
+            <span
+              class="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-primary/10 text-primary text-xs font-black uppercase tracking-wide animate-pulse border border-primary/20"
+            >
+              <span class="relative flex h-2.5 w-2.5">
+                <span
+                  class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-60"
+                ></span>
+                <span
+                  class="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"
+                ></span>
+              </span>
+              <span class="tabular-nums"
+                >{{ submissions_today }} stores scanned today</span
+              >
+            </span>
+          </div>
+          {% endif %}
         </div>
       </div>
 
-      {# Row 3: Trusted by logos right below input #}
-      <div class="mt-8 pt-8 border-t border-gray-100">
-        <p class="text-center text-[10px] font-black uppercase tracking-widest text-gray-400 mb-4">Trusted by</p>
-        <div class="flex flex-wrap justify-center items-center gap-6 md:gap-8">
-          <img src="{{ url_for('static', filename='images/logos/argenx.png') }}" alt="Argenx" class="h-6 md:h-7 w-auto max-w-[90px] object-contain opacity-50 grayscale" loading="lazy" />
-          <img src="{{ url_for('static', filename='images/logos/canopy.png') }}" alt="Canopy" class="h-6 md:h-7 w-auto max-w-[90px] object-contain opacity-50 grayscale" loading="lazy" />
-          <img src="{{ url_for('static', filename='images/logos/lpc.png') }}" alt="Le Petit Chef" class="h-6 md:h-7 w-auto max-w-[90px] object-contain opacity-50 grayscale" loading="lazy" />
-          <img src="{{ url_for('static', filename='images/logos/outdoor-research.png') }}" alt="Outdoor Research" class="h-6 md:h-7 w-auto max-w-[90px] object-contain opacity-50 grayscale" loading="lazy" />
-          <img src="{{ url_for('static', filename='images/logos/edikted.png') }}" alt="Edikted" class="h-6 md:h-7 w-auto max-w-[90px] object-contain opacity-50 grayscale" loading="lazy" />
-          <img src="{{ url_for('static', filename='images/logos/vacation-renter.png') }}" alt="Vacation Renter" class="h-6 md:h-7 w-auto max-w-[90px] object-contain opacity-50 grayscale" loading="lazy" />
-          <img src="{{ url_for('static', filename='images/logos/alle.png') }}" alt="Alle" class="h-6 md:h-7 w-auto max-w-[90px] object-contain opacity-50 grayscale" loading="lazy" />
-          <img src="{{ url_for('static', filename='images/logos/client-2.png') }}" alt="TUSHY" class="h-6 md:h-7 w-auto max-w-[90px] object-contain opacity-50 grayscale" loading="lazy" />
+      {# Trusted by logos #}
+      <div class="mt-8 lg:mt-10 pt-6 border-t border-gray-100">
+        <p
+          class="text-center text-[10px] font-black uppercase tracking-widest text-gray-400 mb-3"
+        >
+          Trusted by
+        </p>
+        <div class="flex flex-wrap justify-center items-center gap-5 md:gap-8">
+          <img
+            src="{{ url_for('static', filename='images/logos/argenx.png') }}"
+            alt="Argenx"
+            class="h-6 md:h-7 w-auto max-w-[90px] object-contain opacity-50 grayscale"
+            loading="lazy"
+          />
+          <img
+            src="{{ url_for('static', filename='images/logos/canopy.png') }}"
+            alt="Canopy"
+            class="h-6 md:h-7 w-auto max-w-[90px] object-contain opacity-50 grayscale"
+            loading="lazy"
+          />
+          <img
+            src="{{ url_for('static', filename='images/logos/lpc.png') }}"
+            alt="Le Petit Chef"
+            class="h-6 md:h-7 w-auto max-w-[90px] object-contain opacity-50 grayscale"
+            loading="lazy"
+          />
+          <img
+            src="{{ url_for('static', filename='images/logos/outdoor-research.png') }}"
+            alt="Outdoor Research"
+            class="h-6 md:h-7 w-auto max-w-[90px] object-contain opacity-50 grayscale"
+            loading="lazy"
+          />
+          <img
+            src="{{ url_for('static', filename='images/logos/edikted.png') }}"
+            alt="Edikted"
+            class="h-6 md:h-7 w-auto max-w-[90px] object-contain opacity-50 grayscale"
+            loading="lazy"
+          />
+          <img
+            src="{{ url_for('static', filename='images/logos/vacation-renter.png') }}"
+            alt="Vacation Renter"
+            class="h-6 md:h-7 w-auto max-w-[90px] object-contain opacity-50 grayscale"
+            loading="lazy"
+          />
+          <img
+            src="{{ url_for('static', filename='images/logos/alle.png') }}"
+            alt="Alle"
+            class="h-6 md:h-7 w-auto max-w-[90px] object-contain opacity-50 grayscale"
+            loading="lazy"
+          />
+          <img
+            src="{{ url_for('static', filename='images/logos/client-2.png') }}"
+            alt="TUSHY"
+            class="h-6 md:h-7 w-auto max-w-[90px] object-contain opacity-50 grayscale"
+            loading="lazy"
+          />
         </div>
       </div>
     </div>
   </section>
 
-  {# How it works — 2 easy steps; image above step titles, replace src with your image #}
+  {# How it works — 2 easy steps; image above step titles, replace src with your
+  image #}
   <section class="py-14 md:py-20 bg-light-base border-t border-gray-100">
     <div class="max-w-6xl mx-auto px-4 md:px-6">
-      <h2 class="text-2xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tight text-center mb-4">Analyze your store’s conversion health in 2 easy steps</h2>
-      <p class="text-gray-600 text-center max-w-2xl mx-auto mb-10">Get a clear read on where you’re leaking—and what to do next.</p>
+      <h2
+        class="text-2xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tight text-center mb-4"
+      >
+        Analyze your store’s conversion health in 2 easy steps
+      </h2>
+      <p class="text-gray-600 text-center max-w-2xl mx-auto mb-10">
+        Get a clear read on where you’re leaking—and what to do next.
+      </p>
       <div class="grid md:grid-cols-2 gap-8 md:gap-10">
         <div>
-          <div class="rounded-2xl overflow-hidden border border-gray-200 bg-gray-50 mb-4">
+          <div
+            class="rounded-2xl overflow-hidden border border-gray-200 bg-gray-50 mb-4"
+          >
             <img
               src="{{ url_for('static', filename='images/cro_scan_motivation.png') }}"
               alt="Motivation — why visitors convert"
@@ -155,11 +353,21 @@
               loading="lazy"
             />
           </div>
-          <h3 class="text-lg font-display font-black text-deep-charcoal uppercase tracking-tight mb-2">Step 1: Run CRO site scan</h3>
-          <p class="text-gray-600 text-sm md:text-base leading-relaxed">Enter your Shopify store URL. We verify it’s Shopify, then crawl your homepage and key pages. Our scan runs 140+ checks on clarity, trust signals, CTAs, and mobile experience.</p>
+          <h3
+            class="text-lg font-display font-black text-deep-charcoal uppercase tracking-tight mb-2"
+          >
+            Step 1: Run CRO site scan
+          </h3>
+          <p class="text-gray-600 text-sm md:text-base leading-relaxed">
+            Enter your store URL. We'll crawl
+            your homepage and key pages. Our scan runs 140+ checks on clarity,
+            trust signals, CTAs, and mobile experience.
+          </p>
         </div>
         <div>
-          <div class="rounded-2xl overflow-hidden border border-gray-200 bg-gray-50 mb-4">
+          <div
+            class="rounded-2xl overflow-hidden border border-gray-200 bg-gray-50 mb-4"
+          >
             <img
               src="{{ url_for('static', filename='images/cro_scan_friction.png') }}"
               alt="Friction — what holds visitors back"
@@ -167,31 +375,66 @@
               loading="lazy"
             />
           </div>
-          <h3 class="text-lg font-display font-black text-deep-charcoal uppercase tracking-tight mb-2">Step 2: Get your report</h3>
-          <p class="text-gray-600 text-sm md:text-base leading-relaxed">Our AI generates your report with a conversion score and a prioritized list of issues. Delivered to your email—usually instantly. In busy times we may need a bit longer.</p>
+          <h3
+            class="text-lg font-display font-black text-deep-charcoal uppercase tracking-tight mb-2"
+          >
+            Step 2: Get your report
+          </h3>
+          <p class="text-gray-600 text-sm md:text-base leading-relaxed">
+            Our AI generates your report with a conversion score and a
+            prioritized list of issues. Delivered to your email—usually
+            instantly. In busy times we may need a bit longer.
+          </p>
         </div>
       </div>
       <div class="mt-10 max-w-2xl mx-auto">
-        <form id="cro-scan-form-steps" class="space-y-3" action="{{ url_for('main.cro_scan_check') }}" method="post">
-          <div class="relative w-full flex min-h-[52px] rounded-xl border-2 border-gray-200 focus-within:border-primary">
-            <span class="inline-flex items-center pl-4 text-gray-500 text-base shrink-0 border-r border-gray-200 bg-gray-50 rounded-l-xl" aria-hidden="true">https://</span>
-            <label for="website_url_steps" class="sr-only">Your Shopify store URL</label>
-            <input
-              type="text"
-              id="website_url_steps"
-              name="website_url"
-              placeholder="yourstore.com"
-              inputmode="url"
-              autocomplete="url"
-              class="flex-1 min-w-0 min-h-[52px] px-4 py-3 pr-28 rounded-r-xl border-0 focus:outline-none focus:ring-0 text-base text-deep-charcoal placeholder-gray-400"
-              required
-            />
-            <button type="submit" id="cro-scan-submit-steps" class="absolute right-2 top-1/2 -translate-y-1/2 min-h-[44px] px-6 py-2.5 bg-primary text-white font-display font-black text-sm uppercase rounded-lg hover:brightness-110 transition-all">
+        <form
+          id="cro-scan-form-steps"
+          class="space-y-3"
+          action="{{ url_for('main.cro_scan_check') }}"
+          method="post"
+        >
+          <div
+            class="flex flex-col md:relative md:flex-row w-full gap-2 md:gap-0 md:min-h-[52px] md:rounded-xl md:border-2 md:border-gray-200 md:focus-within:border-primary"
+          >
+            <div
+              class="flex min-h-[52px] flex-1 min-w-0 rounded-xl border-2 border-gray-200 focus-within:border-primary md:border-0 md:rounded-l-xl md:rounded-r-none"
+            >
+              <span
+                class="inline-flex items-center pl-4 text-gray-500 text-base shrink-0 border-r border-gray-200 bg-gray-50 rounded-l-xl md:rounded-l-xl"
+                aria-hidden="true"
+                >https://</span
+              >
+              <label for="website_url_steps" class="sr-only"
+                >Your store URL</label
+              >
+              <input
+                type="text"
+                id="website_url_steps"
+                name="website_url"
+                placeholder="yourstore.com"
+                inputmode="url"
+                autocomplete="url"
+                class="flex-1 min-w-0 min-h-[52px] px-4 py-3 pr-4 md:pr-28 rounded-r-xl border-0 focus:outline-none focus:ring-0 text-base text-deep-charcoal placeholder-gray-400"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              id="cro-scan-submit-steps"
+              class="w-full md:absolute md:right-2 md:top-1/2 md:-translate-y-1/2 md:w-auto min-h-[44px] px-6 py-2.5 bg-primary text-white font-display font-black text-sm uppercase rounded-xl md:rounded-lg hover:brightness-110 transition-all"
+            >
               Try for free
             </button>
           </div>
-          <p id="cro-scan-error-steps" class="text-red-500 text-sm font-bold hidden" role="alert"></p>
-          <p class="text-gray-500 text-xs text-center">Shopify only. Report sent to your email—often within minutes.</p>
+          <p
+            id="cro-scan-error-steps"
+            class="text-red-500 text-sm font-bold hidden"
+            role="alert"
+          ></p>
+          <p class="text-gray-500 text-xs text-center">
+            Report sent to your email—often within minutes.
+          </p>
         </form>
       </div>
     </div>
@@ -200,39 +443,155 @@
   {# Improve your site's conversion — 6 benefit cards (Semrush-style grid) #}
   <section class="py-14 md:py-20 bg-white border-t border-gray-100">
     <div class="max-w-6xl mx-auto px-4 md:px-6">
-      <h2 class="text-2xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tight text-center mb-2">Improve your store’s conversion for better results</h2>
-      <p class="text-gray-600 text-center max-w-xl mx-auto mb-12">Our AI analyzes your store and surfaces detailed conversion issues—so you know what to fix and in what order.</p>
+      <h2
+        class="text-2xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tight text-center mb-2"
+      >
+        Improve your store’s conversion for better results
+      </h2>
+      <p class="text-gray-600 text-center max-w-xl mx-auto mb-12">
+        Our AI analyzes your store and surfaces detailed conversion issues—so
+        you know what to fix and in what order.
+      </p>
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
         <div class="p-5 md:p-6 rounded-2xl border border-gray-200 bg-primary/5">
-          <span class="material-symbols-outlined text-primary text-3xl mb-3 block">home</span>
-          <h4 class="font-display font-black text-deep-charcoal uppercase tracking-tight text-sm mb-1">Homepage & key pages</h4>
-          <p class="text-gray-600 text-sm leading-relaxed">We analyze your main landing experience and critical flows so you see the full picture.</p>
+          <span
+            class="material-symbols-outlined text-primary text-3xl mb-3 block"
+            >home</span
+          >
+          <h4
+            class="font-display font-black text-deep-charcoal uppercase tracking-tight text-sm mb-1"
+          >
+            Homepage & key pages
+          </h4>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            We analyze your main landing experience and critical flows so you
+            see the full picture.
+          </p>
         </div>
         <div class="p-5 md:p-6 rounded-2xl border border-gray-200 bg-primary/5">
-          <span class="material-symbols-outlined text-primary text-3xl mb-3 block">verified_user</span>
-          <h4 class="font-display font-black text-deep-charcoal uppercase tracking-tight text-sm mb-1">Trust & social proof</h4>
-          <p class="text-gray-600 text-sm leading-relaxed">Where reviews, guarantees, and credibility signals show up—or go missing—above the fold.</p>
+          <span
+            class="material-symbols-outlined text-primary text-3xl mb-3 block"
+            >verified_user</span
+          >
+          <h4
+            class="font-display font-black text-deep-charcoal uppercase tracking-tight text-sm mb-1"
+          >
+            Trust & social proof
+          </h4>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            Where reviews, guarantees, and credibility signals show up—or go
+            missing—above the fold.
+          </p>
         </div>
         <div class="p-5 md:p-6 rounded-2xl border border-gray-200 bg-primary/5">
-          <span class="material-symbols-outlined text-primary text-3xl mb-3 block">touch_app</span>
-          <h4 class="font-display font-black text-deep-charcoal uppercase tracking-tight text-sm mb-1">CTA placement</h4>
-          <p class="text-gray-600 text-sm leading-relaxed">Whether your primary action is visible and compelling on desktop and mobile.</p>
+          <span
+            class="material-symbols-outlined text-primary text-3xl mb-3 block"
+            >touch_app</span
+          >
+          <h4
+            class="font-display font-black text-deep-charcoal uppercase tracking-tight text-sm mb-1"
+          >
+            CTA placement
+          </h4>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            Whether your primary action is visible and compelling on desktop and
+            mobile.
+          </p>
         </div>
         <div class="p-5 md:p-6 rounded-2xl border border-gray-200 bg-primary/5">
-          <span class="material-symbols-outlined text-primary text-3xl mb-3 block">devices</span>
-          <h4 class="font-display font-black text-deep-charcoal uppercase tracking-tight text-sm mb-1">Mobile experience</h4>
-          <p class="text-gray-600 text-sm leading-relaxed">Many leaks happen on mobile; we call out layout and friction issues by device.</p>
+          <span
+            class="material-symbols-outlined text-primary text-3xl mb-3 block"
+            >devices</span
+          >
+          <h4
+            class="font-display font-black text-deep-charcoal uppercase tracking-tight text-sm mb-1"
+          >
+            Mobile experience
+          </h4>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            Many leaks happen on mobile; we call out layout and friction issues
+            by device.
+          </p>
         </div>
         <div class="p-5 md:p-6 rounded-2xl border border-gray-200 bg-primary/5">
-          <span class="material-symbols-outlined text-primary text-3xl mb-3 block">speed</span>
-          <h4 class="font-display font-black text-deep-charcoal uppercase tracking-tight text-sm mb-1">Clarity & friction</h4>
-          <p class="text-gray-600 text-sm leading-relaxed">Messaging clarity, decision load, and friction points that can cost you conversion.</p>
+          <span
+            class="material-symbols-outlined text-primary text-3xl mb-3 block"
+            >speed</span
+          >
+          <h4
+            class="font-display font-black text-deep-charcoal uppercase tracking-tight text-sm mb-1"
+          >
+            Clarity & friction
+          </h4>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            Messaging clarity, decision load, and friction points that can cost
+            you conversion.
+          </p>
         </div>
         <div class="p-5 md:p-6 rounded-2xl border border-gray-200 bg-primary/5">
-          <span class="material-symbols-outlined text-primary text-3xl mb-3 block">format_list_numbered</span>
-          <h4 class="font-display font-black text-deep-charcoal uppercase tracking-tight text-sm mb-1">Prioritized fix list</h4>
-          <p class="text-gray-600 text-sm leading-relaxed">A clear order of what to tackle first so you don’t have to guess.</p>
+          <span
+            class="material-symbols-outlined text-primary text-3xl mb-3 block"
+            >format_list_numbered</span
+          >
+          <h4
+            class="font-display font-black text-deep-charcoal uppercase tracking-tight text-sm mb-1"
+          >
+            Prioritized fix list
+          </h4>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            A clear order of what to tackle first so you don’t have to guess.
+          </p>
         </div>
+      </div>
+      <div class="mt-10 max-w-2xl mx-auto">
+        <form
+          id="cro-scan-form-improve"
+          class="space-y-3"
+          action="{{ url_for('main.cro_scan_check') }}"
+          method="post"
+        >
+          <div
+            class="flex flex-col md:relative md:flex-row w-full gap-2 md:gap-0 md:min-h-[52px] md:rounded-xl md:border-2 md:border-gray-200 md:focus-within:border-primary md:bg-white"
+          >
+            <div
+              class="flex min-h-[52px] flex-1 min-w-0 rounded-xl border-2 border-gray-200 focus-within:border-primary bg-white md:border-0 md:rounded-l-xl md:rounded-r-none"
+            >
+              <span
+                class="inline-flex items-center pl-4 text-gray-500 text-base shrink-0 border-r border-gray-200 bg-gray-50 rounded-l-xl"
+                aria-hidden="true"
+                >https://</span
+              >
+              <label for="website_url_improve" class="sr-only"
+                >Your store URL</label
+              >
+              <input
+                type="text"
+                id="website_url_improve"
+                name="website_url"
+                placeholder="yourstore.com"
+                inputmode="url"
+                autocomplete="url"
+                class="flex-1 min-w-0 min-h-[52px] px-4 py-3 pr-4 md:pr-28 rounded-r-xl border-0 focus:outline-none focus:ring-0 text-base text-deep-charcoal placeholder-gray-400"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              id="cro-scan-submit-improve"
+              class="w-full md:absolute md:right-2 md:top-1/2 md:-translate-y-1/2 md:w-auto min-h-[44px] px-6 py-2.5 bg-primary text-white font-display font-black text-sm uppercase rounded-xl md:rounded-lg hover:brightness-110 transition-all"
+            >
+              Get your report
+            </button>
+          </div>
+          <p
+            id="cro-scan-error-improve"
+            class="text-red-500 text-sm font-bold hidden text-center"
+            role="alert"
+          ></p>
+          <p class="text-gray-500 text-xs text-center">
+            Report sent to your email—often within minutes.
+          </p>
+        </form>
       </div>
     </div>
   </section>
@@ -242,38 +601,141 @@
     <div class="max-w-6xl mx-auto px-4 md:px-6">
       <div class="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
         <div>
-          <h2 class="text-2xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tight mb-4">Find conversion wins for Shopify store owners</h2>
-          <ul class="space-y-3 text-gray-600 mb-6">
-            <li class="flex gap-3"><span class="material-symbols-outlined text-primary shrink-0">check_circle</span> Identify conversion issues on your homepage and key pages</li>
-            <li class="flex gap-3"><span class="material-symbols-outlined text-primary shrink-0">check_circle</span> Get a clear score and prioritized list of fixes</li>
-            <li class="flex gap-3"><span class="material-symbols-outlined text-primary shrink-0">check_circle</span> Implement insights you can act on immediately</li>
+          <h2
+            class="text-2xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tight mb-4"
+          >
+            Find conversion wins for ecommerce store owners
+          </h2>
+          <ul class="space-y-3 text-gray-600">
+            <li class="flex gap-3">
+              <span class="material-symbols-outlined text-primary shrink-0"
+                >check_circle</span
+              >
+              Identify conversion issues on your homepage and key pages
+            </li>
+            <li class="flex gap-3">
+              <span class="material-symbols-outlined text-primary shrink-0"
+                >check_circle</span
+              >
+              Get a clear score and prioritized list of fixes
+            </li>
+            <li class="flex gap-3">
+              <span class="material-symbols-outlined text-primary shrink-0"
+                >check_circle</span
+              >
+              Implement insights you can act on immediately
+            </li>
           </ul>
-          <a href="#cro-scan-cta" class="inline-flex items-center justify-center px-8 py-4 bg-primary text-white font-display font-black text-sm uppercase rounded-xl hover:brightness-110 transition-all shadow-lg shadow-primary/25">Try for free</a>
         </div>
-        <div class="rounded-2xl border-2 border-gray-200 bg-white shadow-xl overflow-hidden">
+        <div
+          class="rounded-2xl border-2 border-gray-200 bg-white shadow-xl overflow-hidden"
+        >
           <div class="p-6 border-b border-gray-100 bg-light-base/50">
-            <p class="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-3">Your CRO Scan Report</p>
+            <p
+              class="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-3"
+            >
+              Your CRO Scan Report
+            </p>
             <div class="flex items-center gap-5">
-              <div class="w-24 h-24 rounded-full border-4 border-primary/30 flex items-center justify-center bg-primary/5 shrink-0">
-                <span class="text-3xl font-display font-black text-primary">72</span>
+              <div
+                class="w-24 h-24 rounded-full border-4 border-primary/30 flex items-center justify-center bg-primary/5 shrink-0"
+              >
+                <span class="text-3xl font-display font-black text-primary"
+                  >72</span
+                >
               </div>
               <div>
-                <p class="font-display font-black text-deep-charcoal uppercase tracking-tight">Overall score</p>
-                <p class="text-gray-500 text-sm">Based on homepage + product + collection pages</p>
+                <p
+                  class="font-display font-black text-deep-charcoal uppercase tracking-tight"
+                >
+                  Overall score
+                </p>
+                <p class="text-gray-500 text-sm">
+                  Based on homepage + product + collection pages
+                </p>
               </div>
             </div>
           </div>
           <div class="p-6">
-            <p class="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-3">Issues to fix</p>
+            <p
+              class="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-3"
+            >
+              Issues to fix
+            </p>
             <ul class="space-y-2.5 text-sm text-gray-700">
-              <li class="flex gap-2"><span class="text-primary font-bold">1.</span> Homepage value proposition unclear above fold</li>
-              <li class="flex gap-2"><span class="text-primary font-bold">2.</span> Primary CTA below fold on mobile</li>
-              <li class="flex gap-2"><span class="text-primary font-bold">3.</span> Trust signals (reviews, guarantees) not visible early</li>
-              <li class="flex gap-2"><span class="text-primary font-bold">4.</span> Product page benefit clarity could improve</li>
-              <li class="flex gap-2"><span class="text-primary font-bold">5.</span> Collection page lacks clear next step</li>
+              <li class="flex gap-2">
+                <span class="text-primary font-bold">1.</span> Homepage value
+                proposition unclear above fold
+              </li>
+              <li class="flex gap-2">
+                <span class="text-primary font-bold">2.</span> Primary CTA below
+                fold on mobile
+              </li>
+              <li class="flex gap-2">
+                <span class="text-primary font-bold">3.</span> Trust signals
+                (reviews, guarantees) not visible early
+              </li>
+              <li class="flex gap-2">
+                <span class="text-primary font-bold">4.</span> Product page
+                benefit clarity could improve
+              </li>
+              <li class="flex gap-2">
+                <span class="text-primary font-bold">5.</span> Collection page
+                lacks clear next step
+              </li>
             </ul>
           </div>
         </div>
+      </div>
+      <div class="mt-10 max-w-2xl mx-auto">
+        <form
+          id="cro-scan-form-wins"
+          class="space-y-3"
+          action="{{ url_for('main.cro_scan_check') }}"
+          method="post"
+        >
+          <div
+            class="flex flex-col md:relative md:flex-row w-full gap-2 md:gap-0 md:min-h-[52px] md:rounded-xl md:border-2 md:border-gray-200 md:focus-within:border-primary md:bg-white"
+          >
+            <div
+              class="flex min-h-[52px] flex-1 min-w-0 rounded-xl border-2 border-gray-200 focus-within:border-primary bg-white md:border-0 md:rounded-l-xl md:rounded-r-none"
+            >
+              <span
+                class="inline-flex items-center pl-4 text-gray-500 text-base shrink-0 border-r border-gray-200 bg-gray-50 rounded-l-xl"
+                aria-hidden="true"
+                >https://</span
+              >
+              <label for="website_url_wins" class="sr-only"
+                >Your store URL</label
+              >
+              <input
+                type="text"
+                id="website_url_wins"
+                name="website_url"
+                placeholder="yourstore.com"
+                inputmode="url"
+                autocomplete="url"
+                class="flex-1 min-w-0 min-h-[52px] px-4 py-3 pr-4 md:pr-28 rounded-r-xl border-0 focus:outline-none focus:ring-0 text-base text-deep-charcoal placeholder-gray-400"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              id="cro-scan-submit-wins"
+              class="w-full md:absolute md:right-2 md:top-1/2 md:-translate-y-1/2 md:w-auto min-h-[44px] px-6 py-2.5 bg-primary text-white font-display font-black text-sm uppercase rounded-xl md:rounded-lg hover:brightness-110 transition-all"
+            >
+              Get your report
+            </button>
+          </div>
+          <p
+            id="cro-scan-error-wins"
+            class="text-red-500 text-sm font-bold hidden text-center"
+            role="alert"
+          ></p>
+          <p class="text-gray-500 text-xs text-center">
+            Report sent to your email—often within minutes.
+          </p>
+        </form>
       </div>
     </div>
   </section>
@@ -282,121 +744,386 @@
   <section class="py-14 md:py-20 bg-white border-t border-gray-100">
     <div class="max-w-6xl mx-auto px-4 md:px-6">
       <div class="text-center mb-12">
-        <h2 class="text-3xl md:text-5xl font-display font-black text-deep-charcoal uppercase tracking-tighter">
+        <h2
+          class="text-3xl md:text-5xl font-display font-black text-deep-charcoal uppercase tracking-tighter"
+        >
           This is what <span class="text-primary">they say.</span>
         </h2>
-        <p class="text-gray-500 font-bold uppercase tracking-widest text-sm mt-4">
+        <p
+          class="text-gray-500 font-bold uppercase tracking-widest text-sm mt-4"
+        >
           Direct feedback from brands who ran the CRO scan.
         </p>
       </div>
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-        <div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200">
-          <p class="text-gray-700 text-sm md:text-base leading-relaxed mb-0 italic">"The scan pinpointed exactly where we were losing people. We fixed the hero and saw a real bump in add-to-cart."</p>
+        <div
+          class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+        >
+          <p
+            class="text-gray-700 text-sm md:text-base leading-relaxed mb-0 italic"
+          >
+            "The scan pinpointed exactly where we were losing people. We fixed
+            the hero and saw a real bump in add-to-cart."
+          </p>
         </div>
-        <div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200">
-          <p class="text-gray-700 text-sm md:text-base leading-relaxed mb-0 italic">"Got the report in minutes. The prioritized list was spot-on—we tackled the first three and conversion went up."</p>
+        <div
+          class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+        >
+          <p
+            class="text-gray-700 text-sm md:text-base leading-relaxed mb-0 italic"
+          >
+            "Got the report in minutes. The prioritized list was spot-on—we
+            tackled the first three and conversion went up."
+          </p>
         </div>
-        <div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200">
-          <p class="text-gray-700 text-sm md:text-base leading-relaxed mb-0 italic">"Finally something that tells you what’s wrong and what to do next. No fluff, just clear fixes."</p>
+        <div
+          class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+        >
+          <p
+            class="text-gray-700 text-sm md:text-base leading-relaxed mb-0 italic"
+          >
+            "Finally something that tells you what’s wrong and what to do next.
+            No fluff, just clear fixes."
+          </p>
         </div>
-        <div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200">
-          <p class="text-gray-700 text-sm md:text-base leading-relaxed mb-0 italic">"The score and the issues list made it easy to get buy-in from our team. We’re working through the report now."</p>
+        <div
+          class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+        >
+          <p
+            class="text-gray-700 text-sm md:text-base leading-relaxed mb-0 italic"
+          >
+            "The score and the issues list made it easy to get buy-in from our
+            team. We’re working through the report now."
+          </p>
         </div>
-        <div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200">
-          <p class="text-gray-700 text-sm md:text-base leading-relaxed mb-0 italic">"Instant report, actionable list. We’d been guessing—this gave us a clear order of what to fix first."</p>
+        <div
+          class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+        >
+          <p
+            class="text-gray-700 text-sm md:text-base leading-relaxed mb-0 italic"
+          >
+            "Instant report, actionable list. We’d been guessing—this gave us a
+            clear order of what to fix first."
+          </p>
         </div>
-        <div class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200">
-          <p class="text-gray-700 text-sm md:text-base leading-relaxed mb-0 italic">"Quick and to the point. The audit surfaced issues we hadn’t thought about, especially on mobile."</p>
+        <div
+          class="bg-light-base p-6 md:p-7 rounded-2xl border border-gray-200"
+        >
+          <p
+            class="text-gray-700 text-sm md:text-base leading-relaxed mb-0 italic"
+          >
+            "Quick and to the point. The audit surfaced issues we hadn’t thought
+            about, especially on mobile."
+          </p>
         </div>
       </div>
     </div>
   </section>
 
   {# Final CTA — dark section (Semrush-style bottom) #}
-  <section id="cro-scan-cta" class="py-14 md:py-20 bg-deep-charcoal border-t border-white/5">
+  <section
+    id="cro-scan-cta"
+    class="py-14 md:py-20 bg-deep-charcoal border-t border-white/5"
+  >
     <div class="max-w-xl mx-auto px-4 text-center">
-      <h2 class="text-2xl md:text-4xl font-display font-black text-white uppercase tracking-tight mb-2">Run a free CRO scan and get your report</h2>
-      <p class="text-slate-400 text-sm md:text-base mb-6">Enter your Shopify store URL. Our AI runs the scan and emails you the report—usually within minutes.</p>
-      <form id="cro-scan-form-bottom" class="space-y-3" action="{{ url_for('main.cro_scan_check') }}" method="post">
-        <div class="relative flex min-h-[52px] rounded-xl border-2 border-white/20 focus-within:border-primary bg-white/5">
-          <span class="inline-flex items-center pl-4 text-gray-400 text-base shrink-0 border-r border-white/20 rounded-l-xl" aria-hidden="true">https://</span>
-          <label for="website_url_bottom" class="sr-only">Your Shopify store URL</label>
+      <h2
+        class="text-2xl md:text-4xl font-display font-black text-white uppercase tracking-tight mb-2"
+      >
+        Run a free CRO scan and get your report
+      </h2>
+      <p class="text-slate-400 text-sm md:text-base mb-6">
+        Enter your store URL. Our AI runs the scan and emails you the
+        report—usually within minutes.
+      </p>
+      <form
+        id="cro-scan-form-bottom"
+        class="space-y-3"
+        action="{{ url_for('main.cro_scan_check') }}"
+        method="post"
+      >
+        <div
+          class="flex flex-col md:relative md:flex-row w-full gap-2 md:gap-0 md:min-h-[52px] md:rounded-xl md:border-2 md:border-white/20 md:focus-within:border-primary md:bg-white/5"
+        >
+          <div
+            class="flex min-h-[52px] flex-1 min-w-0 rounded-xl border-2 border-white/20 focus-within:border-primary bg-white/5 md:border-0 md:rounded-l-xl md:rounded-r-none"
+          >
+            <span
+              class="inline-flex items-center pl-4 text-gray-400 text-base shrink-0 border-r border-white/20 rounded-l-xl"
+              aria-hidden="true"
+              >https://</span
+            >
+            <label for="website_url_bottom" class="sr-only"
+              >Your store URL</label
+            >
+            <input
+              type="text"
+              id="website_url_bottom"
+              name="website_url"
+              placeholder="yourstore.com"
+              inputmode="url"
+              autocomplete="url"
+              class="flex-1 min-w-0 min-h-[52px] px-4 py-3 pr-4 md:pr-24 rounded-r-xl border-0 bg-transparent focus:outline-none focus:ring-0 text-white placeholder-gray-500 text-base"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            id="cro-scan-submit-bottom"
+            class="w-full md:absolute md:right-2 md:top-1/2 md:-translate-y-1/2 md:w-auto min-h-[44px] px-5 py-2.5 bg-primary text-white font-display font-black text-sm uppercase rounded-xl md:rounded-lg hover:brightness-110 transition-all"
+          >
+            Try for free
+          </button>
+        </div>
+        <p
+          id="cro-scan-error-bottom"
+          class="text-red-400 text-sm font-bold hidden"
+          role="alert"
+        ></p>
+        <p class="text-slate-500 text-xs">
+          You typically get your report instantly. In busy periods delivery may
+          be delayed—we’ll email you as soon as it’s ready.
+        </p>
+      </form>
+    </div>
+  </section>
+
+  {# Mobile-only: fixed CTA bar at bottom (duplicate of hero form); visible
+  after scrolling below fold #}
+  <div
+    id="cro-scan-fixed-bar"
+    class="fixed bottom-0 left-0 right-0 z-50 p-4 pb-[calc(0.5rem+env(safe-area-inset-bottom))] bg-white border-t border-gray-200 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] md:hidden translate-y-full transition-transform duration-300 ease-out"
+  >
+    <form
+      id="cro-scan-form-fixed"
+      class="space-y-2"
+      action="{{ url_for('main.cro_scan_check') }}"
+      method="post"
+    >
+      <div class="flex flex-col gap-2">
+        <label for="website_url_fixed" class="sr-only"
+          >Your store URL</label
+        >
+        <div
+          class="flex flex-1 min-w-0 rounded-xl border-2 border-gray-200 bg-white focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 min-h-[50px]"
+        >
+          <span
+            class="inline-flex items-center px-3 text-gray-500 text-sm shrink-0 border-r border-gray-200 bg-gray-50 rounded-l-xl"
+            aria-hidden="true"
+            >https://</span
+          >
           <input
             type="text"
-            id="website_url_bottom"
+            id="website_url_fixed"
             name="website_url"
             placeholder="yourstore.com"
             inputmode="url"
             autocomplete="url"
-            class="flex-1 min-w-0 min-h-[52px] px-4 py-3 pr-24 rounded-r-xl border-0 bg-transparent focus:outline-none focus:ring-0 text-white placeholder-gray-500 text-base"
+            class="flex-1 min-w-0 min-h-[50px] px-3 py-2.5 rounded-r-xl border-0 bg-transparent text-deep-charcoal placeholder-gray-400 text-base focus:outline-none focus:ring-0"
             required
           />
-          <button type="submit" id="cro-scan-submit-bottom" class="absolute right-2 top-1/2 -translate-y-1/2 min-h-[44px] px-5 py-2.5 bg-primary text-white font-display font-black text-sm uppercase rounded-lg hover:brightness-110 transition-all">
-            Try for free
-          </button>
         </div>
-        <p id="cro-scan-error-bottom" class="text-red-400 text-sm font-bold hidden" role="alert"></p>
-        <p class="text-slate-500 text-xs">You typically get your report instantly. In busy periods delivery may be delayed—we’ll email you as soon as it’s ready.</p>
-      </form>
-    </div>
-  </section>
+        <button
+          type="submit"
+          id="cro-scan-submit-fixed"
+          class="w-full min-h-[50px] px-5 py-3 bg-primary text-white font-display font-black text-sm uppercase rounded-xl hover:brightness-110 transition-all"
+        >
+          Get your report
+        </button>
+      </div>
+      <p
+        id="cro-scan-error-fixed"
+        class="text-red-500 text-sm font-bold hidden"
+        role="alert"
+      ></p>
+      <div
+        class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-gray-600 text-xs pt-1"
+      >
+        <span class="flex items-center gap-1.5">
+          <span
+            class="material-symbols-outlined text-primary text-base"
+            style="font-size: 16px"
+            >check_circle</span
+          >
+          Results in under a minute
+        </span>
+        <span class="flex items-center gap-1.5">
+          <span
+            class="material-symbols-outlined text-primary text-base"
+            style="font-size: 16px"
+            >check_circle</span
+          >
+          100% free
+        </span>
+      </div>
+    </form>
+  </div>
 </div>
 
 <script>
-(function(){
-  function stripProtocol(url) {
-    var s = (url || '').trim();
-    return s.replace(/^https?:\/\//i, '').replace(/\/+$/, '').split('/')[0] || s;
-  }
-  function setupForm(formId, inputId, submitId, errorId) {
-    var form = document.getElementById(formId);
-    var input = document.getElementById(inputId);
-    var submitBtn = document.getElementById(submitId);
-    var errEl = document.getElementById(errorId);
-    if (!form || !input) return;
-    input.addEventListener('paste', function(e) {
-      setTimeout(function() {
-        var val = (input.value || '').trim();
-        if (/^https?:\/\//i.test(val)) {
-          input.value = stripProtocol(val);
-        }
-      }, 0);
-    });
-    function setError(msg) {
-      if (errEl) { errEl.textContent = msg || ''; errEl.classList.toggle('hidden', !msg); }
+  (function () {
+    function stripProtocol(url) {
+      var s = (url || "").trim();
+      return (
+        s
+          .replace(/^https?:\/\//i, "")
+          .replace(/\/+$/, "")
+          .split("/")[0] || s
+      );
     }
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      setError('');
-      var url = (input.value || '').trim();
-      if (!url) { setError('Please enter your Shopify store URL.'); return; }
-      // Prepend https:// if user only entered domain (e.g. yourstore.com)
-      if (!/^https?:\/\//i.test(url)) { url = 'https://' + url; }
-      submitBtn.disabled = true;
-      var btnText = submitBtn.textContent;
-      submitBtn.textContent = 'Checking…';
-      fetch('{{ url_for("main.cro_scan_check") }}', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ website_url: url })
-      })
-      .then(function(r) { return r.json().then(function(d) { return { ok: r.ok, data: d }; }); })
-      .then(function(result) {
-        if (result.ok && result.data.redirect) { window.location.href = result.data.redirect; return; }
-        setError(result.data.error || 'Something went wrong. Please try again.');
-        submitBtn.disabled = false;
-        submitBtn.textContent = btnText;
-      })
-      .catch(function() {
-        setError('Network error. Please try again.');
-        submitBtn.disabled = false;
-        submitBtn.textContent = btnText;
+    function setupForm(formId, inputId, submitId, errorId) {
+      var form = document.getElementById(formId);
+      var input = document.getElementById(inputId);
+      var submitBtn = document.getElementById(submitId);
+      var errEl = document.getElementById(errorId);
+      if (!form || !input) return;
+      input.addEventListener("paste", function (e) {
+        setTimeout(function () {
+          var val = (input.value || "").trim();
+          if (/^https?:\/\//i.test(val)) {
+            input.value = stripProtocol(val);
+          }
+        }, 0);
       });
-    });
-  }
-  setupForm('cro-scan-form', 'website_url', 'cro-scan-submit', 'cro-scan-error');
-  setupForm('cro-scan-form-bottom', 'website_url_bottom', 'cro-scan-submit-bottom', 'cro-scan-error-bottom');
-  setupForm('cro-scan-form-steps', 'website_url_steps', 'cro-scan-submit-steps', 'cro-scan-error-steps');
-})();
+      function setError(msg) {
+        if (errEl) {
+          errEl.textContent = msg || "";
+          errEl.classList.toggle("hidden", !msg);
+        }
+      }
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        setError("");
+        var url = (input.value || "").trim();
+        if (!url) {
+          setError("Please enter your store URL.");
+          return;
+        }
+        // Prepend https:// if user only entered domain (e.g. yourstore.com)
+        if (!/^https?:\/\//i.test(url)) {
+          url = "https://" + url;
+        }
+        submitBtn.disabled = true;
+        var btnText = submitBtn.textContent.trim();
+        submitBtn.classList.add("cro-scan-btn-loading");
+        submitBtn.innerHTML = '<span class="cro-scan-btn-spinner" aria-hidden="true"></span> Checking…';
+        fetch('{{ url_for("main.cro_scan_check") }}', {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ website_url: url }),
+        })
+          .then(function (r) {
+            return r.json().then(function (d) {
+              return { ok: r.ok, data: d };
+            });
+          })
+          .then(function (result) {
+            if (result.ok && result.data.redirect) {
+              window.location.href = result.data.redirect;
+              return;
+            }
+            setError(
+              result.data.error || "Something went wrong. Please try again.",
+            );
+            submitBtn.disabled = false;
+            submitBtn.classList.remove("cro-scan-btn-loading");
+            submitBtn.textContent = btnText;
+          })
+          .catch(function () {
+            setError("Network error. Please try again.");
+            submitBtn.disabled = false;
+            submitBtn.classList.remove("cro-scan-btn-loading");
+            submitBtn.textContent = btnText;
+          });
+      });
+    }
+    setupForm(
+      "cro-scan-form",
+      "website_url",
+      "cro-scan-submit",
+      "cro-scan-error",
+    );
+    setupForm(
+      "cro-scan-form-fixed",
+      "website_url_fixed",
+      "cro-scan-submit-fixed",
+      "cro-scan-error-fixed",
+    );
+    setupForm(
+      "cro-scan-form-bottom",
+      "website_url_bottom",
+      "cro-scan-submit-bottom",
+      "cro-scan-error-bottom",
+    );
+    setupForm(
+      "cro-scan-form-steps",
+      "website_url_steps",
+      "cro-scan-submit-steps",
+      "cro-scan-error-steps",
+    );
+    setupForm(
+      "cro-scan-form-improve",
+      "website_url_improve",
+      "cro-scan-submit-improve",
+      "cro-scan-error-improve",
+    );
+    setupForm(
+      "cro-scan-form-wins",
+      "website_url_wins",
+      "cro-scan-submit-wins",
+      "cro-scan-error-wins",
+    );
+
+    // Hero video: play once when "See sample report" is clicked, then show overlay again
+    (function () {
+      var video = document.getElementById("cro-scan-hero-video");
+      var overlay = document.getElementById("cro-scan-hero-overlay");
+      var playBtn = document.getElementById("cro-scan-hero-play");
+      if (!video || !overlay || !playBtn) return;
+      function showOverlay() {
+        overlay.style.display = "";
+      }
+      function hideOverlay() {
+        overlay.style.display = "none";
+      }
+      video.addEventListener("ended", function () {
+        video.currentTime = 0;
+        showOverlay();
+      });
+      video.addEventListener("play", hideOverlay);
+      playBtn.addEventListener("click", function () {
+        hideOverlay();
+        video.currentTime = 0;
+        video.play();
+      });
+      video.addEventListener("pause", showOverlay);
+    })();
+
+    // "Stores scanned today" badge: show 2s after page load
+    (function () {
+      var el = document.getElementById("cro-scan-today-badge");
+      if (el)
+        setTimeout(function () {
+          el.classList.add("opacity-100");
+        }, 2000);
+    })();
+
+    // Fixed bottom bar (mobile): show after scrolling ~280px below the fold
+    (function () {
+      var bar = document.getElementById("cro-scan-fixed-bar");
+      if (!bar) return;
+      var threshold = 280;
+      function updateBar() {
+        if (window.scrollY > threshold) {
+          bar.classList.remove("translate-y-full");
+          bar.classList.add("translate-y-0");
+        } else {
+          bar.classList.remove("translate-y-0");
+          bar.classList.add("translate-y-full");
+        }
+      }
+      window.addEventListener("scroll", updateBar, { passive: true });
+      updateBar();
+    })();
+  })();
 </script>
 {% endblock %}

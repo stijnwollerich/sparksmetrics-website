@@ -184,7 +184,7 @@
         window.dataLayer.push(triggerPayload);
       } catch (err) {}
       if (el.getAttribute("data-checklist-modal") !== null && !el.getAttribute("data-resource")) {
-        el.setAttribute("data-resource", "cro-checklist");
+        el.setAttribute("data-resource", "13-bulletproof-strategies");
         el.setAttribute("data-title", "13 Bulletproof Strategies to Skyrocket Conversions");
         el.setAttribute("data-description", "Enter your email and get the free ebook right away — 13 actionable CRO strategies used by $10M+ brands.");
         el.setAttribute("data-button-text", "Send me the ebook");

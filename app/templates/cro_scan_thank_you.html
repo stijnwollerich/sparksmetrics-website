@@ -43,7 +43,7 @@
   }
   .preview-failed .preview-overlay { display: none !important; }
   .preview-failed#preview-container-desktop,
-  .preview-failed#preview-container-mobile { background: #000 !important; }
+  .preview-failed#preview-container-mobile { background: #f3f4f6 !important; }
 </style>
 <script>
   window._croPreviewOnError = function(img, which) {
@@ -52,7 +52,10 @@
     var container = document.getElementById('preview-container-' + which);
     if (loading) loading.classList.add('hidden');
     if (img) img.style.display = 'none';
-    if (fallback) fallback.classList.remove('hidden');
+    if (fallback) {
+      fallback.classList.remove('hidden');
+      fallback.setAttribute('aria-hidden', 'false');
+    }
     if (container) container.classList.add('preview-failed');
   };
   window._croPreviewOnLoad = function(img, which) {
@@ -67,7 +70,10 @@
       var minH = which === 'mobile' ? 500 : 400;
       if (w < minW || h < minH) {
         img.style.display = 'none';
-        if (fallback) fallback.classList.remove('hidden');
+        if (fallback) {
+          fallback.classList.remove('hidden');
+          fallback.setAttribute('aria-hidden', 'false');
+        }
         if (container) container.classList.add('preview-failed');
       } else {
         img.classList.remove('opacity-0');
@@ -81,12 +87,12 @@
 {% block header %}
 <header class="sticky top-0 left-0 right-0 z-[100] bg-white border-b border-gray-100">
   <div class="max-w-6xl mx-auto px-4 md:px-6 h-14 flex items-center">
-    <a href="{{ url_for('main.index') }}" class="flex items-center gap-2 min-h-[44px]">
+    <span class="flex items-center gap-2 min-h-[44px] pointer-events-none">
       <div class="w-8 h-8 bg-primary rounded flex items-center justify-center rotate-3">
         <span class="text-white font-black text-lg">S</span>
       </div>
       <span class="font-display text-base tracking-tighter uppercase font-extrabold text-deep-charcoal">Sparksmetrics</span>
-    </a>
+    </span>
   </div>
 </header>
 {% endblock %}
@@ -105,7 +111,7 @@
 </script>
 {% endif %}
 <div class="min-h-screen flex flex-col">
-  {# Progress bar — loading animation #}
+  {# Progress bar — 0→100% in 15s with fake “what we’re doing” steps #}
   <section class="border-b border-gray-100 bg-gray-50/60">
     <div class="max-w-6xl mx-auto px-4 md:px-6 py-4">
       <div class="flex items-center justify-between gap-3 mb-2">
@@ -115,36 +121,60 @@
       <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
         <div class="h-full bg-primary rounded-full transition-all duration-300 ease-out overflow-hidden" style="width: 0%;" id="scan-progress-bar"></div>
       </div>
+      <p class="mt-2.5 text-xs text-gray-500 min-h-[1.25rem] text-center" id="scan-status-text" aria-live="polite">Analyzing homepage…</p>
     </div>
   </section>
   <script>
   (function(){
     var bar = document.getElementById('scan-progress-bar');
     var pct = document.getElementById('scan-progress-pct');
+    var statusEl = document.getElementById('scan-status-text');
     if (!bar || !pct) return;
-    var target = 82;
-    var duration = 2800;
-    var start = null;
-    function step(timestamp) {
-      if (!start) start = timestamp;
-      var elapsed = timestamp - start;
-      var progress = Math.min(elapsed / duration, 1);
-      var easeOut = 1 - Math.pow(1 - progress, 1.8);
-      var current = Math.round(easeOut * target);
+    var targetDuration = 15000;
+    var start = Date.now();
+    var current = 0;
+    var steps = [
+      'Analyzing homepage…',
+      'Checking product pages…',
+      'Reviewing conversion elements…',
+      'Scanning trust signals…',
+      'Preparing your report…'
+    ];
+    var stepIndex = 0;
+    function setStep() {
+      if (statusEl) statusEl.textContent = steps[stepIndex % steps.length];
+      stepIndex++;
+    }
+    setStep();
+    var stepInterval = setInterval(setStep, 3000);
+    function rand(min, max) {
+      return min + Math.random() * (max - min);
+    }
+    function tick() {
+      var elapsed = Date.now() - start;
+      if (current >= 100 || elapsed >= targetDuration) {
+        current = 100;
+        bar.style.width = '100%';
+        pct.textContent = '100%';
+        clearInterval(stepInterval);
+        if (statusEl) statusEl.textContent = 'Scan complete';
+        return;
+      }
+      var remaining = targetDuration - elapsed;
+      var remainingPct = 100 - current;
+      var nextIncrement = Math.min(
+        remainingPct,
+        Math.ceil(rand(1, 5))
+      );
+      if (remaining < 2000 && remainingPct > 5) nextIncrement = Math.min(nextIncrement, 2);
+      current = Math.min(100, current + nextIncrement);
       bar.style.width = current + '%';
       pct.textContent = current + '%';
-      if (progress < 1) requestAnimationFrame(step);
-      else {
-        var slowCrawl = setInterval(function() {
-          current = parseInt(bar.style.width, 10) || 0;
-          if (current >= 95) { clearInterval(slowCrawl); return; }
-          current = Math.min(current + 1, 95);
-          bar.style.width = current + '%';
-          pct.textContent = current + '%';
-        }, 400);
-      }
+      var nextDelay = Math.max(80, rand(120, 450));
+      if (Math.random() < 0.15) nextDelay *= 1.5;
+      setTimeout(tick, nextDelay);
     }
-    requestAnimationFrame(step);
+    setTimeout(tick, rand(200, 500));
   })();
   </script>
 
@@ -152,14 +182,14 @@
   <section class="py-8 md:py-10" id="report-gate">
     <div class="max-w-6xl mx-auto px-4 md:px-6">
       <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
-        {# Left: headline + form #}
+        {# Left: focus on email — single title “Where should we send your report?” #}
         <div id="report-form" class="min-w-0">
-          <h1 class="text-2xl sm:text-3xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tight leading-tight mb-3">
-            We’re scanning<br><span class="text-primary break-all block mt-1">{{ store_url | replace('https://', '') | replace('http://', '') }}</span>
+          <h1 class="text-[2.5rem] sm:text-3xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tight leading-tight mb-2">
+            Where should we send your report?
           </h1>
-          <p class="text-gray-600 text-sm leading-relaxed mb-6">Enter your email and we’ll send your report when it’s ready.</p>
+          <p class="text-gray-500 text-sm mb-1">We’re scanning <span class="text-primary break-all">{{ store_url | replace('https://', '') | replace('http://', '') }}</span></p>
+          <p class="text-gray-500 text-sm mb-6">Enter your email below and we’ll send it when it’s ready.</p>
           <div id="email-form-state" class="bg-gray-50/80 border border-gray-100 rounded-2xl p-6 md:p-7">
-            <h2 class="text-sm font-display font-black text-deep-charcoal uppercase tracking-widest mb-4">Where should we send your report?</h2>
             <form id="cro-scan-email-form" class="space-y-4">
               <input type="hidden" name="url" value="{{ store_url }}" />
               <div>
@@ -189,13 +219,11 @@
                   <option value="5,000+">5,000+</option>
                 </select>
               </div>
-              <p class="text-gray-500 text-xs">Used by 300+ Shopify brands</p>
-              <p class="text-gray-500 text-xs mt-0.5">Already requested by {{ submissions_today }} people today</p>
+              <p class="text-gray-500 text-xs">Used by 300+ ecommerce brands</p>
               <p id="report-email-error" class="text-red-500 text-sm font-bold hidden mt-1 min-h-[1.25rem]" role="alert"></p>
               <button type="submit" id="report-email-submit" class="w-full min-h-[52px] px-6 py-3.5 bg-primary text-white font-display font-black uppercase tracking-wide rounded-xl hover:brightness-110 transition-all shadow-lg shadow-primary/20">
                 Unlock My CRO Report
               </button>
-              <p class="text-gray-500 text-xs leading-relaxed pt-1 text-center">No need to wait—close this tab anytime. We’ll email your report when it’s ready.</p>
             </form>
           </div>
           <div id="email-success-state" class="hidden bg-gray-50/80 border border-gray-100 rounded-2xl p-6 md:p-7 text-center">
@@ -206,9 +234,10 @@
           </div>
         </div>
 
-        {# Right: page screenshot with loading state #}
-        <div class="min-w-0 lg:pt-[3.5rem]">
-          <div id="preview-desktop-wrapper" class="preview-device-wrapper w-full">
+        {# Right: page screenshot with loading state; centered on mobile #}
+        <div class="min-w-0 w-full lg:pt-[3.5rem] flex flex-col items-center lg:items-stretch">
+          <div class="w-full flex justify-center lg:justify-stretch">
+          <div id="preview-desktop-wrapper" class="preview-device-wrapper w-full max-w-full">
             <div id="preview-container-desktop" class="rounded-xl overflow-hidden border border-gray-200 bg-gray-100 aspect-video max-h-[360px] relative shadow-sm">
               <div id="screenshot-loading-desktop" class="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gray-100 text-gray-500 z-10">
                 <div class="screenshot-loading-spinner" aria-hidden="true"></div>
@@ -222,20 +251,24 @@
                 onload="window._croPreviewOnLoad(this, 'desktop');"
                 onerror="window._croPreviewOnError(this, 'desktop');"
               />
-              <div id="screenshot-fallback-desktop" class="hidden absolute inset-0 bg-black z-10" aria-hidden="true"></div>
+              <div id="screenshot-fallback-desktop" class="hidden absolute inset-0 flex flex-col items-center justify-center gap-2 text-center p-6 bg-gray-100 z-10" aria-hidden="true">
+                <span class="material-symbols-outlined text-primary text-4xl" aria-hidden="true">check_circle</span>
+                <p class="text-deep-charcoal font-display font-black text-lg uppercase tracking-tight">Your scan ran successfully</p>
+                <p class="text-gray-600 text-sm max-w-xs">We’re analyzing your store. You’ll get your full report by email.</p>
+              </div>
               <div class="preview-overlay absolute inset-0 flex flex-col justify-end p-4 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none">
                 <span class="inline-block text-white text-xs font-bold bg-black/40 backdrop-blur-sm px-2 py-1 rounded mb-1 w-fit">CTA below fold on mobile</span>
                 <span class="inline-block text-white/95 text-xs font-bold bg-black/40 backdrop-blur-sm px-2 py-1 rounded w-fit">Trust signals missing above fold</span>
               </div>
-              <div class="preview-overlay absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div class="w-16 h-16 rounded-full bg-primary flex items-center justify-center shadow-xl ring-4 ring-white/40" aria-hidden="true">
+              <a href="#report-form" class="preview-overlay absolute inset-0 flex items-center justify-center cursor-pointer hover:opacity-90 transition-opacity z-10 lg:hidden" aria-label="Go to form to get your report">
+                <div class="w-16 h-16 rounded-full bg-primary flex items-center justify-center shadow-xl ring-4 ring-white/40 pointer-events-none">
                   <span class="material-symbols-outlined text-white text-4xl" style="font-size: 36px;">download</span>
                 </div>
-              </div>
+              </a>
             </div>
           </div>
-          <div id="preview-mobile-wrapper" class="preview-device-wrapper hidden w-full max-w-[200px] mx-auto mt-4">
-            <div id="preview-container-mobile" class="rounded-xl overflow-hidden border border-gray-200 bg-gray-100 aspect-[9/16] max-h-[300px] relative shadow-sm">
+          <div id="preview-mobile-wrapper" class="preview-device-wrapper hidden w-full max-w-[320px] mt-4 md:max-w-[200px] mx-auto">
+            <div id="preview-container-mobile" class="rounded-xl overflow-hidden border border-gray-200 bg-gray-100 aspect-[9/16] max-h-[420px] md:max-h-[300px] relative shadow-sm">
               <div id="screenshot-loading-mobile" class="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gray-100 text-gray-500 z-10">
                 <div class="screenshot-loading-spinner screenshot-loading-spinner-sm" aria-hidden="true"></div>
                 <span class="text-xs font-medium">Loading…</span>
@@ -248,17 +281,22 @@
                 onload="window._croPreviewOnLoad(this, 'mobile');"
                 onerror="window._croPreviewOnError(this, 'mobile');"
               />
-              <div id="screenshot-fallback-mobile" class="hidden absolute inset-0 bg-black z-10" aria-hidden="true"></div>
+              <div id="screenshot-fallback-mobile" class="hidden absolute inset-0 flex flex-col items-center justify-center gap-1.5 text-center p-4 bg-gray-100 z-10" aria-hidden="true">
+                <span class="material-symbols-outlined text-primary text-3xl" aria-hidden="true">check_circle</span>
+                <p class="text-deep-charcoal font-display font-black text-sm uppercase tracking-tight">Scan ran successfully</p>
+                <p class="text-gray-600 text-xs max-w-[180px]">Full report on its way to your email.</p>
+              </div>
               <div class="preview-overlay absolute inset-0 flex flex-col justify-end p-3 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none">
                 <span class="inline-block text-white text-[10px] font-bold bg-black/40 backdrop-blur-sm px-1.5 py-0.5 rounded mb-1 w-fit">Hero message lacks clarity</span>
                 <span class="inline-block text-white/90 text-[10px] font-bold bg-black/40 backdrop-blur-sm px-1.5 py-0.5 rounded w-fit">Full list in report</span>
               </div>
-              <div class="preview-overlay absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div class="w-14 h-14 rounded-full bg-primary flex items-center justify-center shadow-xl ring-4 ring-white/40" aria-hidden="true">
+              <a href="#report-form" class="preview-overlay absolute inset-0 flex items-center justify-center cursor-pointer hover:opacity-90 transition-opacity z-10" aria-label="Go to form to get your report">
+                <div class="w-14 h-14 rounded-full bg-primary flex items-center justify-center shadow-xl ring-4 ring-white/40 pointer-events-none">
                   <span class="material-symbols-outlined text-white text-3xl" style="font-size: 32px;">download</span>
                 </div>
-              </div>
+              </a>
             </div>
+          </div>
           </div>
           <p class="mt-3 text-xs text-gray-500 leading-snug max-w-md">If your site uses Cloudflare or similar protection, the preview may not load here—your scan still runs and you’ll get the full report by email.</p>
         </div>

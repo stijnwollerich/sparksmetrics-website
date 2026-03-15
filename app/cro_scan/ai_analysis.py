@@ -45,11 +45,11 @@ def _image_dimensions_from_bytes(raw: bytes) -> tuple[int, int] | None:
                 i += 2 + length
             except Exception:
                 break
-    # WebP: RIFF....WEBP then VP8X chunk has width-1 (24b LE) at 20-22, height-1 at 23-25
-    if len(raw) >= 26 and raw[:4] == b"RIFF" and raw[8:12] == b"WEBP":
+    # WebP: RIFF....WEBP then VP8X chunk. Payload (at 20): 1b flags, 3b reserved, 3b width-1 LE, 3b height-1 LE.
+    if len(raw) >= 30 and raw[:4] == b"RIFF" and raw[8:12] == b"WEBP":
         try:
-            w = 1 + (raw[20] | (raw[21] << 8) | (raw[22] << 16))
-            h = 1 + (raw[23] | (raw[24] << 8) | (raw[25] << 16))
+            w = 1 + (raw[24] | (raw[25] << 8) | (raw[26] << 16))
+            h = 1 + (raw[27] | (raw[28] << 8) | (raw[29] << 16))
             if 0 < w <= 10000 and 0 < h <= 10000:
                 return (w, h)
         except Exception:
@@ -170,15 +170,16 @@ def _fetch_screenshot_browserless(
                         "CRO scan: Browserless image too small (%sx%s): %s", w, h, page_url[:50]
                     )
                     return None, False
-            elif len(raw) < 30000:
+            elif len(raw) < 12000:
+                # Accept from 12KB up when dimensions unreadable (e.g. some WebP); ~17KB real screenshots were wrongly rejected at 30KB
                 current_app.logger.info(
                     "CRO scan: Browserless image too small (%s bytes), skipping: %s", len(raw), page_url[:50]
                 )
                 continue
             else:
-                current_app.logger.info(
-                    "CRO scan: Browserless returned image (%s KB), dimensions unreadable, accepting: %s",
-                    len(raw) / 1024, page_url[:50],
+                current_app.logger.debug(
+                    "CRO scan: Browserless image %s KB, dimensions unreadable (e.g. WebP variant), accepting: %s",
+                    round(len(raw) / 1024, 1), page_url[:50],
                 )
             mime = "image/webp" if raw[8:12] == b"WEBP" else "image/png"
             return f"data:{mime};base64,{b64}", True

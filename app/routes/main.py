@@ -468,58 +468,48 @@ def _normalize_shopify_url(raw: str) -> str | None:
         return None
 
 
-def _is_shopify_site(url: str) -> bool:
-    """Check if URL is a Shopify store: myshopify.com or HEAD/GET reveals Shopify headers or body."""
-    if not url:
-        return False
-    from urllib.parse import urlparse
-    try:
-        p = urlparse(url)
-        host = (p.netloc or "").lower()
-        # *.myshopify.com is always Shopify
-        if host.endswith(".myshopify.com") or host == "myshopify.com":
-            return True
-    except Exception:
-        pass
-    # For custom domains: fetch and look for Shopify indicators
-    try:
-        import requests
-        r = requests.get(
-            url,
-            timeout=8,
-            headers={"User-Agent": "Mozilla/5.0 (compatible; Sparksmetrics-CRO-Scan/1.0)"},
-            allow_redirects=True,
-        )
-        if r.status_code != 200:
-            return False
-        # Shopify stores often send these headers or contain in body
-        text = (r.headers.get("X-Shopify-Stage") or "") + (r.text[:20000] if r.text else "")
-        return "shopify" in text.lower() or "cdn.shopify.com" in (r.text or "")[:20000]
-    except Exception:
-        return False
-
-
 @main_bp.route("/cro-scan/", methods=["GET"])
 @main_bp.route("/cro-scan", methods=["GET"])
 def cro_scan_landing():
     """CRO scan lead-gen landing (noindex). Single field: Shopify store URL."""
-    return render_template("cro_scan_landing.html")
+    submissions_today = _cro_scan_submissions_today()
+    return render_template("cro_scan_landing.html", submissions_today=submissions_today)
 
 
 @main_bp.route("/cro-scan/check", methods=["POST"])
 def cro_scan_check():
-    """Validate Shopify URL; redirect to thank-you with url param or return JSON error."""
+    """Validate store URL: we must find both a product and a category page, or we decline (scan would be poor anyway)."""
     data = request.get_json(silent=True) or request.form or {}
     raw = (data.get("website_url") or data.get("url") or "").strip()
-    # Notify Slack on every submit (so you see every button press and value)
     _notify_slack_cro_scan_submit(raw)
     normalized = _normalize_shopify_url(raw)
     if not normalized:
         return jsonify({"success": False, "error": "Please enter a valid website URL."}), 400
-    if not _is_shopify_site(normalized):
+    from app.cro_scan.platform import is_shopify_store
+    from app.cro_scan.screenshots import discover_pages, discover_pages_generic, _url_is_homepage
+    is_shopify = is_shopify_store(normalized)
+    try:
+        # Use same discovery as test-discovery (fast=False) so URLs that pass test pass the scan too
+        pages = discover_pages(normalized, fast=False) if is_shopify else discover_pages_generic(normalized, fast=False)
+    except Exception as e:
+        current_app.logger.warning("CRO scan discovery failed for %s: %s", normalized, e)
+        return jsonify({
+            "success": False,
+            "error": "We couldn't scan this site. Please check the URL and try again.",
+        }), 400
+    product_url = pages.get("product") or ""
+    collection_url = pages.get("collection") or ""
+    if not is_shopify and collection_url and _url_is_homepage(collection_url, normalized):
+        collection_url = ""
+    if not product_url or not collection_url:
+        return jsonify({
+            "success": False,
+            "error": "We couldn't find both a product and a category page on this site. Our scan needs both to work properly—please enter a valid ecommerce store URL.",
+        }), 400
+    if is_shopify:
+        _notify_slack_cro_scan_url(normalized)
+    else:
         _notify_slack_cro_scan_non_shopify(normalized)
-        return jsonify({"success": False, "error": "This doesn't look like a Shopify store. Please enter your Shopify store URL (e.g. yourstore.com or yourstore.myshopify.com)."}), 400
-    _notify_slack_cro_scan_url(normalized)
     from urllib.parse import quote
     thank_you_url = url_for("main.cro_scan_thank_you", url=quote(normalized, safe=""))
     return jsonify({"success": True, "redirect": thank_you_url})
@@ -665,12 +655,20 @@ def cro_scan_report_view(token):
 
 
 def _cro_scan_submissions_today() -> int:
-    """Return a number 0–40 that increases evenly over the day (by hour). Used for social proof copy."""
+    """Return a number 0–60 that increases over the day (UTC), slightly higher during business hours. Used for social proof."""
     from datetime import datetime
     now = datetime.utcnow()
-    fraction_of_day = (now.hour * 60 + now.minute) / (24 * 60)
-    count = int(fraction_of_day * 40)
-    return min(max(count, 0), 40)
+    total_minutes = now.hour * 60 + now.minute
+    fraction_of_day = total_minutes / (24 * 60)
+    # Base: 0–50 by time of day; extra 0–10 during roughly 08:00–20:00 UTC so it feels more realistic
+    base = int(fraction_of_day * 50)
+    hour_frac = now.hour + now.minute / 60
+    if 8 <= hour_frac < 20:
+        bonus = int((hour_frac - 8) / 12 * 10)  # 0 at 08:00, up to 10 by 20:00
+    else:
+        bonus = 0
+    count = base + bonus
+    return min(max(count, 0), 60)
 
 
 @main_bp.route("/cro-scan/thank-you/", methods=["GET"])
@@ -686,6 +684,45 @@ def cro_scan_thank_you():
     store_url = normalized or store_url
     submissions_today = _cro_scan_submissions_today()
     return render_template("cro_scan_thank_you.html", store_url=store_url, submissions_today=submissions_today)
+
+
+@main_bp.route("/cro-scan/test-discovery/", methods=["GET", "POST"])
+@main_bp.route("/cro-scan/test-discovery", methods=["GET", "POST"])
+def cro_scan_test_discovery():
+    """
+    Test-only: discover home, collection, product for a domain. No report, no email, no scan.
+    GET: form to enter URL. POST: run discovery and show result.
+    """
+    result = None
+    if request.method == "POST":
+        raw = (request.form.get("url") or request.form.get("website_url") or "").strip()
+        normalized = _normalize_shopify_url(raw)
+        if not normalized:
+            result = {"error": "Invalid URL. Enter a domain (e.g. store.com or https://store.com)."}
+        else:
+            from app.cro_scan.platform import is_shopify_store
+            from app.cro_scan.screenshots import discover_pages, discover_pages_generic
+            is_shopify = is_shopify_store(normalized)
+            try:
+                pages = discover_pages(normalized) if is_shopify else discover_pages_generic(normalized)
+                result = {
+                    "store_url": normalized,
+                    "is_shopify": is_shopify,
+                    "pages": pages,
+                }
+                # Non-Shopify: only "ecommerce" if we found both collection and product (and collection is not homepage)
+                if not is_shopify and pages:
+                    _norm = lambda u: (u or "").strip().rstrip("/")
+                    coll = pages.get("collection") or ""
+                    prod = pages.get("product") or ""
+                    result["is_likely_ecommerce"] = bool(
+                        coll and prod and _norm(coll) != _norm(normalized)
+                    )
+                else:
+                    result["is_likely_ecommerce"] = True  # Shopify or no pages
+            except Exception as e:
+                result = {"error": str(e), "store_url": normalized, "is_shopify": is_shopify}
+    return render_template("cro_scan_test_discovery.html", result=result)
 
 
 @main_bp.route("/cro-scan/preview-image", methods=["GET"])
@@ -780,7 +817,7 @@ def cro_scan_submit_email():
     return jsonify({"success": True})
 # Downloadable resources: slug -> filename in static/downloads/. Add new resources here.
 RESOURCE_DOWNLOADS = {
-    "cro-checklist": {"filename": "sm-cro-ebook.pdf"},
+    "13-bulletproof-strategies": {"filename": "sm-cro-ebook.pdf"},
 }
 
 @main_bp.route("/how-we-improve-conversions/")
@@ -831,7 +868,7 @@ def _sync_lead_to_brevo(
         current_app.logger.info("Brevo: BREVO_API_KEY not set in .env, skipping contact sync")
         return
     list_ids = list(current_app.config.get("BREVO_LIST_IDS") or [])
-    if submission_type == "resource" and resource_slug == "cro-checklist":
+    if submission_type == "resource" and resource_slug == "13-bulletproof-strategies":
         cro_ebook_id = current_app.config.get("BREVO_CRO_EBOOK_LIST_ID")
         if cro_ebook_id and cro_ebook_id not in list_ids:
             list_ids.append(cro_ebook_id)
@@ -905,11 +942,11 @@ def _notify_slack_cro_scan_submit(raw_value: str) -> None:
 
 
 def _notify_slack_cro_scan_non_shopify(store_url: str) -> None:
-    """Post to Slack when someone submits a URL that is not detected as Shopify. Logs errors, does not raise."""
+    """Post to Slack when someone submits a URL that is not detected as Shopify (scan still runs with generic discovery)."""
     webhook_url = (current_app.config.get("SLACK_WEBHOOK_URL") or "").strip()
     if not webhook_url:
         return
-    text = "CRO scan: non-Shopify URL submitted (user was not sent to thank-you): {}".format(store_url)
+    text = "CRO scan: non-Shopify (generic ecommerce) URL submitted – scan will use category + product discovery: {}".format(store_url)
     try:
         import requests
     except ModuleNotFoundError:
@@ -966,7 +1003,7 @@ def _notify_slack_lead(
         return
     if submission_type == "audit":
         label = "Free CRO audit"
-    elif submission_type == "resource" and resource_slug == "cro-checklist":
+    elif submission_type == "resource" and resource_slug == "13-bulletproof-strategies":
         label = "CRO ebook download"
     elif submission_type == "cro_scan":
         label = "CRO scan (Shopify)"

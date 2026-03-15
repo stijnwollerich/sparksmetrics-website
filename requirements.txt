@@ -19,3 +19,6 @@ gunicorn>=21.0.0
 
 # CRO scan report: HTML → PDF (requires system libs: cairo, pango, gdk-pixbuf; see docs)
 weasyprint>=62.0
+
+# Scripts: GIF compression for CRO scan hero
+Pillow>=10.0.0

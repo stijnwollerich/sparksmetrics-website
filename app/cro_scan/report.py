@@ -27,5 +27,7 @@ def html_to_pdf(html: str) -> bytes:
 
 def build_report_pdf(report: dict) -> bytes:
     """Render report to HTML and convert to PDF. Returns PDF bytes."""
-    html = render_report_html(report)
+    base_url = (current_app.config.get("SITE_URL") or "https://sparksmetrics.com").strip().rstrip("/")
+    with current_app.test_request_context(base_url=base_url):
+        html = render_report_html(report)
     return html_to_pdf(html)

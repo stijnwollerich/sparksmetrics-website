@@ -84,7 +84,7 @@ def create_app(config_object="app.config.Config") -> Flask:
     def static_cache_and_embed(response):
         """Static files: cacheable and safe to load from elsewhere (e.g. email signature images)."""
         if request.path.startswith("/static/"):
-            response.headers.set("Cache-Control", "public, max-age=31536000")  # 1 year
+            response.headers.set("Cache-Control", "public, max-age=31536000, immutable")  # 1 year, immutable for speed
             # Don’t restrict who can load the resource (email clients, external referrers)
             if "Content-Security-Policy" not in response.headers:
                 response.headers.set("X-Content-Type-Options", "nosniff")

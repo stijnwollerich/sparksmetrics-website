@@ -31,9 +31,12 @@
     <link rel="icon" type="image/x-icon" href="{{ url_for('main.favicon') }}"/>
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
     <link crossorigin href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://cdn.tailwindcss.com" rel="preconnect"/>
     <link href="https://calendly.com" rel="preconnect"/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Lexend:wght@700;800;900&amp;display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    {# Load fonts async to avoid render-blocking (saves ~8s on slow connections) #}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Lexend:wght@700;800;900&amp;display=swap" media="print" onload="this.media='all'"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" media="print" onload="this.media='all'"/>
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Lexend:wght@700;800;900&amp;display=swap"/><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"/></noscript>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script>
       tailwind.config = {
@@ -591,7 +594,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </script>
 <script src="{{ url_for('static', filename='js/audit-bar.js') }}" defer></script>
 <script src="{{ url_for('static', filename='js/checklist-modal.js') }}?v=2" defer></script>
+{% if request.endpoint != 'main.cro_scan_landing' %}
 <script src="{{ url_for('static', filename='js/video-cta.js') }}" defer></script>
+{% endif %}
 <script>
 (function(){
   function initVideoPlayOverlay() {

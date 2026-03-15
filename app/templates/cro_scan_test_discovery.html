@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Test page discovery | CRO Scan{% endblock %}
+{% block meta_description %}Test URL discovery for CRO scan (homepage, collection, product). No report, no email.{% endblock %}
+{% block head_extras %}
+<meta name="robots" content="noindex, nofollow" />
+{% endblock %}
+{% block primary_bar %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block body_class %}bg-white text-gray-800 font-sans{% endblock %}
+{% block content %}
+<div class="min-h-screen max-w-2xl mx-auto px-4 py-12">
+  <h1 class="text-2xl font-display font-black text-deep-charcoal uppercase tracking-tight mb-2">Test page discovery</h1>
+  <p class="text-gray-600 text-sm mb-6">Enter a store domain to see which homepage, collection (or category), and product URLs we find. No report is run and no email is sent.</p>
+
+  <form method="post" action="{{ url_for('main.cro_scan_test_discovery') }}" class="space-y-3 mb-10">
+    <label for="url" class="block text-sm font-bold text-gray-700">Store URL</label>
+    <div class="flex gap-2">
+      <input
+        type="text"
+        id="url"
+        name="url"
+        value="{{ result.store_url if result and result.store_url else '' }}"
+        placeholder="https://example-store.com"
+        class="flex-1 min-w-0 px-4 py-2.5 rounded-xl border-2 border-gray-200 bg-white text-deep-charcoal placeholder-gray-400 focus:outline-none focus:border-primary"
+      />
+      <button
+        type="submit"
+        class="px-5 py-2.5 bg-primary text-white font-display font-black text-sm uppercase rounded-xl hover:brightness-110 transition-all shrink-0"
+      >
+        Test
+      </button>
+    </div>
+  </form>
+
+  {% if result %}
+    {% if result.error %}
+      <div class="rounded-xl border-2 border-red-200 bg-red-50 p-4 text-red-700 font-medium">
+        {{ result.error }}
+      </div>
+    {% else %}
+      <div class="rounded-xl border-2 border-gray-200 bg-gray-50 p-6 space-y-4">
+        <p class="text-sm text-gray-600">
+          <strong>Store:</strong> <a href="{{ result.store_url }}" target="_blank" rel="noopener" class="text-primary hover:underline">{{ result.store_url }}</a>
+        </p>
+        <p class="text-sm text-gray-600">
+          <strong>Detected as:</strong> {{ 'Shopify' if result.is_shopify else ('Generic ecommerce' if result.is_likely_ecommerce else 'Not ecommerce') }}
+        </p>
+        <div class="pt-3 border-t border-gray-200 space-y-3">
+          <p class="text-sm">
+            <strong class="text-gray-700 block mb-1">Homepage</strong>
+            {% if result.pages.homepage %}
+              <a href="{{ result.pages.homepage }}" target="_blank" rel="noopener" class="text-primary hover:underline break-all">{{ result.pages.homepage }}</a>
+            {% else %}
+              <span class="text-gray-500">Not found</span>
+            {% endif %}
+          </p>
+          <p class="text-sm">
+            <strong class="text-gray-700 block mb-1">Collection / Category</strong>
+            {% if result.pages.collection %}
+              <a href="{{ result.pages.collection }}" target="_blank" rel="noopener" class="text-primary hover:underline break-all">{{ result.pages.collection }}</a>
+            {% else %}
+              <span class="text-gray-500">Not found</span>
+            {% endif %}
+          </p>
+          <p class="text-sm">
+            <strong class="text-gray-700 block mb-1">Product</strong>
+            {% if result.pages.product %}
+              <a href="{{ result.pages.product }}" target="_blank" rel="noopener" class="text-primary hover:underline break-all">{{ result.pages.product }}</a>
+            {% else %}
+              <span class="text-gray-500">Not found</span>
+            {% endif %}
+          </p>
+        </div>
+      </div>
+    {% endif %}
+  {% endif %}
+</div>
+{% endblock %}

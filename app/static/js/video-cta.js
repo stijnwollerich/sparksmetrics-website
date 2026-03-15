@@ -49,7 +49,7 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     try {
-      var videoEl = document.querySelector('.page-video') || document.querySelector('video') || document.querySelector('iframe[data-video]');
+      var videoEl = document.querySelector('.page-video') || document.querySelector('video:not(.js-skip-video-cta)') || document.querySelector('iframe[data-video]');
       if (!videoEl) return;
       // avoid duplicating if already inserted
       if (videoEl.nextElementSibling && videoEl.nextElementSibling.getAttribute && videoEl.nextElementSibling.getAttribute('data-video-cta')) return;

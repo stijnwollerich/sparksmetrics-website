@@ -1,7 +1,7 @@
 Add your resource files here. Each resource is registered in app/routes/main.py (RESOURCE_DOWNLOADS).
 
 Current:
-- sm-cro-ebook.pdf (slug: cro-checklist). Served via /download/cro-checklist (attachment, noindex).
+- sm-cro-ebook.pdf (slug: 13-bulletproof-strategies). Served via /download/13-bulletproof-strategies (attachment, noindex).
 
 To add a new resource:
 1. Add the PDF/file to this folder.

@@ -57,11 +57,13 @@ def run_scan(store_url: str, email: str, fname: str) -> None:
     except RuntimeError:
         pass
 
-    # 1. Screenshot URLs (mobile). Uses Browserless when BROWSERLESS_API_TOKEN set, else thum.io.
+    # 1. Screenshot URLs (mobile). Shopify: discover collection + product; other stores: discover category + product.
+    from app.cro_scan.platform import is_shopify_store
+    is_shopify = is_shopify_store(store_url)
     try:
-        screenshot_urls = get_screenshot_urls(store_url)
+        screenshot_urls = get_screenshot_urls(store_url, is_shopify=is_shopify)
         provider = "Browserless" if current_app.config.get("BROWSERLESS_API_TOKEN") else "Scrapfly" if current_app.config.get("SCRAPFLY_API_KEY") else "thum.io"
-        current_app.logger.info("CRO scan: screenshot provider=%s for %s", provider, store_url[:50])
+        current_app.logger.info("CRO scan: %s store, provider=%s for %s", "Shopify" if is_shopify else "generic", provider, store_url[:50])
     except Exception as e:
         current_app.logger.warning("CRO scan: screenshot discovery failed: %s", e)
         screenshot_urls = {"homepage": f"https://image.thum.io/get/width/400/{store_url}", "collection": "", "product": ""}
