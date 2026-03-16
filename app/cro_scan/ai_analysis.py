@@ -400,7 +400,15 @@ For each page, use friction for both conversion blockers and UI/UX issues (e.g. 
         if raw.startswith("```"):
             raw = re.sub(r"^```(?:json)?\s*", "", raw)
             raw = re.sub(r"\s*```\s*$", "", raw)
-        report = json.loads(raw)
+        # Parse JSON: use first valid object if model returned "Extra data" (trailing text or second JSON)
+        try:
+            report = json.loads(raw)
+        except json.JSONDecodeError as e:
+            if "Extra data" in str(e):
+                decoder = json.JSONDecoder()
+                report, _ = decoder.raw_decode(raw)
+            else:
+                raise
         report["store_url"] = store_url
         for key, data_uri in valid_screenshots.items():
             if report.get("pages") and isinstance(report["pages"].get(key), dict):

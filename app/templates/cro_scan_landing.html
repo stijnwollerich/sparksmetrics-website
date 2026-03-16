@@ -1,13 +1,14 @@
 {% extends "base.html" %} {% block title %}Free CRO Scan for Ecommerce |
 Sparksmetrics{% endblock %} {% block meta_description %}Free AI-powered CRO scan
-for your ecommerce store. Get an instant conversion report—score, issues, and next steps. In
-busy times delivery may be delayed.{% endblock %} {% block og_title %}Free CRO
-Scan for Ecommerce | Sparksmetrics{% endblock %} {% block og_description %}Free
-AI-powered CRO scan for your ecommerce store. Get an instant conversion report—score, issues,
-and next steps.{% endblock %} {% block twitter_title %}Free CRO Scan for Ecommerce
-| Sparksmetrics{% endblock %} {% block twitter_description %}Check the health
-and conversion score of your online store. Free CRO scan—detect issues and get
-a prioritized report.{% endblock %} {% block head_extras %}
+for your ecommerce store. Get an instant conversion report—score, issues, and
+next steps. In busy times delivery may be delayed.{% endblock %} {% block
+og_title %}Free CRO Scan for Ecommerce | Sparksmetrics{% endblock %} {% block
+og_description %}Free AI-powered CRO scan for your ecommerce store. Get an
+instant conversion report—score, issues, and next steps.{% endblock %} {% block
+twitter_title %}Free CRO Scan for Ecommerce | Sparksmetrics{% endblock %} {%
+block twitter_description %}Check the health and conversion score of your online
+store. Free CRO scan—detect issues and get a prioritized report.{% endblock %}
+{% block head_extras %}
 <meta name="robots" content="noindex, nofollow" />
 <style>
   .cro-scan-btn-spinner {
@@ -22,7 +23,9 @@ a prioritized report.{% endblock %} {% block head_extras %}
     animation: cro-scan-spin 0.7s linear infinite;
   }
   @keyframes cro-scan-spin {
-    to { transform: rotate(360deg); }
+    to {
+      transform: rotate(360deg);
+    }
   }
   .cro-scan-btn-loading {
     cursor: wait;
@@ -121,9 +124,7 @@ text-gray-800 font-sans{% endblock %} {% block content %} {% if ENABLE_GTM %}
             method="post"
           >
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
-              <label for="website_url" class="sr-only"
-                >Your store URL</label
-              >
+              <label for="website_url" class="sr-only">Your store URL</label>
               <div
                 class="flex flex-1 min-w-0 rounded-xl border-2 border-gray-200 bg-white focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 min-h-[50px]"
               >
@@ -359,9 +360,9 @@ text-gray-800 font-sans{% endblock %} {% block content %} {% if ENABLE_GTM %}
             Step 1: Run CRO site scan
           </h3>
           <p class="text-gray-600 text-sm md:text-base leading-relaxed">
-            Enter your store URL. We'll crawl
-            your homepage and key pages. Our scan runs 140+ checks on clarity,
-            trust signals, CTAs, and mobile experience.
+            Enter your store URL. We'll crawl your homepage and key pages. Our
+            scan runs 140+ checks on clarity, trust signals, CTAs, and mobile
+            experience.
           </p>
         </div>
         <div>
@@ -900,9 +901,7 @@ text-gray-800 font-sans{% endblock %} {% block content %} {% if ENABLE_GTM %}
       method="post"
     >
       <div class="flex flex-col gap-2">
-        <label for="website_url_fixed" class="sr-only"
-          >Your store URL</label
-        >
+        <label for="website_url_fixed" class="sr-only">Your store URL</label>
         <div
           class="flex flex-1 min-w-0 rounded-xl border-2 border-gray-200 bg-white focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 min-h-[50px]"
         >
@@ -1005,7 +1004,8 @@ text-gray-800 font-sans{% endblock %} {% block content %} {% if ENABLE_GTM %}
         submitBtn.disabled = true;
         var btnText = submitBtn.textContent.trim();
         submitBtn.classList.add("cro-scan-btn-loading");
-        submitBtn.innerHTML = '<span class="cro-scan-btn-spinner" aria-hidden="true"></span> Checking…';
+        submitBtn.innerHTML =
+          '<span class="cro-scan-btn-spinner" aria-hidden="true"></span> Checking…';
         fetch('{{ url_for("main.cro_scan_check") }}', {
           method: "POST",
           headers: { "Content-Type": "application/json" },

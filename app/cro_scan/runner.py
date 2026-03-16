@@ -89,9 +89,26 @@ def run_scan(store_url: str, email: str, fname: str) -> None:
             report["pages"][page_key] = _empty_page_dict()
         if report["pages"][page_key].get("screenshot_data_uri"):
             continue
-        url = screenshot_urls.get(page_key) or ""
-        if url:
+        url = (screenshot_urls.get(page_key) or "").strip()
+        # Only use URL as img src if it returns an image (thum.io / Scrapfly). With Browserless we get
+        # raw page URLs here—using those as img src returns HTML and breaks; show "unavailable" instead.
+        if url and ("thum.io" in url or "scrapfly" in url.lower()):
             report["pages"][page_key]["screenshot_url"] = url
+
+    # Log report image status so prod logs show why images might be missing on the report page
+    try:
+        summary = []
+        for pk in ("homepage", "collection", "product"):
+            p = (report.get("pages") or {}).get(pk) or {}
+            if p.get("screenshot_data_uri"):
+                summary.append(f"{pk}=embedded")
+            elif p.get("screenshot_url"):
+                summary.append(f"{pk}=url")
+            else:
+                summary.append(f"{pk}=none")
+        current_app.logger.info("CRO scan: report images %s", ", ".join(summary))
+    except Exception:
+        pass
 
     # 3. Store report for private web viewing (secret token; only link holders can view)
     store_name = (report.get("store_name") or "your store").strip()
