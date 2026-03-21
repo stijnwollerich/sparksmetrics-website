@@ -812,6 +812,42 @@ def cro_scan_submit_email():
     _save_lead(fname, email, "cro_scan", resource_slug=None, business_stage=orders_per_month, website_url=store_url)
     _sync_lead_to_brevo(fname, email, "cro_scan", resource_slug=None, business_stage=orders_per_month, website_url=store_url)
     _notify_slack_lead(fname, email, "cro_scan", resource_slug=None, business_stage=orders_per_month, website_url=store_url)
+    nurture_lead_id = None
+    if current_app.config.get("CRO_NURTURE_ENABLED"):
+        try:
+            from app.cro_nurture.leads import create_nurture_lead_from_cro_scan_submit
+
+            nurture_lead_id = create_nurture_lead_from_cro_scan_submit(
+                email=email,
+                store_url=store_url,
+                fname=fname,
+                orders_per_month=orders_per_month,
+            )
+        except Exception as e:
+            current_app.logger.warning("cro_nurture: register lead failed: %s", e)
+        if (
+            nurture_lead_id
+            and current_app.config.get("CRO_NURTURE_TEST_INSTANT_SEQUENCE")
+            and current_app.debug
+        ):
+            import threading
+
+            app = current_app._get_current_object()
+            lid = nurture_lead_id
+
+            def _instant_nurture():
+                with app.app_context():
+                    try:
+                        from app.cro_nurture.services.test_pipeline import (
+                            run_instant_test_sequence_after_submit,
+                        )
+
+                        out = run_instant_test_sequence_after_submit(lid)
+                        app.logger.info("cro_nurture instant test lead=%s result=%s", lid, out)
+                    except Exception:
+                        app.logger.exception("cro_nurture instant test failed lead=%s", lid)
+
+            threading.Thread(target=_instant_nurture, daemon=True).start()
     # Run scan pipeline in background (screenshots → AI → PDF → email)
     _enqueue_cro_scan(store_url, email, fname)
     return jsonify({"success": True})

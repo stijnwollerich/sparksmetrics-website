@@ -105,7 +105,7 @@ class Config:
     """Default configuration."""
 
     SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-change-in-production")
-    DEBUG = os.environ.get("FLASK_DEBUG", "0") == "1"
+    DEBUG = os.environ.get("FLASK_DEBUG", "0").strip().lower() in ("1", "true", "yes", "on")
     TESTING = False
     # PostgreSQL: set DATABASE_URL (e.g. postgresql://user:pass@localhost:5432/dbname). Else SQLite for local dev.
     SQLALCHEMY_DATABASE_URI = _get_sqlalchemy_uri()
@@ -137,6 +137,14 @@ class Config:
 
     # Slack: webhook URL for lead notifications. If set, every lead submission posts to Slack.
     SLACK_WEBHOOK_URL = os.environ.get("SLACK_WEBHOOK_URL", "").strip()
+
+    # CRO nurture (AI drip after /cro-scan): optional; see app/cro_nurture/README.md
+    CRO_NURTURE_ENABLED = os.environ.get("CRO_NURTURE_ENABLED", "").strip() == "1"
+    # Local/dev: after /cro-scan submit, enrich then send all sequence emails back-to-back (still real OpenAI + Brevo).
+    # Only runs when Flask DEBUG is True — never enable on production debug=False.
+    CRO_NURTURE_TEST_INSTANT_SEQUENCE = (
+        os.environ.get("CRO_NURTURE_TEST_INSTANT_SEQUENCE", "").strip() == "1"
+    )
 
     # CRO scan report pipeline: OpenAI for analysis, Brevo for sending the PDF. Either key name works.
     _openai_key = os.environ.get("OPENAI_API_KEY", "").strip() or os.environ.get("OPEN_AI_KEY", "").strip()

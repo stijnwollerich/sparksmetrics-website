@@ -1,4 +1,4 @@
-# CRO scan pipeline: screenshots → AI analysis → PDF report → email.
+# CRO scan pipeline: screenshots → AI analysis → on-site report + email (link).
 
 from app.cro_scan.runner import run_scan
 

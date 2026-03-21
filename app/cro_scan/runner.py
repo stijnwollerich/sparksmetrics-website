@@ -1,4 +1,4 @@
-"""Orchestrate CRO scan pipeline: screenshots → AI → PDF → store → email → Slack."""
+"""Orchestrate CRO scan pipeline: screenshots → AI → store report → email (link) → Slack."""
 from __future__ import annotations
 
 import json
@@ -41,15 +41,13 @@ def run_scan(store_url: str, email: str, fname: str) -> None:
     Run the full CRO scan pipeline in the current (or pushed) app context:
     1. Discover homepage, collection, product and get mobile screenshot URLs
     2. Run AI analysis on screenshots → report JSON
-    3. Build PDF from report
-    4. Store report by secret token for private web viewing
-    5. Send email with link to view report (and optional PDF attachment)
+    3. Store report by secret token for private web viewing
+    4. Send email with link to view report (no PDF attachment)
 
     Logs errors and does not raise; safe to run in a background thread.
     """
     from app.cro_scan.screenshots import get_screenshot_urls
     from app.cro_scan.ai_analysis import analyze_screenshots
-    from app.cro_scan.report import build_report_pdf
     from app.cro_scan.email_report import send_report_email
 
     try:
@@ -131,22 +129,48 @@ def run_scan(store_url: str, email: str, fname: str) -> None:
         current_app.logger.warning("CRO scan: failed to store report for web view: %s", e)
         report_view_url = None
 
-    # 4. PDF (optional; still send if we have it so user can download)
-    pdf_bytes = b""
-    try:
-        pdf_bytes = build_report_pdf(report)
-    except Exception as e:
-        current_app.logger.warning("CRO scan: PDF build failed: %s", e)
-
-    # 5. Email: prefer link to view on site; attach PDF if available
+    # 4. Email: link to on-site report only (no PDF attachment)
     send_report_email(
         to_email=email,
         fname=fname or "there",
         store_name=store_name,
         report_view_url=report_view_url,
-        pdf_bytes=pdf_bytes,
     )
 
-    # 6. Slack: post report link to channel (same webhook as lead notifications)
+    # 5. Slack: post report link to channel (same webhook as lead notifications)
     if report_view_url:
         _notify_slack_report_ready(report_view_url, store_name, email)
+
+    # 6. Nurture: attach report JSON to lead (same email + store URL)
+    try:
+        if current_app.config.get("CRO_NURTURE_ENABLED"):
+            from app.cro_nurture.leads import attach_cro_scan_report_to_lead
+
+            attach_cro_scan_report_to_lead(email=email, store_url=store_url, report=report)
+            # Local dev: cron is usually not installed — run one enrich + dispatch pass after attach.
+            if current_app.debug:
+                import threading
+                import time
+
+                app = current_app._get_current_object()
+
+                def _nurture_cron_kick():
+                    time.sleep(0.75)
+                    with app.app_context():
+                        try:
+                            from app.cro_nurture.services.enrichment import run_enrichment_batch
+                            from app.cro_nurture.services.dispatch import run_dispatch_batch_until_quiet
+
+                            en = run_enrichment_batch()
+                            di = run_dispatch_batch_until_quiet()
+                            app.logger.info(
+                                "cro_nurture: DEBUG post-scan cron kick enrich=%s dispatch=%s",
+                                en,
+                                di,
+                            )
+                        except Exception:
+                            app.logger.exception("cro_nurture: DEBUG post-scan cron kick failed")
+
+                threading.Thread(target=_nurture_cron_kick, daemon=True).start()
+    except Exception as e:
+        current_app.logger.warning("cro_nurture: attach report failed: %s", e)

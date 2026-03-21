@@ -1,4 +1,5 @@
 """Sparksmetrics Flask application factory."""
+import importlib
 from datetime import datetime
 from pathlib import Path
 
@@ -72,9 +73,21 @@ def create_app(config_object="app.config.Config") -> Flask:
     with app.app_context():
         if app.config.get("SQLALCHEMY_DATABASE_URI"):
             from app.models import Lead, CroScanReport  # noqa: F401
+            if app.config.get("CRO_NURTURE_ENABLED"):
+                # importlib: plain "import app.cro_nurture.models" would rebind local name app to the package
+                importlib.import_module("app.cro_nurture.models")
             db.create_all()
+            if app.config.get("CRO_NURTURE_ENABLED"):
+                from app.cro_nurture.sequence_schedule import ensure_default_sequence_from_schedule
+
+                ensure_default_sequence_from_schedule()
 
     app.register_blueprint(main_bp)
+
+    if app.config.get("CRO_NURTURE_ENABLED"):
+        from app.cro_nurture.routes import cro_nurture_bp
+
+        app.register_blueprint(cro_nurture_bp)
 
     @app.errorhandler(404)
     def page_not_found(e):
@@ -169,6 +182,172 @@ def create_app(config_object="app.config.Config") -> Flask:
             finally:
                 conn.close()
             print("Done. Run db.create_all() if you need new tables (e.g. cro_scan_reports).")
+
+    @app.cli.command("cro-nurture-sync-sequence")
+    @click.option("--force", is_flag=True, help="Replace existing step rows from sequence_schedule.py")
+    def cro_nurture_sync_sequence(force):
+        """Apply app/cro_nurture/sequence_schedule.py (STEPS) to the database."""
+        with app.app_context():
+            if not app.config.get("CRO_NURTURE_ENABLED"):
+                print("Enable CRO_NURTURE_ENABLED=1 first (creates cro_nurture_* tables on startup).")
+                return
+            from app.cro_nurture.sequence_schedule import apply_scheduled_steps_to_database
+
+            print(apply_scheduled_steps_to_database(replace_existing=force))
+
+    @app.cli.command("cro-nurture-lead-show")
+    @click.argument("lead_id", type=int, required=False)
+    def cro_nurture_lead_show(lead_id):
+        """Print scan + enrichment summary for one cro_nurture_lead (default: latest row by id)."""
+        import json as json_lib
+
+        with app.app_context():
+            if not app.config.get("CRO_NURTURE_ENABLED"):
+                print("Enable CRO_NURTURE_ENABLED=1 first.")
+                return
+            from app.cro_nurture.models import CroNurtureLead
+            from app.cro_nurture.services.enrichment import dump_lead_enrichment_summary
+
+            lid = lead_id
+            if lid is None:
+                last = CroNurtureLead.query.order_by(CroNurtureLead.id.desc()).first()
+                if not last:
+                    print("No cro_nurture_lead rows.")
+                    return
+                lid = last.id
+                print(f"# using latest lead id={lid}\n")
+            data = dump_lead_enrichment_summary(lid)
+            print(json_lib.dumps(data, indent=2, ensure_ascii=False, default=str))
+
+    @app.cli.command("cro-nurture-lead-enrich")
+    @click.argument("lead_id", type=int)
+    def cro_nurture_lead_enrich(lead_id):
+        """Re-run homepage fetch + OpenAI business_profile for a lead (no CRO form submit)."""
+        import json as json_lib
+
+        with app.app_context():
+            if not app.config.get("CRO_NURTURE_ENABLED"):
+                print("Enable CRO_NURTURE_ENABLED=1 first.")
+                return
+            from app.cro_nurture.services.enrichment import force_re_enrich_lead
+
+            out = force_re_enrich_lead(lead_id)
+            print(json_lib.dumps(out, indent=2, ensure_ascii=False, default=str))
+
+    @app.cli.command("cro-nurture-lead-due-now")
+    @click.argument("lead_id", type=int, required=False)
+    def cro_nurture_lead_due_now(lead_id):
+        """Set a lead's next_send_at to now so the next nurture step is eligible to send."""
+        import json as json_lib
+        from datetime import datetime
+
+        with app.app_context():
+            if not app.config.get("CRO_NURTURE_ENABLED"):
+                print("Enable CRO_NURTURE_ENABLED=1 first.")
+                return
+            from app.cro_nurture.models import CroNurtureLead
+
+            lid = lead_id
+            if lid is None:
+                last = CroNurtureLead.query.order_by(CroNurtureLead.id.desc()).first()
+                if not last:
+                    print("No cro_nurture_lead rows.")
+                    return
+                lid = last.id
+                print(f"# using latest lead id={lid}\n")
+            lead = CroNurtureLead.query.get(lid)
+            if not lead:
+                print(json_lib.dumps({"error": "not_found", "lead_id": lid}))
+                return
+            if lead.unsubscribed_at:
+                print(json_lib.dumps({"error": "unsubscribed", "lead_id": lid}))
+                return
+            if lead.paused:
+                print(json_lib.dumps({"error": "paused", "lead_id": lid}))
+                return
+            if lead.enrichment_status not in ("ok", "failed"):
+                print(
+                    json_lib.dumps(
+                        {"error": "enrichment_not_ready", "lead_id": lid, "status": lead.enrichment_status}
+                    )
+                )
+                return
+            lead.next_send_at = datetime.utcnow()
+            db.session.commit()
+            print(
+                json_lib.dumps(
+                    {
+                        "ok": True,
+                        "lead_id": lid,
+                        "next_step_order": lead.next_step_order,
+                        "next_send_at": lead.next_send_at.isoformat() if lead.next_send_at else None,
+                        "hint": "Run: flask --app run cro-nurture-dispatch",
+                    },
+                    indent=2,
+                    default=str,
+                )
+            )
+
+    @app.cli.command("cro-nurture-dispatch")
+    def cro_nurture_dispatch():
+        """Send due nurture emails (OpenAI + Brevo). Uses multi-round dispatch when TEST_ZERO_DELAYS is on."""
+        import json as json_lib
+
+        with app.app_context():
+            if not app.config.get("CRO_NURTURE_ENABLED"):
+                print("Enable CRO_NURTURE_ENABLED=1 first.")
+                return
+            from app.cro_nurture.services.dispatch import run_dispatch_batch_until_quiet
+
+            out = run_dispatch_batch_until_quiet()
+            print(json_lib.dumps(out, indent=2))
+
+    @app.cli.command("cro-nurture-lead-burst")
+    @click.argument("lead_id", type=int)
+    @click.option("--max-steps", default=15, show_default=True, help="Safety cap on emails in one run")
+    def cro_nurture_lead_burst(lead_id, max_steps):
+        """Send all remaining nurture steps for one lead in one command (dev; forces each step due)."""
+        import json as json_lib
+
+        with app.app_context():
+            if not app.config.get("CRO_NURTURE_ENABLED"):
+                print("Enable CRO_NURTURE_ENABLED=1 first.")
+                return
+            from app.cro_nurture.services.dispatch import run_cli_burst_nurture_lead
+
+            out = run_cli_burst_nurture_lead(lead_id, max_steps=max_steps)
+            print(json_lib.dumps(out, indent=2, default=str))
+
+    @app.cli.command("cro-nurture-lead-reset-sequence")
+    @click.argument("lead_id", type=int)
+    def cro_nurture_lead_reset_sequence(lead_id):
+        """Dev: clear send history and rewind lead to step 1 (re-run burst to test all emails again)."""
+        import json as json_lib
+
+        with app.app_context():
+            if not app.config.get("CRO_NURTURE_ENABLED"):
+                print("Enable CRO_NURTURE_ENABLED=1 first.")
+                return
+            from app.cro_nurture.services.dispatch import reset_nurture_lead_sequence_for_retest
+
+            out = reset_nurture_lead_sequence_for_retest(lead_id)
+            print(json_lib.dumps(out, indent=2, default=str))
+
+    @app.cli.command("cro-nurture-cron")
+    def cro_nurture_cron():
+        """Run enrichment batch, then dispatch (same work as POST /cro-nurture/api/cron/run)."""
+        import json as json_lib
+
+        with app.app_context():
+            if not app.config.get("CRO_NURTURE_ENABLED"):
+                print("Enable CRO_NURTURE_ENABLED=1 first.")
+                return
+            from app.cro_nurture.services.dispatch import run_dispatch_batch_until_quiet
+            from app.cro_nurture.services.enrichment import run_enrichment_batch
+
+            en = run_enrichment_batch()
+            di = run_dispatch_batch_until_quiet()
+            print(json_lib.dumps({"enrichment": en, "dispatch": di}, indent=2))
 
     @app.cli.command("cro-scan-test")
     @click.option("--url", default="https://outdoorresearch.com", help="Store URL to scan")

@@ -1,7 +1,6 @@
-"""Send CRO report PDF via Brevo transactional email API."""
+"""Send CRO report ready email via Brevo (link to on-site report only; no PDF attachment)."""
 from __future__ import annotations
 
-import base64
 from flask import current_app
 
 
@@ -51,11 +50,10 @@ def send_report_email(
     store_name: str,
     *,
     report_view_url: str | None = None,
-    pdf_bytes: bytes | None = None,
 ) -> bool:
     """
     Send the CRO report email via Brevo transactional API.
-    Prefer report_view_url (link to view on site); optionally attach PDF if pdf_bytes is provided.
+    Uses report_view_url only (no PDF attachment).
     Returns True if sent successfully, False otherwise (logs errors).
     """
     api_key = (current_app.config.get("BREVO_API_KEY") or "").strip()
@@ -84,7 +82,7 @@ def send_report_email(
     else:
         html_body = f"""
     <p>Hi {greeting_name},</p>
-    <p>Your CRO scan report for <strong>{store_name}</strong> is ready. Please find the PDF attached.</p>
+    <p>Your CRO scan for <strong>{store_name}</strong> is ready, but we couldn&rsquo;t create a secure view link just now. Reply to this email and we&rsquo;ll send you access.</p>
     <p>If you&rsquo;d like to turn these insights into results, we offer a guaranteed CRO program&mdash;or your money back. <a href="{report_cta_url}">See how we improve conversions</a>.</p>
     <p>Questions? Reply to this email or <a href="{report_cta_url}">learn more here</a>.</p>
     {EMAIL_SIGNATURE_HTML}
@@ -96,13 +94,6 @@ def send_report_email(
         "subject": subject,
         "htmlContent": html_body,
     }
-    if pdf_bytes:
-        payload["attachment"] = [
-            {
-                "name": f"CRO-Scan-Report-{store_name.replace(' ', '-')}.pdf",
-                "content": base64.b64encode(pdf_bytes).decode("ascii"),
-            }
-        ]
 
     try:
         import requests
