@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 from flask import abort, Blueprint, current_app, jsonify, make_response, redirect, render_template, request, Response, url_for, send_file
 
 from app.models import Lead, CroScanReport, db
+from app import spark_backend
 
 BREVO_CONTACTS_URL = "https://api.brevo.com/v3/contacts"
 
@@ -642,13 +643,19 @@ def cro_scan_report_preview():
 @main_bp.route("/cro-scan/report/<token>", methods=["GET"])
 def cro_scan_report_view(token):
     """Serve a stored CRO report by secret token. Only link holders can view; not listed or indexed."""
-    rec = CroScanReport.query.filter_by(token=(token or "").strip()).first()
-    if not rec:
-        abort(404)
-    try:
-        report = json.loads(rec.report_json)
-    except (TypeError, ValueError):
-        abort(404)
+    t = (token or "").strip()
+    if spark_backend.enabled():
+        report = spark_backend.fetch_cro_scan_report_json(t)
+        if not report:
+            abort(404)
+    else:
+        rec = CroScanReport.query.filter_by(token=t).first()
+        if not rec:
+            abort(404)
+        try:
+            report = json.loads(rec.report_json)
+        except (TypeError, ValueError):
+            abort(404)
     resp = make_response(render_template("cro_scan_report.html", report=report))
     resp.headers["X-Robots-Tag"] = "noindex, nofollow"
     return resp
@@ -813,7 +820,17 @@ def cro_scan_submit_email():
     _sync_lead_to_brevo(fname, email, "cro_scan", resource_slug=None, business_stage=orders_per_month, website_url=store_url)
     _notify_slack_lead(fname, email, "cro_scan", resource_slug=None, business_stage=orders_per_month, website_url=store_url)
     nurture_lead_id = None
-    if current_app.config.get("CRO_NURTURE_ENABLED"):
+    if spark_backend.enabled():
+        try:
+            nurture_lead_id = spark_backend.register_nurture_cro_scan(
+                email=email,
+                store_url=store_url,
+                fname=fname,
+                orders_per_month=orders_per_month,
+            )
+        except Exception as e:
+            current_app.logger.warning("spark_backend: nurture register failed: %s", e)
+    elif current_app.config.get("CRO_NURTURE_ENABLED"):
         try:
             from app.cro_nurture.leads import create_nurture_lead_from_cro_scan_submit
 
@@ -872,6 +889,24 @@ def _save_lead(
     website_url: str | None = None,
 ) -> None:
     """Persist lead to Postgres if DATABASE_URL is set. Logs errors, does not raise."""
+    if spark_backend.enabled():
+        # CRO scan: submit-email posts once via register_nurture_cro_scan → Spark /api/site/lead
+        # (avoids duplicate contact + nurture rows).
+        if submission_type == "cro_scan":
+            return
+        try:
+            spark_backend.post_form_lead(
+                fname=fname,
+                email=email,
+                submission_type=submission_type,
+                resource_slug=resource_slug,
+                business_stage=business_stage,
+                website_url=website_url,
+                lead_origin="sparksmetrics.com",
+            )
+        except Exception as e:
+            current_app.logger.warning("spark_backend site-lead failed: %s", e)
+        return
     if not current_app.config.get("SQLALCHEMY_DATABASE_URI"):
         return
     try:
@@ -899,6 +934,8 @@ def _sync_lead_to_brevo(
     website_url: str | None = None,
 ) -> None:
     """Add or update contact in Brevo if BREVO_API_KEY is set. Logs errors, does not raise."""
+    if spark_backend.enabled():
+        return
     api_key = (current_app.config.get("BREVO_API_KEY") or "").strip()
     if not api_key:
         current_app.logger.info("Brevo: BREVO_API_KEY not set in .env, skipping contact sync")

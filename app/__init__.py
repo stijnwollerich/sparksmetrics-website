@@ -1,5 +1,6 @@
 """Sparksmetrics Flask application factory."""
 import importlib
+import os
 from datetime import datetime
 from pathlib import Path
 
@@ -14,6 +15,13 @@ from app.youtube import get_latest_video_ids
 # Load .env from project root (parent of app/) so it works regardless of cwd
 _env_path = Path(__file__).resolve().parent.parent / ".env"
 load_dotenv(_env_path)
+
+
+def _sparksmetrics_uses_spark_backend() -> bool:
+    """When True, marketing DB + nurture live on Spark; this app only runs UI + scan worker."""
+    return bool(
+        (os.getenv("SPARK_BACKEND_URL") or "").strip() and (os.getenv("SPARK_SITE_INGEST_SECRET") or "").strip()
+    )
 
 
 def _read_env_var(path: Path, key: str) -> str:
@@ -72,19 +80,19 @@ def create_app(config_object="app.config.Config") -> Flask:
     db.init_app(app)
     with app.app_context():
         if app.config.get("SQLALCHEMY_DATABASE_URI"):
-            from app.models import Lead, CroScanReport  # noqa: F401
-            if app.config.get("CRO_NURTURE_ENABLED"):
-                # importlib: plain "import app.cro_nurture.models" would rebind local name app to the package
-                importlib.import_module("app.cro_nurture.models")
+            if not _sparksmetrics_uses_spark_backend():
+                from app.models import Lead, CroScanReport  # noqa: F401
+                if app.config.get("CRO_NURTURE_ENABLED"):
+                    importlib.import_module("app.cro_nurture.models")
             db.create_all()
-            if app.config.get("CRO_NURTURE_ENABLED"):
+            if app.config.get("CRO_NURTURE_ENABLED") and not _sparksmetrics_uses_spark_backend():
                 from app.cro_nurture.sequence_schedule import ensure_default_sequence_from_schedule
 
                 ensure_default_sequence_from_schedule()
 
     app.register_blueprint(main_bp)
 
-    if app.config.get("CRO_NURTURE_ENABLED"):
+    if app.config.get("CRO_NURTURE_ENABLED") and not _sparksmetrics_uses_spark_backend():
         from app.cro_nurture.routes import cro_nurture_bp
 
         app.register_blueprint(cro_nurture_bp)
@@ -188,6 +196,9 @@ def create_app(config_object="app.config.Config") -> Flask:
     def cro_nurture_sync_sequence(force):
         """Apply app/cro_nurture/sequence_schedule.py (STEPS) to the database."""
         with app.app_context():
+            if _sparksmetrics_uses_spark_backend():
+                print("SPARK_BACKEND_URL is set — run cro-nurture-sync-sequence on the Spark app.")
+                return
             if not app.config.get("CRO_NURTURE_ENABLED"):
                 print("Enable CRO_NURTURE_ENABLED=1 first (creates cro_nurture_* tables on startup).")
                 return
@@ -202,6 +213,9 @@ def create_app(config_object="app.config.Config") -> Flask:
         import json as json_lib
 
         with app.app_context():
+            if _sparksmetrics_uses_spark_backend():
+                print("SPARK_BACKEND_URL is set — inspect leads on Spark (see docs/SPARKS_SITE_BACKEND.md).")
+                return
             if not app.config.get("CRO_NURTURE_ENABLED"):
                 print("Enable CRO_NURTURE_ENABLED=1 first.")
                 return
@@ -226,6 +240,9 @@ def create_app(config_object="app.config.Config") -> Flask:
         import json as json_lib
 
         with app.app_context():
+            if _sparksmetrics_uses_spark_backend():
+                print("SPARK_BACKEND_URL is set — run this command on Spark.")
+                return
             if not app.config.get("CRO_NURTURE_ENABLED"):
                 print("Enable CRO_NURTURE_ENABLED=1 first.")
                 return
@@ -242,6 +259,9 @@ def create_app(config_object="app.config.Config") -> Flask:
         from datetime import datetime
 
         with app.app_context():
+            if _sparksmetrics_uses_spark_backend():
+                print("SPARK_BACKEND_URL is set — run this command on Spark.")
+                return
             if not app.config.get("CRO_NURTURE_ENABLED"):
                 print("Enable CRO_NURTURE_ENABLED=1 first.")
                 return
@@ -294,6 +314,9 @@ def create_app(config_object="app.config.Config") -> Flask:
         import json as json_lib
 
         with app.app_context():
+            if _sparksmetrics_uses_spark_backend():
+                print("SPARK_BACKEND_URL is set — run this command on Spark.")
+                return
             if not app.config.get("CRO_NURTURE_ENABLED"):
                 print("Enable CRO_NURTURE_ENABLED=1 first.")
                 return
@@ -310,6 +333,9 @@ def create_app(config_object="app.config.Config") -> Flask:
         import json as json_lib
 
         with app.app_context():
+            if _sparksmetrics_uses_spark_backend():
+                print("SPARK_BACKEND_URL is set — run this command on Spark.")
+                return
             if not app.config.get("CRO_NURTURE_ENABLED"):
                 print("Enable CRO_NURTURE_ENABLED=1 first.")
                 return
@@ -325,6 +351,9 @@ def create_app(config_object="app.config.Config") -> Flask:
         import json as json_lib
 
         with app.app_context():
+            if _sparksmetrics_uses_spark_backend():
+                print("SPARK_BACKEND_URL is set — run this command on Spark.")
+                return
             if not app.config.get("CRO_NURTURE_ENABLED"):
                 print("Enable CRO_NURTURE_ENABLED=1 first.")
                 return
@@ -339,6 +368,9 @@ def create_app(config_object="app.config.Config") -> Flask:
         import json as json_lib
 
         with app.app_context():
+            if _sparksmetrics_uses_spark_backend():
+                print("SPARK_BACKEND_URL is set — run this command on Spark.")
+                return
             if not app.config.get("CRO_NURTURE_ENABLED"):
                 print("Enable CRO_NURTURE_ENABLED=1 first.")
                 return

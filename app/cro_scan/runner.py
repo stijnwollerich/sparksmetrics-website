@@ -108,23 +108,33 @@ def run_scan(store_url: str, email: str, fname: str) -> None:
     except Exception:
         pass
 
-    # 3. Store report for private web viewing (secret token; only link holders can view)
+    # 3. Store report for private web viewing (Spark DB when SPARK_BACKEND_URL is set, else local)
     store_name = (report.get("store_name") or "your store").strip()
     report_view_url: str | None = None
+    token: str | None = None
     try:
-        from app.models import db, CroScanReport
-        token = secrets.token_urlsafe(32)
-        report_json_str = json.dumps(report, default=str)
-        rec = CroScanReport(
-            token=token,
-            report_json=report_json_str,
-            store_url=store_url,
-            store_name=store_name,
-        )
-        db.session.add(rec)
-        db.session.commit()
-        base = (current_app.config.get("SITE_URL") or "").strip().rstrip("/") or "https://sparksmetrics.com"
-        report_view_url = f"{base}/cro-scan/report/{token}"
+        from app import spark_backend
+
+        if spark_backend.enabled():
+            token = spark_backend.store_cro_scan_report(
+                report=report, store_url=store_url, store_name=store_name
+            )
+        else:
+            from app.models import db, CroScanReport
+
+            token = secrets.token_urlsafe(32)
+            report_json_str = json.dumps(report, default=str)
+            rec = CroScanReport(
+                token=token,
+                report_json=report_json_str,
+                store_url=store_url,
+                store_name=store_name,
+            )
+            db.session.add(rec)
+            db.session.commit()
+        if token:
+            base = (current_app.config.get("SITE_URL") or "").strip().rstrip("/") or "https://sparksmetrics.com"
+            report_view_url = f"{base}/cro-scan/report/{token}"
     except Exception as e:
         current_app.logger.warning("CRO scan: failed to store report for web view: %s", e)
         report_view_url = None
@@ -141,13 +151,29 @@ def run_scan(store_url: str, email: str, fname: str) -> None:
     if report_view_url:
         _notify_slack_report_ready(report_view_url, store_name, email)
 
-    # 6. Nurture: attach report JSON to lead (same email + store URL)
+    # 6. Nurture: attach report JSON to lead (Spark or local)
     try:
-        if current_app.config.get("CRO_NURTURE_ENABLED"):
+        from app import spark_backend
+
+        if spark_backend.enabled():
+            if spark_backend.attach_nurture_scan(email=email, store_url=store_url, report=report):
+                if current_app.debug:
+                    import threading
+                    import time
+
+                    app = current_app._get_current_object()
+
+                    def _spark_cron_kick():
+                        time.sleep(0.75)
+                        with app.app_context():
+                            ok = spark_backend.trigger_nurture_cron_on_spark()
+                            app.logger.info("spark_backend: post-scan cron kick ok=%s", ok)
+
+                    threading.Thread(target=_spark_cron_kick, daemon=True).start()
+        elif current_app.config.get("CRO_NURTURE_ENABLED"):
             from app.cro_nurture.leads import attach_cro_scan_report_to_lead
 
             attach_cro_scan_report_to_lead(email=email, store_url=store_url, report=report)
-            # Local dev: cron is usually not installed — run one enrich + dispatch pass after attach.
             if current_app.debug:
                 import threading
                 import time

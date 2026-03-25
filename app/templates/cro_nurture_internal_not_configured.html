@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="robots" content="noindex,nofollow"/>
+  <title>Not configured · CRO nurture</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-zinc-950 text-zinc-200 antialiased flex items-center justify-center p-6">
+  <div class="max-w-lg text-left space-y-4">
+    <p class="text-xs font-bold uppercase tracking-widest text-zinc-500">CRO nurture · internal</p>
+    <h1 class="text-2xl font-semibold text-white">No secret configured on the server</h1>
+    <p class="text-sm text-zinc-400">The dashboard needs a token in the environment of the running app (not only your local machine if you deploy elsewhere).</p>
+    <ol class="text-sm text-zinc-300 list-decimal list-inside space-y-2">
+      <li>In <code class="text-orange-400 bg-zinc-900 px-1 rounded">.env</code> on the server, set <code class="text-orange-400 bg-zinc-900 px-1 rounded">CRO_NURTURE_CRON_TOKEN</code> to a long random string (same one you use for cron).</li>
+      <li>Optionally set <code class="text-orange-400 bg-zinc-900 px-1 rounded">CRO_NURTURE_INTERNAL_DASHBOARD_TOKEN</code> instead if you want a different secret only for this page.</li>
+      <li>Restart the app / redeploy so the process picks up the variable.</li>
+      <li>Open <code class="text-zinc-500 break-all">/cro-nurture/internal/leads?token=…</code></li>
+    </ol>
+    <p class="text-xs text-zinc-500">Also ensure <code class="text-zinc-600">CRO_NURTURE_ENABLED=1</code> so this blueprint is registered.</p>
+  </div>
+</body>
+</html>

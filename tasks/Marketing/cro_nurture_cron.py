@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 """
-POST the CRO nurture cron on the public site (enrich + dispatch).
+POST the CRO nurture cron (enrich + dispatch).
 
-Env: SITE_URL (or APP_URL), CRO_NURTURE_CRON_TOKEN
+When SPARK_BACKEND_URL is set, hits Spark (nurture DB lives there).
+Otherwise hits SITE_URL (legacy: nurture on sparksmetrics).
+
+Env: SPARK_BACKEND_URL (optional), SITE_URL (or APP_URL), CRO_NURTURE_CRON_TOKEN
 """
 import os
 import sys
@@ -11,7 +14,10 @@ import requests
 
 
 def main():
-    base = (os.environ.get("SITE_URL") or os.environ.get("APP_URL") or "").rstrip("/")
+    base = (
+        (os.environ.get("SPARK_BACKEND_URL") or "").strip()
+        or (os.environ.get("SITE_URL") or os.environ.get("APP_URL") or "")
+    ).rstrip("/")
     token = os.environ.get("CRO_NURTURE_CRON_TOKEN", "")
     if not base or not token:
         print("SITE_URL (or APP_URL) and CRO_NURTURE_CRON_TOKEN must be set", file=sys.stderr)

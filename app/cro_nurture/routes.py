@@ -2,10 +2,12 @@
 
 import os
 from datetime import datetime
+from typing import Any, Dict, List, Optional
 
-from flask import Blueprint, jsonify, redirect, request
+from flask import Blueprint, jsonify, redirect, render_template, request
+from sqlalchemy.orm import selectinload
 
-from app.models import db
+from app.models import Lead, db
 from app.cro_nurture.models import CroNurtureEmailSend, CroNurtureLead
 from app.cro_nurture.services import config as cn_config
 from app.cro_nurture.services.dispatch import _unsub_serializer, run_dispatch_batch_until_quiet
@@ -37,12 +39,25 @@ def _check_ingest_secret() -> bool:
     return bool(got) and got == expected
 
 
+def _token_from_request() -> str:
+    """Query ?token=, header X-Cron-Token, or Authorization: Bearer …"""
+    q = (request.args.get("token") or "").strip()
+    if q:
+        return q
+    h = (request.headers.get("X-Cron-Token") or "").strip()
+    if h:
+        return h
+    auth = (request.headers.get("Authorization") or "").strip()
+    if auth.lower().startswith("bearer "):
+        return auth[7:].strip()
+    return ""
+
+
 def _check_cron_token() -> bool:
     expected = cn_config.cron_token()
     if not expected:
         return False
-    token = request.args.get("token") or request.headers.get("X-Cron-Token")
-    return token == expected
+    return _token_from_request() == expected
 
 
 def _check_webhook_token() -> bool:
@@ -50,6 +65,101 @@ def _check_webhook_token() -> bool:
     if not expected:
         return False
     return request.args.get("token") == expected
+
+
+def _nurture_lead_display_rows(leads: list, max_subject_len: int = 72) -> List[Dict[str, Any]]:
+    """Build template-friendly rows: flow summary + per-step send lines."""
+    out = []
+    for lead in leads:
+        sends = sorted(
+            lead.email_sends,
+            key=lambda s: (s.sequence_step.step_order if s.sequence_step else 0, s.id),
+        )
+        send_lines = []
+        for s in sends:
+            step_order = s.sequence_step.step_order if s.sequence_step else None
+            subj = (s.subject or "").strip()
+            if len(subj) > max_subject_len:
+                subj = subj[: max_subject_len - 1] + "…"
+            sent_at = s.sent_at
+            send_lines.append(
+                {
+                    "step_order": step_order,
+                    "status": s.status,
+                    "sent_at": sent_at,
+                    "sent_at_label": (
+                        sent_at.strftime("%Y-%m-%d %H:%M:%S UTC")
+                        if sent_at
+                        else "— (not sent yet)"
+                    ),
+                    "subject": subj or "—",
+                    "opens": int(s.open_count or 0),
+                    "clicks": int(s.click_count or 0),
+                    "error_message": (s.error_message or "").strip(),
+                }
+            )
+        profile_keys: List[str] = []
+        bp = lead.business_profile
+        if isinstance(bp, dict):
+            profile_keys = sorted(bp.keys())
+        scan = lead.cro_scan_payload if isinstance(lead.cro_scan_payload, dict) else {}
+        has_full_report = bool(scan.get("full_report"))
+        out.append(
+            {
+                "lead": lead,
+                "send_lines": send_lines,
+                "profile_keys": profile_keys,
+                "has_full_report": has_full_report,
+            }
+        )
+    return out
+
+
+def _optional_int_query(name: str) -> Optional[int]:
+    """
+    None = no SQL limit (all rows). Optional ?limit= / ?form_limit= caps rows (1..100_000).
+    """
+    if name not in request.args:
+        return None
+    raw = (request.args.get(name) or "").strip()
+    if raw == "":
+        return None
+    return min(max(int(raw), 1), 100_000)
+
+
+@cro_nurture_bp.route("/internal/leads", methods=["GET"])
+def internal_leads_dashboard():
+    """Staff-only HTML: all nurture leads on one page + form leads."""
+    expected = cn_config.internal_dashboard_token()
+    if not expected:
+        return render_template("cro_nurture_internal_not_configured.html"), 503
+    if _token_from_request() != expected:
+        return render_template("cro_nurture_internal_unauthorized.html"), 401
+    limit_nurture = _optional_int_query("limit")
+    limit_forms = _optional_int_query("form_limit")
+
+    nq = CroNurtureLead.query.options(
+        selectinload(CroNurtureLead.email_sends).selectinload(CroNurtureEmailSend.sequence_step),
+        selectinload(CroNurtureLead.sequence),
+    ).order_by(CroNurtureLead.id.desc())
+    if limit_nurture is not None:
+        nq = nq.limit(limit_nurture)
+    nurture_leads = nq.all()
+
+    fq = Lead.query.order_by(Lead.id.desc())
+    if limit_forms is not None:
+        fq = fq.limit(limit_forms)
+    form_leads = fq.all()
+
+    return render_template(
+        "cro_nurture_internal_leads.html",
+        nurture_rows=_nurture_lead_display_rows(nurture_leads, max_subject_len=4000),
+        form_leads=form_leads,
+        nurture_count=len(nurture_leads),
+        form_count=len(form_leads),
+        limit_nurture=limit_nurture,
+        limit_forms=limit_forms,
+    )
 
 
 @cro_nurture_bp.route("/api/ingest", methods=["POST"])

@@ -97,6 +97,10 @@ flask --app run cro-nurture-cron
 **Alternative (HTTP):** start the app, then  
 `curl -X POST "http://localhost:5001/cro-nurture/api/cron/run?token=YOUR_CRO_NURTURE_CRON_TOKEN"`.
 
+**Internal dashboard (HTML):** in the browser, open  
+`/cro-nurture/internal/leads?token=YOUR_CRO_NURTURE_CRON_TOKEN`  
+Auth: `?token=` (same value as `CRO_NURTURE_CRON_TOKEN`, or `CRO_NURTURE_INTERNAL_DASHBOARD_TOKEN` if set), or header `X-Cron-Token` / `Authorization: Bearer …`. If you see “Unauthorized” with no token in `.env` on the **deployed** host, set `CRO_NURTURE_CRON_TOKEN` there and restart. **By default** loads **all** nurture + form rows on **one page**. Optional caps: `?limit=` / `?form_limit=` (max 100000 each).
+
 ## Localhost testing
 
 - **App + DB**: With **`FLASK_DEBUG=1`**, after each scan finishes the app runs enrich + **multi-round** dispatch in a background thread when **`CRO_NURTURE_TEST_ZERO_DELAYS=1`** (otherwise a single dispatch round). The first nurture email after attach still respects **`CRO_NURTURE_LOCAL_FIRST_EMAIL_SECONDS`** in DEBUG (default **`0`**). In production (`DEBUG` off), `CRO_NURTURE_TEST_ZERO_DELAYS` is ignored and cron uses normal DB delays.
@@ -150,7 +154,8 @@ Optional **`POST /cro-nurture/api/ingest`** remains for external systems; use `C
 | `CRO_NURTURE_TEST_WAIT_BEFORE_NURTURE_SECONDS` | Default `120` — delay after `full_report` exists before instant-test burst |
 | `CRO_NURTURE_TEST_WAIT_FOR_SCAN_MAX_SECONDS` | Default `900` — max poll time for `full_report` before burst anyway |
 | `CRO_NURTURE_LOCAL_FIRST_EMAIL_SECONDS` | With `FLASK_DEBUG=1`, seconds after scan attach before nurture #1 (default `0`; set `7200` to mimic prod) |
-| `CRO_NURTURE_CRON_TOKEN` | Cron endpoints |
+| `CRO_NURTURE_CRON_TOKEN` | Cron endpoints + internal HTML dashboard (unless overridden below) |
+| `CRO_NURTURE_INTERNAL_DASHBOARD_TOKEN` | Optional: use this instead of `CRO_NURTURE_CRON_TOKEN` for `/cro-nurture/internal/leads?token=…` only |
 | `CRO_NURTURE_INGEST_SECRET` | Optional `/api/ingest` auth |
 | `CRO_NURTURE_BREVO_WEBHOOK_TOKEN` | Webhook query token |
 | `CRO_NURTURE_BREVO_LIST_IDS` | Extra Brevo lists for nurture contacts (comma-separated) |

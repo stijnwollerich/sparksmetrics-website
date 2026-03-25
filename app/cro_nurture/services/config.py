@@ -6,7 +6,19 @@ def ingest_secret():
 
 
 def cron_token():
-    return os.getenv("CRO_NURTURE_CRON_TOKEN", "")
+    """Strip whitespace — .env values are often accidentally padded."""
+    return (os.getenv("CRO_NURTURE_CRON_TOKEN", "") or "").strip()
+
+
+def internal_dashboard_token():
+    """
+    Optional separate secret for the HTML leads dashboard.
+    If unset, the dashboard uses the same value as cron_token().
+    """
+    dedicated = (os.getenv("CRO_NURTURE_INTERNAL_DASHBOARD_TOKEN", "") or "").strip()
+    if dedicated:
+        return dedicated
+    return cron_token()
 
 
 def brevo_webhook_token():

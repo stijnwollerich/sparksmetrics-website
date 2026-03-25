@@ -163,6 +163,11 @@ class Config:
     # Thank-you page preview: when True (default), run Cloudflare/challenge check (adds ~5–10s). Set to False for faster preview (may sometimes show challenge).
     CRO_PREVIEW_CHECK_CHALLENGE = os.environ.get("CRO_PREVIEW_CHECK_CHALLENGE", "true").strip().lower() in ("1", "true", "yes")
 
+    # Optional: forward leads to Spark POST /api/site/lead (see Spark docs/SPARKS_SITE_BACKEND.md).
+    # SPARK_BACKEND_URL — Spark base URL, no trailing slash
+    # SPARK_SITE_INGEST_SECRET — must match Spark SPARK_SITE_INGEST_SECRET (header X-Spark-Site-Secret)
+    # SPARK_CRO_NURTURE_CRON_TOKEN — optional; same as Spark CRO_NURTURE_CRON_TOKEN for post-scan HTTP cron kick
+
 
 class ProductionConfig(Config):
     """Production configuration."""

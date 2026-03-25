@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="robots" content="noindex,nofollow"/>
+  <title>Unauthorized · CRO nurture</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-zinc-950 text-zinc-200 antialiased flex items-center justify-center p-6">
+  <div class="max-w-md text-center space-y-3">
+    <p class="text-xs font-bold uppercase tracking-widest text-zinc-500">CRO nurture · internal</p>
+    <h1 class="text-2xl font-semibold text-white">Unauthorized</h1>
+    <p class="text-sm text-zinc-400">The server <strong class="text-zinc-300">has</strong> a token configured, but the request did not match.</p>
+    <ul class="text-sm text-zinc-500 text-left list-disc list-inside space-y-2 max-w-md mx-auto">
+      <li>Use the <strong class="text-zinc-400">exact</strong> value of <code class="text-orange-400 bg-zinc-900 px-1 rounded">CRO_NURTURE_CRON_TOKEN</code> (or <code class="text-orange-400 bg-zinc-900 px-1 rounded">CRO_NURTURE_INTERNAL_DASHBOARD_TOKEN</code> if you set that).</li>
+      <li>Example: <code class="text-zinc-600 break-all">/cro-nurture/internal/leads?token=YOUR_SECRET</code></li>
+      <li>Or header <code class="text-zinc-600">X-Cron-Token: YOUR_SECRET</code> / <code class="text-zinc-600">Authorization: Bearer YOUR_SECRET</code></li>
+      <li>No spaces or quotes in the URL — if you copy-pasted from <code class="text-zinc-600">.env</code>, avoid trailing spaces (we strip them server-side now).</li>
+    </ul>
+  </div>
+</body>
+</html>

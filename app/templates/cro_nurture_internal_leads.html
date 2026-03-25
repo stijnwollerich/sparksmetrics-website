@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="robots" content="noindex,nofollow"/>
+  <title>CRO nurture &amp; leads · internal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-zinc-950 text-zinc-200 antialiased text-sm">
+  <div class="border-b border-zinc-800 bg-zinc-900/80 backdrop-blur sticky top-0 z-10">
+    <div class="max-w-[1600px] mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-3">
+      <div>
+        <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Sparksmetrics · internal</p>
+        <h1 class="text-lg font-semibold text-white mt-0.5">All leads · one page</h1>
+      </div>
+      <p class="text-xs text-zinc-500 max-w-xl">
+        <strong class="text-zinc-300">{{ nurture_count }}</strong> nurture rows{% if limit_nurture is not none %} (capped at {{ limit_nurture }}){% else %} (full table){% endif %}
+        · <strong class="text-zinc-300">{{ form_count }}</strong> form leads{% if limit_forms is not none %} (capped at {{ limit_forms }}){% else %} (full table){% endif %}.
+        Optional: <code class="text-orange-400">?limit=</code> / <code class="text-orange-400">?form_limit=</code> (max 100k each).
+      </p>
+    </div>
+  </div>
+
+  <main class="max-w-[1600px] mx-auto px-4 py-8 space-y-12">
+    <section>
+      <h2 class="text-xs font-bold uppercase tracking-widest text-orange-400 mb-4">CRO nurture · all rows</h2>
+      <p class="text-zinc-500 text-xs mb-4">One row per <code class="text-zinc-400">cro_nurture_lead</code>. The right column lists <strong class="text-zinc-400">every nurture email</strong>: <strong class="text-zinc-400">when</strong> (UTC) and <strong class="text-zinc-400">subject line</strong> (what they received).</p>
+      <div class="overflow-x-auto rounded-lg border border-zinc-800">
+        <table class="min-w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-zinc-900 text-[10px] font-bold uppercase tracking-wider text-zinc-500 border-b border-zinc-800">
+              <th class="p-3 whitespace-nowrap">ID</th>
+              <th class="p-3 whitespace-nowrap">Created</th>
+              <th class="p-3">Email</th>
+              <th class="p-3">Name</th>
+              <th class="p-3 min-w-[140px]">Site</th>
+              <th class="p-3 whitespace-nowrap">Source</th>
+              <th class="p-3 whitespace-nowrap">Sequence</th>
+              <th class="p-3 whitespace-nowrap">Enrich</th>
+              <th class="p-3 whitespace-nowrap">Scan</th>
+              <th class="p-3 whitespace-nowrap">Next step</th>
+              <th class="p-3 whitespace-nowrap">Next send (UTC)</th>
+              <th class="p-3 whitespace-nowrap">Flags</th>
+              <th class="p-3 min-w-[200px]">Profile keys</th>
+              <th class="p-3 min-w-[480px]">Emails sent — when &amp; subject</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-zinc-800">
+            {% for row in nurture_rows %}
+            {% set L = row.lead %}
+            <tr class="hover:bg-zinc-900/50 align-top">
+              <td class="p-3 font-mono text-zinc-400">{{ L.id }}</td>
+              <td class="p-3 text-zinc-400 whitespace-nowrap">{{ L.created_at.strftime('%Y-%m-%d %H:%M') if L.created_at else '—' }}</td>
+              <td class="p-3 text-white font-medium break-all">{{ L.email }}</td>
+              <td class="p-3 text-zinc-300">{% set _nm = ((L.first_name or '') ~ ' ' ~ (L.last_name or ''))|trim %}{{ _nm or '—' }}</td>
+              <td class="p-3"><a class="text-orange-400 hover:underline break-all" href="{{ L.site_url }}" target="_blank" rel="noopener">{{ L.site_url }}</a></td>
+              <td class="p-3 text-zinc-400">{{ L.source_tag or '—' }}</td>
+              <td class="p-3 text-zinc-400">{{ L.sequence.name if L.sequence else '—' }}</td>
+              <td class="p-3">
+                <span class="inline-flex px-2 py-0.5 rounded text-[10px] font-bold uppercase
+                  {% if L.enrichment_status == 'ok' %}bg-emerald-950 text-emerald-300
+                  {% elif L.enrichment_status == 'pending' %}bg-amber-950 text-amber-200
+                  {% else %}bg-red-950 text-red-300{% endif %}">{{ L.enrichment_status }}</span>
+                {% if L.enrichment_error %}
+                <p class="text-[10px] text-red-400 mt-1 max-w-xs" title="{{ L.enrichment_error|e }}">{{ L.enrichment_error[:120] }}{% if L.enrichment_error|length > 120 %}…{% endif %}</p>
+                {% endif %}
+              </td>
+              <td class="p-3 text-zinc-400">
+                {% if row.has_full_report %}<span class="text-emerald-400">full_report</span>{% elif L.cro_scan_payload %}<span class="text-amber-300">partial</span>{% else %}<span class="text-zinc-600">—</span>{% endif %}
+              </td>
+              <td class="p-3 font-mono text-zinc-300">{{ L.next_step_order }}</td>
+              <td class="p-3 text-zinc-400 whitespace-nowrap">{{ L.next_send_at.strftime('%Y-%m-%d %H:%M') if L.next_send_at else '—' }}</td>
+              <td class="p-3 text-xs text-zinc-400 space-y-1">
+                {% if L.paused %}<span class="block text-amber-400">paused</span>{% endif %}
+                {% if L.unsubscribed_at %}<span class="block text-red-400">unsub {{ L.unsubscribed_at.strftime('%Y-%m-%d') }}</span>{% endif %}
+                {% if not L.paused and not L.unsubscribed_at %}<span class="text-zinc-600">active</span>{% endif %}
+              </td>
+              <td class="p-3 text-[11px] text-zinc-500 font-mono leading-snug">{{ row.profile_keys|join(', ') if row.profile_keys else '—' }}</td>
+              <td class="p-2 align-top">
+                {% if row.send_lines %}
+                <table class="w-full text-[11px] border border-zinc-800 rounded overflow-hidden">
+                  <thead>
+                    <tr class="bg-zinc-900/80 text-zinc-500 uppercase tracking-wider text-[9px]">
+                      <th class="text-left p-2 font-bold whitespace-nowrap">When (UTC)</th>
+                      <th class="text-left p-2 font-bold">Step</th>
+                      <th class="text-left p-2 font-bold">Status</th>
+                      <th class="text-left p-2 font-bold min-w-[200px]">Subject (email they got)</th>
+                      <th class="text-left p-2 font-bold whitespace-nowrap">Engage</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-zinc-800 text-zinc-300">
+                    {% for s in row.send_lines %}
+                    <tr class="bg-zinc-950/50">
+                      <td class="p-2 font-mono text-zinc-400 whitespace-nowrap align-top">{{ s.sent_at_label }}</td>
+                      <td class="p-2 font-mono align-top">{{ s.step_order if s.step_order is not none else '—' }}</td>
+                      <td class="p-2 align-top">{{ s.status }}</td>
+                      <td class="p-2 align-top text-zinc-200" title="{{ s.subject|e }}">{{ s.subject }}</td>
+                      <td class="p-2 text-zinc-500 whitespace-nowrap align-top">o{{ s.opens }} / c{{ s.clicks }}</td>
+                    </tr>
+                    {% if s.error_message %}
+                    <tr class="bg-red-950/20">
+                      <td class="p-2 text-red-400 text-[10px]" colspan="5">{{ s.error_message }}</td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                  </tbody>
+                </table>
+                {% else %}
+                <span class="text-zinc-600 p-2 inline-block">No nurture emails yet</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% if not nurture_rows %}
+      <p class="text-zinc-500 mt-4">No nurture leads in range.</p>
+      {% endif %}
+    </section>
+
+    <section>
+      <h2 class="text-xs font-bold uppercase tracking-widest text-orange-400 mb-4">Form leads · all rows (<code class="text-zinc-500">leads</code>)</h2>
+      <p class="text-zinc-500 text-xs mb-4">Audit / ebook / resource downloads. Nurture drip emails are only in the table above — not duplicated here.</p>
+      <div class="overflow-x-auto rounded-lg border border-zinc-800">
+        <table class="min-w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-zinc-900 text-[10px] font-bold uppercase tracking-wider text-zinc-500 border-b border-zinc-800">
+              <th class="p-3">ID</th>
+              <th class="p-3">Created</th>
+              <th class="p-3">Name</th>
+              <th class="p-3">Email</th>
+              <th class="p-3">Type</th>
+              <th class="p-3">Resource</th>
+              <th class="p-3">Stage</th>
+              <th class="p-3">Website</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-zinc-800">
+            {% for F in form_leads %}
+            <tr class="hover:bg-zinc-900/50">
+              <td class="p-3 font-mono text-zinc-400">{{ F.id }}</td>
+              <td class="p-3 text-zinc-400 whitespace-nowrap">{{ F.created_at.strftime('%Y-%m-%d %H:%M') if F.created_at else '—' }}</td>
+              <td class="p-3 text-zinc-200">{{ F.fname }}</td>
+              <td class="p-3 text-white break-all">{{ F.email }}</td>
+              <td class="p-3 text-zinc-400">{{ F.submission_type }}</td>
+              <td class="p-3 text-zinc-400">{{ F.resource_slug or '—' }}</td>
+              <td class="p-3 text-zinc-400">{{ F.business_stage or '—' }}</td>
+              <td class="p-3 break-all"><span class="text-zinc-500">{{ F.website_url or '—' }}</span></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% if not form_leads %}
+      <p class="text-zinc-500 mt-4">No form leads in range.</p>
+      {% endif %}
+    </section>
+  </main>
+</body>
+</html>
