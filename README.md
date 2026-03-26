@@ -50,6 +50,22 @@ gunicorn -w 4 -b 0.0.0.0:5000 "run:app"
 
 Set `FLASK_DEBUG=0` and a strong `SECRET_KEY` in production.
 
+### Database schema updates
+
+This app does **not** use Flask-Migrate (`flask db upgrade`). After pulling model changes, apply additive column updates with the custom command (from the project root, with the venv activated):
+
+```bash
+python -m flask --app run db-upgrade
+```
+
+On a server without `flask` on `PATH`, use the venv interpreter explicitly:
+
+```bash
+./venv/bin/python -m flask --app run db-upgrade
+```
+
+The `--app run` flag loads `run.py`, which registers the CLI commands on the application instance.
+
 ## Blog
 
 - **Manual post creation:** See **docs/BLOG_POSTS.md** for how to add a new post (template in `app/templates/blog/` + entry in `app/blog_posts.json`). Posts appear on `/blog` (newest first) and in the sitemap; the footer links to the blog.

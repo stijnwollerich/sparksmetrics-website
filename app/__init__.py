@@ -171,18 +171,20 @@ def create_app(config_object="app.config.Config") -> Flask:
                             conn.commit()
                             print(f"  Added column leads.{col}")
                         except Exception as e:
+                            conn.rollback()
                             if "duplicate column" in str(e).lower():
                                 pass  # already exists
                             else:
                                 raise
                 else:
-                    # PostgreSQL: same idea
+                    # PostgreSQL: failed ALTER aborts the transaction — must rollback before next statement
                     for col, spec in [("business_stage", "VARCHAR(120)"), ("website_url", "VARCHAR(500)")]:
                         try:
                             conn.execute(text(f"ALTER TABLE leads ADD COLUMN {col} {spec}"))
                             conn.commit()
                             print(f"  Added column leads.{col}")
                         except Exception as e:
+                            conn.rollback()
                             if "already exists" in str(e).lower() or "duplicate" in str(e).lower():
                                 pass
                             else:
