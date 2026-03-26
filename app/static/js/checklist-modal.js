@@ -208,9 +208,11 @@
     e.preventDefault();
     var fnameInput = document.getElementById("lead-fname");
     var emailInput = document.getElementById("lead-email");
+    var websiteUrlInput = document.getElementById("lead-website-url");
     var businessStageEl = document.getElementById("lead-business-stage");
     var fname = fnameInput && fnameInput.value ? fnameInput.value.trim() : "";
     var email = emailInput && emailInput.value ? emailInput.value.trim() : "";
+    var websiteUrlOpt = websiteUrlInput && websiteUrlInput.value ? websiteUrlInput.value.trim() : "";
     var businessStage = businessStageEl && businessStageEl.value ? businessStageEl.value.trim() : null;
     var resource = slugInput && slugInput.value ? slugInput.value.trim() : "";
     var modalType = typeInput && typeInput.value ? typeInput.value : "resource";
@@ -268,6 +270,7 @@
       ? { fname: fname, email: email }
       : { resource: resource, fname: fname, email: email };
     if (modalType === "resource" && businessStage) body.business_stage = businessStage;
+    if (websiteUrlOpt) body.website_url = websiteUrlOpt;
 
     fetch(url, {
       method: "POST",

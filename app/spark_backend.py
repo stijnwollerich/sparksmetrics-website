@@ -1,4 +1,7 @@
-"""Forward marketing data to Spark via POST /api/site/lead (unified ingest). See Spark docs/SPARKS_SITE_BACKEND.md."""
+"""Forward marketing data to Spark via POST /api/site/lead (unified ingest).
+
+Spark app: see Spark `docs/SPARKS_SITE_BACKEND.md`. Payload field reference for this repo: `docs/SPARK_SITE_LEAD_API.md`.
+"""
 
 from __future__ import annotations
 
@@ -8,6 +11,23 @@ import os
 from typing import Any
 
 _log = logging.getLogger(__name__)
+
+
+def _enroll_nurture_for_submission_type(submission_type: str) -> bool:
+    """True if this submission_type should request nurture automation on Spark (see SPARK_NURTURE_ENROLLMENT_TYPES)."""
+    st = (submission_type or "").strip().lower()
+    if not st:
+        return False
+    try:
+        from flask import has_app_context, current_app
+
+        if has_app_context() and current_app.config.get("SPARK_NURTURE_ENROLLMENT_TYPES") is not None:
+            return st in current_app.config["SPARK_NURTURE_ENROLLMENT_TYPES"]
+    except Exception:
+        pass
+    from app.config import get_spark_nurture_enrollment_types
+
+    return st in get_spark_nurture_enrollment_types()
 
 
 def enabled() -> bool:
@@ -68,6 +88,8 @@ def post_form_lead(
     business_stage: str | None = None,
     website_url: str | None = None,
     lead_origin: str | None = None,
+    form_page_url: str | None = None,
+    orders_per_month: str | None = None,
 ) -> bool:
     payload = {
         "fname": fname,
@@ -79,6 +101,11 @@ def post_form_lead(
     }
     if lead_origin:
         payload["lead_origin"] = lead_origin
+    if (form_page_url or "").strip():
+        payload["form_page_url"] = form_page_url.strip()
+    if (orders_per_month or "").strip():
+        payload["orders_per_month"] = orders_per_month.strip()
+    payload["enroll_nurture"] = _enroll_nurture_for_submission_type(submission_type)
     ok, _ = post_site_lead(payload, timeout=25)
     return ok
 
@@ -130,7 +157,12 @@ def fetch_cro_scan_report_json(token: str) -> dict[str, Any] | None:
 
 
 def register_nurture_cro_scan(
-    *, email: str, store_url: str, fname: str, orders_per_month: str | None
+    *,
+    email: str,
+    store_url: str,
+    fname: str,
+    orders_per_month: str | None,
+    form_page_url: str | None = None,
 ) -> int | None:
     payload: dict[str, Any] = {
         "email": email,
@@ -140,6 +172,9 @@ def register_nurture_cro_scan(
         "submission_type": "cro_scan",
         "lead_origin": "sparksmetrics.com",
     }
+    if (form_page_url or "").strip():
+        payload["form_page_url"] = form_page_url.strip()
+    payload["enroll_nurture"] = _enroll_nurture_for_submission_type("cro_scan")
     ok, data = post_site_lead(payload, timeout=25)
     if not ok or not data:
         _log.warning("spark_backend nurture register: failed or empty response")
@@ -154,15 +189,25 @@ def register_nurture_cro_scan(
         return None
 
 
-def attach_nurture_scan(*, email: str, store_url: str, report: dict) -> bool:
-    ok, _ = post_site_lead(
-        {
-            "email": email,
-            "store_url": store_url,
-            "report": report,
-        },
-        timeout=120,
-    )
+def attach_nurture_scan(
+    *,
+    email: str,
+    store_url: str,
+    report: dict,
+    submission_type: str = "cro_scan",
+    report_view_url: str | None = None,
+) -> bool:
+    st = (submission_type or "cro_scan").strip().lower() or "cro_scan"
+    payload: dict[str, Any] = {
+        "email": email,
+        "store_url": store_url,
+        "report": report,
+        "submission_type": st,
+        "enroll_nurture": _enroll_nurture_for_submission_type(st),
+    }
+    if (report_view_url or "").strip():
+        payload["report_view_url"] = report_view_url.strip()
+    ok, _ = post_site_lead(payload, timeout=120)
     if not ok:
         _log.warning("spark_backend attach-scan (site-lead): failed")
     return ok
@@ -170,7 +215,13 @@ def attach_nurture_scan(*, email: str, store_url: str, report: dict) -> bool:
 
 def trigger_nurture_cron_on_spark() -> bool:
     """POST Spark /cro-nurture/api/cron/run (enrich + dispatch)."""
-    cron_tok = (os.getenv("SPARK_CRO_NURTURE_CRON_TOKEN") or os.getenv("CRO_NURTURE_CRON_TOKEN") or "").strip()
+    # Align with Spark cn_config.cron_token() lookup (EMAIL_AUTOMATION_CRON_TOKEN / CRO_NURTURE_CRON_TOKEN / …).
+    cron_tok = (
+        (os.getenv("EMAIL_AUTOMATION_CRON_TOKEN") or "").strip()
+        or (os.getenv("SPARK_EMAIL_AUTOMATION_CRON_TOKEN") or "").strip()
+        or (os.getenv("CRO_NURTURE_CRON_TOKEN") or "").strip()
+        or (os.getenv("SPARK_CRO_NURTURE_CRON_TOKEN") or "").strip()
+    )
     if not cron_tok:
         _log.warning("spark_backend cron: set SPARK_CRO_NURTURE_CRON_TOKEN (same value as on Spark)")
         return False

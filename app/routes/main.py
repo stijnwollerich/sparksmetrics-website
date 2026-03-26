@@ -781,21 +781,63 @@ def cro_scan_preview_image():
     return resp
 
 
-def _enqueue_cro_scan(store_url: str, email: str, fname: str) -> None:
-    """Start the CRO scan pipeline in a background thread (screenshots → AI → PDF → email)."""
+def _enqueue_cro_scan(
+    store_url: str,
+    email: str,
+    fname: str,
+    *,
+    delivery_mode: str = "funnel",
+    spark_attach_submission_type: str = "cro_scan",
+) -> None:
+    """Start the CRO scan pipeline in a background thread (screenshots → AI → store → optional email)."""
     import threading
+
     app = current_app._get_current_object()
 
     def _run():
         with app.app_context():
             try:
                 from app.cro_scan import run_scan
-                run_scan(store_url=store_url, email=email, fname=fname)
+
+                run_scan(
+                    store_url=store_url,
+                    email=email,
+                    fname=fname,
+                    delivery_mode=delivery_mode,
+                    spark_attach_submission_type=spark_attach_submission_type,
+                )
             except Exception as e:
                 app.logger.warning("CRO scan background job failed: %s", e)
 
     t = threading.Thread(target=_run, daemon=True)
     t.start()
+
+
+def _maybe_enqueue_lead_magnet_background_scan(
+    *,
+    website_url: str | None,
+    email: str,
+    fname: str,
+    submission_type: str,
+) -> None:
+    """
+    After audit/resource lead capture: optional background CRO scan for Spark enrichment only
+    (no report email to the lead). Requires SPARK_BACKEND_URL + secret + non-empty store URL.
+    """
+    if not spark_backend.enabled():
+        return
+    raw = (website_url or "").strip()
+    if not raw:
+        return
+    store_url = _normalize_shopify_url(raw) or raw
+    st = (submission_type or "audit").strip().lower()
+    _enqueue_cro_scan(
+        store_url,
+        email,
+        fname,
+        delivery_mode="lead_magnet_enrich",
+        spark_attach_submission_type=st,
+    )
 
 
 @main_bp.route("/cro-scan/submit-email", methods=["POST"])
@@ -820,6 +862,7 @@ def cro_scan_submit_email():
     _sync_lead_to_brevo(fname, email, "cro_scan", resource_slug=None, business_stage=orders_per_month, website_url=store_url)
     _notify_slack_lead(fname, email, "cro_scan", resource_slug=None, business_stage=orders_per_month, website_url=store_url)
     nurture_lead_id = None
+    form_page_url = _ingest_form_page_url(data if isinstance(data, dict) else {})
     if spark_backend.enabled():
         try:
             nurture_lead_id = spark_backend.register_nurture_cro_scan(
@@ -827,6 +870,7 @@ def cro_scan_submit_email():
                 store_url=store_url,
                 fname=fname,
                 orders_per_month=orders_per_month,
+                form_page_url=form_page_url,
             )
         except Exception as e:
             current_app.logger.warning("spark_backend: nurture register failed: %s", e)
@@ -865,8 +909,14 @@ def cro_scan_submit_email():
                         app.logger.exception("cro_nurture instant test failed lead=%s", lid)
 
             threading.Thread(target=_instant_nurture, daemon=True).start()
-    # Run scan pipeline in background (screenshots → AI → PDF → email)
-    _enqueue_cro_scan(store_url, email, fname)
+    # Run scan pipeline in background (screenshots → AI → report email + Slack + attach)
+    _enqueue_cro_scan(
+        store_url,
+        email,
+        fname,
+        delivery_mode="funnel",
+        spark_attach_submission_type="cro_scan",
+    )
     return jsonify({"success": True})
 # Downloadable resources: slug -> filename in static/downloads/. Add new resources here.
 RESOURCE_DOWNLOADS = {
@@ -880,6 +930,17 @@ def how_we_improve_conversions():
     return render_template("how-we-improve-conversions.html")
 
 
+def _ingest_form_page_url(data: dict | None) -> str | None:
+    """Resolve Spark `form_page_url` from JSON body or Referer. See docs/SPARK_SITE_LEAD_API.md."""
+    d = data if isinstance(data, dict) else {}
+    for k in ("form_page_url", "page_url", "submission_url"):
+        v = (d.get(k) or "").strip()
+        if v:
+            return v
+    ref = (request.referrer or "").strip()
+    return ref or None
+
+
 def _save_lead(
     fname: str,
     email: str,
@@ -887,8 +948,14 @@ def _save_lead(
     resource_slug: str | None = None,
     business_stage: str | None = None,
     website_url: str | None = None,
+    form_page_url: str | None = None,
+    orders_per_month: str | None = None,
 ) -> None:
-    """Persist lead to Postgres if DATABASE_URL is set. Logs errors, does not raise."""
+    """Persist lead to Postgres if DATABASE_URL is set. Logs errors, does not raise.
+
+    When Spark is enabled, forwards to POST /api/site/lead — see docs/SPARK_SITE_LEAD_API.md.
+    Nurture enrollment is controlled by SPARK_NURTURE_ENROLLMENT_TYPES (submission_type list).
+    """
     if spark_backend.enabled():
         # CRO scan: submit-email posts once via register_nurture_cro_scan → Spark /api/site/lead
         # (avoids duplicate contact + nurture rows).
@@ -903,6 +970,8 @@ def _save_lead(
                 business_stage=business_stage,
                 website_url=website_url,
                 lead_origin="sparksmetrics.com",
+                form_page_url=form_page_url,
+                orders_per_month=orders_per_month,
             )
         except Exception as e:
             current_app.logger.warning("spark_backend site-lead failed: %s", e)
@@ -1227,9 +1296,24 @@ def request_audit():
         return jsonify({"success": False, "error": "First name required"}), 400
     if not email or not re.match(r"^[^\s@]+@[^\s@]+\.[^\s@]+$", email):
         return jsonify({"success": False, "error": "Invalid email"}), 400
-    _save_lead(fname, email, "audit", resource_slug=None, website_url=website_url)
+    if website_url:
+        website_url = _normalize_shopify_url(website_url) or website_url
+    _save_lead(
+        fname,
+        email,
+        "audit",
+        resource_slug=None,
+        website_url=website_url,
+        form_page_url=_ingest_form_page_url(data),
+    )
     _sync_lead_to_brevo(fname, email, "audit", resource_slug=None, website_url=website_url)
     _notify_slack_lead(fname, email, "audit", resource_slug=None, website_url=website_url)
+    _maybe_enqueue_lead_magnet_background_scan(
+        website_url=website_url,
+        email=email,
+        fname=fname,
+        submission_type="audit",
+    )
     return jsonify({"success": True})
 
 
@@ -1241,6 +1325,7 @@ def download_resource():
     email = (data.get("email") or "").strip()
     slug = (data.get("resource") or "").strip()
     business_stage = (data.get("business_stage") or "").strip() or None
+    website_url_lm = (data.get("website_url") or data.get("store_url") or "").strip() or None
     if not fname:
         return jsonify({"success": False, "error": "First name required"}), 400
     if not email or not re.match(r"^[^\s@]+@[^\s@]+\.[^\s@]+$", email):
@@ -1248,9 +1333,39 @@ def download_resource():
     resource = RESOURCE_DOWNLOADS.get(slug) if slug else None
     if not resource:
         return jsonify({"success": False, "error": "Unknown resource"}), 400
-    _save_lead(fname, email, "resource", resource_slug=slug or None, business_stage=business_stage)
-    _sync_lead_to_brevo(fname, email, "resource", resource_slug=slug or None, business_stage=business_stage)
-    _notify_slack_lead(fname, email, "resource", resource_slug=slug or None, business_stage=business_stage)
+    if website_url_lm:
+        website_url_lm = _normalize_shopify_url(website_url_lm) or website_url_lm
+    _save_lead(
+        fname,
+        email,
+        "resource",
+        resource_slug=slug or None,
+        business_stage=business_stage,
+        website_url=website_url_lm,
+        form_page_url=_ingest_form_page_url(data),
+    )
+    _sync_lead_to_brevo(
+        fname,
+        email,
+        "resource",
+        resource_slug=slug or None,
+        business_stage=business_stage,
+        website_url=website_url_lm,
+    )
+    _notify_slack_lead(
+        fname,
+        email,
+        "resource",
+        resource_slug=slug or None,
+        business_stage=business_stage,
+        website_url=website_url_lm,
+    )
+    _maybe_enqueue_lead_magnet_background_scan(
+        website_url=website_url_lm,
+        email=email,
+        fname=fname,
+        submission_type="resource",
+    )
     download_url = url_for("main.serve_download", slug=slug)
     return jsonify({"success": True, "download_url": download_url})
 

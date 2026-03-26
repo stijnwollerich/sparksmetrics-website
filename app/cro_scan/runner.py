@@ -36,22 +36,54 @@ def _notify_slack_report_ready(report_view_url: str, store_name: str, to_email: 
         current_app.logger.warning("Slack notify error: %s", e)
 
 
-def run_scan(store_url: str, email: str, fname: str) -> None:
+def _schedule_spark_post_scan_cron_kick() -> None:
+    """Notify Spark to run enrich/dispatch after report attach (non-blocking)."""
+    import threading
+    import time
+
+    from app import spark_backend
+
+    app = current_app._get_current_object()
+
+    def _kick():
+        time.sleep(0.75)
+        with app.app_context():
+            ok = spark_backend.trigger_nurture_cron_on_spark()
+            app.logger.info("spark_backend: post-scan cron kick ok=%s", ok)
+
+    threading.Thread(target=_kick, daemon=True).start()
+
+
+def run_scan(
+    store_url: str,
+    email: str,
+    fname: str,
+    *,
+    delivery_mode: str = "funnel",
+    spark_attach_submission_type: str = "cro_scan",
+) -> None:
     """
     Run the full CRO scan pipeline in the current (or pushed) app context:
     1. Discover homepage, collection, product and get mobile screenshot URLs
     2. Run AI analysis on screenshots → report JSON
     3. Store report by secret token for private web viewing
-    4. Send email with link to view report (no PDF attachment)
+    4. If ``delivery_mode == "funnel"``: email + Slack the report link (/cro-scan funnel).
+    5. If ``delivery_mode == "lead_magnet_enrich"``: no email/Slack — only Spark attach for enrichment.
+
+    ``spark_attach_submission_type`` is sent on attach (audit, resource, cro_scan).
 
     Logs errors and does not raise; safe to run in a background thread.
     """
+    mode = (delivery_mode or "funnel").strip().lower()
+    enrich_only = mode == "lead_magnet_enrich"
     from app.cro_scan.screenshots import get_screenshot_urls
     from app.cro_scan.ai_analysis import analyze_screenshots
     from app.cro_scan.email_report import send_report_email
 
     try:
-        current_app.logger.info("CRO scan: starting for %s → %s", store_url, email)
+        current_app.logger.info(
+            "CRO scan: starting mode=%s for %s → %s", mode, store_url, email
+        )
     except RuntimeError:
         pass
 
@@ -139,37 +171,38 @@ def run_scan(store_url: str, email: str, fname: str) -> None:
         current_app.logger.warning("CRO scan: failed to store report for web view: %s", e)
         report_view_url = None
 
-    # 4. Email: link to on-site report only (no PDF attachment)
-    send_report_email(
-        to_email=email,
-        fname=fname or "there",
-        store_name=store_name,
-        report_view_url=report_view_url,
-    )
-
-    # 5. Slack: post report link to channel (same webhook as lead notifications)
-    if report_view_url:
-        _notify_slack_report_ready(report_view_url, store_name, email)
+    # 4–5. Funnel only: transactional email + Slack (/cro-scan); lead magnets skip (Spark enrichment only)
+    if not enrich_only:
+        send_report_email(
+            to_email=email,
+            fname=fname or "there",
+            store_name=store_name,
+            report_view_url=report_view_url,
+        )
+        if report_view_url:
+            _notify_slack_report_ready(report_view_url, store_name, email)
+    else:
+        try:
+            current_app.logger.info(
+                "CRO scan: lead_magnet_enrich — no report email/Slack; url=%s", report_view_url
+            )
+        except RuntimeError:
+            pass
 
     # 6. Nurture: attach report JSON to lead (Spark or local)
     try:
         from app import spark_backend
 
         if spark_backend.enabled():
-            if spark_backend.attach_nurture_scan(email=email, store_url=store_url, report=report):
-                if current_app.debug:
-                    import threading
-                    import time
-
-                    app = current_app._get_current_object()
-
-                    def _spark_cron_kick():
-                        time.sleep(0.75)
-                        with app.app_context():
-                            ok = spark_backend.trigger_nurture_cron_on_spark()
-                            app.logger.info("spark_backend: post-scan cron kick ok=%s", ok)
-
-                    threading.Thread(target=_spark_cron_kick, daemon=True).start()
+            st_attach = (spark_attach_submission_type or "cro_scan").strip().lower() or "cro_scan"
+            if spark_backend.attach_nurture_scan(
+                email=email,
+                store_url=store_url,
+                report=report,
+                submission_type=st_attach,
+                report_view_url=report_view_url,
+            ):
+                _schedule_spark_post_scan_cron_kick()
         elif current_app.config.get("CRO_NURTURE_ENABLED"):
             from app.cro_nurture.leads import attach_cro_scan_report_to_lead
 

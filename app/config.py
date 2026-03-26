@@ -101,6 +101,20 @@ def _get_sqlalchemy_uri() -> str:
     return f"sqlite:///{path.as_posix()}"
 
 
+def get_spark_nurture_enrollment_types() -> frozenset[str]:
+    """
+    submission_type values that send enroll_nurture=True on Spark POST /api/site/lead.
+
+    Env ``SPARK_NURTURE_ENROLLMENT_TYPES``: comma-separated, e.g. ``cro_scan`` or ``cro_scan,audit``.
+    If unset, default is ``cro_scan`` only. Set to empty to disable all (all forms send
+    ``enroll_nurture: false``). Spark must honor the ``enroll_nurture`` boolean.
+    """
+    raw = os.environ.get("SPARK_NURTURE_ENROLLMENT_TYPES")
+    if raw is None:
+        return frozenset({"cro_scan"})
+    return frozenset(x.strip().lower() for x in raw.split(",") if x.strip())
+
+
 class Config:
     """Default configuration."""
 
@@ -167,6 +181,8 @@ class Config:
     # SPARK_BACKEND_URL — Spark base URL, no trailing slash
     # SPARK_SITE_INGEST_SECRET — must match Spark SPARK_SITE_INGEST_SECRET (header X-Spark-Site-Secret)
     # SPARK_CRO_NURTURE_CRON_TOKEN — optional; same as Spark CRO_NURTURE_CRON_TOKEN for post-scan HTTP cron kick
+    # SPARK_NURTURE_ENROLLMENT_TYPES — comma-separated submission_type values that send enroll_nurture=true (see get_spark_nurture_enrollment_types)
+    SPARK_NURTURE_ENROLLMENT_TYPES = get_spark_nurture_enrollment_types()
 
 
 class ProductionConfig(Config):
