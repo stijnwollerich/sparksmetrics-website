@@ -92,3 +92,16 @@ Examples:
 - Empty value: no form sends `enroll_nurture: true` (all false).
 
 Form → `submission_type`: **`/cro-scan/submit-email`** → `cro_scan`; **`/request-audit`** → `audit`; **`/download-resource`** → `resource`; Calendly webhook → `calendly`.
+
+## Silent background CRO scan (all URL leads → Spark)
+
+When **`SPARK_BACKEND_URL`** is set and **`SPARK_BACKGROUND_CRO_SCAN=1`** (default in code: on unless set to `0` / `false` / `no` / `off`):
+
+1. **`_save_lead`** calls `post_form_lead` as before.
+2. On **success**, if the payload had a non-empty **`website_url`**, the app enqueues **`run_scan`** with **`delivery_mode=lead_magnet_enrich`** (same as audit/resource): full CRO pipeline on Sparksmetrics, **no** report email to the lead; **`attach_nurture_scan`** sends **`report`** + **`report_view_url`** to Spark.
+
+So **every** form that hits Spark with a store URL gets a scan (except **`cro_scan`**, which is handled only from **`/cro-scan/submit-email`** — register + separate funnel scan — to avoid duplicate work).
+
+**Calendly** and other paths **without** a URL do not enqueue a scan.
+
+Spark: if **`report`** arrives and no nurture row matched, ingest **creates** a **`cro_nurture_lead`** then attaches so **`full_report`** is stored. Nurture drip still follows **`enroll_nurture`** / Spark rules from the first touch; expand **`SPARK_NURTURE_ENROLLMENT_TYPES`** if you want more `submission_type` values to start the sequence, not only scan storage.

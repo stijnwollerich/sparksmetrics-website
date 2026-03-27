@@ -1,5 +1,4 @@
 """Main (public) routes."""
-import base64
 import json
 import re
 from pathlib import Path
@@ -486,32 +485,27 @@ def cro_scan_check():
     normalized = _normalize_shopify_url(raw)
     if not normalized:
         return jsonify({"success": False, "error": "Please enter a valid website URL."}), 400
-    from app.cro_scan.platform import is_shopify_store
-    from app.cro_scan.screenshots import discover_pages, discover_pages_generic, _url_is_homepage
-    is_shopify = is_shopify_store(normalized)
-    try:
-        # Use same discovery as test-discovery (fast=False) so URLs that pass test pass the scan too
-        pages = discover_pages(normalized, fast=False) if is_shopify else discover_pages_generic(normalized, fast=False)
-    except Exception as e:
-        current_app.logger.warning("CRO scan discovery failed for %s: %s", normalized, e)
+    if not spark_backend.enabled():
         return jsonify({
             "success": False,
-            "error": "We couldn't scan this site. Please check the URL and try again.",
-        }), 400
-    product_url = pages.get("product") or ""
-    collection_url = pages.get("collection") or ""
-    if not is_shopify and collection_url and _url_is_homepage(collection_url, normalized):
-        collection_url = ""
-    if not product_url or not collection_url:
+            "error": "CRO validation requires Spark (set SPARK_BACKEND_URL and SPARK_SITE_INGEST_SECRET).",
+        }), 503
+    chk = spark_backend.check_cro_store(website_url=normalized)
+    if chk is None:
         return jsonify({
             "success": False,
-            "error": "We couldn't find both a product and a category page on this site. Our scan needs both to work properly—please enter a valid ecommerce store URL.",
-        }), 400
+            "error": "We couldn't validate this URL right now. Please try again.",
+        }), 502
+    if not chk.get("success"):
+        return jsonify({"success": False, "error": chk.get("error") or "Invalid store URL."}), 400
+    normalized = (chk.get("normalized_url") or normalized).strip()
+    is_shopify = bool(chk.get("is_shopify", True))
     if is_shopify:
         _notify_slack_cro_scan_url(normalized)
     else:
         _notify_slack_cro_scan_non_shopify(normalized)
     from urllib.parse import quote
+
     thank_you_url = url_for("main.cro_scan_thank_you", url=quote(normalized, safe=""))
     return jsonify({"success": True, "redirect": thank_you_url})
 
@@ -635,7 +629,8 @@ def _sample_report_for_preview() -> dict:
 @main_bp.route("/cro-scan/report-preview", methods=["GET"])
 def cro_scan_report_preview():
     """Preview the CRO report HTML template with sample data (for design/dev)."""
-    from app.cro_scan.ai_analysis import _normalize_report
+    from app.cro_report_normalize import _normalize_report
+
     report = _normalize_report(_sample_report_for_preview())
     return render_template("cro_scan_report.html", report=report)
 
@@ -656,6 +651,9 @@ def cro_scan_report_view(token):
             report = json.loads(rec.report_json)
         except (TypeError, ValueError):
             abort(404)
+    from app.cro_report_normalize import _normalize_report
+
+    report = _normalize_report(report if isinstance(report, dict) else {})
     resp = make_response(render_template("cro_scan_report.html", report=report))
     resp.headers["X-Robots-Tag"] = "noindex, nofollow"
     return resp
@@ -706,77 +704,37 @@ def cro_scan_test_discovery():
         normalized = _normalize_shopify_url(raw)
         if not normalized:
             result = {"error": "Invalid URL. Enter a domain (e.g. store.com or https://store.com)."}
-        else:
-            from app.cro_scan.platform import is_shopify_store
-            from app.cro_scan.screenshots import discover_pages, discover_pages_generic
-            is_shopify = is_shopify_store(normalized)
-            try:
-                pages = discover_pages(normalized) if is_shopify else discover_pages_generic(normalized)
+        elif spark_backend.enabled():
+            data = spark_backend.post_cro_test_discovery(url=raw, fast=False)
+            if not data:
+                result = {"error": "Discovery service unavailable (Spark).", "store_url": normalized}
+            elif data.get("error"):
                 result = {
-                    "store_url": normalized,
-                    "is_shopify": is_shopify,
-                    "pages": pages,
+                    "error": data.get("error"),
+                    "store_url": data.get("store_url") or normalized,
+                    "is_shopify": data.get("is_shopify"),
                 }
-                # Non-Shopify: only "ecommerce" if we found both collection and product (and collection is not homepage)
-                if not is_shopify and pages:
-                    _norm = lambda u: (u or "").strip().rstrip("/")
-                    coll = pages.get("collection") or ""
-                    prod = pages.get("product") or ""
-                    result["is_likely_ecommerce"] = bool(
-                        coll and prod and _norm(coll) != _norm(normalized)
-                    )
-                else:
-                    result["is_likely_ecommerce"] = True  # Shopify or no pages
-            except Exception as e:
-                result = {"error": str(e), "store_url": normalized, "is_shopify": is_shopify}
+            else:
+                result = data
+        else:
+            result = {"error": "Set SPARK_BACKEND_URL for test discovery.", "store_url": normalized}
     return render_template("cro_scan_test_discovery.html", result=result)
 
 
 @main_bp.route("/cro-scan/preview-image", methods=["GET"])
 def cro_scan_preview_image():
     """
-    Return screenshot for thank-you page preview. When BROWSERLESS_API_TOKEN is set,
-    use Browserless (works on Cloudflare-protected sites). Otherwise thum.io.
-    Cap total at 10s; skip challenge check when using Browserless (image is already real).
+    Return screenshot for thank-you page preview (proxied from Spark when backend is enabled).
     """
-    from urllib.parse import unquote
-    from app.cro_scan.ai_analysis import _fetch_and_validate_screenshot, _fetch_screenshot_browserless, _is_challenge_page
-
-    url_param = request.args.get("url", "").strip()
-    width_param = request.args.get("width", "1280").strip()
-    width = 400 if width_param == "400" else 1280
-    store_url = unquote(url_param) if url_param else None
-    if not store_url or not store_url.startswith("http"):
+    if not spark_backend.enabled():
+        abort(503)
+    params = {k: request.args.get(k, "") for k in ("url", "width") if request.args.get(k, "").strip()}
+    if "url" not in params:
         abort(404)
-    store_url = _normalize_shopify_url(store_url) or store_url
-
-    browserless_token = (current_app.config.get("BROWSERLESS_API_TOKEN") or "").strip()
-    if browserless_token:
-        # Use Browserless so protected sites (e.g. cghunter.com) show a real preview; 8s to stay under 10s
-        data_uri, is_valid = _fetch_screenshot_browserless(store_url, browserless_token, timeout=8, retries=0)
-        check_challenge = False  # Browserless bypasses Cloudflare, no need to check
-    else:
-        thum_url = f"https://image.thum.io/get/width/{width}/{store_url}"
-        data_uri, is_valid = _fetch_and_validate_screenshot(thum_url, timeout=6, retries=0)
-        check_challenge = current_app.config.get("CRO_PREVIEW_CHECK_CHALLENGE", True)
-
-    if not is_valid or not data_uri:
+    status, body = spark_backend.fetch_cro_preview_image(params=params)
+    if status != 200 or not body:
         abort(404)
-    if check_challenge:
-        api_key = (
-            (current_app.config.get("OPENAI_API_KEY") or "")
-            or (current_app.config.get("OPEN_AI_KEY") or "")
-            or ""
-        ).strip()
-        if api_key and _is_challenge_page(data_uri, api_key, timeout=4):
-            abort(404)
-    # Return image bytes (data_uri is "data:image/png;base64,...")
-    try:
-        b64 = data_uri.split(",", 1)[1] if "," in data_uri else ""
-        raw = base64.standard_b64decode(b64)
-    except Exception:
-        abort(404)
-    resp = Response(raw, mimetype="image/png")
+    resp = Response(body, mimetype="image/png")
     resp.headers["Cache-Control"] = "private, max-age=60"
     return resp
 
@@ -789,28 +747,23 @@ def _enqueue_cro_scan(
     delivery_mode: str = "funnel",
     spark_attach_submission_type: str = "cro_scan",
 ) -> None:
-    """Start the CRO scan pipeline in a background thread (screenshots → AI → store → optional email)."""
-    import threading
-
-    app = current_app._get_current_object()
-
-    def _run():
-        with app.app_context():
-            try:
-                from app.cro_scan import run_scan
-
-                run_scan(
-                    store_url=store_url,
-                    email=email,
-                    fname=fname,
-                    delivery_mode=delivery_mode,
-                    spark_attach_submission_type=spark_attach_submission_type,
-                )
-            except Exception as e:
-                app.logger.warning("CRO scan background job failed: %s", e)
-
-    t = threading.Thread(target=_run, daemon=True)
-    t.start()
+    """Start the CRO scan pipeline on Spark (POST /api/site/cro-scan/run)."""
+    if not spark_backend.enabled():
+        current_app.logger.warning(
+            "CRO scan skipped: set SPARK_BACKEND_URL and SPARK_SITE_INGEST_SECRET (store=%s email=%s)",
+            (store_url or "")[:60],
+            email,
+        )
+        return
+    ok = spark_backend.trigger_cro_scan_run(
+        store_url=store_url,
+        email=email,
+        fname=fname,
+        delivery_mode=delivery_mode,
+        spark_attach_submission_type=spark_attach_submission_type,
+    )
+    if not ok:
+        current_app.logger.warning("CRO scan: Spark /cro-scan/run trigger failed for %s", (store_url or "")[:60])
 
 
 def _maybe_enqueue_lead_magnet_background_scan(
@@ -821,8 +774,11 @@ def _maybe_enqueue_lead_magnet_background_scan(
     submission_type: str,
 ) -> None:
     """
-    After audit/resource lead capture: optional background CRO scan for Spark enrichment only
-    (no report email to the lead). Requires SPARK_BACKEND_URL + secret + non-empty store URL.
+    Background CRO scan on Spark: ``POST /api/site/cro-scan/run`` with
+    ``delivery_mode=lead_magnet_enrich`` (no report email; report stored + attached on Spark).
+
+    Used after successful Spark ingest when the lead has a store URL (see ``_save_lead``).
+    Requires SPARK_BACKEND_URL + secret + non-empty store URL.
     """
     if not spark_backend.enabled():
         return
@@ -962,7 +918,9 @@ def _save_lead(
         if submission_type == "cro_scan":
             return
         try:
-            spark_backend.post_form_lead(
+            from app.config import spark_background_cro_scan_after_ingest_enabled
+
+            ok = spark_backend.post_form_lead(
                 fname=fname,
                 email=email,
                 submission_type=submission_type,
@@ -973,6 +931,17 @@ def _save_lead(
                 form_page_url=form_page_url,
                 orders_per_month=orders_per_month,
             )
+            if (
+                ok
+                and (website_url or "").strip()
+                and spark_background_cro_scan_after_ingest_enabled()
+            ):
+                _maybe_enqueue_lead_magnet_background_scan(
+                    website_url=website_url,
+                    email=email,
+                    fname=fname,
+                    submission_type=submission_type,
+                )
         except Exception as e:
             current_app.logger.warning("spark_backend site-lead failed: %s", e)
         return
@@ -1359,12 +1328,6 @@ def download_resource():
         resource_slug=slug or None,
         business_stage=business_stage,
         website_url=website_url_lm,
-    )
-    _maybe_enqueue_lead_magnet_background_scan(
-        website_url=website_url_lm,
-        email=email,
-        fname=fname,
-        submission_type="resource",
     )
     download_url = url_for("main.serve_download", slug=slug)
     return jsonify({"success": True, "download_url": download_url})

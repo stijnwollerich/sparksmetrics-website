@@ -213,6 +213,104 @@ def attach_nurture_scan(
     return ok
 
 
+def trigger_cro_scan_run(
+    *,
+    store_url: str,
+    email: str,
+    fname: str,
+    delivery_mode: str = "funnel",
+    spark_attach_submission_type: str = "cro_scan",
+) -> bool:
+    """POST Spark ``/api/site/cro-scan/run`` (202). Scan runs on Spark."""
+    try:
+        import requests
+    except ImportError:
+        return False
+    try:
+        r = requests.post(
+            f"{_base()}/api/site/cro-scan/run",
+            json={
+                "store_url": store_url,
+                "email": email,
+                "fname": fname,
+                "delivery_mode": delivery_mode,
+                "submission_type": spark_attach_submission_type,
+            },
+            headers=_headers(),
+            timeout=8,
+        )
+        if r.status_code not in (200, 202):
+            _log.warning("spark_backend cro-scan run: HTTP %s %s", r.status_code, (r.text or "")[:300])
+            return False
+        return True
+    except Exception as e:
+        _log.warning("spark_backend cro-scan run: %s", e)
+        return False
+
+
+def check_cro_store(*, website_url: str) -> dict | None:
+    """POST Spark ``/api/site/cro-scan/check-store`` → JSON or None on failure."""
+    try:
+        import requests
+    except ImportError:
+        return None
+    try:
+        r = requests.post(
+            f"{_base()}/api/site/cro-scan/check-store",
+            json={"website_url": website_url},
+            headers=_headers(),
+            timeout=120,
+        )
+        if r.status_code != 200:
+            _log.warning("spark_backend check-store: HTTP %s %s", r.status_code, (r.text or "")[:300])
+            return None
+        return r.json()
+    except Exception as e:
+        _log.warning("spark_backend check-store: %s", e)
+        return None
+
+
+def fetch_cro_preview_image(*, params: dict[str, str]) -> tuple[int, bytes | None]:
+    """GET Spark preview-image (secret). Returns (status_code, body or None)."""
+    try:
+        import requests
+    except ImportError:
+        return 0, None
+    try:
+        r = requests.get(
+            f"{_base()}/api/site/cro-scan/preview-image",
+            params=params,
+            headers=_headers(),
+            timeout=15,
+        )
+        return r.status_code, r.content
+    except Exception as e:
+        _log.warning("spark_backend preview-image: %s", e)
+        return 0, None
+
+
+def post_cro_test_discovery(*, url: str, fast: bool = False) -> dict | None:
+    """POST Spark test-discovery JSON."""
+    try:
+        import requests
+    except ImportError:
+        return None
+    try:
+        r = requests.post(
+            f"{_base()}/api/site/cro-scan/test-discovery",
+            json={"url": url, "fast": fast},
+            headers=_headers(),
+            timeout=120,
+        )
+        if r.status_code not in (200, 500):
+            _log.warning("spark_backend test-discovery: HTTP %s", r.status_code)
+            return None
+        return r.json()
+    except Exception as e:
+        _log.warning("spark_backend test-discovery: %s", e)
+        return None
+
+
 def trigger_nurture_cron_on_spark() -> bool:
     """POST Spark /cro-nurture/api/cron/run (enrich + dispatch)."""
     # Align with Spark cn_config.cron_token() lookup (EMAIL_AUTOMATION_CRON_TOKEN / CRO_NURTURE_CRON_TOKEN / …).

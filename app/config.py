@@ -115,6 +115,17 @@ def get_spark_nurture_enrollment_types() -> frozenset[str]:
     return frozenset(x.strip().lower() for x in raw.split(",") if x.strip())
 
 
+def spark_background_cro_scan_after_ingest_enabled() -> bool:
+    """
+    When Spark ingest succeeds and the lead has a store/website URL, enqueue a **silent** CRO scan
+    (``lead_magnet_enrich``): store report + attach to Spark, **no** report email to the lead.
+
+    Env ``SPARK_BACKGROUND_CRO_SCAN`` — default ``1`` (on). Set to ``0`` / ``false`` to disable.
+    """
+    raw = (os.environ.get("SPARK_BACKGROUND_CRO_SCAN") or "1").strip().lower()
+    return raw not in ("0", "false", "no", "off")
+
+
 class Config:
     """Default configuration."""
 
@@ -182,6 +193,7 @@ class Config:
     # SPARK_SITE_INGEST_SECRET — must match Spark SPARK_SITE_INGEST_SECRET (header X-Spark-Site-Secret)
     # SPARK_CRO_NURTURE_CRON_TOKEN — optional; same as Spark CRO_NURTURE_CRON_TOKEN for post-scan HTTP cron kick
     # SPARK_NURTURE_ENROLLMENT_TYPES — comma-separated submission_type values that send enroll_nurture=true (see get_spark_nurture_enrollment_types)
+    # SPARK_BACKGROUND_CRO_SCAN — default 1: after successful Spark ingest with a URL, run silent CRO scan → attach full_report (no report email)
     SPARK_NURTURE_ENROLLMENT_TYPES = get_spark_nurture_enrollment_types()
 
 

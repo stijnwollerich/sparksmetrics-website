@@ -385,51 +385,14 @@ def create_app(config_object="app.config.Config") -> Flask:
 
     @app.cli.command("cro-scan-test")
     @click.option("--url", default="https://outdoorresearch.com", help="Store URL to scan")
-    @click.option("--out", default="cro_scan_report_test.pdf", help="Output PDF path")
+    @click.option("--out", default="cro_scan_report_test.pdf", help="Unused (legacy); scan runs on Spark")
     def cro_scan_test(url, out):
-        """Run a one-off CRO scan and save the report PDF (no email). For testing."""
-        import sys
-        store_url = url.strip() if url else "https://outdoorresearch.com"
-        if not store_url.startswith("http"):
-            store_url = "https://" + store_url
-        with app.app_context():
-            from app.cro_scan.screenshots import get_screenshot_urls
-            from app.cro_scan.ai_analysis import analyze_screenshots
-            from app.cro_scan.report import build_report_pdf
-            print("1. Getting mobile screenshot URLs...", flush=True)
-            try:
-                screenshot_urls = get_screenshot_urls(store_url)
-            except Exception as e:
-                print(f"   Error: {e}", file=sys.stderr)
-                sys.exit(1)
-            for k, v in screenshot_urls.items():
-                print(f"   {k}: {v[:70]}..." if v and len(v) > 70 else f"   {k}: {v or '(none)'}")
-            print("2. Running AI analysis (OpenAI vision)...", flush=True)
-            report = analyze_screenshots(store_url, screenshot_urls)
-            print(f"   Overall score: {report.get('overall_score')}, store: {report.get('store_name')}")
-            from app.cro_scan.ai_analysis import _empty_page_dict
-            for page_key in ("homepage", "collection", "product"):
-                if not isinstance(report.get("pages", {}).get(page_key), dict):
-                    report.setdefault("pages", {})[page_key] = _empty_page_dict()
-                url_val = screenshot_urls.get(page_key) or ""
-                if url_val:
-                    report["pages"][page_key]["screenshot_url"] = url_val
-            print("3. Building report...", flush=True)
-            from flask import render_template
-            html = render_template("cro_scan_report.html", report=report)
-            out_dir = Path(__file__).resolve().parent.parent
-            html_path = out_dir / (Path(out).stem + ".html")
-            html_path.write_text(html, encoding="utf-8")
-            print(f"   HTML saved: {html_path}")
-            try:
-                pdf_bytes = build_report_pdf(report)
-                if pdf_bytes:
-                    out_path = out_dir / out
-                    out_path.write_bytes(pdf_bytes)
-                    print(f"   PDF saved: {out_path}")
-                else:
-                    print("   PDF skipped (empty). Open the HTML file in a browser to view the report.")
-            except Exception as e:
-                print(f"   PDF skipped ({e}). Open the HTML file in a browser to view the report.")
+        """CRO scan pipeline runs on Spark. Use the Spark app or POST /api/site/cro-scan/run with a test email."""
+        print(
+            "The CRO scan pipeline was moved to Spark. On Spark: set env (OpenAI, BROWSERLESS/SCRAPFLY, etc.), "
+            "then POST /api/site/cro-scan/run with store_url, email, fname, delivery_mode.",
+            flush=True,
+        )
+        print(f"Ignoring --out={out!r}; example store: {url.strip()}", flush=True)
 
     return app
