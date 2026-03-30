@@ -22,7 +22,11 @@
     <meta property="og:title" content="{% block og_title %}Sparksmetrics{% endblock %}"/>
     <meta property="og:description" content="{% block og_description %}Results-driven CRO and analytics for brands that scale. Free conversion audit and data-driven optimization.{% endblock %}"/>
     <meta property="og:url" content="{{ request.url }}"/>
-    {% block og_image_meta %}{% endblock %}
+    {% block og_image_meta %}
+    <meta property="og:image" content="{{ url_for('static', filename='favicon.svg', _external=True) }}"/>
+    <meta property="og:image:alt" content="Sparksmetrics logo"/>
+    <meta name="twitter:image" content="{{ url_for('static', filename='favicon.svg', _external=True) }}"/>
+    {% endblock %}
     <meta name="twitter:card" content="summary_large_image"/>
     <meta name="twitter:title" content="{% block twitter_title %}Sparksmetrics{% endblock %}"/>
     <meta name="twitter:description" content="{% block twitter_description %}Results-driven CRO and analytics for brands that scale. Free conversion audit and data-driven optimization.{% endblock %}"/>
@@ -631,7 +635,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </script>
 <script>
 (function(){
-  var CALENDLY_URL = 'https://calendly.com/stijnwherever/free-30-minute-strategy-session?hide_gdpr_banner=1';
+  var CALENDLY_URL = 'https://calendly.com/stijn-wollerich/free-30-minute-strategy-session?hide_gdpr_banner=1';
   var modal = document.getElementById('schedule-modal');
   var iframe = document.getElementById('schedule-calendly-iframe');
   if (!modal || !iframe) return;

@@ -1,5 +1,6 @@
 (function () {
-  var CALENDLY_URL = "https://calendly.com/stijnwherever/free-30-minute-strategy-session?hide_gdpr_banner=1";
+  var CALENDLY_URL =
+    "https://calendly.com/stijn-wollerich/free-30-minute-strategy-session?hide_gdpr_banner=1";
 
   var modal = document.getElementById("lead-modal");
   var form = document.getElementById("lead-form");
@@ -25,12 +26,24 @@
 
   function openModal(trigger) {
     if (!modal) return;
-    var modalType = trigger.getAttribute("data-modal-type") || (trigger.getAttribute("data-resource") ? "resource" : "audit");
+    var modalType =
+      trigger.getAttribute("data-modal-type") ||
+      (trigger.getAttribute("data-resource") ? "resource" : "audit");
     currentModalType = modalType;
     var resource = trigger.getAttribute("data-resource") || "";
-    var title = trigger.getAttribute("data-title") || (modalType === "audit" ? "Get a FREE 24-Hour CRO Audit" : "Free Resource");
-    var description = trigger.getAttribute("data-description") || (modalType === "audit" ? "Enter your email and we’ll get in touch to schedule your free audit. Limited to 3 brands per week." : "Enter your email and we’ll send you the file.");
-    var buttonText = trigger.getAttribute("data-button-text") || (modalType === "audit" ? "Claim my free audit" : "Send me the resource");
+    var title =
+      trigger.getAttribute("data-title") ||
+      (modalType === "audit"
+        ? "Get a FREE 24-Hour CRO Audit"
+        : "Free Resource");
+    var description =
+      trigger.getAttribute("data-description") ||
+      (modalType === "audit"
+        ? "Enter your email and we’ll get in touch to schedule your free audit. Limited to 3 brands per week."
+        : "Enter your email and we’ll send you the file.");
+    var buttonText =
+      trigger.getAttribute("data-button-text") ||
+      (modalType === "audit" ? "Claim my free audit" : "Send me the resource");
     var bulletsJson = trigger.getAttribute("data-bullets");
 
     if (typeInput) typeInput.value = modalType;
@@ -40,33 +53,48 @@
     currentButtonText = buttonText;
     if (submitTextEl) submitTextEl.textContent = buttonText;
     var icon = modalType === "audit" ? "schedule" : "download";
-    if (submitBtn) submitBtn.innerHTML = buttonText + ' <span class="material-symbols-outlined text-lg">' + icon + "</span>";
+    if (submitBtn)
+      submitBtn.innerHTML =
+        buttonText +
+        ' <span class="material-symbols-outlined text-lg">' +
+        icon +
+        "</span>";
 
     if (badgesEl) {
       if (modalType === "audit") {
-        badgesEl.innerHTML = '<span class="inline-block px-3 py-1.5 bg-primary/10 text-primary text-xs font-black uppercase rounded-full">Free Audit</span><span class="inline-block px-2.5 py-1 border border-primary/30 text-primary text-[10px] font-black uppercase rounded-md">24-hour turnaround</span>';
+        badgesEl.innerHTML =
+          '<span class="inline-block px-3 py-1.5 bg-primary/10 text-primary text-xs font-black uppercase rounded-full">Free Audit</span><span class="inline-block px-2.5 py-1 border border-primary/30 text-primary text-[10px] font-black uppercase rounded-md">24-hour turnaround</span>';
       } else {
-        badgesEl.innerHTML = '<span class="inline-block px-3 py-1.5 bg-primary/10 text-primary text-xs font-black uppercase rounded-full">Free Resource</span><span class="inline-block px-2.5 py-1 border border-primary/30 text-primary text-[10px] font-black uppercase rounded-md">Instant access</span>';
+        badgesEl.innerHTML =
+          '<span class="inline-block px-3 py-1.5 bg-primary/10 text-primary text-xs font-black uppercase rounded-full">Free Resource</span><span class="inline-block px-2.5 py-1 border border-primary/30 text-primary text-[10px] font-black uppercase rounded-md">Instant access</span>';
       }
     }
     if (sidebarBadgeEl) {
-      sidebarBadgeEl.innerHTML = modalType === "audit"
-        ? '<span class="material-symbols-outlined text-primary text-lg">schedule</span><span class="text-[10px] font-black uppercase tracking-widest text-primary">24-hour turnaround</span>'
-        : '<span class="material-symbols-outlined text-primary text-lg">schedule</span><span class="text-[10px] font-black uppercase tracking-widest text-primary">Instant download</span>';
+      sidebarBadgeEl.innerHTML =
+        modalType === "audit"
+          ? '<span class="material-symbols-outlined text-primary text-lg">schedule</span><span class="text-[10px] font-black uppercase tracking-widest text-primary">24-hour turnaround</span>'
+          : '<span class="material-symbols-outlined text-primary text-lg">schedule</span><span class="text-[10px] font-black uppercase tracking-widest text-primary">Instant download</span>';
     }
 
     if (bulletsEl) {
       if (bulletsJson) {
         try {
           var bullets = JSON.parse(bulletsJson);
-          bulletsEl.innerHTML = (bullets || []).map(function (b) {
-            return '<li class="flex gap-3"><span class="material-symbols-outlined text-primary shrink-0">check_circle</span>' + b + "</li>";
-          }).join("");
+          bulletsEl.innerHTML = (bullets || [])
+            .map(function (b) {
+              return (
+                '<li class="flex gap-3"><span class="material-symbols-outlined text-primary shrink-0">check_circle</span>' +
+                b +
+                "</li>"
+              );
+            })
+            .join("");
         } catch (e) {
           bulletsEl.innerHTML = defaultBullets;
         }
       } else if (modalType === "audit") {
-        bulletsEl.innerHTML = '<li class="flex gap-3"><span class="material-symbols-outlined text-primary shrink-0">check_circle</span>Data and UI/UX audit of your funnel</li><li class="flex gap-3"><span class="material-symbols-outlined text-primary shrink-0">check_circle</span>Prioritized list of leaks and opportunities</li><li class="flex gap-3"><span class="material-symbols-outlined text-primary shrink-0">check_circle</span>Clear next steps—no obligation</li>';
+        bulletsEl.innerHTML =
+          '<li class="flex gap-3"><span class="material-symbols-outlined text-primary shrink-0">check_circle</span>Data and UI/UX audit of your funnel</li><li class="flex gap-3"><span class="material-symbols-outlined text-primary shrink-0">check_circle</span>Prioritized list of leaks and opportunities</li><li class="flex gap-3"><span class="material-symbols-outlined text-primary shrink-0">check_circle</span>Clear next steps—no obligation</li>';
       } else {
         bulletsEl.innerHTML = defaultBullets;
       }
@@ -81,17 +109,21 @@
     document.body.style.overflow = "hidden";
     document.getElementById("lead-fname").focus();
     // debug: push modal open event
-      try {
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({
-          event: "lead_modal_open",
-          modal_type: currentModalType,
-          resource: resource || null,
-          trigger_text: (trigger && (trigger.getAttribute && (trigger.getAttribute('data-title') || trigger.textContent))) || null,
-          path: window.location.pathname,
-          timestamp: new Date().toISOString()
-        });
-      } catch (err) {}
+    try {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: "lead_modal_open",
+        modal_type: currentModalType,
+        resource: resource || null,
+        trigger_text:
+          (trigger &&
+            trigger.getAttribute &&
+            (trigger.getAttribute("data-title") || trigger.textContent)) ||
+          null,
+        path: window.location.pathname,
+        timestamp: new Date().toISOString(),
+      });
+    } catch (err) {}
   }
 
   function closeModal() {
@@ -106,7 +138,8 @@
     if (!url || url === "#") return;
     var a = document.createElement("a");
     a.href = url;
-    a.download = (url.split("/").pop() || "download").split("?")[0] || "download";
+    a.download =
+      (url.split("/").pop() || "download").split("?")[0] || "download";
     a.rel = "noopener";
     document.body.appendChild(a);
     a.click();
@@ -129,14 +162,18 @@
         var emailEl = document.getElementById("lead-email");
         var stageEl = document.getElementById("lead-business-stage");
         var calFormAnswers = {
-          fname_initial: fnameEl && fnameEl.value ? fnameEl.value.charAt(0) : null,
+          fname_initial:
+            fnameEl && fnameEl.value ? fnameEl.value.charAt(0) : null,
           email_masked: (function (e) {
             if (!e || !e.value) return null;
             var parts = e.value.split("@");
-            return parts.length === 2 ? parts[0].charAt(0) + "***@" + parts[1] : null;
+            return parts.length === 2
+              ? parts[0].charAt(0) + "***@" + parts[1]
+              : null;
           })(emailEl),
         };
-        if (stageEl && stageEl.value) calFormAnswers.business_stage = stageEl.value;
+        if (stageEl && stageEl.value)
+          calFormAnswers.business_stage = stageEl.value;
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({
           event: "calendly_open_from_lead",
@@ -145,7 +182,7 @@
           form_answers: calFormAnswers,
           url: CALENDLY_URL,
           path: window.location.pathname,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         });
       } catch (err) {}
     }
@@ -161,7 +198,12 @@
     if (thankYouState) thankYouState.classList.add("hidden");
     if (calendlyIframe) calendlyIframe.src = "about:blank";
     var icon = currentModalType === "audit" ? "schedule" : "download";
-    if (submitBtn) submitBtn.innerHTML = currentButtonText + ' <span class="material-symbols-outlined text-lg">' + icon + "</span>";
+    if (submitBtn)
+      submitBtn.innerHTML =
+        currentButtonText +
+        ' <span class="material-symbols-outlined text-lg">' +
+        icon +
+        "</span>";
   }
 
   function bindTrigger(el) {
@@ -170,23 +212,39 @@
       resetModal();
       // Push a datalayer event when CTA is clicked to open lead modal
       try {
-        var triggerModalType = el.getAttribute("data-modal-type") || (el.getAttribute("data-resource") ? "resource" : "audit");
+        var triggerModalType =
+          el.getAttribute("data-modal-type") ||
+          (el.getAttribute("data-resource") ? "resource" : "audit");
         var triggerResource = el.getAttribute("data-resource") || null;
         var triggerPayload = {
-          event: triggerModalType === "audit" ? "audit_cta_clicked" : "ebook_cta_clicked",
-          trigger_text: el.getAttribute("data-title") || (el.textContent || "").trim().slice(0, 120),
+          event:
+            triggerModalType === "audit"
+              ? "audit_cta_clicked"
+              : "ebook_cta_clicked",
+          trigger_text:
+            el.getAttribute("data-title") ||
+            (el.textContent || "").trim().slice(0, 120),
           modal_type: triggerModalType,
           resource: triggerResource,
           path: window.location.pathname,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         };
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push(triggerPayload);
       } catch (err) {}
-      if (el.getAttribute("data-checklist-modal") !== null && !el.getAttribute("data-resource")) {
+      if (
+        el.getAttribute("data-checklist-modal") !== null &&
+        !el.getAttribute("data-resource")
+      ) {
         el.setAttribute("data-resource", "13-bulletproof-strategies");
-        el.setAttribute("data-title", "13 Bulletproof Strategies to Skyrocket Conversions");
-        el.setAttribute("data-description", "Enter your email and get the free ebook right away — 13 actionable CRO strategies used by $10M+ brands.");
+        el.setAttribute(
+          "data-title",
+          "13 Bulletproof Strategies to Skyrocket Conversions",
+        );
+        el.setAttribute(
+          "data-description",
+          "Enter your email and get the free ebook right away — 13 actionable CRO strategies used by $10M+ brands.",
+        );
         el.setAttribute("data-button-text", "Send me the ebook");
       }
       openModal(el);
@@ -200,134 +258,169 @@
     el.addEventListener("click", closeModal);
   });
 
-  if (modal) modal.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") closeModal();
-  });
+  if (modal)
+    modal.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") closeModal();
+    });
 
-  if (form) form.addEventListener("submit", function (e) {
-    e.preventDefault();
-    var fnameInput = document.getElementById("lead-fname");
-    var emailInput = document.getElementById("lead-email");
-    var websiteUrlInput = document.getElementById("lead-website-url");
-    var businessStageEl = document.getElementById("lead-business-stage");
-    var fname = fnameInput && fnameInput.value ? fnameInput.value.trim() : "";
-    var email = emailInput && emailInput.value ? emailInput.value.trim() : "";
-    var websiteUrlOpt = websiteUrlInput && websiteUrlInput.value ? websiteUrlInput.value.trim() : "";
-    var businessStage = businessStageEl && businessStageEl.value ? businessStageEl.value.trim() : null;
-    var resource = slugInput && slugInput.value ? slugInput.value.trim() : "";
-    var modalType = typeInput && typeInput.value ? typeInput.value : "resource";
-    if (!fname) return;
-    if (!email) return;
-    if (businessStageEl && !businessStage) {
-      businessStageEl.focus();
-      businessStageEl.reportValidity && businessStageEl.reportValidity();
-      return;
-    }
+  if (form)
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var fnameInput = document.getElementById("lead-fname");
+      var emailInput = document.getElementById("lead-email");
+      var websiteUrlInput = document.getElementById("lead-website-url");
+      var businessStageEl = document.getElementById("lead-business-stage");
+      var fname = fnameInput && fnameInput.value ? fnameInput.value.trim() : "";
+      var email = emailInput && emailInput.value ? emailInput.value.trim() : "";
+      var websiteUrlOpt =
+        websiteUrlInput && websiteUrlInput.value
+          ? websiteUrlInput.value.trim()
+          : "";
+      var businessStage =
+        businessStageEl && businessStageEl.value
+          ? businessStageEl.value.trim()
+          : null;
+      var resource = slugInput && slugInput.value ? slugInput.value.trim() : "";
+      var modalType =
+        typeInput && typeInput.value ? typeInput.value : "resource";
+      if (!fname) return;
+      if (!email) return;
+      if (businessStageEl && !businessStage) {
+        businessStageEl.focus();
+        businessStageEl.reportValidity && businessStageEl.reportValidity();
+        return;
+      }
 
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = "Sending…";
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = "Sending…";
 
-    // Mask PII before pushing to dataLayer
-    function maskEmail(e) {
-      try {
-        if (!e) return null;
-        var parts = e.split('@');
-        if (parts.length !== 2) return null;
-        return parts[0].charAt(0) + '***@' + parts[1];
-      } catch (err) { return null; }
-    }
-    function maskName(n) {
-      try { return n ? n.charAt(0) : null; } catch (err) { return null; }
-    }
-    var maskedEmail = maskEmail(email);
-    var fnameInitial = maskName(fname);
-    // Form answers for dataLayer (masked PII + non-PII answers)
-    var formAnswers = {
-      fname_initial: fnameInitial,
-      email_masked: maskedEmail,
-    };
-    if (businessStage) formAnswers.business_stage = businessStage;
-
-    // Push a datalayer event with form answers (useful for GTM)
-    try {
-      window.dataLayer = window.dataLayer || [];
-      var submittedPayload = {
-        event: "lead_form_submitted",
-        form_id: "lead-form",
-        modal_type: modalType,
-        resource: resource,
-        form_answers: formAnswers,
-        path: window.location.pathname,
-        timestamp: new Date().toISOString(),
-      };
-      window.dataLayer.push(submittedPayload);
-    } catch (err) {
-      // ignore
-    }
-
-    var url = modalType === "audit" ? "/request-audit" : "/download-resource";
-    var body = modalType === "audit"
-      ? { fname: fname, email: email }
-      : { resource: resource, fname: fname, email: email };
-    if (modalType === "resource" && businessStage) body.business_stage = businessStage;
-    if (websiteUrlOpt) body.website_url = websiteUrlOpt;
-
-    fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-      body: JSON.stringify(body),
-    })
-      .then(function (res) { return res.json(); })
-      .then(function (data) {
-        var hasDownload = modalType === "resource" && data.success && data.download_url;
-        // Push success event with server response and form answers
+      // Mask PII before pushing to dataLayer
+      function maskEmail(e) {
         try {
-          window.dataLayer = window.dataLayer || [];
-          var successPayload = {
-            event: "lead_form_success",
-            form_id: "lead-form",
-            modal_type: modalType,
-            resource: resource,
-            form_answers: formAnswers,
-            success: !!data.success,
-            download_url: data.download_url || null,
-            path: window.location.pathname,
-            timestamp: new Date().toISOString(),
-          };
-          window.dataLayer.push(successPayload);
-        } catch (err) {}
-        // Redirect to thank-you page with source (from) and referring page (ref)
-        var fromParam = modalType === "audit" ? "audit" : (resource || "ebook");
-        var thankYouUrl = "/thank-you/?from=" + encodeURIComponent(fromParam) + "&ref=" + encodeURIComponent(window.location.pathname || "");
-        if (hasDownload && data.download_url) {
-          triggerDownload(data.download_url);
+          if (!e) return null;
+          var parts = e.split("@");
+          if (parts.length !== 2) return null;
+          return parts[0].charAt(0) + "***@" + parts[1];
+        } catch (err) {
+          return null;
         }
-        window.location.href = thankYouUrl;
-      })
-      .catch(function () {
-        // Push error event with form answers
+      }
+      function maskName(n) {
         try {
-          window.dataLayer = window.dataLayer || [];
-          var errorPayload = {
-            event: "lead_form_error",
-            form_id: "lead-form",
-            modal_type: modalType,
-            resource: resource,
-            form_answers: formAnswers,
-            path: window.location.pathname,
-            timestamp: new Date().toISOString(),
-          };
-          window.dataLayer.push(errorPayload);
-        } catch (err) {}
-        // On error still redirect to thank-you so user can book
-        var fromParam = modalType === "audit" ? "audit" : (resource || "ebook");
-        var thankYouUrl = "/thank-you/?from=" + encodeURIComponent(fromParam) + "&ref=" + encodeURIComponent(window.location.pathname || "");
-        window.location.href = thankYouUrl;
+          return n ? n.charAt(0) : null;
+        } catch (err) {
+          return null;
+        }
+      }
+      var maskedEmail = maskEmail(email);
+      var fnameInitial = maskName(fname);
+      // Form answers for dataLayer (masked PII + non-PII answers)
+      var formAnswers = {
+        fname_initial: fnameInitial,
+        email_masked: maskedEmail,
+      };
+      if (businessStage) formAnswers.business_stage = businessStage;
+
+      // Push a datalayer event with form answers (useful for GTM)
+      try {
+        window.dataLayer = window.dataLayer || [];
+        var submittedPayload = {
+          event: "lead_form_submitted",
+          form_id: "lead-form",
+          modal_type: modalType,
+          resource: resource,
+          form_answers: formAnswers,
+          path: window.location.pathname,
+          timestamp: new Date().toISOString(),
+        };
+        window.dataLayer.push(submittedPayload);
+      } catch (err) {
+        // ignore
+      }
+
+      var url = modalType === "audit" ? "/request-audit" : "/download-resource";
+      var body =
+        modalType === "audit"
+          ? { fname: fname, email: email }
+          : { resource: resource, fname: fname, email: email };
+      if (modalType === "resource" && businessStage)
+        body.business_stage = businessStage;
+      if (websiteUrlOpt) body.website_url = websiteUrlOpt;
+
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        body: JSON.stringify(body),
       })
-      .finally(function () {
-        submitBtn.disabled = false;
-        var icon = currentModalType === "audit" ? "schedule" : "download";
-        submitBtn.innerHTML = currentButtonText + ' <span class="material-symbols-outlined text-lg">' + icon + "</span>";
-      });
-  });
+        .then(function (res) {
+          return res.json();
+        })
+        .then(function (data) {
+          var hasDownload =
+            modalType === "resource" && data.success && data.download_url;
+          // Push success event with server response and form answers
+          try {
+            window.dataLayer = window.dataLayer || [];
+            var successPayload = {
+              event: "lead_form_success",
+              form_id: "lead-form",
+              modal_type: modalType,
+              resource: resource,
+              form_answers: formAnswers,
+              success: !!data.success,
+              download_url: data.download_url || null,
+              path: window.location.pathname,
+              timestamp: new Date().toISOString(),
+            };
+            window.dataLayer.push(successPayload);
+          } catch (err) {}
+          // Redirect to thank-you page with source (from) and referring page (ref)
+          var fromParam = modalType === "audit" ? "audit" : resource || "ebook";
+          var thankYouUrl =
+            "/thank-you/?from=" +
+            encodeURIComponent(fromParam) +
+            "&ref=" +
+            encodeURIComponent(window.location.pathname || "");
+          if (hasDownload && data.download_url) {
+            triggerDownload(data.download_url);
+          }
+          window.location.href = thankYouUrl;
+        })
+        .catch(function () {
+          // Push error event with form answers
+          try {
+            window.dataLayer = window.dataLayer || [];
+            var errorPayload = {
+              event: "lead_form_error",
+              form_id: "lead-form",
+              modal_type: modalType,
+              resource: resource,
+              form_answers: formAnswers,
+              path: window.location.pathname,
+              timestamp: new Date().toISOString(),
+            };
+            window.dataLayer.push(errorPayload);
+          } catch (err) {}
+          // On error still redirect to thank-you so user can book
+          var fromParam = modalType === "audit" ? "audit" : resource || "ebook";
+          var thankYouUrl =
+            "/thank-you/?from=" +
+            encodeURIComponent(fromParam) +
+            "&ref=" +
+            encodeURIComponent(window.location.pathname || "");
+          window.location.href = thankYouUrl;
+        })
+        .finally(function () {
+          submitBtn.disabled = false;
+          var icon = currentModalType === "audit" ? "schedule" : "download";
+          submitBtn.innerHTML =
+            currentButtonText +
+            ' <span class="material-symbols-outlined text-lg">' +
+            icon +
+            "</span>";
+        });
+    });
 })();

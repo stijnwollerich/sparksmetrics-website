@@ -12,15 +12,14 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
 {% block head_extras %}
 <meta name="robots" content="noindex, follow" />
 {% endblock %} {% block body_class %}bg-white text-gray-800 font-sans{% endblock
-%} {% block content %}
-{% if ENABLE_GTM %}
+%} {% block content %} {% if ENABLE_GTM %}
 <script>
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({
-    event: 'page_view',
-    page_type: 'thank_you',
-    page_path: '{{ request.path }}',
-    from_param: '{{ from_param|default("", true) }}'
+    event: "page_view",
+    page_type: "thank_you",
+    page_path: "{{ request.path }}",
+    from_param: '{{ from_param|default("", true) }}',
   });
 </script>
 {% endif %}
@@ -32,12 +31,12 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
         Your CRO report is being prepared.
       </p>
       <p class="text-gray-600 text-xs md:text-sm">
-        Due to high demand we're still scanning your store. We'll send the full report to your email as soon as it's ready—no need to wait on this page.
+        Due to high demand we're still scanning your store. We'll send the full
+        report to your email as soon as it's ready—no need to wait on this page.
       </p>
     </div>
   </section>
-  {% endif %}
-  {# 1. Headline — one focus #}
+  {% endif %} {# 1. Headline — one focus #}
   <section class="pt-10 pb-6 md:pt-14 md:pb-8">
     <div class="max-w-2xl mx-auto px-4 text-center">
       <p
@@ -163,7 +162,7 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
       </p>
       <div
         class="calendly-inline-widget w-full"
-        data-url="https://calendly.com/stijnwherever/free-30-minute-strategy-session?hide_gdpr_banner=1"
+        data-url="https://calendly.com/stijn-wollerich/free-30-minute-strategy-session?hide_gdpr_banner=1"
         style="min-width: 320px; height: 700px"
       ></div>
     </div>
