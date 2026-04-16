@@ -1,0 +1,956 @@
+{% extends "base.html" %}
+{% block title %}What does it cost per month to hire a CRO agency?{% endblock %}
+{% block meta_description %}See a published monthly CRO retainer fee for your Shopify store in three quick steps—no checkout on the page; we email your snapshot.{% endblock %}
+{% block og_title %}What does it cost per month to hire a CRO agency?{% endblock %}
+{% block og_description %}Published monthly CRO retainer fee from your store inputs—no checkout; we email your snapshot.{% endblock %}
+{% block twitter_title %}What does it cost per month to hire a CRO agency?{% endblock %}
+{% block twitter_description %}Published monthly CRO retainer fee by store inputs—no checkout; we email your snapshot.{% endblock %}
+{% block head_extras %}
+<meta name="robots" content="noindex, nofollow" />
+<style>
+  .ccr-btn-spinner {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    margin-right: 0.4em;
+    vertical-align: -0.2em;
+    animation: ccr-spin 0.7s linear infinite;
+  }
+  @keyframes ccr-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .ccr-btn-loading {
+    cursor: wait;
+  }
+  .ccr-step {
+    display: none;
+  }
+  .ccr-step.is-active {
+    display: block;
+  }
+  #ccr-slides-track {
+    will-change: transform;
+  }
+  .ccr-slide-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 9999px;
+    background: rgb(209 213 219);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
+  .ccr-slide-dot[aria-current="true"] {
+    background: #ff4d00;
+    width: 18px;
+  }
+  .ccr-carousel-nav .material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 600, "GRAD" 0, "opsz" 24;
+  }
+  .ccr-hero-stars .material-symbols-outlined {
+    font-size: 1.25rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    font-variation-settings: "FILL" 1, "wght" 400;
+  }
+  @media (min-width: 768px) {
+    .ccr-hero-stars .material-symbols-outlined {
+      font-size: 1.5rem;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+  #faq summary::-webkit-details-marker {
+    display: none;
+  }
+</style>
+{% endblock %}
+{% block footer %}{% endblock %}
+{% block primary_bar %}{% endblock %}
+{% block audit_bar %}{% endblock %}
+{% block body_class %}bg-white text-gray-800 font-sans{% endblock %}
+{% block content %}
+{% if ENABLE_GTM %}
+<script>
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: "page_view",
+    page_type: "cro_cost_roi_landing",
+    page_path: "{{ request.path }}",
+  });
+</script>
+{% endif %}
+<div class="min-h-screen flex flex-col">
+  <section class="pt-6 pb-12 md:pt-8 md:pb-16 lg:pt-10 lg:pb-20">
+    <div class="max-w-4xl mx-auto px-4 md:px-6">
+      <div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 mb-3">
+        <span class="ccr-hero-stars inline-flex items-center gap-0.5 text-primary shrink-0" aria-label="Five star client rating">
+          <span class="material-symbols-outlined star-filled leading-none inline-flex items-center justify-center" aria-hidden="true">star</span>
+          <span class="material-symbols-outlined star-filled leading-none inline-flex items-center justify-center" aria-hidden="true">star</span>
+          <span class="material-symbols-outlined star-filled leading-none inline-flex items-center justify-center" aria-hidden="true">star</span>
+          <span class="material-symbols-outlined star-filled leading-none inline-flex items-center justify-center" aria-hidden="true">star</span>
+          <span class="material-symbols-outlined star-filled leading-none inline-flex items-center justify-center" aria-hidden="true">star</span>
+        </span>
+        <span class="text-gray-500 hidden sm:inline" aria-hidden="true">|</span>
+        <span class="text-gray-600 text-xs md:text-sm font-normal">$61M+ generated from A/B testing</span>
+      </div>
+      <h1 class="text-center text-2xl sm:text-3xl md:text-4xl lg:text-[2.65rem] font-display font-black text-deep-charcoal tracking-tight leading-[1.12] mb-3 max-w-3xl mx-auto">
+        What does it really cost per month to hire a <span class="text-primary">conversion rate optimization agency</span>?
+      </h1>
+      <p class="text-gray-600 text-sm md:text-base mb-8 text-center max-w-2xl mx-auto leading-relaxed">
+        In about a minute you’ll see your published monthly CRO retainer on this page—no signup, no mailing list. Email is only there if you’d like the same figures sent to you.
+      </p>
+
+      <div
+        id="ccr-module"
+        class="rounded-2xl border-2 border-gray-200 shadow-xl overflow-hidden bg-white max-w-2xl mx-auto"
+      >
+        <div id="ccr-questions-phase">
+          <div class="bg-deep-charcoal text-white px-4 py-3 flex items-center justify-between gap-3">
+            <span class="font-display font-black uppercase text-xs tracking-widest">Your numbers</span>
+            <span id="ccr-step-label" class="text-white/80 text-[11px] font-semibold tabular-nums">Step 1 of 3</span>
+          </div>
+          <div class="h-1.5 bg-gray-100">
+            <div id="ccr-progress-fill" class="h-full bg-primary transition-all duration-300" style="width:33.333%"></div>
+          </div>
+          <div class="p-6 md:p-8">
+            <p id="ccr-calc-error" class="text-red-600 text-sm font-bold mb-3 hidden" role="alert"></p>
+
+            <div class="ccr-step is-active" data-step="1" role="group" aria-labelledby="ccr-step1-title">
+              <p id="ccr-step1-title" class="font-display font-black text-deep-charcoal uppercase text-sm mb-3">Orders per month</p>
+              <label for="ccr-orders" class="block text-[10px] font-bold text-gray-500 uppercase tracking-wide mb-1">Range</label>
+              <select
+                id="ccr-orders"
+                class="w-full min-h-[48px] px-4 rounded-xl border-2 border-gray-200 bg-white text-deep-charcoal focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none text-base"
+              >
+                <option value="">Select…</option>
+                <option value="250">&lt;500</option>
+                <option value="750">500–1,000</option>
+                <option value="3000">1,000–5,000</option>
+                <option value="7500">5,000–10,000</option>
+                <option value="20000">10,000–30,000</option>
+                <option value="40000">&gt;30,000</option>
+              </select>
+            </div>
+
+            <div class="ccr-step" data-step="2" role="group" aria-labelledby="ccr-step2-title">
+              <p id="ccr-step2-title" class="font-display font-black text-deep-charcoal uppercase text-sm mb-3">Store conversion rate (CVR)</p>
+              <label for="ccr-cvr-select" class="block text-[10px] font-bold text-gray-500 uppercase tracking-wide mb-1">Range</label>
+              <select
+                id="ccr-cvr-select"
+                class="w-full min-h-[48px] px-4 rounded-xl border-2 border-gray-200 bg-white text-deep-charcoal focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none text-base"
+              >
+                <option value="">Select…</option>
+                <option value="0.5">&lt;1%</option>
+                <option value="1.5">1–2%</option>
+                <option value="2.5">2–3%</option>
+                <option value="3.5">3–4%</option>
+                <option value="4.5">4–5%</option>
+                <option value="5.5">5–6%</option>
+                <option value="7">&gt;6%</option>
+                <option value="__custom__">Other (type exact %)</option>
+              </select>
+              <div id="ccr-cvr-custom-wrap" class="hidden mt-3">
+                <label for="ccr-cvr-custom" class="block text-[10px] font-bold text-gray-500 uppercase tracking-wide mb-1">Exact CVR (%)</label>
+                <div class="flex min-h-[48px] rounded-xl border-2 border-gray-200 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 bg-white">
+                  <input
+                    type="text"
+                    id="ccr-cvr-custom"
+                    inputmode="decimal"
+                    autocomplete="off"
+                    placeholder="2.5 or 2,5"
+                    class="flex-1 min-w-0 px-4 py-2.5 border-0 rounded-l-xl focus:outline-none focus:ring-0 text-base"
+                  />
+                  <span class="inline-flex items-center px-4 text-gray-500 text-sm font-semibold border-l border-gray-200 bg-gray-50 rounded-r-xl">%</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="ccr-step" data-step="3" role="group" aria-labelledby="ccr-step3-title">
+              <p id="ccr-step3-title" class="font-display font-black text-deep-charcoal uppercase text-sm mb-3">Monthly storefront revenue (USD)</p>
+              <label for="ccr-revenue-select" class="block text-[10px] font-bold text-gray-500 uppercase tracking-wide mb-1">Range</label>
+              <select
+                id="ccr-revenue-select"
+                class="w-full min-h-[48px] px-4 rounded-xl border-2 border-gray-200 bg-white text-deep-charcoal focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none text-base"
+              >
+                <option value="">Select…</option>
+                <option value="75000">$50k – $100k / mo</option>
+                <option value="175000">$100k – $250k / mo</option>
+                <option value="375000">$250k – $500k / mo</option>
+                <option value="750000">$500k – $1M / mo</option>
+                <option value="1750000">$1M – $2.5M / mo</option>
+                <option value="3000000">$2.5M+ / mo</option>
+                <option value="__custom__">Other (type amount)</option>
+              </select>
+              <div id="ccr-revenue-custom-wrap" class="hidden mt-3">
+                <label for="ccr-revenue-custom" class="block text-[10px] font-bold text-gray-500 uppercase tracking-wide mb-1">Monthly revenue (USD)</label>
+                <input
+                  type="text"
+                  id="ccr-revenue-custom"
+                  inputmode="decimal"
+                  autocomplete="off"
+                  placeholder="250000 or 250.000 or 250,000"
+                  class="w-full min-h-[48px] px-4 rounded-xl border-2 border-gray-200 bg-white text-deep-charcoal focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none text-base"
+                />
+              </div>
+            </div>
+
+            <div class="flex gap-2 mt-6">
+              <button
+                type="button"
+                id="ccr-back-btn"
+                class="hidden min-h-[48px] px-4 rounded-xl border-2 border-gray-200 text-deep-charcoal font-display font-black text-xs uppercase hover:bg-gray-50 transition-colors shrink-0"
+              >
+                Back
+              </button>
+              <button
+                type="button"
+                id="ccr-next-btn"
+                class="flex-1 min-h-[48px] px-4 bg-primary text-white font-display font-black text-sm uppercase rounded-xl hover:brightness-110 transition-all"
+              >
+                Continue
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="ccr-results-phase" class="hidden" aria-live="polite">
+          <div class="bg-deep-charcoal text-white px-3 py-2 flex items-center justify-between gap-2">
+            <span id="ccr-results-view-label" class="text-[10px] font-semibold text-white/90 tabular-nums">4 / 5</span>
+            <span class="font-display font-black uppercase text-[10px] tracking-widest">Results</span>
+            <span class="material-symbols-outlined text-primary shrink-0" style="font-size: 18px" aria-hidden="true">layers</span>
+          </div>
+
+          <div id="ccr-results-dots" class="flex justify-center gap-1.5 py-1.5 bg-gray-50 border-b border-gray-100" role="navigation" aria-label="Slide">
+            <button type="button" class="ccr-slide-dot" data-ccr-slide-dot="0" aria-label="Slide 1, ROI" aria-current="true"></button>
+            <button type="button" class="ccr-slide-dot" data-ccr-slide-dot="1" aria-label="Slide 2, Guarantee" aria-current="false"></button>
+            <button type="button" class="ccr-slide-dot" data-ccr-slide-dot="2" aria-label="Slide 3, Work" aria-current="false"></button>
+            <button type="button" class="ccr-slide-dot" data-ccr-slide-dot="3" aria-label="Slide 4, Email" aria-current="false"></button>
+            <button type="button" class="ccr-slide-dot" data-ccr-slide-dot="4" aria-label="Slide 5, Thank you" aria-current="false"></button>
+          </div>
+
+          <div class="flex items-stretch bg-white border-b border-gray-100">
+            <button
+              type="button"
+              id="ccr-results-chevron-prev"
+              class="ccr-carousel-nav flex-shrink-0 w-10 sm:w-11 self-stretch flex items-center justify-center border-r border-gray-200 bg-gray-50 text-deep-charcoal hover:bg-gray-100 disabled:opacity-35 disabled:pointer-events-none transition-colors min-h-0"
+              aria-label="Previous result"
+            >
+              <span class="material-symbols-outlined text-2xl sm:text-3xl" aria-hidden="true">chevron_left</span>
+            </button>
+            <div id="ccr-carousel-clip" class="min-w-0 overflow-hidden">
+              <div
+                id="ccr-slides-track"
+                class="flex w-[500%] items-start transition-transform duration-300 ease-out"
+                style="transform: translateX(0%)"
+              >
+              <div class="basis-1/5 shrink-0 grow-0 box-border px-2 sm:px-3 py-2 flex flex-col justify-start" data-ccr-slide="0">
+                <p class="text-center text-[10px] sm:text-xs font-black uppercase tracking-wide text-primary mb-0.5 leading-tight px-1">Your modeled ROI</p>
+                <p id="ccr-out-roi" class="text-center text-4xl sm:text-5xl md:text-6xl font-display font-black text-primary tabular-nums leading-none tracking-tight">—</p>
+                <p id="ccr-roi-uplift-line" class="text-center text-sm sm:text-base font-display font-bold text-deep-charcoal mt-0.5 tabular-nums"></p>
+                <div class="mt-2 pt-2 border-t border-gray-100">
+                  <p id="ccr-slide-0-fee-line" class="text-center text-sm font-display font-bold text-deep-charcoal"></p>
+                </div>
+                <p class="text-center text-[10px] text-gray-500 mt-1.5 leading-snug max-w-[15rem] mx-auto">Illustrative only—not a quote or performance promise.</p>
+                <p id="ccr-mismatch-note" class="hidden text-center text-[10px] text-amber-900 bg-amber-50 rounded-md px-2 py-1 mt-1.5 leading-snug"></p>
+              </div>
+
+              <div class="basis-1/5 shrink-0 grow-0 box-border px-2 sm:px-3 py-2 flex flex-col justify-start" data-ccr-slide="1">
+                <p class="text-center text-2xl sm:text-3xl font-display font-black text-primary leading-tight px-1">We Guarantee ROI.</p>
+                <p class="text-center text-xs text-gray-500 mt-0.5">(or we work for free)</p>
+                <p class="text-center text-sm text-gray-700 mt-2 leading-snug max-w-[17rem] mx-auto">
+                  On qualifying work we take the risk; you keep the upside when tests win.
+                </p>
+              </div>
+
+              <div class="basis-1/5 shrink-0 grow-0 box-border px-2 sm:px-3 py-2 flex flex-col justify-start overflow-y-auto max-h-[240px] sm:max-h-[260px]" data-ccr-slide="2">
+                <p class="text-center text-[10px] font-black uppercase tracking-widest text-gray-500 mb-1.5">Work we have shipped</p>
+                <div class="grid grid-cols-2 gap-1.5 sm:gap-2">
+                  {% for slug, case in case_studies_list[:6] %}
+                  <div class="rounded-lg border border-gray-200 overflow-hidden bg-gray-50 text-left">
+                    {% if case.main_image %}
+                    <div class="aspect-[5/3] overflow-hidden bg-gray-200">
+                      <img src="{{ url_for('static', filename=case.main_image) }}" alt="" class="w-full h-full object-cover" loading="lazy" width="200" height="120" />
+                    </div>
+                    {% endif %}
+                    <p class="text-[9px] sm:text-[10px] font-bold text-deep-charcoal leading-tight p-1.5 line-clamp-2">{{ case.card_title|default(case.result_headline) }}</p>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+
+              <div class="basis-1/5 shrink-0 grow-0 box-border px-2 sm:px-3 py-2 flex flex-col justify-start" data-ccr-slide="3">
+                <p class="text-center text-[10px] font-black uppercase tracking-widest text-gray-500 mb-0.5">Email your snapshot</p>
+                <p class="text-center text-[11px] text-gray-600 mb-1.5 leading-snug max-w-[16rem] mx-auto">
+                  We’ll email pricing, ROI, and guarantee to your inbox right after you submit.
+                </p>
+              <form id="ccr-lead-form" class="space-y-1.5" novalidate>
+                <input type="hidden" name="monthly_revenue_usd" id="ccr-f-revenue" value="" />
+                <input type="hidden" name="transactions_per_month" id="ccr-f-orders" value="" />
+                <input type="hidden" name="cvr_percent" id="ccr-f-cvr" value="" />
+                <div>
+                  <label for="ccr-fname" class="sr-only">First name</label>
+                  <input
+                    type="text"
+                    id="ccr-fname"
+                    name="fname"
+                    required
+                    maxlength="80"
+                    placeholder="First name"
+                    autocomplete="given-name"
+                    class="w-full min-h-[44px] px-3 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none text-sm"
+                  />
+                </div>
+                <div>
+                  <label for="ccr-email" class="sr-only">Work email</label>
+                  <input
+                    type="email"
+                    id="ccr-email"
+                    name="email"
+                    required
+                    placeholder="Work email"
+                    autocomplete="email"
+                    class="w-full min-h-[44px] px-3 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none text-sm"
+                  />
+                </div>
+                <div>
+                  <label for="ccr-store" class="sr-only">Store URL</label>
+                  <div class="flex min-w-0 rounded-xl border-2 border-gray-200 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 min-h-[44px]">
+                    <span class="inline-flex items-center px-2 text-gray-500 text-xs shrink-0 border-r border-gray-200 bg-gray-50 rounded-l-xl" aria-hidden="true">https://</span>
+                    <input
+                      type="text"
+                      id="ccr-store"
+                      name="website_url"
+                      required
+                      placeholder="yourbrand.com"
+                      inputmode="url"
+                      autocomplete="url"
+                      class="flex-1 min-w-0 px-2 py-2 rounded-r-xl border-0 focus:outline-none focus:ring-0 text-sm"
+                    />
+                  </div>
+                </div>
+                <p id="ccr-lead-error" class="text-red-600 text-xs font-bold hidden" role="alert"></p>
+                <button
+                  type="submit"
+                  id="ccr-lead-submit"
+                  class="w-full min-h-[46px] px-4 py-2.5 bg-deep-charcoal text-white font-display font-black text-xs uppercase rounded-xl hover:bg-black transition-colors"
+                >
+                  Email me the cost
+                </button>
+                <p class="text-gray-500 text-[9px] text-center leading-snug">Sent immediately when email delivery is configured. No newsletter from this step.</p>
+              </form>
+              </div>
+
+              <div class="basis-1/5 shrink-0 grow-0 box-border px-2 sm:px-3 py-3 flex flex-col justify-start items-center text-center" data-ccr-slide="4">
+                <span class="material-symbols-outlined text-primary mb-1" style="font-size: 36px" aria-hidden="true">mark_email_read</span>
+                <p class="font-display font-black text-base sm:text-lg text-deep-charcoal uppercase tracking-tight">Thank you</p>
+                <p class="text-xs sm:text-sm text-gray-600 mt-1 max-w-[16rem] leading-snug">Check your inbox for your snapshot. If it is not there within a minute, peek at spam.</p>
+                <div id="ccr-thanks-detail" class="w-full max-w-[17rem] mt-3 pt-3 border-t border-gray-200 text-left">
+                  <p class="text-[10px] font-black uppercase tracking-wide text-gray-500 mb-1 text-center">Your full snapshot</p>
+                  <p id="ccr-thanks-roi" class="text-center text-2xl sm:text-3xl font-display font-black text-primary tabular-nums leading-none">—</p>
+                  <p id="ccr-thanks-uplift" class="text-center text-xs font-display font-bold text-deep-charcoal mt-1 tabular-nums"></p>
+                  <p id="ccr-thanks-fee" class="text-center text-xs font-display font-bold text-deep-charcoal mt-1"></p>
+                  <p class="text-center text-[9px] text-gray-500 mt-1.5 leading-snug">Illustrative only—not a quote or performance promise.</p>
+                </div>
+                <p class="text-[10px] text-gray-500 mt-2 text-center leading-snug max-w-[16rem]">Use the arrows to see guarantee, work samples, and ROI detail.</p>
+              </div>
+              </div>
+            </div>
+            <button
+              type="button"
+              id="ccr-results-chevron-next"
+              class="ccr-carousel-nav flex-shrink-0 w-10 sm:w-11 self-stretch flex items-center justify-center border-l border-gray-200 bg-gray-50 text-deep-charcoal hover:bg-gray-100 disabled:opacity-35 disabled:pointer-events-none transition-colors min-h-0"
+              aria-label="Next result"
+            >
+              <span class="material-symbols-outlined text-2xl sm:text-3xl" aria-hidden="true">chevron_right</span>
+            </button>
+          </div>
+
+          <div class="px-3 py-2 bg-gray-50 border-t border-gray-200">
+            <button
+              type="button"
+              id="ccr-results-bottom-next"
+              class="w-full min-h-[44px] px-3 rounded-xl bg-primary text-white font-display font-black text-xs sm:text-sm uppercase tracking-wide hover:brightness-110 transition-all disabled:opacity-40 disabled:pointer-events-none"
+            >
+              Next
+            </button>
+          </div>
+
+          <div class="px-3 py-1.5 border-t border-gray-100 bg-gray-50">
+            <button type="button" id="ccr-edit-btn" class="w-full text-center text-primary font-bold text-[10px] uppercase tracking-wide hover:underline py-1">Edit my inputs</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 grid grid-cols-3 gap-1.5 sm:gap-3 max-w-2xl mx-auto text-center">
+        <div class="rounded-lg sm:rounded-xl border border-gray-100 bg-gray-50/80 px-1 py-2 sm:px-2 sm:py-2.5 min-w-0">
+          <p class="text-[9px] sm:text-[10px] font-black uppercase tracking-wide text-primary mb-0.5">No spam</p>
+          <p class="text-gray-600 text-[9px] sm:text-[11px] leading-tight !mb-0">Tool only—no list.</p>
+        </div>
+        <div class="rounded-lg sm:rounded-xl border border-gray-100 bg-gray-50/80 px-1 py-2 sm:px-2 sm:py-2.5 min-w-0">
+          <p class="text-[9px] sm:text-[10px] font-black uppercase tracking-wide text-primary mb-0.5">Instant</p>
+          <p class="text-gray-600 text-[9px] sm:text-[11px] leading-tight !mb-0">Fee right after step 3.</p>
+        </div>
+        <div class="rounded-lg sm:rounded-xl border border-gray-100 bg-gray-50/80 px-1 py-2 sm:px-2 sm:py-2.5 min-w-0">
+          <p class="text-[9px] sm:text-[10px] font-black uppercase tracking-wide text-primary mb-0.5">3 questions</p>
+          <p class="text-gray-600 text-[9px] sm:text-[11px] leading-tight !mb-0">Orders, CVR, and monthly revenue.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="py-12 md:py-16 bg-light-base border-t border-gray-100">
+    <div class="max-w-3xl mx-auto px-4 md:px-6 text-center">
+      <h2 class="text-xl md:text-3xl font-display font-black text-deep-charcoal uppercase tracking-tight mb-3">What a CRO agency does</h2>
+      <p class="text-gray-600 text-sm md:text-base leading-relaxed mb-8">
+        A CRO agency studies how people move through your store or funnel—where they hesitate, misunderstand the offer, or leave. The work is a loop: <strong class="text-deep-charcoal">research, clear hypotheses, controlled experiments, shipped improvements,</strong> and measurement so you learn what actually changed behavior.
+      </p>
+      <div class="grid sm:grid-cols-3 gap-4 text-left">
+        <div class="rounded-2xl border border-gray-200 bg-white p-4">
+          <span class="material-symbols-outlined text-primary text-2xl mb-2 block">travel_explore</span>
+          <p class="font-display font-black uppercase text-xs text-deep-charcoal mb-1">Find the real friction</p>
+          <p class="text-gray-600 text-xs leading-relaxed !mb-0">Analytics, session replay, and qualitative signals show where the journey breaks—so fixes target real problems, not guesses.</p>
+        </div>
+        <div class="rounded-2xl border border-gray-200 bg-white p-4">
+          <span class="material-symbols-outlined text-primary text-2xl mb-2 block">science</span>
+          <p class="font-display font-black uppercase text-xs text-deep-charcoal mb-1">Test in the wild</p>
+          <p class="text-gray-600 text-xs leading-relaxed !mb-0">Changes roll out as experiments with clear success criteria, QA, and readouts—so you know what worked and what did not.</p>
+        </div>
+        <div class="rounded-2xl border border-gray-200 bg-white p-4">
+          <span class="material-symbols-outlined text-primary text-2xl mb-2 block">groups</span>
+          <p class="font-display font-black uppercase text-xs text-deep-charcoal mb-1">Ship as a team</p>
+          <p class="text-gray-600 text-xs leading-relaxed !mb-0">Strategy, UX, copy, and implementation sit together so ideas become live updates on the site—not slide decks that never ship.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-12 md:py-16 bg-white border-t border-gray-100" id="faq">
+    <div class="max-w-3xl mx-auto px-4 md:px-6">
+      <h2 class="text-xl md:text-3xl font-display font-black text-deep-charcoal uppercase tracking-tight text-center mb-8">Quick answers</h2>
+      <div class="space-y-4">
+        <details class="group rounded-xl border border-gray-200 bg-white overflow-hidden">
+          <summary class="px-4 py-3 cursor-pointer list-none flex justify-between items-center gap-3 font-bold text-deep-charcoal text-sm md:text-base">
+            Red flags when hiring a CRO agency?
+            <span class="material-symbols-outlined shrink-0 text-primary text-xl group-open:rotate-180 transition-transform" aria-hidden="true">expand_more</span>
+          </summary>
+          <div class="px-4 pb-4 pt-0 text-gray-600 text-sm leading-relaxed">
+            Vague “strategy only” retainers with no test calendar, no clear ownership of dev/QA, or promises that never show up in writing. Strong shops spell out velocity, tooling, and how wins are measured before you sign.
+          </div>
+        </details>
+        <details class="group rounded-xl border border-gray-200 bg-white overflow-hidden">
+          <summary class="px-4 py-3 cursor-pointer list-none flex justify-between items-center gap-3 font-bold text-deep-charcoal text-sm md:text-base">
+            How long until CRO usually pays off?
+            <span class="material-symbols-outlined shrink-0 text-primary text-xl group-open:rotate-180 transition-transform" aria-hidden="true">expand_more</span>
+          </summary>
+          <div class="px-4 pb-4 pt-0 text-gray-600 text-sm leading-relaxed">
+            Most programs need a few shipping cycles before you can read lift with confidence—think weeks of setup, then a steady drumbeat of tests. If someone promises overnight revenue jumps with no traffic or no tests, treat that as a warning sign.
+          </div>
+        </details>
+        <details class="group rounded-xl border border-gray-200 bg-white overflow-hidden">
+          <summary class="px-4 py-3 cursor-pointer list-none flex justify-between items-center gap-3 font-bold text-deep-charcoal text-sm md:text-base">
+            Is a CRO retainer worth it?
+            <span class="material-symbols-outlined shrink-0 text-primary text-xl group-open:rotate-180 transition-transform" aria-hidden="true">expand_more</span>
+          </summary>
+          <div class="px-4 pb-4 pt-0 text-gray-600 text-sm leading-relaxed">
+            It tends to matter when you already have meaningful traffic and margin: small conversion gains compound across every session. If you are still proving product–market fit or have almost no volume, you may get more leverage from creative and acquisition first.
+          </div>
+        </details>
+        <details class="group rounded-xl border border-gray-200 bg-white overflow-hidden">
+          <summary class="px-4 py-3 cursor-pointer list-none flex justify-between items-center gap-3 font-bold text-deep-charcoal text-sm md:text-base">
+            What should I know about “ROI guarantees”?
+            <span class="material-symbols-outlined shrink-0 text-primary text-xl group-open:rotate-180 transition-transform" aria-hidden="true">expand_more</span>
+          </summary>
+          <div class="px-4 pb-4 pt-0 text-gray-600 text-sm leading-relaxed">
+            Some agencies advertise ROI-back or multiplier terms; almost all narrow who qualifies, how uplift is counted, and over what window. Treat marketing language as a prompt to read the contract, not as a substitute for one.
+          </div>
+        </details>
+        <details class="group rounded-xl border border-gray-200 bg-white overflow-hidden">
+          <summary class="px-4 py-3 cursor-pointer list-none flex justify-between items-center gap-3 font-bold text-deep-charcoal text-sm md:text-base">
+            How do agencies usually price CRO?
+            <span class="material-symbols-outlined shrink-0 text-primary text-xl group-open:rotate-180 transition-transform" aria-hidden="true">expand_more</span>
+          </summary>
+          <div class="px-4 pb-4 pt-0 text-gray-600 text-sm leading-relaxed">
+            Monthly retainers are common because the work is ongoing—research, experiments, fixes, reporting. A few shops blend in performance elements; either way, ask what is included at each fee level and what happens if priorities shift mid-quarter.
+          </div>
+        </details>
+        <details class="group rounded-xl border border-gray-200 bg-white overflow-hidden">
+          <summary class="px-4 py-3 cursor-pointer list-none flex justify-between items-center gap-3 font-bold text-deep-charcoal text-sm md:text-base">
+            What should I ask before I sign?
+            <span class="material-symbols-outlined shrink-0 text-primary text-xl group-open:rotate-180 transition-transform" aria-hidden="true">expand_more</span>
+          </summary>
+          <div class="px-4 pb-4 pt-0 text-gray-600 text-sm leading-relaxed">
+            Ask for a sample test plan, who touches your theme or checkout, how reporting is delivered, and how they handle losing tests. Good answers are specific; hand-waving about “best practices” without a calendar rarely ages well.
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  (function () {
+    var UPLIFT = 0.15;
+    var TOTAL_STEPS = 3;
+    var step = 1;
+    var unlocked = false;
+
+    function normalizeNumStr(s) {
+      s = String(s || "")
+        .trim()
+        .replace(/\$/g, "")
+        .replace(/\s/g, "");
+      if (!s) return "";
+      if (/^\d+,\d{1,2}$/.test(s)) return s.replace(",", ".");
+      if (/^\d{1,3}(\.\d{3})+$/.test(s)) return s.replace(/\./g, "");
+      if (/^\d{1,3}(,\d{3})+$/.test(s)) return s.replace(/,/g, "");
+      return s.replace(/,/g, "");
+    }
+    function parseMoney(s) {
+      var t = normalizeNumStr(s);
+      if (!t) return null;
+      var n = parseFloat(t);
+      return isFinite(n) ? n : null;
+    }
+    function parsePositiveInt(s) {
+      var t = String(s == null ? "" : s).trim().replace(/,/g, "");
+      if (!t || !/^\d+$/.test(t)) return null;
+      var n = parseInt(t, 10);
+      return isFinite(n) && n > 0 ? n : null;
+    }
+    function fmtUsdExact(n) {
+      if (!isFinite(n)) return "—";
+      return "$" + Math.round(n).toLocaleString("en-US");
+    }
+
+    function planForOrders(orders) {
+      if (orders < 3000) {
+        return {
+          slug: "standard",
+          name: "Standard",
+          price: 3280,
+          guarantee: "1x",
+          band: "<3,000 orders/mo",
+          features: [
+            "Fix biggest leaks",
+            "Limited funnel coverage",
+            "Slower testing speed",
+            "Design, development, and copywriting",
+            "Low parallel testing",
+          ],
+        };
+      }
+      if (orders <= 8000) {
+        return {
+          slug: "growth",
+          name: "Growth",
+          price: 4520,
+          guarantee: "2x",
+          band: "3,000–8,000 orders/mo",
+          features: [
+            "Optimize key funnel stages",
+            "More test coverage",
+            "Faster testing speed",
+            "Design, development, and copywriting",
+            "Medium parallel testing",
+          ],
+        };
+      }
+      return {
+        slug: "full_stack",
+        name: "Full-Stack",
+        price: 6880,
+        guarantee: "3x",
+        band: ">8,000 orders/mo",
+        features: [
+          "Optimize entire customer journey",
+          "Maximum test coverage",
+          "Highest testing speed",
+          "Design, development, and copywriting",
+          "High parallel testing",
+        ],
+      };
+    }
+
+    function compute(rev, orders) {
+      var monthlyUplift = rev * UPLIFT;
+      var annualUplift = monthlyUplift * 12;
+      var plan = planForOrders(orders);
+      var roiMonthly = plan.price > 0 ? monthlyUplift / plan.price : 0;
+      return { monthlyUplift: monthlyUplift, annualUplift: annualUplift, plan: plan, roiMonthly: roiMonthly };
+    }
+
+    function testsPerMonthTypical(planSlug, sessionsPerMo) {
+      var s = sessionsPerMo || 0;
+      var lo = 2;
+      var hi = 4;
+      if (planSlug === "growth") {
+        lo = 4;
+        hi = 8;
+      } else if (planSlug === "full_stack") {
+        lo = 8;
+        hi = 14;
+      }
+      if (s > 120000) hi += 2;
+      if (s > 0 && s < 12000) hi = Math.max(lo, hi - 2);
+      return lo + "–" + hi;
+    }
+
+    function readCvr() {
+      var sel = document.getElementById("ccr-cvr-select").value;
+      if (sel === "__custom__") return parseMoney(document.getElementById("ccr-cvr-custom").value);
+      if (!sel) return null;
+      return parseFloat(sel);
+    }
+    function readRevenue() {
+      var sel = document.getElementById("ccr-revenue-select").value;
+      if (sel === "__custom__") return parseMoney(document.getElementById("ccr-revenue-custom").value);
+      if (!sel) return null;
+      return parseFloat(sel);
+    }
+    function wireSelectCustom(selectId, wrapId, customId) {
+      var sel = document.getElementById(selectId);
+      var wrap = document.getElementById(wrapId);
+      function upd() {
+        wrap.classList.toggle("hidden", sel.value !== "__custom__");
+      }
+      sel.addEventListener("change", upd);
+      upd();
+    }
+    wireSelectCustom("ccr-cvr-select", "ccr-cvr-custom-wrap", "ccr-cvr-custom");
+    wireSelectCustom("ccr-revenue-select", "ccr-revenue-custom-wrap", "ccr-revenue-custom");
+
+    var qPhase = document.getElementById("ccr-questions-phase");
+    var rPhase = document.getElementById("ccr-results-phase");
+    var stepLabel = document.getElementById("ccr-step-label");
+    var progressFill = document.getElementById("ccr-progress-fill");
+    var backBtn = document.getElementById("ccr-back-btn");
+    var nextBtn = document.getElementById("ccr-next-btn");
+    var calcErr = document.getElementById("ccr-calc-error");
+    var ordersIn = document.getElementById("ccr-orders");
+    var editBtn = document.getElementById("ccr-edit-btn");
+
+    function setCalcError(msg) {
+      calcErr.textContent = msg || "";
+      calcErr.classList.toggle("hidden", !msg);
+    }
+
+    function showStep(n) {
+      step = n;
+      var steps = document.querySelectorAll(".ccr-step");
+      for (var i = 0; i < steps.length; i++) {
+        var el = steps[i];
+        var sn = parseInt(el.getAttribute("data-step"), 10);
+        el.classList.toggle("is-active", sn === step);
+      }
+      stepLabel.textContent = "Step " + step + " of " + TOTAL_STEPS;
+      progressFill.style.width = (100 * step) / TOTAL_STEPS + "%";
+      backBtn.classList.toggle("hidden", step === 1);
+      nextBtn.textContent = step === TOTAL_STEPS ? "Show my price" : "Continue";
+    }
+
+    function readValues() {
+      return {
+        orders: parsePositiveInt(ordersIn.value),
+        cvr: readCvr(),
+        rev: readRevenue(),
+      };
+    }
+
+    function validateStep(n) {
+      setCalcError("");
+      var v = readValues();
+      if (n === 1) {
+        if (v.orders == null) return "Pick an orders-per-month range.";
+        return null;
+      }
+      if (n === 2) {
+        if (v.cvr == null || v.cvr < 0.05 || v.cvr > 50) return "Pick a CVR band or enter a value between 0.05% and 50%.";
+        return null;
+      }
+      if (n === 3) {
+        if (v.rev == null || v.rev < 50000) return "Pick a revenue band or enter at least $50,000 / month.";
+        if (v.rev > 5e7) return "For revenue above ~$50M/month, these public bands are not a fit—talk to a specialist firm directly.";
+        return null;
+      }
+      return null;
+    }
+
+    var RESULT_VIEW_COUNT = 5;
+    var resultsViewIdx = 0;
+    var ccrEmailDelivered = false;
+
+    function showResultsView(idx) {
+      var maxIdx = ccrEmailDelivered ? RESULT_VIEW_COUNT - 1 : RESULT_VIEW_COUNT - 2;
+      var minIdx = ccrEmailDelivered ? 0 : 3;
+      resultsViewIdx = Math.max(minIdx, Math.min(maxIdx, idx));
+      var track = document.getElementById("ccr-slides-track");
+      if (track) track.style.transform = "translateX(-" + resultsViewIdx * 20 + "%)";
+      var dots = document.querySelectorAll("[data-ccr-slide-dot]");
+      for (var di = 0; di < dots.length; di++) {
+        var dIdx = parseInt(dots[di].getAttribute("data-ccr-slide-dot"), 10);
+        dots[di].setAttribute("aria-current", dIdx === resultsViewIdx ? "true" : "false");
+      }
+      var vLbl = document.getElementById("ccr-results-view-label");
+      var tabChromeHidden = resultsViewIdx < 3 && !ccrEmailDelivered;
+      if (vLbl) {
+        vLbl.textContent = resultsViewIdx + 1 + " / " + RESULT_VIEW_COUNT;
+        vLbl.classList.toggle("invisible", tabChromeHidden);
+        vLbl.setAttribute("aria-hidden", tabChromeHidden ? "true" : "false");
+      }
+      var dotsWrap = document.getElementById("ccr-results-dots");
+      if (dotsWrap) dotsWrap.classList.toggle("hidden", tabChromeHidden);
+      var atStart = resultsViewIdx === 0;
+      var atEnd = resultsViewIdx === RESULT_VIEW_COUNT - 1;
+      var chPrev = document.getElementById("ccr-results-chevron-prev");
+      var chNext = document.getElementById("ccr-results-chevron-next");
+      if (chPrev) chPrev.disabled = atStart || (resultsViewIdx === 3 && !ccrEmailDelivered);
+      if (chNext) chNext.disabled = atEnd || (resultsViewIdx === RESULT_VIEW_COUNT - 2 && !ccrEmailDelivered);
+      var bottomNext = document.getElementById("ccr-results-bottom-next");
+      if (bottomNext) {
+        bottomNext.classList.toggle("hidden", resultsViewIdx >= RESULT_VIEW_COUNT - 2);
+        bottomNext.disabled = atEnd || resultsViewIdx >= RESULT_VIEW_COUNT - 2;
+      }
+      var clip = document.getElementById("ccr-carousel-clip");
+      var slides = document.querySelectorAll("#ccr-slides-track > [data-ccr-slide]");
+      function syncCarouselClipHeight() {
+        if (!clip || slides.length <= resultsViewIdx) return;
+        var h = slides[resultsViewIdx].offsetHeight;
+        if (h > 0) clip.style.height = h + "px";
+      }
+      syncCarouselClipHeight();
+      requestAnimationFrame(function () {
+        syncCarouselClipHeight();
+      });
+    }
+
+    function runCalc() {
+      setCalcError("");
+      var v = readValues();
+      for (var s = 1; s <= TOTAL_STEPS; s++) {
+        var err = validateStep(s);
+        if (err) {
+          showStep(s);
+          setCalcError(err);
+          return;
+        }
+      }
+      var rev = v.rev;
+      var o = compute(rev, v.orders);
+      var plan = o.plan;
+      ccrEmailDelivered = false;
+
+      var roiFig = o.roiMonthly < 0.1 ? "<0.1×" : o.roiMonthly.toFixed(1).replace(/\.0$/, "") + "×";
+      document.getElementById("ccr-out-roi").textContent = roiFig;
+      var upliftLine = document.getElementById("ccr-roi-uplift-line");
+      var upliftSentence = "+" + fmtUsdExact(o.monthlyUplift) + " / mo estimated revenue lift";
+      if (upliftLine) {
+        upliftLine.textContent = upliftSentence;
+      }
+      var feeLine = document.getElementById("ccr-slide-0-fee-line");
+      var feeText = "About " + fmtUsdExact(plan.price) + "/mo · " + plan.name;
+      if (feeLine) {
+        feeLine.textContent = feeText;
+      }
+      var thanksRoi = document.getElementById("ccr-thanks-roi");
+      if (thanksRoi) thanksRoi.textContent = roiFig;
+      var thanksUp = document.getElementById("ccr-thanks-uplift");
+      if (thanksUp) thanksUp.textContent = upliftSentence;
+      var thanksFee = document.getElementById("ccr-thanks-fee");
+      if (thanksFee) thanksFee.textContent = feeText;
+      var note = document.getElementById("ccr-mismatch-note");
+      if (note) note.classList.add("hidden");
+
+      document.getElementById("ccr-f-revenue").value = String(Math.round(rev));
+      document.getElementById("ccr-f-orders").value = String(Math.round(v.orders));
+      document.getElementById("ccr-f-cvr").value = String(v.cvr);
+
+      unlocked = true;
+      qPhase.classList.add("hidden");
+      rPhase.classList.remove("hidden");
+      if (window.dataLayer) {
+        window.dataLayer.push({ event: "cro_cost_roi_calculated", page_type: "cro_cost_roi_landing" });
+      }
+      showResultsView(3);
+      try {
+        document.getElementById("ccr-module").scrollIntoView({ behavior: "smooth", block: "start" });
+      } catch (e) {}
+    }
+
+    function advanceWizard() {
+      var err = validateStep(step);
+      if (err) {
+        setCalcError(err);
+        return;
+      }
+      if (step < TOTAL_STEPS) {
+        showStep(step + 1);
+        return;
+      }
+      runCalc();
+    }
+
+    nextBtn.addEventListener("click", advanceWizard);
+
+    qPhase.addEventListener("keydown", function (e) {
+      if (e.key !== "Enter") return;
+      var t = e.target;
+      if (!t || t.tagName.toLowerCase() !== "input") return;
+      var type = (t.getAttribute("type") || "text").toLowerCase();
+      if (type !== "text" && type !== "email" && type !== "url" && type !== "search") return;
+      e.preventDefault();
+      advanceWizard();
+    });
+
+    backBtn.addEventListener("click", function () {
+      setCalcError("");
+      if (step > 1) showStep(step - 1);
+    });
+
+    editBtn.addEventListener("click", function () {
+      unlocked = false;
+      ccrEmailDelivered = false;
+      var clearIds = [
+        "ccr-roi-uplift-line",
+        "ccr-slide-0-fee-line",
+        "ccr-thanks-uplift",
+        "ccr-thanks-fee",
+      ];
+      for (var ci = 0; ci < clearIds.length; ci++) {
+        var cel = document.getElementById(clearIds[ci]);
+        if (cel) cel.textContent = "";
+      }
+      var roiEl = document.getElementById("ccr-out-roi");
+      if (roiEl) roiEl.textContent = "—";
+      var thanksRoiEl = document.getElementById("ccr-thanks-roi");
+      if (thanksRoiEl) thanksRoiEl.textContent = "—";
+      var clipEl = document.getElementById("ccr-carousel-clip");
+      if (clipEl) clipEl.style.height = "";
+      rPhase.classList.add("hidden");
+      qPhase.classList.remove("hidden");
+      showStep(1);
+      showResultsView(3);
+      try {
+        document.getElementById("ccr-module").scrollIntoView({ behavior: "smooth", block: "start" });
+      } catch (e) {}
+    });
+
+    var slideDots = document.querySelectorAll("[data-ccr-slide-dot]");
+    for (var sdi = 0; sdi < slideDots.length; sdi++) {
+      slideDots[sdi].addEventListener("click", function () {
+        showResultsView(parseInt(this.getAttribute("data-ccr-slide-dot"), 10));
+      });
+    }
+    var chPrev = document.getElementById("ccr-results-chevron-prev");
+    var chNext = document.getElementById("ccr-results-chevron-next");
+    if (chPrev) chPrev.addEventListener("click", function () { showResultsView(resultsViewIdx - 1); });
+    if (chNext) chNext.addEventListener("click", function () { showResultsView(resultsViewIdx + 1); });
+    var bottomNext = document.getElementById("ccr-results-bottom-next");
+    if (bottomNext) {
+      bottomNext.addEventListener("click", function () {
+        showResultsView(resultsViewIdx + 1);
+      });
+    }
+
+    showStep(1);
+
+    var form = document.getElementById("ccr-lead-form");
+    var leadErr = document.getElementById("ccr-lead-error");
+    var submitBtn = document.getElementById("ccr-lead-submit");
+    function setLeadErr(msg) {
+      leadErr.textContent = msg || "";
+      leadErr.classList.toggle("hidden", !msg);
+    }
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      setLeadErr("");
+      if (!unlocked) {
+        setLeadErr("Complete the calculator first.");
+        return;
+      }
+      var fname = (document.getElementById("ccr-fname").value || "").trim();
+      var email = (document.getElementById("ccr-email").value || "").trim();
+      var url = (document.getElementById("ccr-store").value || "").trim();
+      if (!fname) {
+        setLeadErr("Please enter your first name.");
+        return;
+      }
+      if (!email) {
+        setLeadErr("Please enter your email.");
+        return;
+      }
+      if (!url) {
+        setLeadErr("Please enter your store URL.");
+        return;
+      }
+      if (!/^https?:\/\//i.test(url)) url = "https://" + url;
+      submitBtn.disabled = true;
+      var bt = submitBtn.textContent.trim();
+      submitBtn.classList.add("ccr-btn-loading");
+      submitBtn.innerHTML = '<span class="ccr-btn-spinner" aria-hidden="true"></span> Sending…';
+      fetch('{{ url_for("main.cro_cost_roi_submit") }}', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fname: fname,
+          email: email,
+          website_url: url,
+          monthly_revenue_usd: document.getElementById("ccr-f-revenue").value,
+          transactions_per_month: document.getElementById("ccr-f-orders").value,
+          cvr_percent: document.getElementById("ccr-f-cvr").value,
+          form_page_url: window.location.href,
+        }),
+      })
+        .then(function (r) {
+          return r.json().then(function (d) {
+            return { ok: r.ok, data: d };
+          });
+        })
+        .then(function (res) {
+          if (res.ok && res.data.success) {
+            if (window.dataLayer) {
+              window.dataLayer.push({ event: "cro_cost_roi_lead", page_type: "cro_cost_roi_landing" });
+            }
+            ccrEmailDelivered = true;
+            showResultsView(RESULT_VIEW_COUNT - 1);
+            submitBtn.disabled = false;
+            submitBtn.classList.remove("ccr-btn-loading");
+            submitBtn.textContent = bt;
+            return;
+          }
+          setLeadErr(res.data.error || "Something went wrong. Please try again.");
+          submitBtn.disabled = false;
+          submitBtn.classList.remove("ccr-btn-loading");
+          submitBtn.textContent = bt;
+        })
+        .catch(function () {
+          setLeadErr("Network error. Please try again.");
+          submitBtn.disabled = false;
+          submitBtn.classList.remove("ccr-btn-loading");
+          submitBtn.textContent = bt;
+        });
+    });
+  })();
+</script>
+<script>
+  (function () {
+    var root = document.getElementById("faq");
+    if (!root) return;
+    var items = root.querySelectorAll("details");
+    for (var i = 0; i < items.length; i++) {
+      items[i].addEventListener("toggle", function () {
+        if (!this.open) return;
+        for (var j = 0; j < items.length; j++) {
+          if (items[j] !== this) items[j].removeAttribute("open");
+        }
+      });
+    }
+  })();
+</script>
+{% endblock %}

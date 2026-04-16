@@ -1,6 +1,6 @@
 # Temporarily hidden elements
 
-Control visibility by editing `temporarily_hidden` in `app/templates/base.html`. Child templates (e.g. `landing_alt.html`) use this list to show/hide sections.
+Control visibility by editing `temporarily_hidden` in `app/templates/base.html`. Child templates (e.g. `landing_pages/landing_alt.html`) use this list to show/hide sections.
 
 ## Keys and where they live
 
@@ -8,10 +8,10 @@ Control visibility by editing `temporarily_hidden` in `app/templates/base.html`.
 |---------------------|---------------|-------------|
 | `primary_bar`       | base.html     | Top orange bar: "Only accepting 2 more partners for Q3…" |
 | `audit_bar`         | base.html     | Bottom audit bar: "Get a FREE 24-HOUR CRO AUDIT" |
-| `homepage_video`    | landing_alt.html | Homepage hero video: "Watch: How we find and fix conversion leaks" |
-| `video_testimonials`| landing_alt.html | Video testimonials (3 cards) + YouTube gallery section |
-| `cro_checklist`     | landing_alt.html | "The 57-Point CRO Checklist" section |
-| `results_section`  | landing_alt.html | "The Results of Relentless Optimization" section + video cards |
+| `homepage_video`    | landing_pages/landing_alt.html | Homepage hero video: "Watch: How we find and fix conversion leaks" |
+| `video_testimonials`| landing_pages/landing_alt.html | Video testimonials (3 cards) + YouTube gallery section |
+| `cro_checklist`     | landing_pages/landing_alt.html | "The 57-Point CRO Checklist" section |
+| `results_section`  | landing_pages/landing_alt.html | "The Results of Relentless Optimization" section + video cards |
 | `cro_video_testimonials` | cro.html | CRO page: "The Results of Relentless Optimization" video testimonial cards (3 cards) |
 | `analytics_video_testimonials` | analytics.html | Analytics page: "The Results of Accurate Tracking" video testimonial cards (3 cards) |
 

@@ -36,6 +36,17 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
       </p>
     </div>
   </section>
+  {% elif (from_param|default('')) == 'cro_cost_roi' %}
+  <section class="bg-primary/10 border-b border-primary/20 py-4">
+    <div class="max-w-2xl mx-auto px-4 text-center">
+      <p class="text-deep-charcoal text-sm md:text-base font-medium mb-1">
+        You're in—we'll follow up with a tailored breakdown.
+      </p>
+      <p class="text-gray-600 text-xs md:text-sm">
+        Book a free strategy call below when you're ready. No pitch—we'll look at your funnel and next tests.
+      </p>
+    </div>
+  </section>
   {% endif %} {# 1. Headline — one focus #}
   <section class="pt-10 pb-6 md:pt-14 md:pb-8">
     <div class="max-w-2xl mx-auto px-4 text-center">

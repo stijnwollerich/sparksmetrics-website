@@ -603,7 +603,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </script>
 <script src="{{ url_for('static', filename='js/audit-bar.js') }}" defer></script>
 <script src="{{ url_for('static', filename='js/checklist-modal.js') }}?v=3" defer></script>
-{% if request.endpoint != 'main.cro_scan_landing' %}
+{% if request.endpoint != 'main.cro_scan_landing' and request.endpoint != 'main.cro_cost_roi_landing' %}
 <script src="{{ url_for('static', filename='js/video-cta.js') }}" defer></script>
 {% endif %}
 <script>

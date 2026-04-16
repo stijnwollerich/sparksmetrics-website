@@ -1,6 +1,9 @@
 """Main (public) routes."""
+import html
 import json
+import math
 import re
+from typing import Any
 from pathlib import Path
 from datetime import datetime, timezone
 from flask import abort, Blueprint, current_app, jsonify, make_response, redirect, render_template, request, Response, url_for, send_file
@@ -396,7 +399,7 @@ BLOG_POSTS: list[dict] = _load_blog_posts()
 @main_bp.route("/")
 def index():
     """Home page — CRO landing (light theme)."""
-    return render_template("landing_alt.html")
+    return render_template("landing_pages/landing_alt.html")
 
 
 @main_bp.route("/favicon.ico")
@@ -473,7 +476,399 @@ def _normalize_shopify_url(raw: str) -> str | None:
 def cro_scan_landing():
     """CRO scan lead-gen landing (noindex). Single field: Shopify store URL."""
     submissions_today = _cro_scan_submissions_today()
-    return render_template("cro_scan_landing.html", submissions_today=submissions_today)
+    return render_template("landing_pages/cro_scan_landing.html", submissions_today=submissions_today)
+
+
+def _normalize_locale_number_string(raw: str) -> str:
+    """Allow `2.5` or `2,5` (decimal comma); `250.000` / `250,000` thousands; strip `$`."""
+    s = (raw or "").strip().replace("$", "").replace("\u00a0", "")
+    if not s:
+        return ""
+    s = re.sub(r"\s+", "", s)
+    if re.fullmatch(r"\d+,\d{1,2}", s):
+        return s.replace(",", ".")
+    if re.fullmatch(r"\d{1,3}(\.\d{3})+", s):
+        return s.replace(".", "")
+    if re.fullmatch(r"\d{1,3}(,\d{3})+", s):
+        return s.replace(",", "")
+    return s.replace(",", "")
+
+
+def _parse_usd_amount(raw) -> float | None:
+    """Parse a user-supplied dollar amount; returns None if missing or invalid."""
+    if raw is None:
+        return None
+    if isinstance(raw, (int, float)):
+        if isinstance(raw, bool):
+            return None
+        v = float(raw)
+        return v if math.isfinite(v) and v >= 0 else None
+    s = _normalize_locale_number_string(str(raw))
+    if not s:
+        return None
+    try:
+        v = float(s)
+    except ValueError:
+        return None
+    if not math.isfinite(v) or v < 0:
+        return None
+    return v
+
+
+def _parse_positive_int(raw) -> int | None:
+    if raw is None or raw == "":
+        return None
+    if isinstance(raw, bool):
+        return None
+    if isinstance(raw, int):
+        return raw if raw > 0 else None
+    if isinstance(raw, float):
+        if not math.isfinite(raw) or raw <= 0:
+            return None
+        return int(round(raw))
+    s = _normalize_locale_number_string(str(raw))
+    if not s:
+        return None
+    try:
+        v = int(float(s))
+    except ValueError:
+        return None
+    return v if v > 0 else None
+
+
+def _parse_cvr_percent(raw) -> float | None:
+    """Parse conversion rate as percent (e.g. 2.5 or 2,5 for 2.5%)."""
+    v = _parse_usd_amount(raw)
+    if v is None or v <= 0 or v > 100:
+        return None
+    return float(v)
+
+
+def _cro_plan_for_monthly_orders(transactions_pm: int) -> dict[str, Any]:
+    """Published CRO program tier by monthly order volume (Sparksmetrics pricing)."""
+    t = int(transactions_pm)
+    if t < 3000:
+        return {
+            "slug": "standard",
+            "name": "Standard",
+            "price_usd": 3_280.0,
+            "roi_guarantee_label": "1x",
+            "orders_band": "<3,000 orders/mo",
+            "features": [
+                "Fix biggest leaks",
+                "Limited funnel coverage",
+                "Slower testing speed",
+                "Design, development, and copywriting",
+                "Low parallel testing",
+            ],
+        }
+    if t <= 8_000:
+        return {
+            "slug": "growth",
+            "name": "Growth",
+            "price_usd": 4_520.0,
+            "roi_guarantee_label": "2x",
+            "orders_band": "3,000–8,000 orders/mo",
+            "features": [
+                "Optimize key funnel stages",
+                "More test coverage",
+                "Faster testing speed",
+                "Design, development, and copywriting",
+                "Medium parallel testing",
+            ],
+        }
+    return {
+        "slug": "full_stack",
+        "name": "Full-Stack",
+        "price_usd": 6_880.0,
+        "roi_guarantee_label": "3x",
+        "orders_band": ">8,000 orders/mo",
+        "features": [
+            "Optimize entire customer journey",
+            "Maximum test coverage",
+            "Highest testing speed",
+            "Design, development, and copywriting",
+            "High parallel testing",
+        ],
+    }
+
+
+def _compute_cro_cost_roi_snapshot(monthly_revenue_usd: float, transactions_pm: int) -> dict[str, Any]:
+    """
+    Illustrative planning numbers for paid-ad landing pages (not a quote).
+    Uplift: internal illustration from revenue (not shown as a fixed % on-page).
+    Program fee: published tier from monthly order volume.
+    """
+    r = max(0.0, float(monthly_revenue_usd))
+    monthly_uplift = r * 0.15
+    annual_uplift = monthly_uplift * 12.0
+    plan = _cro_plan_for_monthly_orders(int(transactions_pm))
+    fee = float(plan["price_usd"])
+    roi_monthly = (monthly_uplift / fee) if fee else 0.0
+    return {
+        "monthly_revenue_usd": r,
+        "monthly_uplift_usd": monthly_uplift,
+        "annual_uplift_usd": annual_uplift,
+        "retainer_low_usd": fee,
+        "retainer_high_usd": fee,
+        "retainer_mid_usd": fee,
+        "roi_monthly": roi_monthly,
+        "plan_slug": plan["slug"],
+        "plan_name": plan["name"],
+        "plan_roi_guarantee_label": plan["roi_guarantee_label"],
+        "plan_orders_band": plan["orders_band"],
+    }
+
+
+def _cro_cost_roi_business_stage_line(
+    *,
+    monthly_revenue_usd: float,
+    monthly_ad_spend_usd: float | None,
+    snap: dict[str, Any],
+    transactions_pm: int | None = None,
+    cvr_percent: float | None = None,
+    aov_usd: float | None = None,
+) -> str:
+    """Compact snapshot for Lead.business_stage (max 120 chars in DB)."""
+
+    def k(x: float) -> str:
+        ax = abs(x)
+        if ax >= 1_000_000:
+            return f"{x / 1_000_000:.1f}M".replace(".0M", "M")
+        if ax >= 1_000:
+            return f"{round(x / 1_000)}k"
+        return str(int(round(x)))
+
+    parts: list[str] = []
+    if transactions_pm is not None and transactions_pm > 0:
+        parts.append(f"ord/mo~{transactions_pm}")
+    if cvr_percent is not None and cvr_percent > 0:
+        cvr_s = f"{cvr_percent:.2f}".rstrip("0").rstrip(".")
+        parts.append(f"cvr{cvr_s}%")
+    if aov_usd is not None and aov_usd > 0:
+        parts.append(f"aov${k(aov_usd)}")
+    fee_i = int(round(float(snap.get("retainer_mid_usd") or 0)))
+    slug = (snap.get("plan_slug") or "")[:12]
+    guar = snap.get("plan_roi_guarantee_label") or ""
+    parts.extend(
+        [
+            f"rev~${k(monthly_revenue_usd)}",
+            f"illust≈${k(snap['monthly_uplift_usd'])}/mo",
+            f"{slug}|${fee_i}|{guar}",
+            f"ROI~{snap['roi_monthly']:.1f}x",
+        ]
+    )
+    if monthly_ad_spend_usd and monthly_ad_spend_usd > 0:
+        parts.append(f"ads${k(monthly_ad_spend_usd)}")
+    s = " | ".join(parts)
+    return s[:120]
+
+
+def _send_cro_cost_roi_results_email(
+    *,
+    to_email: str,
+    fname: str,
+    monthly_revenue_usd: float,
+    transactions_pm: int,
+    cvr_percent: float,
+    website_url: str,
+    snap: dict[str, Any],
+) -> None:
+    """Send calculator follow-up via Brevo transactional API. No-op if BREVO_SENDER_EMAIL unset."""
+    sender = (current_app.config.get("BREVO_SENDER_EMAIL") or "").strip()
+    sender_name = (current_app.config.get("BREVO_SENDER_NAME") or "Sparksmetrics").strip()
+    if not sender:
+        current_app.logger.info("CRO cost ROI email skipped: BREVO_SENDER_EMAIL not set")
+        return
+
+    from app.cro_nurture.services.brevo_send import send_transactional_html
+    from app.cro_nurture.services.dispatch import (
+        _closing_and_signature_html,
+        _signature_links_row_html,
+    )
+
+    plan_name = str(snap.get("plan_name") or "")
+    fee = float(snap.get("retainer_mid_usd") or 0.0)
+    lift = float(snap.get("monthly_uplift_usd") or 0.0)
+    guar = str(snap.get("plan_roi_guarantee_label") or "")
+    roi_m = float(snap.get("roi_monthly") or 0.0)
+    if roi_m < 0.1:
+        roi_disp = "<0.1×"
+    else:
+        s_roi = f"{roi_m:.1f}"
+        if s_roi.endswith(".0"):
+            s_roi = s_roi[:-2]
+        roi_disp = s_roi + "×"
+
+    safe_fname = html.escape(fname)
+    safe_url = html.escape(website_url)
+    esc_plan = html.escape(plan_name)
+    esc_roi = html.escape(roi_disp)
+    results_url = url_for("main.results", _external=True)
+    schedule_url = url_for("main.schedule_a_call", _external=True)
+    esc_results = html.escape(results_url, quote=True)
+    esc_schedule = html.escape(schedule_url, quote=True)
+
+    guar_plain = guar.strip() or "published by tier (I can spell out what applies on a call)"
+    text_body = "\n".join(
+        [
+            f"Hi {fname},",
+            "",
+            "Thanks for running our CRO cost vs ROI calculator. I pulled together the snapshot from what you entered so you have it in one place.",
+            "",
+            f"You shared {website_url}, about ${monthly_revenue_usd:,.0f} in monthly revenue, roughly {transactions_pm:,} orders per month, and about {cvr_percent:g}% CVR.",
+            "",
+            f"Framed the same way as on the calculator: with a monthly investment of about ${fee:,.0f} on the {plan_name} tier, the illustration implies about ${lift:,.0f} in monthly revenue uplift "
+            f"(a planning figure from the model, not a promise). That works out to roughly {roi_disp} ROI against that monthly fee on those same assumptions.",
+            f"Our guarantee on qualifying work for this tier is {guar_plain} as we publish it—happy to explain what that covers in plain language.",
+            "",
+            "When we work with a store, the programme covers analytics, design, and development together so we can go from insight to shipped experiments without hand-offs stalling the work.",
+            "",
+            "If you want a second pair of eyes on whether this kind of programme is a fit, the clearest next step is a free strategy session. No pitch deck—just your site, your goals, and a practical look at where we would start.",
+            "",
+            f"Schedule a free strategy session: {schedule_url}",
+            "",
+            f"If you would rather browse first, here is our results page with case studies: {results_url}",
+            "",
+            "Reply to this email if something in the snapshot does not line up with how you think about the business—we are happy to sanity-check it.",
+            "",
+            "If there's anything I can help with, let me know.",
+            "",
+            "Thanks,",
+            "Stijn Wollerich",
+            "sparksmetrics.com · Book a call: https://sparksmetrics.com/schedule-a-call/",
+        ]
+    )
+
+    esc_guar_body = html.escape(guar_plain)
+    html_core = f"""<!DOCTYPE html><html><body style="font-family:system-ui,-apple-system,sans-serif;line-height:1.6;color:#111;max-width:36rem;">
+<p>Hi {safe_fname},</p>
+<p>Thanks for running our CRO cost vs ROI calculator. I pulled together the snapshot from what you entered so you have it in one place.</p>
+<p>You shared <a href="{safe_url}">{safe_url}</a>, about <strong>${monthly_revenue_usd:,.0f}</strong> in monthly revenue, roughly <strong>{transactions_pm:,}</strong> orders per month, and about <strong>{cvr_percent:g}%</strong> CVR.</p>
+<p>Framed the same way as on the calculator: with a <strong>monthly investment</strong> of about <strong>${fee:,.0f}</strong> on the <strong>{esc_plan}</strong> tier, the illustration implies about <strong>${lift:,.0f}</strong> in <strong>monthly revenue uplift</strong> (a planning figure from the model, not a promise). That works out to roughly <strong>{esc_roi} ROI</strong> against that monthly fee on those same assumptions.</p>
+<p>Our <strong>guarantee</strong> on qualifying work for this tier is <strong>{esc_guar_body}</strong> as we publish it—happy to explain what that covers in plain language.</p>
+<p>When we work with a store, the programme covers <strong>analytics, design, and development</strong> together so we can go from insight to shipped experiments without hand-offs stalling the work.</p>
+<p>If you want a second pair of eyes on whether this kind of programme is a fit, the clearest next step is a free strategy session. No pitch deck—just your site, your goals, and a practical look at where we would start.</p>
+<p><a href="{esc_schedule}">Schedule a free strategy session</a> — pick a time that works for you.</p>
+<p>If you would rather browse first, here is our <a href="{esc_results}">results page with case studies</a>.</p>
+<p>Reply to this email if something in the snapshot does not line up with how you think about the business—we are happy to sanity-check it.</p>
+"""
+
+    html_body = html_core + _closing_and_signature_html() + _signature_links_row_html(None) + "</body></html>"
+
+    send_transactional_html(
+        to_email=to_email,
+        subject="Your CRO calculator snapshot",
+        html_content=html_body,
+        text_content=text_body,
+        sender_name=sender_name,
+        sender_email=sender,
+        tags=["cro_cost_roi", "calculator_breakdown"],
+    )
+
+
+@main_bp.route("/cro-cost-roi/", methods=["GET"])
+@main_bp.route("/cro-cost-roi", methods=["GET"])
+def cro_cost_roi_landing():
+    """Paid-ad landing: CRO cost vs ROI calculator (noindex)."""
+    return render_template("landing_pages/cro_cost_roi_landing.html")
+
+
+@main_bp.route("/cro-cost-roi/submit", methods=["POST"])
+def cro_cost_roi_submit():
+    """Persist calculator lead; recomputes model server-side from revenue."""
+    data = request.get_json(silent=True) or request.form or {}
+    fname = (data.get("fname") or "").strip()
+    email = (data.get("email") or "").strip()
+    website_raw = (data.get("website_url") or data.get("url") or "").strip()
+    rev = _parse_usd_amount(data.get("monthly_revenue_usd"))
+    ad_spend = _parse_usd_amount(data.get("monthly_ad_spend_usd"))
+    txns = _parse_positive_int(data.get("transactions_per_month"))
+    cvr = _parse_cvr_percent(data.get("cvr_percent"))
+    aov = _parse_usd_amount(data.get("aov_usd"))
+
+    if not fname:
+        return jsonify({"success": False, "error": "Please enter your first name."}), 400
+    if not email or not re.match(r"^[^\s@]+@[^\s@]+\.[^\s@]+$", email):
+        return jsonify({"success": False, "error": "Please enter a valid work email."}), 400
+    if _is_personal_email_domain(email):
+        return jsonify(
+            {
+                "success": False,
+                "error": "Please use your company or work email. We don't accept personal email addresses.",
+            }
+        ), 400
+    if not website_raw:
+        return jsonify({"success": False, "error": "Please enter your store URL."}), 400
+    website_url = _normalize_shopify_url(website_raw) or website_raw
+    if rev is None or rev < 50_000:
+        return jsonify({"success": False, "error": "Invalid revenue. Run the calculator with at least $50k/month."}), 400
+    if rev > 50_000_000:
+        return jsonify({"success": False, "error": "Revenue out of range for this form—please email us instead."}), 400
+    if txns is None or txns < 10:
+        return jsonify({"success": False, "error": "Invalid calculator inputs (orders)."}), 400
+    if cvr is None or cvr < 0.05 or cvr > 50:
+        return jsonify({"success": False, "error": "Invalid calculator inputs (CVR)."}), 400
+    if aov is not None and (aov < 1 or aov > 500_000):
+        return jsonify({"success": False, "error": "Invalid calculator inputs (AOV)."}), 400
+
+    snap = _compute_cro_cost_roi_snapshot(rev, txns)
+    business_stage = _cro_cost_roi_business_stage_line(
+        monthly_revenue_usd=rev,
+        monthly_ad_spend_usd=ad_spend,
+        snap=snap,
+        transactions_pm=txns,
+        cvr_percent=cvr,
+        aov_usd=aov,
+    )
+    form_page_url = _ingest_form_page_url(data if isinstance(data, dict) else {})
+
+    _save_lead(
+        fname,
+        email,
+        "cro_cost_roi",
+        resource_slug=None,
+        business_stage=business_stage,
+        website_url=website_url,
+        form_page_url=form_page_url,
+        orders_per_month=str(txns),
+    )
+    _sync_lead_to_brevo(
+        fname,
+        email,
+        "cro_cost_roi",
+        resource_slug=None,
+        business_stage=business_stage,
+        website_url=website_url,
+    )
+    _notify_slack_lead(
+        fname,
+        email,
+        "cro_cost_roi",
+        resource_slug=None,
+        business_stage=business_stage,
+        website_url=website_url,
+    )
+    if (current_app.config.get("BREVO_SENDER_EMAIL") or "").strip():
+        try:
+            _send_cro_cost_roi_results_email(
+                to_email=email,
+                fname=fname,
+                monthly_revenue_usd=float(rev),
+                transactions_pm=int(txns),
+                cvr_percent=float(cvr),
+                website_url=website_url,
+                snap=snap,
+            )
+        except Exception as e:
+            current_app.logger.exception("CRO cost ROI transactional email failed: %s", e)
+            return jsonify(
+                {
+                    "success": False,
+                    "error": "We saved your request but could not send the email. Please try again in a moment.",
+                }
+            ), 503
+    return jsonify({"success": True})
 
 
 @main_bp.route("/cro-scan/check", methods=["POST"])
@@ -991,6 +1386,10 @@ def _sync_lead_to_brevo(
         cro_scan_list_id = current_app.config.get("BREVO_CRO_SCAN_LIST_ID")
         if cro_scan_list_id and cro_scan_list_id not in list_ids:
             list_ids.append(cro_scan_list_id)
+    if submission_type == "cro_cost_roi":
+        audit_list_id = current_app.config.get("BREVO_AUDIT_LIST_ID")
+        if audit_list_id and audit_list_id not in list_ids:
+            list_ids.append(audit_list_id)
     attributes = {"FNAME": fname}
     if business_stage:
         attributes["BUSINESS_STAGE"] = business_stage
@@ -1118,12 +1517,16 @@ def _notify_slack_lead(
         label = "CRO ebook download"
     elif submission_type == "cro_scan":
         label = "CRO scan (Shopify)"
+    elif submission_type == "cro_cost_roi":
+        label = "CRO cost / ROI calculator"
     else:
         label = "Resource download"
     text = "New lead: *{}* <{}> – {}".format(fname, email, label)
     if business_stage:
         if submission_type == "cro_scan":
             text += "\nOrders per month: {}".format(business_stage)
+        elif submission_type == "cro_cost_roi":
+            text += "\nCalculator snapshot: {}".format(business_stage)
         else:
             text += "\nOrder volume / stage: {}".format(business_stage)
     if website_url:
