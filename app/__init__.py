@@ -51,6 +51,10 @@ def create_app(config_object="app.config.Config") -> Flask:
         app.config["BREVO_API_KEY"] = _read_env_var(_env_path, "BREVO_API_KEY")
     if not (app.config.get("SLACK_WEBHOOK_URL") or "").strip():
         app.config["SLACK_WEBHOOK_URL"] = _read_env_var(_env_path, "SLACK_WEBHOOK_URL")
+    if not (app.config.get("SLACK_SPARKSMETRICS_WEBHOOK_URL") or "").strip():
+        app.config["SLACK_SPARKSMETRICS_WEBHOOK_URL"] = _read_env_var(
+            _env_path, "SLACK_SPARKSMETRICS_WEBHOOK_URL"
+        )
     _openai = (app.config.get("OPENAI_API_KEY") or "").strip() or (app.config.get("OPEN_AI_KEY") or "").strip()
     if not _openai:
         _openai = _read_env_var(_env_path, "OPEN_AI_KEY") or _read_env_var(_env_path, "OPENAI_API_KEY")

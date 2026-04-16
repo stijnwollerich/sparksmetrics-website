@@ -91,7 +91,13 @@ Examples:
 - `cro_scan,audit`: audit requests also request enrollment.
 - Empty value: no form sends `enroll_nurture: true` (all false).
 
-Form → `submission_type`: **`/cro-scan/submit-email`** → `cro_scan`; **`/request-audit`** → `audit`; **`/download-resource`** → `resource`; Calendly webhook → `calendly`.
+Form → `submission_type`: **`/cro-scan/submit-email`** → `cro_scan`; **`/cro-cost-roi/submit`** → `cro_cost_roi`; **`/request-audit`** → `audit`; **`/download-resource`** → `resource`; Calendly webhook → `calendly`.
+
+### CRO cost / ROI calculator (`cro_cost_roi`)
+
+After a successful Spark ingest, the marketing app starts the same **CRO scan pipeline** as the public scan (`POST /api/site/cro-scan/run`, `delivery_mode=funnel`, `submission_type` attach **`cro_cost_roi`**) so the report can attach to the lead on Spark. It does **not** enqueue the generic “lead magnet enrich” background scan (that path is skipped for this type to avoid duplicate runs).
+
+Transactional email to the lead is always the **Sparksmetrics “calculator snapshot”** message (not the CRO scan nurture copy). Spark-side nurture for `cro_cost_roi` is requested by default (`enroll_nurture: true` unless `SPARK_CRO_COST_ROI_ENROLL_NURTURE=0`). Spark should use a **sequence keyed off `submission_type`** (or equivalent) so these contacts do not receive the **CRO scan drip** wording meant for `/cro-scan` signups.
 
 ## Silent background CRO scan (all URL leads → Spark)
 

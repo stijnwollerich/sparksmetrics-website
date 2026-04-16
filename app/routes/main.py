@@ -841,13 +841,12 @@ def cro_cost_roi_submit():
         business_stage=business_stage,
         website_url=website_url,
     )
-    _notify_slack_lead(
-        fname,
-        email,
-        "cro_cost_roi",
-        resource_slug=None,
-        business_stage=business_stage,
+    _notify_slack_sparksmetrics_cro_cost_roi(
+        fname=fname,
+        email=email,
         website_url=website_url,
+        business_stage=business_stage,
+        spark_scan_started=bool(spark_backend.enabled()),
     )
     if (current_app.config.get("BREVO_SENDER_EMAIL") or "").strip():
         try:
@@ -1328,8 +1327,22 @@ def _save_lead(
             )
             if (
                 ok
+                and submission_type == "cro_cost_roi"
+                and (website_url or "").strip()
+            ):
+                store_for_scan = _normalize_shopify_url(website_url) or (website_url or "").strip()
+                _enqueue_cro_scan(
+                    store_for_scan,
+                    email,
+                    fname,
+                    delivery_mode="funnel",
+                    spark_attach_submission_type="cro_cost_roi",
+                )
+            if (
+                ok
                 and (website_url or "").strip()
                 and spark_background_cro_scan_after_ingest_enabled()
+                and submission_type != "cro_cost_roi"
             ):
                 _maybe_enqueue_lead_magnet_background_scan(
                     website_url=website_url,
@@ -1481,6 +1494,53 @@ def _notify_slack_cro_scan_url(store_url: str) -> None:
     if not webhook_url:
         return
     text = "CRO scan URL submitted: {}".format(store_url)
+    try:
+        import requests
+    except ModuleNotFoundError:
+        current_app.logger.warning("Slack notify skipped: install requests (pip install requests)")
+        return
+    try:
+        r = requests.post(
+            webhook_url,
+            json={"text": text},
+            headers={"Content-Type": "application/json"},
+            timeout=5,
+        )
+        if r.status_code != 200:
+            current_app.logger.warning("Slack webhook failed: HTTP %s – %s", r.status_code, (r.text or "")[:200])
+    except Exception as e:
+        current_app.logger.warning("Slack notify error: %s", e)
+
+
+def _notify_slack_sparksmetrics_cro_cost_roi(
+    *,
+    fname: str,
+    email: str,
+    website_url: str | None,
+    business_stage: str | None,
+    spark_scan_started: bool,
+) -> None:
+    """Post to #sparksmetrics (dedicated webhook) when someone completes the CRO cost/ROI email step."""
+    webhook_url = (current_app.config.get("SLACK_SPARKSMETRICS_WEBHOOK_URL") or "").strip() or (
+        current_app.config.get("SLACK_WEBHOOK_URL") or ""
+    ).strip()
+    if not webhook_url:
+        return
+    lines = [
+        "*#sparksmetrics · CRO cost/ROI calculator* — email submitted",
+        f"Name: {fname}",
+        f"Email: {email}",
+    ]
+    if website_url:
+        lines.append(f"Store: {website_url}")
+    if business_stage:
+        lines.append(f"Calculator snapshot: {business_stage}")
+    lines.append(
+        "Spark: CRO scan pipeline started (funnel attach)."
+        if spark_scan_started
+        else "Spark: not configured — scan not started from marketing app."
+    )
+    text = "\n".join(lines)
     try:
         import requests
     except ModuleNotFoundError:

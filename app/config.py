@@ -162,6 +162,8 @@ class Config:
 
     # Slack: webhook URL for lead notifications. If set, every lead submission posts to Slack.
     SLACK_WEBHOOK_URL = os.environ.get("SLACK_WEBHOOK_URL", "").strip()
+    # Optional: Incoming Webhook for #sparksmetrics (CRO cost/ROI calculator email submits). Falls back to SLACK_WEBHOOK_URL.
+    SLACK_SPARKSMETRICS_WEBHOOK_URL = os.environ.get("SLACK_SPARKSMETRICS_WEBHOOK_URL", "").strip()
 
     # CRO nurture (AI drip after /cro-scan): optional; see app/cro_nurture/README.md
     CRO_NURTURE_ENABLED = os.environ.get("CRO_NURTURE_ENABLED", "").strip() == "1"
