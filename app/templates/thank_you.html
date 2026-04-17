@@ -1037,50 +1037,8 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
     </div>
   </section>
 
-  <!-- WE LIVE, BREATHE, AND SLEEP CRO. (videos placed directly after Proven ROI) -->
-  <section class="py-16 md:py-20 bg-white border-t border-gray-100">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="text-center mb-14 md:mb-20">
-        <h2
-          class="text-3xl md:text-5xl lg:text-6xl font-display font-black text-white uppercase tracking-tighter"
-          style="color: #1a1a1b"
-        >
-          WE LIVE, BREATHE, AND SLEEP CRO.
-        </h2>
-        {# YouTube channel link removed as requested #}
-      </div>
-      <div
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl mx-auto"
-      >
-        {% set vids = youtube_video_ids or [] %} {% if 'vbUI7BW8PNI' not in vids
-        %} {% set vids = ['vbUI7BW8PNI'] + vids %} {% endif %} {% for video_id
-        in vids %}
-        <div
-          class="aspect-video w-full rounded-xl overflow-hidden bg-black relative"
-        >
-          <a
-            href="#calendly"
-            class="absolute inset-0 z-10 flex items-center justify-center"
-          >
-            <div
-              class="w-16 h-16 bg-primary rounded-full flex items-center justify-center shadow-lg"
-            >
-              <span class="material-symbols-outlined text-white text-3xl"
-                >play_arrow</span
-              >
-            </div>
-          </a>
-          <img
-            src="https://img.youtube.com/vi/{{ video_id }}/hqdefault.jpg"
-            alt="YouTube thumbnail {{ loop.index }}"
-            class="w-full h-full object-cover"
-            loading="lazy"
-          />
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-  </section>
+  {% set strip_cta = 'calendly' %}
+  {% include 'includes/_youtube_cro_thumb_strip.html' %}
 </div>
 
 {# One floating CTA #}

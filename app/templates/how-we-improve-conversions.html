@@ -369,7 +369,8 @@ fixes them with data—convert more of your traffic.{% endblock %} {% block foot
               type="url"
               id="vsl-website"
               name="website_url"
-              placeholder="https://yourstore.com"
+              required
+              placeholder="yourstore.com"
               class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-primary"
               autocomplete="url"
             />
@@ -879,49 +880,8 @@ fixes them with data—convert more of your traffic.{% endblock %} {% block foot
     </div>
   </section>
 
-  <!-- WE LIVE, BREATHE, AND SLEEP CRO. (halfway through testimonials) -->
-  <section class="py-16 md:py-20 bg-white border-t border-gray-100">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="text-center mb-14 md:mb-20">
-        <h2
-          class="text-3xl md:text-5xl lg:text-6xl font-display font-black text-white uppercase tracking-tighter"
-          style="color: #1a1a1b"
-        >
-          WE LIVE, BREATHE, AND SLEEP CRO.
-        </h2>
-      </div>
-      <div
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl mx-auto"
-      >
-        {% set vids = youtube_video_ids or [] %} {% if 'vbUI7BW8PNI' not in vids
-        %} {% set vids = ['vbUI7BW8PNI'] + vids %} {% endif %} {% for video_id
-        in vids %}
-        <div
-          class="aspect-video w-full rounded-xl overflow-hidden bg-black relative"
-        >
-          <a
-            href="#calendly"
-            class="absolute inset-0 z-10 flex items-center justify-center"
-          >
-            <div
-              class="w-16 h-16 bg-primary rounded-full flex items-center justify-center shadow-lg"
-            >
-              <span class="material-symbols-outlined text-white text-3xl"
-                >play_arrow</span
-              >
-            </div>
-          </a>
-          <img
-            src="https://img.youtube.com/vi/{{ video_id }}/hqdefault.jpg"
-            alt="YouTube thumbnail {{ loop.index }}"
-            class="w-full h-full object-cover"
-            loading="lazy"
-          />
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-  </section>
+  {% set strip_cta = 'calendly' %} {% include
+  'includes/_youtube_cro_thumb_strip.html' %}
 
   <section class="py-20 md:py-24 bg-white border-b border-gray-100">
     <div class="max-w-7xl mx-auto px-6">
@@ -1369,7 +1329,10 @@ fixes them with data—convert more of your traffic.{% endblock %} {% block foot
           document.getElementById("vsl-website").value
             ? document.getElementById("vsl-website").value.trim()
             : "";
-        if (!fname || !email) return;
+        if (!fname || !email || !website) {
+          form.reportValidity && form.reportValidity();
+          return;
+        }
         if (submitBtn) {
           submitBtn.disabled = true;
           submitBtn.textContent = "Sending…";
@@ -1383,7 +1346,7 @@ fixes them with data—convert more of your traffic.{% endblock %} {% block foot
           body: JSON.stringify({
             fname: fname,
             email: email,
-            website_url: website || undefined,
+            website_url: website,
           }),
         })
           .then(function (r) {

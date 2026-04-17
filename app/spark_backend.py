@@ -90,6 +90,9 @@ def post_form_lead(
     lead_origin: str | None = None,
     form_page_url: str | None = None,
     orders_per_month: str | None = None,
+    conversion_rate: str | None = None,
+    average_order_value: str | None = None,
+    enroll_nurture_override: bool | None = None,
 ) -> bool:
     payload = {
         "fname": fname,
@@ -105,6 +108,10 @@ def post_form_lead(
         payload["form_page_url"] = form_page_url.strip()
     if (orders_per_month or "").strip():
         payload["orders_per_month"] = orders_per_month.strip()
+    if (conversion_rate or "").strip():
+        payload["conversion_rate"] = conversion_rate.strip()
+    if (average_order_value or "").strip():
+        payload["average_order_value"] = average_order_value.strip()
     enroll = _enroll_nurture_for_submission_type(submission_type)
     # CRO cost/ROI: default lead-gen on Spark (like /cro-scan). Set SPARK_CRO_COST_ROI_ENROLL_NURTURE=0 to disable.
     # Spark should branch nurture/copy by submission_type so this is not the CRO scan drip.
@@ -112,6 +119,8 @@ def post_form_lead(
     if st == "cro_cost_roi":
         raw = (os.getenv("SPARK_CRO_COST_ROI_ENROLL_NURTURE") or "1").strip().lower()
         enroll = raw not in ("0", "false", "no", "off")
+    if enroll_nurture_override is not None:
+        enroll = enroll_nurture_override
     payload["enroll_nurture"] = enroll
     ok, _ = post_site_lead(payload, timeout=25)
     return ok

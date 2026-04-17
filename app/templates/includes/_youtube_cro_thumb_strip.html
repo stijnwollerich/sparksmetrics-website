@@ -1,0 +1,156 @@
+{# Horizontal thumbnail strip. Context: cro_video_thumb_strip. Before include set strip_cta: audit | ebook | calendly | youtube_channel. Optional: show_youtube_channel_link (bool). #}
+{% set cta = strip_cta|default('audit') %}
+<section
+  class="py-16 md:py-20 bg-white border-t border-gray-100 yt-cro-thumb-strip"
+  data-strip-cta="{{ cta }}"
+>
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-10 md:mb-14">
+      <h2
+        class="text-3xl md:text-5xl lg:text-6xl font-display font-black uppercase tracking-tighter"
+        style="color: #1a1a1b"
+      >
+        WE LIVE, BREATHE, AND SLEEP CRO.
+      </h2>
+      {% if show_youtube_channel_link %}
+      <p
+        class="text-center text-gray-500 font-bold uppercase tracking-widest text-sm mt-4"
+      >
+        <a
+          class="hover:text-primary transition-colors"
+          href="https://www.youtube.com/@stijnwollerich"
+          target="_blank"
+          rel="noopener"
+          >More on our YouTube channel →</a
+        >
+      </p>
+      {% endif %}
+    </div>
+    <div class="relative">
+      <button
+        type="button"
+        class="yt-cro-strip-arrow yt-cro-strip-prev hidden sm:flex absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 items-center justify-center rounded-full bg-white border border-gray-200 shadow-md text-deep-charcoal hover:bg-light-base -ml-2"
+        aria-label="Scroll thumbnails left"
+      >
+        <span class="material-symbols-outlined">chevron_left</span>
+      </button>
+      <button
+        type="button"
+        class="yt-cro-strip-arrow yt-cro-strip-next hidden sm:flex absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 items-center justify-center rounded-full bg-white border border-gray-200 shadow-md text-deep-charcoal hover:bg-light-base -mr-2"
+        aria-label="Scroll thumbnails right"
+      >
+        <span class="material-symbols-outlined">chevron_right</span>
+      </button>
+      <div
+        class="yt-cro-strip-track flex gap-4 md:gap-5 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-3 -mx-1 px-1"
+        tabindex="0"
+      >
+        {% for item in cro_video_thumb_strip %}
+        <div
+          class="shrink-0 w-[min(88vw,20rem)] sm:w-[min(45vw,22rem)] md:w-[min(32%,22rem)] max-w-sm snap-center"
+        >
+          <div
+            class="aspect-video w-full rounded-xl overflow-hidden bg-black relative shadow-md border border-gray-200"
+          >
+            {% if cta == 'ebook' %}
+            <a
+              href="#"
+              class="absolute inset-0 z-10 flex items-center justify-center"
+              data-checklist-modal
+              data-resource="13-bulletproof-strategies"
+              data-title="13 Bulletproof Strategies to Skyrocket Conversions"
+              data-description="Enter your email and get the free ebook right away — 13 actionable CRO strategies used by $10M+ brands."
+              data-button-text="Send me the ebook"
+            >
+              <div
+                class="w-14 h-14 md:w-16 md:h-16 bg-primary rounded-full flex items-center justify-center shadow-lg"
+              >
+                <span class="material-symbols-outlined text-white text-2xl md:text-3xl"
+                  >play_arrow</span
+                >
+              </div>
+            </a>
+            {% elif cta == 'calendly' %}
+            <a
+              href="#calendly"
+              class="absolute inset-0 z-10 flex items-center justify-center"
+            >
+              <div
+                class="w-14 h-14 md:w-16 md:h-16 bg-primary rounded-full flex items-center justify-center shadow-lg"
+              >
+                <span class="material-symbols-outlined text-white text-2xl md:text-3xl"
+                  >play_arrow</span
+                >
+              </div>
+            </a>
+            {% elif cta == 'youtube_channel' %}
+            <a
+              href="https://www.youtube.com/@stijnwollerich"
+              target="_blank"
+              rel="noopener"
+              class="absolute inset-0 z-10 flex items-center justify-center"
+            >
+              <div
+                class="w-14 h-14 md:w-16 md:h-16 bg-primary rounded-full flex items-center justify-center shadow-lg"
+              >
+                <span class="material-symbols-outlined text-white text-2xl md:text-3xl"
+                  >play_arrow</span
+                >
+              </div>
+            </a>
+            {% else %}
+            <a
+              href="#"
+              class="absolute inset-0 z-10 flex items-center justify-center"
+              data-audit-modal
+              data-modal-type="audit"
+              data-title="Get a free CRO audit on your funnel"
+              data-button-text="Request my free audit"
+            >
+              <div
+                class="w-14 h-14 md:w-16 md:h-16 bg-primary rounded-full flex items-center justify-center shadow-lg"
+              >
+                <span class="material-symbols-outlined text-white text-2xl md:text-3xl"
+                  >play_arrow</span
+                >
+              </div>
+            </a>
+            {% endif %}
+            <img
+              src="{{ url_for('static', filename=item.path) }}"
+              alt="{{ item.alt }}"
+              class="w-full h-full object-cover"
+              width="480"
+              height="270"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  (function () {
+    document.querySelectorAll(".yt-cro-thumb-strip").forEach(function (sec) {
+      var track = sec.querySelector(".yt-cro-strip-track");
+      var prev = sec.querySelector(".yt-cro-strip-prev");
+      var next = sec.querySelector(".yt-cro-strip-next");
+      if (!track) return;
+      function scrollByDir(dir) {
+        var amount = Math.max(track.clientWidth * 0.65, 280);
+        track.scrollBy({ left: dir * amount, behavior: "smooth" });
+      }
+      if (prev)
+        prev.addEventListener("click", function () {
+          scrollByDir(-1);
+        });
+      if (next)
+        next.addEventListener("click", function () {
+          scrollByDir(1);
+        });
+    });
+  })();
+</script>

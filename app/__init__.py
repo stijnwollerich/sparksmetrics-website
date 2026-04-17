@@ -8,6 +8,7 @@ import click
 from dotenv import load_dotenv
 from flask import Flask, render_template, request
 
+from app.cro_video_thumb_strip import CRO_VIDEO_THUMB_STRIP
 from app.models import db
 from app.routes.main import CASE_STUDIES, CASE_STUDY_ORDER, main_bp
 from app.youtube import get_latest_video_ids
@@ -158,6 +159,11 @@ def create_app(config_object="app.config.Config") -> Flask:
             (slug, CASE_STUDIES[slug]) for slug in CASE_STUDY_ORDER if slug in CASE_STUDIES
         ]
         return {"case_studies_list": case_studies_list}
+
+    @app.context_processor
+    def inject_cro_video_thumb_strip():
+        """Shared compressed thumbnails for WE LIVE / CRO video strips across templates."""
+        return {"cro_video_thumb_strip": CRO_VIDEO_THUMB_STRIP}
 
     @app.cli.command("db-upgrade")
     def db_upgrade():

@@ -588,32 +588,9 @@ block head_extras %}{% endblock %} {% block content %}
       </div>
     </div>
   </section>
-  <section
-    class="py-20 md:py-24 bg-white overflow-hidden border-t border-gray-100"
-  >
-    <div class="max-w-7xl mx-auto px-6">
-      <h2
-        class="text-3xl md:text-5xl lg:text-6xl font-display font-black text-deep-charcoal text-center mb-4 uppercase tracking-tighter"
-      >
-        WE LIVE, BREATHE, AND SLEEP CRO.
-      </h2>
-      <p
-        class="text-center text-gray-500 font-bold uppercase tracking-widest text-sm mb-12"
-      >
-        <a
-          class="hover:text-primary transition-colors"
-          href="https://www.youtube.com/@stijnwollerich"
-          target="_blank"
-          rel="noopener"
-          >More on our YouTube channel →</a
-        >
-      </p>
-      {# Ensure latest video appears first in homepage gallery #} {% set vids =
-      youtube_video_ids or [] %} {% if 'vbUI7BW8PNI' not in vids %} {% set vids
-      = ['vbUI7BW8PNI'] + vids %} {% endif %} {% set youtube_video_ids = vids %}
-      {% include '_youtube_gallery.html' %}
-    </div>
-  </section>
+  {% set strip_cta = 'youtube_channel' %}
+  {% set show_youtube_channel_link = True %}
+  {% include 'includes/_youtube_cro_thumb_strip.html' %}
   <section class="py-24 bg-white border-t border-gray-100">
     <div class="max-w-7xl mx-auto px-6">
       <div

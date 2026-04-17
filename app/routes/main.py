@@ -1280,6 +1280,13 @@ def how_we_improve_conversions():
     return render_template("how-we-improve-conversions.html")
 
 
+@main_bp.route("/free-cro-audit/")
+@main_bp.route("/free-cro-audit")
+def free_cro_audit_landing():
+    """Landing page focused on free CRO audit requests."""
+    return render_template("free_cro_audit.html")
+
+
 def _ingest_form_page_url(data: dict | None) -> str | None:
     """Resolve Spark `form_page_url` from JSON body or Referer. See docs/SPARK_SITE_LEAD_API.md."""
     d = data if isinstance(data, dict) else {}
@@ -1300,6 +1307,11 @@ def _save_lead(
     website_url: str | None = None,
     form_page_url: str | None = None,
     orders_per_month: str | None = None,
+    conversion_rate: str | None = None,
+    average_order_value: str | None = None,
+    *,
+    skip_background_cro_scan: bool = False,
+    enroll_nurture_override: bool | None = None,
 ) -> None:
     """Persist lead to Postgres if DATABASE_URL is set. Logs errors, does not raise.
 
@@ -1324,6 +1336,9 @@ def _save_lead(
                 lead_origin="sparksmetrics.com",
                 form_page_url=form_page_url,
                 orders_per_month=orders_per_month,
+                conversion_rate=conversion_rate,
+                average_order_value=average_order_value,
+                enroll_nurture_override=enroll_nurture_override,
             )
             if (
                 ok
@@ -1337,9 +1352,10 @@ def _save_lead(
                     fname,
                     delivery_mode="funnel",
                     spark_attach_submission_type="cro_cost_roi",
-                )
+            )
             if (
-                ok
+                not skip_background_cro_scan
+                and ok
                 and (website_url or "").strip()
                 and spark_background_cro_scan_after_ingest_enabled()
                 and submission_type != "cro_cost_roi"
@@ -1566,6 +1582,7 @@ def _notify_slack_lead(
     resource_slug: str | None = None,
     business_stage: str | None = None,
     website_url: str | None = None,
+    slack_headline: str | None = None,
 ) -> None:
     """Post a short message to Slack when a lead is submitted. Logs errors, does not raise."""
     webhook_url = (current_app.config.get("SLACK_WEBHOOK_URL") or "").strip()
@@ -1582,6 +1599,8 @@ def _notify_slack_lead(
     else:
         label = "Resource download"
     text = "New lead: *{}* <{}> – {}".format(fname, email, label)
+    if slack_headline and slack_headline.strip():
+        text = "{}\n{}".format(slack_headline.strip(), text)
     if business_stage:
         if submission_type == "cro_scan":
             text += "\nOrders per month: {}".format(business_stage)
@@ -1717,34 +1736,214 @@ def admin_client_events():
         abort(500)
 
 
+def _merge_audit_lead_metrics_postgres(
+    *,
+    fname: str,
+    email: str,
+    website_url: str | None,
+    business_stage: str | None,
+) -> None:
+    """When Spark is off: attach audit metrics to the latest audit row for this email, or insert one."""
+    if not current_app.config.get("SQLALCHEMY_DATABASE_URI"):
+        return
+    try:
+        lead = (
+            Lead.query.filter_by(email=email, submission_type="audit")
+            .order_by(Lead.id.desc())
+            .first()
+        )
+        if lead:
+            if fname:
+                lead.fname = fname
+            if business_stage:
+                lead.business_stage = business_stage
+            if (website_url or "").strip():
+                lead.website_url = (website_url or "").strip()
+        else:
+            db.session.add(
+                Lead(
+                    fname=fname or (email.split("@", 1)[0] if "@" in email else "there"),
+                    email=email,
+                    submission_type="audit",
+                    resource_slug=None,
+                    business_stage=(business_stage or "").strip() or None,
+                    website_url=(website_url or "").strip() or None,
+                )
+            )
+        db.session.commit()
+    except Exception as e:
+        current_app.logger.warning("Failed to merge audit lead metrics (postgres): %s", e)
+        db.session.rollback()
+
+
 @main_bp.route("/request-audit", methods=["POST"])
 def request_audit():
-    """Collect fname, email, and optional website_url for free CRO audit request; returns success (no file)."""
+    """Collect fname, email, website_url, and optional audit metrics; returns success (no file).
+
+    Multistep modal (``audit_multistep_step``): **1** = capture contact + URL, Spark ingest, background
+    CRO scan, Brevo/Slack; **2** = upsert metrics on the same contact (no second background scan;
+    ``enroll_nurture: false`` on Spark so automation is not restarted).
+    """
     data = request.get_json(silent=True) or {}
+    ms_raw = data.get("audit_multistep_step")
+    ms_step: int | None
+    try:
+        ms_step = int(ms_raw) if ms_raw is not None and str(ms_raw).strip() != "" else None
+    except (TypeError, ValueError):
+        ms_step = None
+
     fname = (data.get("fname") or "").strip()
     email = (data.get("email") or "").strip()
     website_url = (data.get("website_url") or "").strip() or None
+    orders_pm = (data.get("orders_per_month") or "").strip()
+    cvr = (data.get("conversion_rate") or "").strip()
+    aov = (data.get("average_order_value") or "").strip()
+    form_page_url = _ingest_form_page_url(data)
+
+    def _audit_not_ok_email():
+        return not email or not re.match(r"^[^\s@]+@[^\s@]+\.[^\s@]+$", email)
+
+    if ms_step == 1:
+        if not fname:
+            return jsonify({"success": False, "error": "First name required"}), 400
+        if _audit_not_ok_email():
+            return jsonify({"success": False, "error": "Invalid email"}), 400
+        if not website_url:
+            return jsonify({"success": False, "error": "Store URL required"}), 400
+        website_url = _normalize_shopify_url(website_url) or website_url
+        _save_lead(
+            fname,
+            email,
+            "audit",
+            resource_slug=None,
+            website_url=website_url,
+            form_page_url=form_page_url,
+            business_stage=None,
+            orders_per_month=None,
+            conversion_rate=None,
+            average_order_value=None,
+        )
+        _sync_lead_to_brevo(
+            fname,
+            email,
+            "audit",
+            resource_slug=None,
+            business_stage=None,
+            website_url=website_url,
+        )
+        _notify_slack_lead(
+            fname,
+            email,
+            "audit",
+            resource_slug=None,
+            business_stage=None,
+            website_url=website_url,
+            slack_headline="*CRO audit · step 1 of 2* — contact + store URL submitted (metrics may follow).",
+        )
+        return jsonify({"success": True})
+
+    if ms_step == 2:
+        if _audit_not_ok_email():
+            return jsonify({"success": False, "error": "Invalid email"}), 400
+        if not website_url:
+            return jsonify({"success": False, "error": "Store URL required"}), 400
+        if not orders_pm or not cvr or not aov:
+            return jsonify(
+                {
+                    "success": False,
+                    "error": "Orders per month, conversion rate, and AOV are required together.",
+                }
+            ), 400
+        if not fname:
+            fname = (email.split("@", 1)[0] or "").strip() or "there"
+        website_url = _normalize_shopify_url(website_url) or website_url
+        audit_business_stage = f"orders/mo: {orders_pm} | CVR: {cvr} | AOV: {aov}"
+        if spark_backend.enabled():
+            _save_lead(
+                fname,
+                email,
+                "audit",
+                resource_slug=None,
+                website_url=website_url,
+                form_page_url=form_page_url,
+                business_stage=audit_business_stage,
+                orders_per_month=orders_pm or None,
+                conversion_rate=cvr or None,
+                average_order_value=aov or None,
+                skip_background_cro_scan=True,
+                enroll_nurture_override=False,
+            )
+        else:
+            _merge_audit_lead_metrics_postgres(
+                fname=fname,
+                email=email,
+                website_url=website_url,
+                business_stage=audit_business_stage,
+            )
+        _sync_lead_to_brevo(
+            fname,
+            email,
+            "audit",
+            resource_slug=None,
+            business_stage=audit_business_stage,
+            website_url=website_url,
+        )
+        _notify_slack_lead(
+            fname,
+            email,
+            "audit",
+            resource_slug=None,
+            business_stage=audit_business_stage,
+            website_url=website_url,
+            slack_headline="*CRO audit · step 2 of 2* — orders, CVR & AOV submitted.",
+        )
+        return jsonify({"success": True})
+
+    # Single-shot (no multistep): same payload as before
     if not fname:
         return jsonify({"success": False, "error": "First name required"}), 400
-    if not email or not re.match(r"^[^\s@]+@[^\s@]+\.[^\s@]+$", email):
+    if _audit_not_ok_email():
         return jsonify({"success": False, "error": "Invalid email"}), 400
-    if website_url:
-        website_url = _normalize_shopify_url(website_url) or website_url
+    if not website_url:
+        return jsonify({"success": False, "error": "Store URL required"}), 400
+    website_url = _normalize_shopify_url(website_url) or website_url
+    audit_business_stage: str | None = None
+    if orders_pm or cvr or aov:
+        if not orders_pm or not cvr or not aov:
+            return jsonify(
+                {
+                    "success": False,
+                    "error": "Orders per month, conversion rate, and AOV are required together.",
+                }
+            ), 400
+        audit_business_stage = f"orders/mo: {orders_pm} | CVR: {cvr} | AOV: {aov}"
     _save_lead(
         fname,
         email,
         "audit",
         resource_slug=None,
         website_url=website_url,
-        form_page_url=_ingest_form_page_url(data),
+        form_page_url=form_page_url,
+        business_stage=audit_business_stage,
+        orders_per_month=orders_pm or None,
+        conversion_rate=cvr or None,
+        average_order_value=aov or None,
     )
-    _sync_lead_to_brevo(fname, email, "audit", resource_slug=None, website_url=website_url)
-    _notify_slack_lead(fname, email, "audit", resource_slug=None, website_url=website_url)
-    _maybe_enqueue_lead_magnet_background_scan(
+    _sync_lead_to_brevo(
+        fname,
+        email,
+        "audit",
+        resource_slug=None,
+        business_stage=audit_business_stage,
         website_url=website_url,
-        email=email,
-        fname=fname,
-        submission_type="audit",
+    )
+    _notify_slack_lead(
+        fname,
+        email,
+        "audit",
+        resource_slug=None,
+        business_stage=audit_business_stage,
+        website_url=website_url,
     )
     return jsonify({"success": True})
 

@@ -1,0 +1,452 @@
+{# Shared lead modal (resource + audit). Optional: lead_modal_thank_you_redirect (full URL), lead_modal_audit_multistep (bool, 2-step audit + metrics). #}
+    <div
+      id="lead-modal"
+      class="fixed inset-0 z-[200] hidden"
+      aria-hidden="true"
+      aria-modal="true"
+      role="dialog"
+      aria-labelledby="lead-modal-title"
+      {% if lead_modal_thank_you_redirect is defined and lead_modal_thank_you_redirect %}data-lead-thank-you-redirect="{{ lead_modal_thank_you_redirect }}"{% endif %}
+      {% if lead_modal_audit_multistep|default(false) %}data-lead-audit-multistep="1"{% endif %}
+    >
+      <div
+        class="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        data-lead-close
+      ></div>
+      <div
+        class="absolute inset-0 flex items-center justify-center p-4 md:p-6 pointer-events-none"
+      >
+        <div
+          class="bg-white rounded-3xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden pointer-events-auto flex flex-col border border-gray-100"
+          id="lead-modal-panel"
+        >
+          {# Form state: email capture + sidebar #}
+          <div
+            id="lead-form-state"
+            class="flex flex-col md:flex-row flex-1 min-h-0"
+          >
+            <div
+              class="p-8 md:p-12 md:w-[55%] flex flex-col min-w-0 overflow-y-auto"
+            >
+              <div class="flex items-start justify-between gap-4 mb-6">
+                <div
+                  class="flex items-center gap-2 flex-wrap"
+                  id="lead-modal-badges"
+                ></div>
+                <button
+                  type="button"
+                  class="p-3 min-h-[44px] min-w-[44px] -m-2 text-slate-400 hover:text-deep-charcoal rounded-lg transition-colors shrink-0 flex items-center justify-center"
+                  data-lead-close
+                  aria-label="Close"
+                >
+                  <span class="material-symbols-outlined">close</span>
+                </button>
+              </div>
+              <h2
+                id="lead-modal-title"
+                class="text-2xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tighter mb-3"
+              ></h2>
+              <p
+                id="lead-modal-description"
+                class="text-gray-600 text-base md:text-lg mb-8"
+              ></p>
+              <form id="lead-form" class="space-y-6">
+                <input type="hidden" name="resource" id="lead-slug" value="" />
+                <input
+                  type="hidden"
+                  name="modal_type"
+                  id="lead-modal-type"
+                  value="resource"
+                />
+                <div id="lead-form-primary-fields" class="space-y-6">
+                <div>
+                  <label
+                    for="lead-fname"
+                    class="block text-xs font-black uppercase tracking-widest text-deep-charcoal mb-2"
+                    >First name</label
+                  >
+                  <input
+                    type="text"
+                    id="lead-fname"
+                    name="fname"
+                    required
+                    placeholder="Your first name"
+                    class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl text-deep-charcoal placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
+                    autocomplete="given-name"
+                  />
+                </div>
+                <div>
+                  <label
+                    for="lead-email"
+                    class="block text-xs font-black uppercase tracking-widest text-deep-charcoal mb-2"
+                    >Email</label
+                  >
+                  <input
+                    type="email"
+                    id="lead-email"
+                    name="email"
+                    required
+                    placeholder="you@company.com"
+                    class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl text-deep-charcoal placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
+                    autocomplete="email"
+                  />
+                </div>
+                <div>
+                  <label
+                    for="lead-website-url"
+                    class="block text-xs font-black uppercase tracking-widest text-deep-charcoal mb-2"
+                    >Store URL
+                    <span
+                      id="lead-website-url-optional-hint"
+                      class="font-medium normal-case text-gray-500"
+                      >(optional)</span
+                    >
+                  </label>
+                  <input
+                    type="url"
+                    id="lead-website-url"
+                    name="website_url"
+                    inputmode="url"
+                    placeholder="yourstore.com"
+                    class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl text-deep-charcoal placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
+                    autocomplete="url"
+                  />
+                  <p
+                    id="lead-website-url-help-resource"
+                    class="text-xs text-gray-500 mt-2"
+                  >
+                    If provided, we may run an internal store audit snapshot to
+                    personalize follow-up. We won’t email you a scan report from
+                    this form.
+                  </p>
+                  <p
+                    id="lead-website-url-help-audit"
+                    class="text-xs text-gray-500 mt-2 hidden"
+                  >
+                    We need your store URL so we can review your funnel.
+                  </p>
+                </div>
+                </div>
+                {% if lead_modal_audit_multistep|default(false) %}
+                <p
+                  id="lead-audit-step1-error"
+                  class="hidden text-sm text-red-600 mb-2"
+                  role="alert"
+                ></p>
+                <button
+                  type="button"
+                  id="lead-audit-btn-next"
+                  class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 px-6 py-4 border-2 border-gray-200 text-deep-charcoal font-display text-sm font-black uppercase rounded-xl hover:bg-gray-50 transition-colors"
+                >
+                  Continue
+                </button>
+                <div
+                  id="lead-audit-step-2-fields"
+                  class="space-y-6 hidden"
+                  aria-hidden="true"
+                >
+                  <p
+                    class="text-xs font-black uppercase tracking-widest text-primary mb-1"
+                  >
+                    Step 2 of 2 — A few numbers
+                  </p>
+                  <div>
+                    <label
+                      for="lead-audit-orders-per-month"
+                      class="block text-xs font-black uppercase tracking-widest text-deep-charcoal mb-2"
+                      >Orders per month</label
+                    >
+                    <select
+                      id="lead-audit-orders-per-month"
+                      name="orders_per_month"
+                      class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl text-deep-charcoal focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors bg-white"
+                    >
+                      <option value="" disabled selected>Pick the closest range…</option>
+                      <option value="Up to ~100/month">Up to ~100 orders/month</option>
+                      <option value="~1,000/month">Around 1,000 orders/month</option>
+                      <option value="~5,000/month">Around 5,000 orders/month</option>
+                      <option value="10,000+/month">10,000+ orders/month</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label
+                      for="lead-audit-conversion-rate"
+                      class="block text-xs font-black uppercase tracking-widest text-deep-charcoal mb-2"
+                      >Current conversion rate (%)</label
+                    >
+                    <input
+                      type="text"
+                      id="lead-audit-conversion-rate"
+                      name="conversion_rate"
+                      inputmode="decimal"
+                      placeholder="e.g. 2.4"
+                      class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl text-deep-charcoal placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
+                      autocomplete="off"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      for="lead-audit-aov"
+                      class="block text-xs font-black uppercase tracking-widest text-deep-charcoal mb-2"
+                      >Average order value (AOV)</label
+                    >
+                    <input
+                      type="text"
+                      id="lead-audit-aov"
+                      name="average_order_value"
+                      inputmode="decimal"
+                      placeholder="e.g. 85"
+                      class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl text-deep-charcoal placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
+                      autocomplete="off"
+                    />
+                  </div>
+                  <div class="flex flex-col sm:flex-row gap-3">
+                    <button
+                      type="button"
+                      id="lead-audit-btn-back"
+                      class="min-h-[48px] inline-flex items-center justify-center px-6 py-4 border-2 border-gray-200 text-deep-charcoal font-display text-sm font-black uppercase rounded-xl hover:bg-gray-50 transition-colors sm:w-36"
+                    >
+                      Back
+                    </button>
+                    <button
+                      type="submit"
+                      id="lead-submit"
+                      class="flex-1 min-h-[48px] inline-flex items-center justify-center gap-2 px-6 py-4 bg-primary text-white font-display text-sm font-black uppercase rounded-xl hover:brightness-110 transition-all shadow-lg shadow-primary/25"
+                    >
+                      <span id="lead-submit-text">Send me the resource</span>
+                      <span class="material-symbols-outlined text-lg"
+                        >schedule</span
+                      >
+                    </button>
+                  </div>
+                </div>
+                {% else %}
+                <button
+                  type="submit"
+                  id="lead-submit"
+                  class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 px-6 py-4 bg-primary text-white font-display text-sm font-black uppercase rounded-xl hover:brightness-110 transition-all shadow-lg shadow-primary/25"
+                >
+                  <span id="lead-submit-text">Send me the resource</span>
+                  <span class="material-symbols-outlined text-lg"
+                    >download</span
+                  >
+                </button>
+                {% endif %}
+              </form>
+              <div class="mt-8 space-y-4">
+                <p class="flex items-center gap-2 text-gray-600 text-sm">
+                  <span class="material-symbols-outlined text-primary text-lg"
+                    >lock</span
+                  >
+                  Your data is private.
+                </p>
+                <p
+                  class="text-xs text-gray-500 font-bold uppercase tracking-widest"
+                >
+                  Used by 200+ brands · Same process for $10M+ funnels
+                </p>
+              </div>
+            </div>
+            <div
+              class="bg-light-base border-t md:border-t-0 md:border-l border-gray-100 p-8 md:p-12 md:w-[45%] rounded-b-3xl md:rounded-b-none md:rounded-r-3xl flex flex-col overflow-y-auto"
+            >
+              <div
+                id="lead-sidebar-badge"
+                class="inline-flex items-center gap-2 px-3 py-2 bg-primary/10 rounded-lg w-fit mb-8"
+              >
+                <span class="material-symbols-outlined text-primary text-lg"
+                  >schedule</span
+                >
+                <span
+                  class="text-[10px] font-black uppercase tracking-widest text-primary"
+                  >Instant download</span
+                >
+              </div>
+              <p
+                class="text-[10px] font-black uppercase tracking-widest text-primary mb-4"
+              >
+                What you get
+              </p>
+              <ul
+                id="lead-modal-bullets"
+                class="space-y-5 text-sm text-gray-700 mb-10"
+              >
+                <li class="flex gap-3">
+                  <span class="material-symbols-outlined text-primary shrink-0"
+                    >check_circle</span
+                  >
+                  Every leak and conversion lever we audit for
+                </li>
+                <li class="flex gap-3">
+                  <span class="material-symbols-outlined text-primary shrink-0"
+                    >check_circle</span
+                  >
+                  Prioritized fix list you can use today
+                </li>
+                <li class="flex gap-3">
+                  <span class="material-symbols-outlined text-primary shrink-0"
+                    >check_circle</span
+                  >
+                  Same blueprint used for $10M+ brands
+                </li>
+              </ul>
+              <div class="mt-auto pt-8 border-t border-gray-200 relative">
+                <span
+                  class="absolute top-6 right-0 material-symbols-outlined text-primary text-xl"
+                  >verified</span
+                >
+                <p class="text-deep-charcoal font-bold text-sm mb-1">
+                  Verified partner
+                </p>
+                <p
+                  class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-3"
+                >
+                  CRO &amp; analytics
+                </p>
+                <p class="text-gray-600 text-sm italic leading-snug">
+                  "Stijn is a great go-to resource for building a proper
+                  infrastructure for Google Analytics and setting up the
+                  dashboard so you get access to your data in a simple way. You
+                  only need to explain the purpose and he'll outline a great
+                  strategy."
+                </p>
+              </div>
+            </div>
+          </div>
+          {# Thank-you state: full modal about scheduling — Calendly one side,
+          reasons + info other side #}
+          <div
+            id="lead-thankyou-state"
+            class="hidden flex flex-col md:flex-row flex-1 min-h-0"
+          >
+            <div
+              class="flex flex-col md:w-[55%] min-h-[70vh] md:min-h-[80vh] bg-gray-50"
+            >
+              <div
+                class="flex items-center justify-between p-4 border-b border-gray-200 shrink-0"
+              >
+                <span
+                  class="text-xs font-black uppercase tracking-widest text-primary"
+                  >Pick a time</span
+                >
+                <button
+                  type="button"
+                  class="p-2 -m-2 text-slate-400 hover:text-deep-charcoal rounded-lg transition-colors"
+                  data-lead-close
+                  aria-label="Close"
+                >
+                  <span class="material-symbols-outlined">close</span>
+                </button>
+              </div>
+              <div class="flex-1 min-h-0">
+                <iframe
+                  id="lead-calendly-iframe"
+                  title="Schedule a call"
+                  class="w-full h-full min-h-[500px]"
+                  src="about:blank"
+                ></iframe>
+              </div>
+            </div>
+            <div
+              class="p-8 md:p-12 md:w-[45%] flex flex-col overflow-y-auto bg-white border-t md:border-t-0 md:border-l border-gray-100 rounded-b-3xl md:rounded-b-none md:rounded-r-3xl"
+            >
+              <span class="material-symbols-outlined text-primary text-4xl mb-4"
+                >check_circle</span
+              >
+              <h2
+                class="text-xl md:text-3xl font-display font-black text-deep-charcoal uppercase tracking-tighter mb-2"
+              >
+                You’re in. Now let’s talk.
+              </h2>
+              <p
+                id="lead-thankyou-message"
+                class="text-gray-600 text-base mb-8"
+              >
+                Pick a time on the left for a free 30-minute strategy session.
+              </p>
+              <div class="mb-8">
+                <h3
+                  class="text-primary font-display font-black uppercase tracking-tighter text-sm mb-5"
+                >
+                  Why book a call?
+                </h3>
+                <ul class="space-y-5">
+                  <li
+                    class="flex gap-4 p-4 rounded-xl bg-light-base border border-gray-100"
+                  >
+                    <span
+                      class="material-symbols-outlined text-primary shrink-0 mt-0.5"
+                      >check_circle</span
+                    >
+                    <div>
+                      <p class="font-bold text-deep-charcoal mb-1">No pitch.</p>
+                      <p class="text-gray-600 text-sm leading-relaxed mb-0">
+                        We focus on your funnel and your next steps—not a sales
+                        script.
+                      </p>
+                    </div>
+                  </li>
+                  <li
+                    class="flex gap-4 p-4 rounded-xl bg-light-base border border-gray-100"
+                  >
+                    <span
+                      class="material-symbols-outlined text-primary shrink-0 mt-0.5"
+                      >check_circle</span
+                    >
+                    <div>
+                      <p class="font-bold text-deep-charcoal mb-1">
+                        Clear next steps.
+                      </p>
+                      <p class="text-gray-600 text-sm leading-relaxed mb-0">
+                        You’ll leave with a clear picture of where you’re
+                        leaking and what to fix first.
+                      </p>
+                    </div>
+                  </li>
+                  <li
+                    class="flex gap-4 p-4 rounded-xl bg-light-base border border-gray-100"
+                  >
+                    <span
+                      class="material-symbols-outlined text-primary shrink-0 mt-0.5"
+                      >check_circle</span
+                    >
+                    <div>
+                      <p class="font-bold text-deep-charcoal mb-1">
+                        Same process we use for $10M+ brands.
+                      </p>
+                      <p class="text-gray-600 text-sm leading-relaxed mb-0">
+                        Data, audits, and prioritization—not guesswork.
+                      </p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <p
+                class="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-6"
+              >
+                Used by 200+ brands
+              </p>
+              <div class="pt-6 border-t border-gray-200 relative">
+                <span
+                  class="absolute top-6 right-0 material-symbols-outlined text-primary text-lg"
+                  >verified</span
+                >
+                <p class="text-deep-charcoal font-bold text-sm mb-1">
+                  Verified partner
+                </p>
+                <p
+                  class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2"
+                >
+                  CRO &amp; analytics
+                </p>
+                <p class="text-gray-600 text-sm italic leading-snug">
+                  "Stijn is a great go-to resource for building a proper
+                  infrastructure for Google Analytics and setting up the
+                  dashboard so you get access to your data in a simple way."
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
