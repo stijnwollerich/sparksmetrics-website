@@ -1,46 +1,97 @@
-<!DOCTYPE html>
+<!doctype html>
 <html class="scroll-smooth" lang="en">
-<head>
+  <head>
     {% if ENABLE_GTM %}
     <!-- Google Tag Manager -->
     <script>
-      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
-      var f=d.getElementsByTagName(s)[0], j=d.createElement(s), dl=l!='dataLayer'?'&l='+l:'';
-      j.async=true; j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl; f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','GTM-ML2ZDNH2');
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-ML2ZDNH2");
     </script>
     <!-- End Google Tag Manager -->
     {% endif %}
     <!-- PostMessage wrapper removed to avoid interfering with third-party embeds -->
     <!-- Global error suppression removed to avoid hiding root causes -->
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
     <title>{% block title %}Sparksmetrics{% endblock %}</title>
-    <meta name="description" content="{% block meta_description %}Results-driven CRO and analytics for brands that scale. Free conversion audit and data-driven optimization.{% endblock %}"/>
-    <link rel="canonical" href="{{ request.url }}"/>
-    <meta property="og:type" content="website"/>
-    <meta property="og:title" content="{% block og_title %}Sparksmetrics{% endblock %}"/>
-    <meta property="og:description" content="{% block og_description %}Results-driven CRO and analytics for brands that scale. Free conversion audit and data-driven optimization.{% endblock %}"/>
-    <meta property="og:url" content="{{ request.url }}"/>
+    <meta
+      name="description"
+      content="{% block meta_description %}Results-driven CRO and analytics for brands that scale. Free conversion audit and data-driven optimization.{% endblock %}"
+    />
+    <link rel="canonical" href="{{ request.url }}" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="{% block og_title %}Sparksmetrics{% endblock %}"
+    />
+    <meta
+      property="og:description"
+      content="{% block og_description %}Results-driven CRO and analytics for brands that scale. Free conversion audit and data-driven optimization.{% endblock %}"
+    />
+    <meta property="og:url" content="{{ request.url }}" />
     {% block og_image_meta %}
-    <meta property="og:image" content="{{ url_for('static', filename='favicon.svg', _external=True) }}"/>
-    <meta property="og:image:alt" content="Sparksmetrics logo"/>
-    <meta name="twitter:image" content="{{ url_for('static', filename='favicon.svg', _external=True) }}"/>
+    <meta
+      property="og:image"
+      content="{{ url_for('static', filename='favicon.svg', _external=True) }}"
+    />
+    <meta property="og:image:alt" content="Sparksmetrics logo" />
+    <meta
+      name="twitter:image"
+      content="{{ url_for('static', filename='favicon.svg', _external=True) }}"
+    />
     {% endblock %}
-    <meta name="twitter:card" content="summary_large_image"/>
-    <meta name="twitter:title" content="{% block twitter_title %}Sparksmetrics{% endblock %}"/>
-    <meta name="twitter:description" content="{% block twitter_description %}Results-driven CRO and analytics for brands that scale. Free conversion audit and data-driven optimization.{% endblock %}"/>
-    <meta name="theme-color" content="#050505"/>
-    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}"/>
-    <link rel="icon" type="image/x-icon" href="{{ url_for('main.favicon') }}"/>
-    <link href="https://fonts.googleapis.com" rel="preconnect"/>
-    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect"/>
-    <link href="https://cdn.tailwindcss.com" rel="preconnect"/>
-    <link href="https://calendly.com" rel="preconnect"/>
-    {# Load fonts async to avoid render-blocking (saves ~8s on slow connections) #}
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Lexend:wght@700;800;900&amp;display=swap" media="print" onload="this.media='all'"/>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" media="print" onload="this.media='all'"/>
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Lexend:wght@700;800;900&amp;display=swap"/><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"/></noscript>
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="{% block twitter_title %}Sparksmetrics{% endblock %}"
+    />
+    <meta
+      name="twitter:description"
+      content="{% block twitter_description %}Results-driven CRO and analytics for brands that scale. Free conversion audit and data-driven optimization.{% endblock %}"
+    />
+    <meta name="theme-color" content="#050505" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="{{ url_for('static', filename='favicon.svg') }}"
+    />
+    <link rel="icon" type="image/x-icon" href="{{ url_for('main.favicon') }}" />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://cdn.tailwindcss.com" rel="preconnect" />
+    <link href="https://calendly.com" rel="preconnect" />
+    {# Load fonts async to avoid render-blocking (saves ~8s on slow connections)
+    #}
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Lexend:wght@700;800;900&amp;display=swap"
+      media="print"
+      onload="this.media = 'all'"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      media="print"
+      onload="this.media = 'all'"
+    />
+    <noscript
+      ><link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Lexend:wght@700;800;900&amp;display=swap" /><link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    /></noscript>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script>
       tailwind.config = {
@@ -52,8 +103,8 @@
               "deep-charcoal": "#1A1A1B",
               "light-base": "#F9F9FB",
               "background-dark": "#050505",
-              "charcoal": "#0F0F0F",
-              "surface": "#161616",
+              charcoal: "#0F0F0F",
+              surface: "#161616",
               "off-white": "#F9F9FB",
             },
             fontFamily: {
@@ -66,69 +117,208 @@
     </script>
     <style type="text/tailwindcss">
       @layer base {
-        h1, h2, h3, h4 { @apply font-display font-black uppercase tracking-tighter leading-tight; }
-        p { @apply mb-6 text-lg md:text-xl; }
-        a, button { -webkit-tap-highlight-color: rgba(255, 77, 0, 0.2); }
+        h1,
+        h2,
+        h3,
+        h4 {
+          @apply font-display font-black uppercase tracking-tighter leading-tight;
+        }
+        p {
+          @apply mb-6 text-lg md:text-xl;
+        }
+        a,
+        button {
+          -webkit-tap-highlight-color: rgba(255, 77, 0, 0.2);
+        }
       }
       @layer components {
-        .content-narrow { max-width: 800px; margin-left: auto; margin-right: auto; }
-        .text-shadow-strong { text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
-        .avatar-stack img { @apply w-10 h-10 md:w-12 md:h-12 rounded-full object-cover border-2 border-deep-charcoal; }
-        .avatar-stack img + img { margin-left: -0.75rem; }
-        .material-symbols-outlined.star-filled { font-variation-settings: "FILL" 1, "wght" 400; }
-        .noise-bg { background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuAI_xj2ntGZEV1hR4DfQjAg37cZcF9JUtaLGhKQsFx5D_tgNDzbWZICSzwLMhkM4hUDV0ITDfJf-yZ-PBYeljwy6d0dv1jJqRa2I3TyNrVSlaFIgE0o0MA80qOXWoX7OsDQPTKUGBNi6F1X2BltrT5K5OqYt7gzQ6vRf7Xp0mWSRI85jKkhidrE3LMI5MIDpjCc3iKFT5MXHn6qfLyluwCjTjlsPBOxaeqgXyLOlCLcTZ0a_DfAga8ZnIH1JCmzviq47iuQIOq9ngY); opacity: 0.03; }
-        .concentric-circles { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 250%; aspect-ratio: 1/1; background-image: repeating-radial-gradient(circle at center, transparent, transparent 80px, rgba(255, 87, 34, 0.03) 81px, rgba(255, 87, 34, 0.03) 81.5px); pointer-events: none; z-index: 0; }
-        .video-glow { box-shadow: 0 0 60px -10px rgba(255, 87, 34, 0.25); }
-        [data-video-play-overlay][data-playing] .video-play-overlay { opacity: 0; pointer-events: none; }
-        .editorial-text p { @apply mb-10 leading-[1.8] text-charcoal text-xl md:text-2xl font-medium; }
-        .editorial-text .highlight { @apply bg-primary text-white px-2 py-0.5 rounded font-black; }
-        .editorial-text .highlight-soft { @apply bg-primary/20 text-deep-charcoal px-1.5 py-0.5 rounded; }
-        .editorial-text strong { @apply text-black font-extrabold; }
-        .problem-intro p { @apply leading-[1.85] mb-0; }
-        .problem-intro { @apply space-y-6; }
+        .content-narrow {
+          max-width: 800px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+        .text-shadow-strong {
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .avatar-stack img {
+          @apply w-10 h-10 md:w-12 md:h-12 rounded-full object-cover border-2 border-deep-charcoal;
+        }
+        .avatar-stack img + img {
+          margin-left: -0.75rem;
+        }
+        .material-symbols-outlined.star-filled {
+          font-variation-settings:
+            "FILL" 1,
+            "wght" 400;
+        }
+        .noise-bg {
+          background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuAI_xj2ntGZEV1hR4DfQjAg37cZcF9JUtaLGhKQsFx5D_tgNDzbWZICSzwLMhkM4hUDV0ITDfJf-yZ-PBYeljwy6d0dv1jJqRa2I3TyNrVSlaFIgE0o0MA80qOXWoX7OsDQPTKUGBNi6F1X2BltrT5K5OqYt7gzQ6vRf7Xp0mWSRI85jKkhidrE3LMI5MIDpjCc3iKFT5MXHn6qfLyluwCjTjlsPBOxaeqgXyLOlCLcTZ0a_DfAga8ZnIH1JCmzviq47iuQIOq9ngY);
+          opacity: 0.03;
+        }
+        .concentric-circles {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 250%;
+          aspect-ratio: 1/1;
+          background-image: repeating-radial-gradient(
+            circle at center,
+            transparent,
+            transparent 80px,
+            rgba(255, 87, 34, 0.03) 81px,
+            rgba(255, 87, 34, 0.03) 81.5px
+          );
+          pointer-events: none;
+          z-index: 0;
+        }
+        .video-glow {
+          box-shadow: 0 0 60px -10px rgba(255, 87, 34, 0.25);
+        }
+        [data-video-play-overlay][data-playing] .video-play-overlay {
+          opacity: 0;
+          pointer-events: none;
+        }
+        .editorial-text p {
+          @apply mb-10 leading-[1.8] text-charcoal text-xl md:text-2xl font-medium;
+        }
+        .editorial-text .highlight {
+          @apply bg-primary text-white px-2 py-0.5 rounded font-black;
+        }
+        .editorial-text .highlight-soft {
+          @apply bg-primary/20 text-deep-charcoal px-1.5 py-0.5 rounded;
+        }
+        .editorial-text strong {
+          @apply text-black font-extrabold;
+        }
+        .problem-intro p {
+          @apply leading-[1.85] mb-0;
+        }
+        .problem-intro {
+          @apply space-y-6;
+        }
         /* Blog typography (scoped for best reading experience) */
-        .blog-prose { @apply text-gray-800; }
-        .blog-prose h1 { @apply normal-case text-3xl md:text-5xl font-display font-black tracking-tight text-deep-charcoal mb-4; }
-        .blog-prose h2 { @apply normal-case text-2xl md:text-3xl font-display font-black tracking-tight text-deep-charcoal mt-12 mb-4; }
-        .blog-prose h3 { @apply normal-case text-xl md:text-2xl font-display font-black tracking-tight text-deep-charcoal mt-10 mb-3; }
+        .blog-prose {
+          @apply text-gray-800;
+        }
+        .blog-prose h1 {
+          @apply normal-case text-3xl md:text-5xl font-display font-black tracking-tight text-deep-charcoal mb-4;
+        }
+        .blog-prose h2 {
+          @apply normal-case text-2xl md:text-3xl font-display font-black tracking-tight text-deep-charcoal mt-12 mb-4;
+        }
+        .blog-prose h3 {
+          @apply normal-case text-xl md:text-2xl font-display font-black tracking-tight text-deep-charcoal mt-10 mb-3;
+        }
         /* Blog paragraphs: consistent base size for body and lists */
-        .blog-prose p { @apply mb-5 text-base md:text-lg leading-[1.7] text-gray-800 font-medium; }
-        .blog-prose p.lead { @apply text-lg md:text-xl leading-relaxed text-gray-700 mb-6; }
-        .blog-prose a { @apply text-primary font-bold underline decoration-primary/30 underline-offset-4 hover:decoration-primary; }
-        .blog-prose a.btn { @apply no-underline; }
-        .blog-prose ul { @apply my-6 pl-6 list-disc space-y-3 text-base md:text-lg leading-[1.75] font-medium; }
-        .blog-prose ol { @apply my-6 pl-6 list-decimal space-y-3 text-base md:text-lg leading-[1.75] font-medium; }
-        .blog-prose li { @apply text-gray-800; }
-        .blog-prose #toc { @apply text-base py-1 mt-8; }
-        .blog-prose #toc strong { @apply text-xs font-black uppercase tracking-widest text-gray-500 block mb-3; }
-        .blog-prose #toc ul { @apply text-sm md:text-base space-y-2.5 mt-0 font-medium pl-4; }
-        .blog-prose blockquote { @apply my-8 border-l-4 border-primary pl-6 pr-4 py-3 bg-primary/5 rounded-r-2xl italic text-gray-800; }
-        .blog-prose hr { @apply my-12 border-gray-200; }
-        .blog-prose code { @apply font-mono text-[0.95em] bg-gray-100 px-1.5 py-0.5 rounded border border-gray-200; }
-        .blog-prose pre { @apply my-8 p-5 bg-gray-950 text-gray-100 rounded-2xl overflow-x-auto border border-black/10; }
-        .blog-prose pre code { @apply bg-transparent p-0 border-0 text-gray-100; }
-        .blog-prose .callout { @apply my-10 p-6 md:p-8 bg-primary/5 border border-primary/10 rounded-2xl; }
-        .blog-prose .callout-title { @apply normal-case text-base font-black uppercase tracking-widest text-primary mb-2; }
-        .blog-prose .btn { @apply inline-flex items-center justify-center gap-2 px-6 py-4 min-h-[48px] rounded-xl font-black uppercase tracking-[0.18em] text-[10px] md:text-[11px] transition-all; }
-        .blog-prose .btn-primary { @apply bg-primary text-white hover:brightness-110 shadow-lg shadow-primary/25; }
-        .blog-prose .btn-outline { @apply bg-white text-deep-charcoal border border-gray-200 hover:border-primary/30 hover:text-primary; }
-        .blog-prose .btn-soft { @apply bg-primary/10 text-primary hover:bg-primary/15; }
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .blog-prose p {
+          @apply mb-5 text-base md:text-lg leading-[1.7] text-gray-800 font-medium;
+        }
+        .blog-prose p.lead {
+          @apply text-lg md:text-xl leading-relaxed text-gray-700 mb-6;
+        }
+        .blog-prose a {
+          @apply text-primary font-bold underline decoration-primary/30 underline-offset-4 hover:decoration-primary;
+        }
+        .blog-prose a.btn {
+          @apply no-underline;
+        }
+        .blog-prose ul {
+          @apply my-6 pl-6 list-disc space-y-3 text-base md:text-lg leading-[1.75] font-medium;
+        }
+        .blog-prose ol {
+          @apply my-6 pl-6 list-decimal space-y-3 text-base md:text-lg leading-[1.75] font-medium;
+        }
+        .blog-prose li {
+          @apply text-gray-800;
+        }
+        .blog-prose #toc {
+          @apply text-base py-1 mt-8;
+        }
+        .blog-prose #toc strong {
+          @apply text-xs font-black uppercase tracking-widest text-gray-500 block mb-3;
+        }
+        .blog-prose #toc ul {
+          @apply text-sm md:text-base space-y-2.5 mt-0 font-medium pl-4;
+        }
+        .blog-prose blockquote {
+          @apply my-8 border-l-4 border-primary pl-6 pr-4 py-3 bg-primary/5 rounded-r-2xl italic text-gray-800;
+        }
+        .blog-prose hr {
+          @apply my-12 border-gray-200;
+        }
+        .blog-prose code {
+          @apply font-mono text-[0.95em] bg-gray-100 px-1.5 py-0.5 rounded border border-gray-200;
+        }
+        .blog-prose pre {
+          @apply my-8 p-5 bg-gray-950 text-gray-100 rounded-2xl overflow-x-auto border border-black/10;
+        }
+        .blog-prose pre code {
+          @apply bg-transparent p-0 border-0 text-gray-100;
+        }
+        .blog-prose .callout {
+          @apply my-10 p-6 md:p-8 bg-primary/5 border border-primary/10 rounded-2xl;
+        }
+        .blog-prose .callout-title {
+          @apply normal-case text-base font-black uppercase tracking-widest text-primary mb-2;
+        }
+        .blog-prose .btn {
+          @apply inline-flex items-center justify-center gap-2 px-6 py-4 min-h-[48px] rounded-xl font-black uppercase tracking-[0.18em] text-[10px] md:text-[11px] transition-all;
+        }
+        .blog-prose .btn-primary {
+          @apply bg-primary text-white hover:brightness-110 shadow-lg shadow-primary/25;
+        }
+        .blog-prose .btn-outline {
+          @apply bg-white text-deep-charcoal border border-gray-200 hover:border-primary/30 hover:text-primary;
+        }
+        .blog-prose .btn-soft {
+          @apply bg-primary/10 text-primary hover:bg-primary/15;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
         /* Temporarily hidden: remove class sm-temporarily-hidden from these to show again. See HIDDEN_ELEMENTS below. */
-        .sm-temporarily-hidden { display: none !important; }
+        .sm-temporarily-hidden {
+          display: none !important;
+        }
         /* Article visual components */
         /* tuned to match original banners exactly: spacing, sizes, colors */
-        .article-hero { @apply bg-white border border-gray-100 rounded-3xl p-10 md:p-14 shadow-[0_20px_60px_-12px_rgba(34,34,34,0.18)] mb-8; }
-        .article-hero .kicker { @apply text-primary font-black uppercase text-sm tracking-widest mb-3; letter-spacing:0.14em; }
-        .article-hero h2 { @apply text-2xl md:text-5xl font-display font-black text-deep-charcoal mb-4; }
-        .article-hero p.lead { @apply text-lg md:text-2xl text-gray-600 leading-relaxed; }
-        .tip-banner { @apply mt-6 p-6 md:p-8 bg-primary/6 border-l-6 border-primary rounded-xl; }
-        .tip-banner strong { @apply text-deep-charcoal font-black; font-size:1.02rem; }
-        .stat-grid { @apply grid grid-cols-1 sm:grid-cols-3 gap-6 my-6; }
-        .stat-card { @apply bg-white border border-gray-100 rounded-2xl p-6 text-center shadow-md; }
-        .blog-prose .btn { @apply inline-flex items-center justify-center gap-2 px-7 py-4 min-h-[56px] rounded-xl font-black uppercase tracking-[0.18em] text-[11px] md:text-[12px] transition-all; }
-        .blog-prose .btn-primary { @apply bg-primary text-white hover:brightness-110 shadow-xl shadow-primary/30; }
+        .article-hero {
+          @apply bg-white border border-gray-100 rounded-3xl p-10 md:p-14 shadow-[0_20px_60px_-12px_rgba(34,34,34,0.18)] mb-8;
+        }
+        .article-hero .kicker {
+          @apply text-primary font-black uppercase text-sm tracking-widest mb-3;
+          letter-spacing: 0.14em;
+        }
+        .article-hero h2 {
+          @apply text-2xl md:text-5xl font-display font-black text-deep-charcoal mb-4;
+        }
+        .article-hero p.lead {
+          @apply text-lg md:text-2xl text-gray-600 leading-relaxed;
+        }
+        .tip-banner {
+          @apply mt-6 p-6 md:p-8 bg-primary/6 border-l-6 border-primary rounded-xl;
+        }
+        .tip-banner strong {
+          @apply text-deep-charcoal font-black;
+          font-size: 1.02rem;
+        }
+        .stat-grid {
+          @apply grid grid-cols-1 sm:grid-cols-3 gap-6 my-6;
+        }
+        .stat-card {
+          @apply bg-white border border-gray-100 rounded-2xl p-6 text-center shadow-md;
+        }
+        .blog-prose .btn {
+          @apply inline-flex items-center justify-center gap-2 px-7 py-4 min-h-[56px] rounded-xl font-black uppercase tracking-[0.18em] text-[11px] md:text-[12px] transition-all;
+        }
+        .blog-prose .btn-primary {
+          @apply bg-primary text-white hover:brightness-110 shadow-xl shadow-primary/30;
+        }
       }
       /* Make modal two-column layouts stack to one column on small screens */
       @media (max-width: 640px) {
@@ -151,12 +341,16 @@
         /* Replace left borders with top borders when stacked for visual separation */
         .max-w-5xl .md\\:border-l {
           border-left: none !important;
-          border-top: 1px solid rgba(229,231,235,1) !important;
+          border-top: 1px solid rgba(229, 231, 235, 1) !important;
         }
 
         /* Reduce large paddings in modal panels on small screens for better fit */
-        .max-w-5xl .md\\:p-12 { padding: 1.25rem !important; }
-        .max-w-5xl .p-8 { padding: 1rem !important; }
+        .max-w-5xl .md\\:p-12 {
+          padding: 1.25rem !important;
+        }
+        .max-w-5xl .p-8 {
+          padding: 1rem !important;
+        }
       }
 
       /* More specific modal stacking rules to prevent overlap on mobile */
@@ -181,14 +375,16 @@
           width: 100% !important;
         }
         /* Ensure box sizing and remove min-width to avoid overlap */
-        #lead-modal-panel, #lead-modal-panel * {
+        #lead-modal-panel,
+        #lead-modal-panel * {
           box-sizing: border-box !important;
           min-width: 0 !important;
         }
       }
       /* Ensure modal inner scroll areas become normal flow on small screens to avoid overlap */
       @media (max-width: 640px) {
-        #lead-modal-panel, #schedule-modal {
+        #lead-modal-panel,
+        #schedule-modal {
           max-height: calc(100vh - 2rem) !important;
           overflow: auto !important;
         }
@@ -211,560 +407,1135 @@
       }
     </style>
     {% block head_extras %}{% endblock %}
-</head>
-<body class="antialiased selection:bg-primary selection:text-white {% block body_class %}bg-light-base text-gray-800 font-sans leading-relaxed{% endblock %}">
-{% if ENABLE_GTM %}
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-ML2ZDNH2"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-{% endif %}
-{# HIDDEN_ELEMENTS: primary_bar, audit_bar, homepage_video, video_testimonials, cro_checklist, results_section, cro_video_testimonials, analytics_video_testimonials. To show/hide: add or remove from temporarily_hidden. #}
-{% set temporarily_hidden = ['video_testimonials', 'cro_checklist', 'results_section', 'cro_video_testimonials', 'analytics_video_testimonials'] %}
-{% block primary_bar %}
-<div id="primary_bar" class="bg-primary text-white text-[10px] md:text-xs font-black uppercase tracking-[0.25em] py-3.5 text-center border-b border-black/5 relative z-[110] {{ 'sm-temporarily-hidden' if 'primary_bar' in temporarily_hidden else '' }}">
-    Only accepting {{ primary_bar_slots }} more partner{{ 's' if primary_bar_slots != 1 else '' }} for {{ primary_bar_month }}.
-</div>
-{% endblock %}
-{% block header %}
-<header class="sticky top-0 left-0 right-0 z-[100] bg-black backdrop-blur-md border-b border-white/10">
-    <nav class="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between" aria-label="Main navigation">
+  </head>
+  <body
+    class="antialiased selection:bg-primary selection:text-white {% block body_class %}bg-light-base text-gray-800 font-sans leading-relaxed{% endblock %}"
+  >
+    {% if ENABLE_GTM %}
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-ML2ZDNH2"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    {% endif %} {# HIDDEN_ELEMENTS: primary_bar, audit_bar, homepage_video,
+    video_testimonials, cro_checklist, results_section, cro_video_testimonials,
+    analytics_video_testimonials. To show/hide: add or remove from
+    temporarily_hidden. #} {% set temporarily_hidden = ['video_testimonials',
+    'cro_checklist', 'results_section', 'cro_video_testimonials',
+    'analytics_video_testimonials'] %} {% block primary_bar %}
+    <div
+      id="primary_bar"
+      class="bg-primary text-white text-[10px] md:text-xs font-black uppercase tracking-[0.25em] py-3.5 text-center border-b border-black/5 relative z-[110] {{ 'sm-temporarily-hidden' if 'primary_bar' in temporarily_hidden else '' }}"
+    >
+      Only accepting {{ primary_bar_slots }} more partner{{ 's' if
+      primary_bar_slots != 1 else '' }} for {{ primary_bar_month }}.
+    </div>
+    {% endblock %} {% block header %}
+    <header
+      class="sticky top-0 left-0 right-0 z-[100] bg-black backdrop-blur-md border-b border-white/10"
+    >
+      <nav
+        class="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between"
+        aria-label="Main navigation"
+      >
         <div class="flex items-center gap-4 sm:gap-8">
-            <a href="{{ url_for('main.index') }}" class="flex items-center gap-2 group cursor-pointer min-h-[44px]">
-                <div class="w-9 h-9 bg-primary rounded flex items-center justify-center rotate-3 transition-transform">
-                    <span class="text-white font-black text-xl">S</span>
-                </div>
-                <span class="font-display text-lg sm:text-xl tracking-tighter uppercase font-extrabold text-white">Sparksmetrics</span>
-            </a>
+          <a
+            href="{{ url_for('main.index') }}"
+            class="flex items-center gap-2 group cursor-pointer min-h-[44px]"
+          >
+            <div
+              class="w-9 h-9 bg-primary rounded flex items-center justify-center rotate-3 transition-transform"
+            >
+              <span class="text-white font-black text-xl">S</span>
+            </div>
+            <span
+              class="font-display text-lg sm:text-xl tracking-tighter uppercase font-extrabold text-white"
+              >Sparksmetrics</span
+            >
+          </a>
         </div>
         <div class="flex items-center gap-2 sm:gap-8">
-            <div class="hidden md:flex items-center gap-8">
-                <a class="text-[11px] font-bold uppercase tracking-widest hover:text-primary transition-colors text-white py-3 min-h-[44px] inline-flex items-center" href="{{ url_for('main.cro') }}">CRO</a>
-                <a class="text-[11px] font-bold uppercase tracking-widest hover:text-primary transition-colors text-white py-3 min-h-[44px] inline-flex items-center" href="{{ url_for('main.analytics') }}">Analytics</a>
-                <a class="text-[11px] font-bold uppercase tracking-widest hover:text-primary transition-colors text-white py-3 min-h-[44px] inline-flex items-center" href="{{ url_for('main.results') }}">Results</a>
-            </div>
-            <a class="hidden md:inline-flex px-6 py-3 min-h-[44px] items-center justify-center bg-primary text-white text-xs font-black uppercase rounded hover:brightness-110 transition-all shadow-lg shadow-primary/20" href="{{ url_for('main.schedule_a_call') }}">Talk to us</a>
-            <button type="button" id="nav-menu-toggle" class="md:hidden p-3 min-h-[44px] min-w-[44px] flex items-center justify-center text-white hover:bg-white/10 rounded-lg transition-colors -m-2" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
-                <span class="material-symbols-outlined text-2xl" aria-hidden="true">menu</span>
-            </button>
+          <div class="hidden md:flex items-center gap-8">
+            <a
+              class="text-[11px] font-bold uppercase tracking-widest hover:text-primary transition-colors text-white py-3 min-h-[44px] inline-flex items-center"
+              href="{{ url_for('main.cro') }}"
+              >CRO</a
+            >
+            <a
+              class="text-[11px] font-bold uppercase tracking-widest hover:text-primary transition-colors text-white py-3 min-h-[44px] inline-flex items-center"
+              href="{{ url_for('main.analytics') }}"
+              >Analytics</a
+            >
+            <a
+              class="text-[11px] font-bold uppercase tracking-widest hover:text-primary transition-colors text-white py-3 min-h-[44px] inline-flex items-center"
+              href="{{ url_for('main.results') }}"
+              >Results</a
+            >
+          </div>
+          <a
+            class="hidden md:inline-flex px-6 py-3 min-h-[44px] items-center justify-center bg-primary text-white text-xs font-black uppercase rounded hover:brightness-110 transition-all shadow-lg shadow-primary/20"
+            href="{{ url_for('main.schedule_a_call') }}"
+            >Talk to us</a
+          >
+          <button
+            type="button"
+            id="nav-menu-toggle"
+            class="md:hidden p-3 min-h-[44px] min-w-[44px] flex items-center justify-center text-white hover:bg-white/10 rounded-lg transition-colors -m-2"
+            aria-expanded="false"
+            aria-controls="nav-menu"
+            aria-label="Open menu"
+          >
+            <span class="material-symbols-outlined text-2xl" aria-hidden="true"
+              >menu</span
+            >
+          </button>
         </div>
-    </nav>
-    <div id="nav-menu" class="md:hidden hidden absolute top-full left-0 right-0 bg-black border-b border-white/10 shadow-lg" aria-hidden="true">
+      </nav>
+      <div
+        id="nav-menu"
+        class="md:hidden hidden absolute top-full left-0 right-0 bg-black border-b border-white/10 shadow-lg"
+        aria-hidden="true"
+      >
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-1">
-            <a class="min-h-[44px] px-4 py-3 flex items-center text-sm font-bold uppercase tracking-widest text-white hover:bg-white/10 rounded-lg transition-colors" href="{{ url_for('main.cro') }}">CRO</a>
-            <a class="min-h-[44px] px-4 py-3 flex items-center text-sm font-bold uppercase tracking-widest text-white hover:bg-white/10 rounded-lg transition-colors" href="{{ url_for('main.analytics') }}">Analytics</a>
-            <a class="min-h-[44px] px-4 py-3 flex items-center text-sm font-bold uppercase tracking-widest text-white hover:bg-white/10 rounded-lg transition-colors" href="{{ url_for('main.results') }}">Results</a>
-            <a class="min-h-[44px] px-4 py-3 flex items-center text-sm font-bold uppercase text-primary bg-primary/10 rounded-lg mt-2" href="{{ url_for('main.schedule_a_call') }}">Talk to us</a>
+          <a
+            class="min-h-[44px] px-4 py-3 flex items-center text-sm font-bold uppercase tracking-widest text-white hover:bg-white/10 rounded-lg transition-colors"
+            href="{{ url_for('main.cro') }}"
+            >CRO</a
+          >
+          <a
+            class="min-h-[44px] px-4 py-3 flex items-center text-sm font-bold uppercase tracking-widest text-white hover:bg-white/10 rounded-lg transition-colors"
+            href="{{ url_for('main.analytics') }}"
+            >Analytics</a
+          >
+          <a
+            class="min-h-[44px] px-4 py-3 flex items-center text-sm font-bold uppercase tracking-widest text-white hover:bg-white/10 rounded-lg transition-colors"
+            href="{{ url_for('main.results') }}"
+            >Results</a
+          >
+          <a
+            class="min-h-[44px] px-4 py-3 flex items-center text-sm font-bold uppercase text-primary bg-primary/10 rounded-lg mt-2"
+            href="{{ url_for('main.schedule_a_call') }}"
+            >Talk to us</a
+          >
         </div>
-    </div>
-</header>
-{% endblock %}
-<main>
-    {% block content %}{% endblock %}
-</main>
-{% block footer %}
-<footer class="bg-black border-t border-white/5">
-    <div class="max-w-7xl mx-auto px-6 py-16 md:py-20">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-10">
-            <div class="sm:col-span-2 lg:col-span-1">
-                <a href="{{ url_for('main.index') }}" class="inline-flex items-center gap-2 group">
-                    <div class="w-10 h-10 bg-primary rounded flex items-center justify-center rotate-3 transition-transform group-hover:rotate-0">
-                        <span class="text-white font-black text-lg">S</span>
-                    </div>
-                    <span class="font-display text-xl tracking-tighter uppercase font-extrabold text-white">Sparksmetrics</span>
-                </a>
-                <p class="mt-4 text-slate-500 text-sm max-w-xs">Results-driven CRO and analytics for brands that scale.</p>
-                <a href="https://www.youtube.com/@stijnwollerich" target="_blank" rel="noopener noreferrer" class="mt-5 inline-flex items-center gap-2 text-slate-400 hover:text-primary transition-colors group/yt" aria-label="Sparksmetrics on YouTube">
-                    <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-700 group-hover/yt:bg-primary/20 transition-colors" aria-hidden="true">
-                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                        </svg>
-                    </span>
-                    <span class="text-sm font-bold uppercase tracking-widest">YouTube</span>
-                </a>
-            </div>
-            <div>
-                <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">Services</h3>
-                <ul class="space-y-3">
-                    <li><a class="text-sm text-slate-400 hover:text-white transition-colors" href="{{ url_for('main.cro') }}">CRO</a></li>
-                    <li><a class="text-sm text-slate-400 hover:text-white transition-colors" href="{{ url_for('main.cro_ebook') }}">Free CRO Ebook</a></li>
-                    <li><a class="text-sm text-slate-400 hover:text-white transition-colors" href="{{ url_for('main.analytics') }}">Analytics</a></li>
-                    <li><a class="text-sm text-slate-400 hover:text-white transition-colors" href="{{ url_for('main.results') }}">Results</a></li>
-                    <li><a class="text-sm text-slate-400 hover:text-white transition-colors" href="{{ url_for('main.blog_index') }}">Blog</a></li>
-                    <li><a class="text-sm text-slate-400 hover:text-white transition-colors" href="#" data-audit-modal data-title="Get a FREE 24-Hour CRO Audit" data-description="Enter your email and we’ll get in touch to schedule your free audit. Limited to 3 brands per week." data-button-text="Claim my free audit">Schedule a Call</a></li>
-                    {% block footer_links %}{% endblock %}
-                </ul>
-            </div>
-            <div>
-                <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">Legal</h3>
-                <ul class="space-y-3">
-                    <li><a class="text-sm text-slate-400 hover:text-white transition-colors" href="{{ url_for('main.privacy_policy') }}">Privacy Policy</a></li>
-                    <li><a class="text-sm text-slate-400 hover:text-white transition-colors" href="{{ url_for('main.terms') }}">Terms of Service</a></li>
-                </ul>
-            </div>
+      </div>
+    </header>
+    {% endblock %}
+    <main>{% block content %}{% endblock %}</main>
+    {% block footer %}
+    <footer class="bg-black border-t border-white/5">
+      <div class="max-w-7xl mx-auto px-6 py-16 md:py-20">
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-10"
+        >
+          <div class="sm:col-span-2 lg:col-span-1">
+            <a
+              href="{{ url_for('main.index') }}"
+              class="inline-flex items-center gap-2 group"
+            >
+              <div
+                class="w-10 h-10 bg-primary rounded flex items-center justify-center rotate-3 transition-transform group-hover:rotate-0"
+              >
+                <span class="text-white font-black text-lg">S</span>
+              </div>
+              <span
+                class="font-display text-xl tracking-tighter uppercase font-extrabold text-white"
+                >Sparksmetrics</span
+              >
+            </a>
+            <p class="mt-4 text-slate-500 text-sm max-w-xs">
+              Results-driven CRO and analytics for brands that scale.
+            </p>
+            <a
+              href="https://www.youtube.com/@stijnwollerich"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="mt-5 inline-flex items-center gap-2 text-slate-400 hover:text-primary transition-colors group/yt"
+              aria-label="Sparksmetrics on YouTube"
+            >
+              <span
+                class="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-700 group-hover/yt:bg-primary/20 transition-colors"
+                aria-hidden="true"
+              >
+                <svg
+                  class="w-5 h-5"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"
+                  />
+                </svg>
+              </span>
+              <span class="text-sm font-bold uppercase tracking-widest"
+                >YouTube</span
+              >
+            </a>
+          </div>
+          <div>
+            <h3
+              class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4"
+            >
+              Services
+            </h3>
+            <ul class="space-y-3">
+              <li>
+                <a
+                  class="text-sm text-slate-400 hover:text-white transition-colors"
+                  href="{{ url_for('main.cro') }}"
+                  >CRO</a
+                >
+              </li>
+              <li>
+                <a
+                  class="text-sm text-slate-400 hover:text-white transition-colors"
+                  href="{{ url_for('main.cro_ebook') }}"
+                  >Free CRO Ebook</a
+                >
+              </li>
+              <li>
+                <a
+                  class="text-sm text-slate-400 hover:text-white transition-colors"
+                  href="{{ url_for('main.analytics') }}"
+                  >Analytics</a
+                >
+              </li>
+              <li>
+                <a
+                  class="text-sm text-slate-400 hover:text-white transition-colors"
+                  href="{{ url_for('main.results') }}"
+                  >Results</a
+                >
+              </li>
+              <li>
+                <a
+                  class="text-sm text-slate-400 hover:text-white transition-colors"
+                  href="{{ url_for('main.blog_index') }}"
+                  >Blog</a
+                >
+              </li>
+              <li>
+                <a
+                  class="text-sm text-slate-400 hover:text-white transition-colors"
+                  href="#"
+                  data-audit-modal
+                  data-title="Get a FREE 24-Hour CRO Audit"
+                  data-description="Enter your email and we’ll get in touch to schedule your free audit. Limited to 3 brands per week."
+                  data-button-text="Claim my free audit"
+                  >Schedule a Call</a
+                >
+              </li>
+              {% block footer_links %}{% endblock %}
+            </ul>
+          </div>
+          <div>
+            <h3
+              class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4"
+            >
+              Legal
+            </h3>
+            <ul class="space-y-3">
+              <li>
+                <a
+                  class="text-sm text-slate-400 hover:text-white transition-colors"
+                  href="{{ url_for('main.privacy_policy') }}"
+                  >Privacy Policy</a
+                >
+              </li>
+              <li>
+                <a
+                  class="text-sm text-slate-400 hover:text-white transition-colors"
+                  href="{{ url_for('main.terms') }}"
+                  >Terms of Service</a
+                >
+              </li>
+            </ul>
+          </div>
         </div>
         <div class="mt-14 pt-8 border-t border-white/5">
-            <p class="text-[10px] text-slate-600 font-medium uppercase tracking-widest">© {{ now().year }} Sparksmetrics. All Rights Reserved.</p>
+          <p
+            class="text-[10px] text-slate-600 font-medium uppercase tracking-widest"
+          >
+            © {{ now().year }} Sparksmetrics. All Rights Reserved.
+          </p>
         </div>
-    </div>
-</footer>
-{% endblock %}
-{# Single lead modal: resource download or audit. Form → thank you + Calendly. Content from trigger data. #}
-<div id="lead-modal" class="fixed inset-0 z-[200] hidden" aria-hidden="true" aria-modal="true" role="dialog" aria-labelledby="lead-modal-title">
-  <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" data-lead-close></div>
-  <div class="absolute inset-0 flex items-center justify-center p-4 md:p-6 pointer-events-none">
-    <div class="bg-white rounded-3xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden pointer-events-auto flex flex-col border border-gray-100" id="lead-modal-panel">
-      {# Form state: email capture + sidebar #}
-      <div id="lead-form-state" class="flex flex-col md:flex-row flex-1 min-h-0">
-        <div class="p-8 md:p-12 md:w-[55%] flex flex-col min-w-0 overflow-y-auto">
-          <div class="flex items-start justify-between gap-4 mb-6">
-            <div class="flex items-center gap-2 flex-wrap" id="lead-modal-badges"></div>
-            <button type="button" class="p-3 min-h-[44px] min-w-[44px] -m-2 text-slate-400 hover:text-deep-charcoal rounded-lg transition-colors shrink-0 flex items-center justify-center" data-lead-close aria-label="Close">
-              <span class="material-symbols-outlined">close</span>
-            </button>
+      </div>
+    </footer>
+    {% endblock %} {# Single lead modal: resource download or audit. Form →
+    thank you + Calendly. Content from trigger data. #}
+    <div
+      id="lead-modal"
+      class="fixed inset-0 z-[200] hidden"
+      aria-hidden="true"
+      aria-modal="true"
+      role="dialog"
+      aria-labelledby="lead-modal-title"
+    >
+      <div
+        class="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        data-lead-close
+      ></div>
+      <div
+        class="absolute inset-0 flex items-center justify-center p-4 md:p-6 pointer-events-none"
+      >
+        <div
+          class="bg-white rounded-3xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden pointer-events-auto flex flex-col border border-gray-100"
+          id="lead-modal-panel"
+        >
+          {# Form state: email capture + sidebar #}
+          <div
+            id="lead-form-state"
+            class="flex flex-col md:flex-row flex-1 min-h-0"
+          >
+            <div
+              class="p-8 md:p-12 md:w-[55%] flex flex-col min-w-0 overflow-y-auto"
+            >
+              <div class="flex items-start justify-between gap-4 mb-6">
+                <div
+                  class="flex items-center gap-2 flex-wrap"
+                  id="lead-modal-badges"
+                ></div>
+                <button
+                  type="button"
+                  class="p-3 min-h-[44px] min-w-[44px] -m-2 text-slate-400 hover:text-deep-charcoal rounded-lg transition-colors shrink-0 flex items-center justify-center"
+                  data-lead-close
+                  aria-label="Close"
+                >
+                  <span class="material-symbols-outlined">close</span>
+                </button>
+              </div>
+              <h2
+                id="lead-modal-title"
+                class="text-2xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tighter mb-3"
+              ></h2>
+              <p
+                id="lead-modal-description"
+                class="text-gray-600 text-base md:text-lg mb-8"
+              ></p>
+              <form id="lead-form" class="space-y-6">
+                <input type="hidden" name="resource" id="lead-slug" value="" />
+                <input
+                  type="hidden"
+                  name="modal_type"
+                  id="lead-modal-type"
+                  value="resource"
+                />
+                <div>
+                  <label
+                    for="lead-fname"
+                    class="block text-xs font-black uppercase tracking-widest text-deep-charcoal mb-2"
+                    >First name</label
+                  >
+                  <input
+                    type="text"
+                    id="lead-fname"
+                    name="fname"
+                    required
+                    placeholder="Your first name"
+                    class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl text-deep-charcoal placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
+                    autocomplete="given-name"
+                  />
+                </div>
+                <div>
+                  <label
+                    for="lead-email"
+                    class="block text-xs font-black uppercase tracking-widest text-deep-charcoal mb-2"
+                    >Email</label
+                  >
+                  <input
+                    type="email"
+                    id="lead-email"
+                    name="email"
+                    required
+                    placeholder="you@company.com"
+                    class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl text-deep-charcoal placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
+                    autocomplete="email"
+                  />
+                </div>
+                <div>
+                  <label
+                    for="lead-website-url"
+                    class="block text-xs font-black uppercase tracking-widest text-deep-charcoal mb-2"
+                    >Store URL
+                    <span class="font-medium normal-case text-gray-500"
+                      >(optional)</span
+                    ></label
+                  >
+                  <input
+                    type="url"
+                    id="lead-website-url"
+                    name="website_url"
+                    inputmode="url"
+                    placeholder="https://yourstore.com"
+                    class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl text-deep-charcoal placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
+                    autocomplete="url"
+                  />
+                  <p class="text-xs text-gray-500 mt-2">
+                    If provided, we may run an internal store audit snapshot to
+                    personalize follow-up. We won’t email you a scan report from
+                    this form.
+                  </p>
+                </div>
+                <button
+                  type="submit"
+                  id="lead-submit"
+                  class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 px-6 py-4 bg-primary text-white font-display text-sm font-black uppercase rounded-xl hover:brightness-110 transition-all shadow-lg shadow-primary/25"
+                >
+                  <span id="lead-submit-text">Send me the resource</span>
+                  <span class="material-symbols-outlined text-lg"
+                    >download</span
+                  >
+                </button>
+              </form>
+              <div class="mt-8 space-y-4">
+                <p class="flex items-center gap-2 text-gray-600 text-sm">
+                  <span class="material-symbols-outlined text-primary text-lg"
+                    >lock</span
+                  >
+                  Your data is private.
+                </p>
+                <p
+                  class="text-xs text-gray-500 font-bold uppercase tracking-widest"
+                >
+                  Used by 200+ brands · Same process for $10M+ funnels
+                </p>
+              </div>
+            </div>
+            <div
+              class="bg-light-base border-t md:border-t-0 md:border-l border-gray-100 p-8 md:p-12 md:w-[45%] rounded-b-3xl md:rounded-b-none md:rounded-r-3xl flex flex-col overflow-y-auto"
+            >
+              <div
+                id="lead-sidebar-badge"
+                class="inline-flex items-center gap-2 px-3 py-2 bg-primary/10 rounded-lg w-fit mb-8"
+              >
+                <span class="material-symbols-outlined text-primary text-lg"
+                  >schedule</span
+                >
+                <span
+                  class="text-[10px] font-black uppercase tracking-widest text-primary"
+                  >Instant download</span
+                >
+              </div>
+              <p
+                class="text-[10px] font-black uppercase tracking-widest text-primary mb-4"
+              >
+                What you get
+              </p>
+              <ul
+                id="lead-modal-bullets"
+                class="space-y-5 text-sm text-gray-700 mb-10"
+              >
+                <li class="flex gap-3">
+                  <span class="material-symbols-outlined text-primary shrink-0"
+                    >check_circle</span
+                  >
+                  Every leak and conversion lever we audit for
+                </li>
+                <li class="flex gap-3">
+                  <span class="material-symbols-outlined text-primary shrink-0"
+                    >check_circle</span
+                  >
+                  Prioritized fix list you can use today
+                </li>
+                <li class="flex gap-3">
+                  <span class="material-symbols-outlined text-primary shrink-0"
+                    >check_circle</span
+                  >
+                  Same blueprint used for $10M+ brands
+                </li>
+              </ul>
+              <div class="mt-auto pt-8 border-t border-gray-200 relative">
+                <span
+                  class="absolute top-6 right-0 material-symbols-outlined text-primary text-xl"
+                  >verified</span
+                >
+                <p class="text-deep-charcoal font-bold text-sm mb-1">
+                  Verified partner
+                </p>
+                <p
+                  class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-3"
+                >
+                  CRO &amp; analytics
+                </p>
+                <p class="text-gray-600 text-sm italic leading-snug">
+                  "Stijn is a great go-to resource for building a proper
+                  infrastructure for Google Analytics and setting up the
+                  dashboard so you get access to your data in a simple way. You
+                  only need to explain the purpose and he'll outline a great
+                  strategy."
+                </p>
+              </div>
+            </div>
           </div>
-          <h2 id="lead-modal-title" class="text-2xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tighter mb-3"></h2>
-          <p id="lead-modal-description" class="text-gray-600 text-base md:text-lg mb-8"></p>
-          <form id="lead-form" class="space-y-6">
-            <input type="hidden" name="resource" id="lead-slug" value=""/>
-            <input type="hidden" name="modal_type" id="lead-modal-type" value="resource"/>
-            <div>
-              <label for="lead-fname" class="block text-xs font-black uppercase tracking-widest text-deep-charcoal mb-2">First name</label>
-              <input type="text" id="lead-fname" name="fname" required placeholder="Your first name" class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl text-deep-charcoal placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" autocomplete="given-name"/>
+          {# Thank-you state: full modal about scheduling — Calendly one side,
+          reasons + info other side #}
+          <div
+            id="lead-thankyou-state"
+            class="hidden flex flex-col md:flex-row flex-1 min-h-0"
+          >
+            <div
+              class="flex flex-col md:w-[55%] min-h-[70vh] md:min-h-[80vh] bg-gray-50"
+            >
+              <div
+                class="flex items-center justify-between p-4 border-b border-gray-200 shrink-0"
+              >
+                <span
+                  class="text-xs font-black uppercase tracking-widest text-primary"
+                  >Pick a time</span
+                >
+                <button
+                  type="button"
+                  class="p-2 -m-2 text-slate-400 hover:text-deep-charcoal rounded-lg transition-colors"
+                  data-lead-close
+                  aria-label="Close"
+                >
+                  <span class="material-symbols-outlined">close</span>
+                </button>
+              </div>
+              <div class="flex-1 min-h-0">
+                <iframe
+                  id="lead-calendly-iframe"
+                  title="Schedule a call"
+                  class="w-full h-full min-h-[500px]"
+                  src="about:blank"
+                ></iframe>
+              </div>
             </div>
-            <div>
-              <label for="lead-email" class="block text-xs font-black uppercase tracking-widest text-deep-charcoal mb-2">Email</label>
-              <input type="email" id="lead-email" name="email" required placeholder="you@company.com" class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl text-deep-charcoal placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" autocomplete="email"/>
+            <div
+              class="p-8 md:p-12 md:w-[45%] flex flex-col overflow-y-auto bg-white border-t md:border-t-0 md:border-l border-gray-100 rounded-b-3xl md:rounded-b-none md:rounded-r-3xl"
+            >
+              <span class="material-symbols-outlined text-primary text-4xl mb-4"
+                >check_circle</span
+              >
+              <h2
+                class="text-xl md:text-3xl font-display font-black text-deep-charcoal uppercase tracking-tighter mb-2"
+              >
+                You’re in. Now let’s talk.
+              </h2>
+              <p
+                id="lead-thankyou-message"
+                class="text-gray-600 text-base mb-8"
+              >
+                Pick a time on the left for a free 30-minute strategy session.
+              </p>
+              <div class="mb-8">
+                <h3
+                  class="text-primary font-display font-black uppercase tracking-tighter text-sm mb-5"
+                >
+                  Why book a call?
+                </h3>
+                <ul class="space-y-5">
+                  <li
+                    class="flex gap-4 p-4 rounded-xl bg-light-base border border-gray-100"
+                  >
+                    <span
+                      class="material-symbols-outlined text-primary shrink-0 mt-0.5"
+                      >check_circle</span
+                    >
+                    <div>
+                      <p class="font-bold text-deep-charcoal mb-1">No pitch.</p>
+                      <p class="text-gray-600 text-sm leading-relaxed mb-0">
+                        We focus on your funnel and your next steps—not a sales
+                        script.
+                      </p>
+                    </div>
+                  </li>
+                  <li
+                    class="flex gap-4 p-4 rounded-xl bg-light-base border border-gray-100"
+                  >
+                    <span
+                      class="material-symbols-outlined text-primary shrink-0 mt-0.5"
+                      >check_circle</span
+                    >
+                    <div>
+                      <p class="font-bold text-deep-charcoal mb-1">
+                        Clear next steps.
+                      </p>
+                      <p class="text-gray-600 text-sm leading-relaxed mb-0">
+                        You’ll leave with a clear picture of where you’re
+                        leaking and what to fix first.
+                      </p>
+                    </div>
+                  </li>
+                  <li
+                    class="flex gap-4 p-4 rounded-xl bg-light-base border border-gray-100"
+                  >
+                    <span
+                      class="material-symbols-outlined text-primary shrink-0 mt-0.5"
+                      >check_circle</span
+                    >
+                    <div>
+                      <p class="font-bold text-deep-charcoal mb-1">
+                        Same process we use for $10M+ brands.
+                      </p>
+                      <p class="text-gray-600 text-sm leading-relaxed mb-0">
+                        Data, audits, and prioritization—not guesswork.
+                      </p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <p
+                class="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-6"
+              >
+                Used by 200+ brands
+              </p>
+              <div class="pt-6 border-t border-gray-200 relative">
+                <span
+                  class="absolute top-6 right-0 material-symbols-outlined text-primary text-lg"
+                  >verified</span
+                >
+                <p class="text-deep-charcoal font-bold text-sm mb-1">
+                  Verified partner
+                </p>
+                <p
+                  class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2"
+                >
+                  CRO &amp; analytics
+                </p>
+                <p class="text-gray-600 text-sm italic leading-snug">
+                  "Stijn is a great go-to resource for building a proper
+                  infrastructure for Google Analytics and setting up the
+                  dashboard so you get access to your data in a simple way."
+                </p>
+              </div>
             </div>
-            <div>
-              <label for="lead-website-url" class="block text-xs font-black uppercase tracking-widest text-deep-charcoal mb-2">Store URL <span class="font-medium normal-case text-gray-500">(optional)</span></label>
-              <input type="url" id="lead-website-url" name="website_url" inputmode="url" placeholder="https://yourstore.com" class="w-full px-5 py-4 border-2 border-gray-200 rounded-xl text-deep-charcoal placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors" autocomplete="url"/>
-              <p class="text-xs text-gray-500 mt-2">If provided, we may run an internal store audit snapshot to personalize follow-up. We won’t email you a scan report from this form.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    {# Schedule-a-call modal: Calendly only, no form. Opened by links to
+    schedule-a-call. #}
+    <div
+      id="schedule-modal"
+      class="fixed inset-0 z-[200] hidden"
+      aria-hidden="true"
+      aria-modal="true"
+      role="dialog"
+      aria-labelledby="schedule-modal-title"
+    >
+      <div
+        class="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        data-schedule-close
+      ></div>
+      <div
+        class="absolute inset-0 flex items-center justify-center p-4 md:p-6 pointer-events-none"
+      >
+        <div
+          class="bg-white rounded-3xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden pointer-events-auto flex flex-col border border-gray-100"
+        >
+          <div class="flex flex-col md:flex-row flex-1 min-h-0">
+            <div
+              class="flex flex-col md:w-[55%] min-h-[70vh] md:min-h-[80vh] bg-gray-50"
+            >
+              <div
+                class="flex items-center justify-between p-4 border-b border-gray-200 shrink-0"
+              >
+                <span
+                  class="text-xs font-black uppercase tracking-widest text-primary"
+                  >Pick a time</span
+                >
+                <button
+                  type="button"
+                  class="p-2 -m-2 text-slate-400 hover:text-deep-charcoal rounded-lg transition-colors"
+                  data-schedule-close
+                  aria-label="Close"
+                >
+                  <span class="material-symbols-outlined">close</span>
+                </button>
+              </div>
+              <div class="flex-1 min-h-0">
+                <iframe
+                  id="schedule-calendly-iframe"
+                  title="Schedule a call"
+                  class="w-full h-full min-h-[500px]"
+                  src="about:blank"
+                ></iframe>
+              </div>
             </div>
-            <button type="submit" id="lead-submit" class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 px-6 py-4 bg-primary text-white font-display text-sm font-black uppercase rounded-xl hover:brightness-110 transition-all shadow-lg shadow-primary/25">
-              <span id="lead-submit-text">Send me the resource</span>
-              <span class="material-symbols-outlined text-lg">download</span>
-            </button>
-          </form>
-          <div class="mt-8 space-y-4">
-            <p class="flex items-center gap-2 text-gray-600 text-sm">
-              <span class="material-symbols-outlined text-primary text-lg">lock</span>
-              Your data is private.
+            <div
+              class="p-8 md:p-12 md:w-[45%] flex flex-col overflow-y-auto bg-white border-t md:border-t-0 md:border-l border-gray-100 rounded-b-3xl md:rounded-b-none md:rounded-r-3xl"
+            >
+              <span class="material-symbols-outlined text-primary text-4xl mb-4"
+                >schedule</span
+              >
+              <h2
+                id="schedule-modal-title"
+                class="text-xl md:text-3xl font-display font-black text-deep-charcoal uppercase tracking-tighter mb-2"
+              >
+                Book a free 30‑minute call
+              </h2>
+              <p class="text-gray-600 text-base mb-8">
+                Pick a time on the left. No pitch—we focus on your funnel and
+                next steps.
+              </p>
+              <div class="mb-8">
+                <h3
+                  class="text-primary font-display font-black uppercase tracking-tighter text-sm mb-5"
+                >
+                  Why book a call?
+                </h3>
+                <ul class="space-y-5">
+                  <li
+                    class="flex gap-4 p-4 rounded-xl bg-light-base border border-gray-100"
+                  >
+                    <span
+                      class="material-symbols-outlined text-primary shrink-0 mt-0.5"
+                      >check_circle</span
+                    >
+                    <div>
+                      <p class="font-bold text-deep-charcoal mb-1">No pitch.</p>
+                      <p class="text-gray-600 text-sm leading-relaxed mb-0">
+                        We focus on your funnel and your next steps—not a sales
+                        script.
+                      </p>
+                    </div>
+                  </li>
+                  <li
+                    class="flex gap-4 p-4 rounded-xl bg-light-base border border-gray-100"
+                  >
+                    <span
+                      class="material-symbols-outlined text-primary shrink-0 mt-0.5"
+                      >check_circle</span
+                    >
+                    <div>
+                      <p class="font-bold text-deep-charcoal mb-1">
+                        Clear next steps.
+                      </p>
+                      <p class="text-gray-600 text-sm leading-relaxed mb-0">
+                        You'll leave with a clear picture of where you're
+                        leaking and what to fix first.
+                      </p>
+                    </div>
+                  </li>
+                  <li
+                    class="flex gap-4 p-4 rounded-xl bg-light-base border border-gray-100"
+                  >
+                    <span
+                      class="material-symbols-outlined text-primary shrink-0 mt-0.5"
+                      >check_circle</span
+                    >
+                    <div>
+                      <p class="font-bold text-deep-charcoal mb-1">
+                        Same process we use for $10M+ brands.
+                      </p>
+                      <p class="text-gray-600 text-sm leading-relaxed mb-0">
+                        Data, audits, and prioritization—not guesswork.
+                      </p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <p
+                class="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-6"
+              >
+                Used by 200+ brands
+              </p>
+              <div class="pt-6 border-t border-gray-200 relative">
+                <span
+                  class="absolute top-6 right-0 material-symbols-outlined text-primary text-lg"
+                  >verified</span
+                >
+                <p class="text-deep-charcoal font-bold text-sm mb-1">
+                  Verified partner
+                </p>
+                <p
+                  class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2"
+                >
+                  CRO &amp; analytics
+                </p>
+                <p class="text-gray-600 text-sm italic leading-snug">
+                  "Stijn is a great go-to resource for building a proper
+                  infrastructure for Google Analytics and setting up the
+                  dashboard so you get access to your data in a simple way."
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% block audit_bar %}
+    <div
+      id="audit-bar"
+      class="fixed bottom-0 left-0 right-0 z-[90] bg-white border-t border-slate-200 px-4 py-2 shadow-[0_-10px_40px_rgba(0,0,0,0.08)] transition-transform duration-300 {{ 'sm-temporarily-hidden' if 'audit_bar' in temporarily_hidden else '' }}"
+      role="banner"
+      aria-label="Free CRO audit offer"
+      style="transform: translateY(100%); visibility: hidden"
+    >
+      <div
+        class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2"
+      >
+        <div class="flex items-center gap-2">
+          <div
+            class="w-7 h-7 md:w-8 md:h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0"
+          >
+            <span
+              class="material-symbols-outlined text-primary text-base md:text-lg"
+              >analytics</span
+            >
+          </div>
+          <div>
+            <p
+              class="text-charcoal font-black text-xs md:text-sm tracking-tight uppercase leading-none mb-0"
+            >
+              Get a FREE 24-HOUR CRO AUDIT
             </p>
-            <p class="text-xs text-gray-500 font-bold uppercase tracking-widest">Used by 200+ brands · Same process for $10M+ funnels</p>
+            <p
+              class="text-slate-500 text-[9px] md:text-[10px] font-bold uppercase leading-tight mb-0"
+            >
+              Limited to 3 brands per week. Secure yours now.
+            </p>
           </div>
-        </div>
-        <div class="bg-light-base border-t md:border-t-0 md:border-l border-gray-100 p-8 md:p-12 md:w-[45%] rounded-b-3xl md:rounded-b-none md:rounded-r-3xl flex flex-col overflow-y-auto">
-          <div id="lead-sidebar-badge" class="inline-flex items-center gap-2 px-3 py-2 bg-primary/10 rounded-lg w-fit mb-8">
-            <span class="material-symbols-outlined text-primary text-lg">schedule</span>
-            <span class="text-[10px] font-black uppercase tracking-widest text-primary">Instant download</span>
-          </div>
-          <p class="text-[10px] font-black uppercase tracking-widest text-primary mb-4">What you get</p>
-          <ul id="lead-modal-bullets" class="space-y-5 text-sm text-gray-700 mb-10">
-            <li class="flex gap-3"><span class="material-symbols-outlined text-primary shrink-0">check_circle</span> Every leak and conversion lever we audit for</li>
-            <li class="flex gap-3"><span class="material-symbols-outlined text-primary shrink-0">check_circle</span> Prioritized fix list you can use today</li>
-            <li class="flex gap-3"><span class="material-symbols-outlined text-primary shrink-0">check_circle</span> Same blueprint used for $10M+ brands</li>
-          </ul>
-          <div class="mt-auto pt-8 border-t border-gray-200 relative">
-            <span class="absolute top-6 right-0 material-symbols-outlined text-primary text-xl">verified</span>
-            <p class="text-deep-charcoal font-bold text-sm mb-1">Verified partner</p>
-            <p class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-3">CRO &amp; analytics</p>
-            <p class="text-gray-600 text-sm italic leading-snug">"Stijn is a great go-to resource for building a proper infrastructure for Google Analytics and setting up the dashboard so you get access to your data in a simple way. You only need to explain the purpose and he'll outline a great strategy."</p>
-          </div>
-        </div>
-      </div>
-      {# Thank-you state: full modal about scheduling — Calendly one side, reasons + info other side #}
-      <div id="lead-thankyou-state" class="hidden flex flex-col md:flex-row flex-1 min-h-0">
-        <div class="flex flex-col md:w-[55%] min-h-[70vh] md:min-h-[80vh] bg-gray-50">
-          <div class="flex items-center justify-between p-4 border-b border-gray-200 shrink-0">
-            <span class="text-xs font-black uppercase tracking-widest text-primary">Pick a time</span>
-            <button type="button" class="p-2 -m-2 text-slate-400 hover:text-deep-charcoal rounded-lg transition-colors" data-lead-close aria-label="Close">
-              <span class="material-symbols-outlined">close</span>
-            </button>
-          </div>
-          <div class="flex-1 min-h-0">
-            <iframe id="lead-calendly-iframe" title="Schedule a call" class="w-full h-full min-h-[500px]" src="about:blank"></iframe>
-          </div>
-        </div>
-        <div class="p-8 md:p-12 md:w-[45%] flex flex-col overflow-y-auto bg-white border-t md:border-t-0 md:border-l border-gray-100 rounded-b-3xl md:rounded-b-none md:rounded-r-3xl">
-          <span class="material-symbols-outlined text-primary text-4xl mb-4">check_circle</span>
-          <h2 class="text-xl md:text-3xl font-display font-black text-deep-charcoal uppercase tracking-tighter mb-2">You’re in. Now let’s talk.</h2>
-          <p id="lead-thankyou-message" class="text-gray-600 text-base mb-8">Pick a time on the left for a free 30-minute strategy session.</p>
-          <div class="mb-8">
-            <h3 class="text-primary font-display font-black uppercase tracking-tighter text-sm mb-5">Why book a call?</h3>
-            <ul class="space-y-5">
-              <li class="flex gap-4 p-4 rounded-xl bg-light-base border border-gray-100">
-                <span class="material-symbols-outlined text-primary shrink-0 mt-0.5">check_circle</span>
-                <div>
-                  <p class="font-bold text-deep-charcoal mb-1">No pitch.</p>
-                  <p class="text-gray-600 text-sm leading-relaxed mb-0">We focus on your funnel and your next steps—not a sales script.</p>
-                </div>
-              </li>
-              <li class="flex gap-4 p-4 rounded-xl bg-light-base border border-gray-100">
-                <span class="material-symbols-outlined text-primary shrink-0 mt-0.5">check_circle</span>
-                <div>
-                  <p class="font-bold text-deep-charcoal mb-1">Clear next steps.</p>
-                  <p class="text-gray-600 text-sm leading-relaxed mb-0">You’ll leave with a clear picture of where you’re leaking and what to fix first.</p>
-                </div>
-              </li>
-              <li class="flex gap-4 p-4 rounded-xl bg-light-base border border-gray-100">
-                <span class="material-symbols-outlined text-primary shrink-0 mt-0.5">check_circle</span>
-                <div>
-                  <p class="font-bold text-deep-charcoal mb-1">Same process we use for $10M+ brands.</p>
-                  <p class="text-gray-600 text-sm leading-relaxed mb-0">Data, audits, and prioritization—not guesswork.</p>
-                </div>
-              </li>
-            </ul>
-          </div>
-          <p class="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-6">Used by 200+ brands</p>
-          <div class="pt-6 border-t border-gray-200 relative">
-            <span class="absolute top-6 right-0 material-symbols-outlined text-primary text-lg">verified</span>
-            <p class="text-deep-charcoal font-bold text-sm mb-1">Verified partner</p>
-            <p class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2">CRO &amp; analytics</p>
-            <p class="text-gray-600 text-sm italic leading-snug">"Stijn is a great go-to resource for building a proper infrastructure for Google Analytics and setting up the dashboard so you get access to your data in a simple way."</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-{# Schedule-a-call modal: Calendly only, no form. Opened by links to schedule-a-call. #}
-<div id="schedule-modal" class="fixed inset-0 z-[200] hidden" aria-hidden="true" aria-modal="true" role="dialog" aria-labelledby="schedule-modal-title">
-  <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" data-schedule-close></div>
-  <div class="absolute inset-0 flex items-center justify-center p-4 md:p-6 pointer-events-none">
-    <div class="bg-white rounded-3xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden pointer-events-auto flex flex-col border border-gray-100">
-      <div class="flex flex-col md:flex-row flex-1 min-h-0">
-        <div class="flex flex-col md:w-[55%] min-h-[70vh] md:min-h-[80vh] bg-gray-50">
-          <div class="flex items-center justify-between p-4 border-b border-gray-200 shrink-0">
-            <span class="text-xs font-black uppercase tracking-widest text-primary">Pick a time</span>
-            <button type="button" class="p-2 -m-2 text-slate-400 hover:text-deep-charcoal rounded-lg transition-colors" data-schedule-close aria-label="Close">
-              <span class="material-symbols-outlined">close</span>
-            </button>
-          </div>
-          <div class="flex-1 min-h-0">
-            <iframe id="schedule-calendly-iframe" title="Schedule a call" class="w-full h-full min-h-[500px]" src="about:blank"></iframe>
-          </div>
-        </div>
-        <div class="p-8 md:p-12 md:w-[45%] flex flex-col overflow-y-auto bg-white border-t md:border-t-0 md:border-l border-gray-100 rounded-b-3xl md:rounded-b-none md:rounded-r-3xl">
-          <span class="material-symbols-outlined text-primary text-4xl mb-4">schedule</span>
-          <h2 id="schedule-modal-title" class="text-xl md:text-3xl font-display font-black text-deep-charcoal uppercase tracking-tighter mb-2">Book a free 30‑minute call</h2>
-          <p class="text-gray-600 text-base mb-8">Pick a time on the left. No pitch—we focus on your funnel and next steps.</p>
-          <div class="mb-8">
-            <h3 class="text-primary font-display font-black uppercase tracking-tighter text-sm mb-5">Why book a call?</h3>
-            <ul class="space-y-5">
-              <li class="flex gap-4 p-4 rounded-xl bg-light-base border border-gray-100">
-                <span class="material-symbols-outlined text-primary shrink-0 mt-0.5">check_circle</span>
-                <div>
-                  <p class="font-bold text-deep-charcoal mb-1">No pitch.</p>
-                  <p class="text-gray-600 text-sm leading-relaxed mb-0">We focus on your funnel and your next steps—not a sales script.</p>
-                </div>
-              </li>
-              <li class="flex gap-4 p-4 rounded-xl bg-light-base border border-gray-100">
-                <span class="material-symbols-outlined text-primary shrink-0 mt-0.5">check_circle</span>
-                <div>
-                  <p class="font-bold text-deep-charcoal mb-1">Clear next steps.</p>
-                  <p class="text-gray-600 text-sm leading-relaxed mb-0">You'll leave with a clear picture of where you're leaking and what to fix first.</p>
-                </div>
-              </li>
-              <li class="flex gap-4 p-4 rounded-xl bg-light-base border border-gray-100">
-                <span class="material-symbols-outlined text-primary shrink-0 mt-0.5">check_circle</span>
-                <div>
-                  <p class="font-bold text-deep-charcoal mb-1">Same process we use for $10M+ brands.</p>
-                  <p class="text-gray-600 text-sm leading-relaxed mb-0">Data, audits, and prioritization—not guesswork.</p>
-                </div>
-              </li>
-            </ul>
-          </div>
-          <p class="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-6">Used by 200+ brands</p>
-          <div class="pt-6 border-t border-gray-200 relative">
-            <span class="absolute top-6 right-0 material-symbols-outlined text-primary text-lg">verified</span>
-            <p class="text-deep-charcoal font-bold text-sm mb-1">Verified partner</p>
-            <p class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2">CRO &amp; analytics</p>
-            <p class="text-gray-600 text-sm italic leading-snug">"Stijn is a great go-to resource for building a proper infrastructure for Google Analytics and setting up the dashboard so you get access to your data in a simple way."</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-{% block audit_bar %}
-<div id="audit-bar" class="fixed bottom-0 left-0 right-0 z-[90] bg-white border-t border-slate-200 px-4 py-2 shadow-[0_-10px_40px_rgba(0,0,0,0.08)] transition-transform duration-300 {{ 'sm-temporarily-hidden' if 'audit_bar' in temporarily_hidden else '' }}" role="banner" aria-label="Free CRO audit offer" style="transform: translateY(100%); visibility: hidden;">
-    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
-        <div class="flex items-center gap-2">
-            <div class="w-7 h-7 md:w-8 md:h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                <span class="material-symbols-outlined text-primary text-base md:text-lg">analytics</span>
-            </div>
-            <div>
-                <p class="text-charcoal font-black text-xs md:text-sm tracking-tight uppercase leading-none mb-0">Get a FREE 24-HOUR CRO AUDIT</p>
-                <p class="text-slate-500 text-[9px] md:text-[10px] font-bold uppercase leading-tight mb-0">Limited to 3 brands per week. Secure yours now.</p>
-            </div>
         </div>
         <div class="flex items-center gap-2">
-            <button type="button" class="px-5 py-2 md:px-6 md:py-2 bg-primary text-white text-[10px] md:text-xs font-black uppercase rounded-md hover:brightness-110 transition-all shadow-lg shadow-primary/30 cursor-pointer" data-audit-modal data-title="Get a FREE 24-Hour CRO Audit" data-description="Enter your email and we’ll get in touch to schedule your free audit. Limited to 3 brands per week." data-button-text="Claim my free audit">Claim Audit Now</button>
-            <button type="button" id="audit-bar-close" class="p-1.5 text-slate-400 hover:text-charcoal hover:bg-slate-100 rounded transition-colors" aria-label="Close audit bar">
-                <span class="material-symbols-outlined text-lg">close</span>
-            </button>
+          <button
+            type="button"
+            class="px-5 py-2 md:px-6 md:py-2 bg-primary text-white text-[10px] md:text-xs font-black uppercase rounded-md hover:brightness-110 transition-all shadow-lg shadow-primary/30 cursor-pointer"
+            data-audit-modal
+            data-title="Get a FREE 24-Hour CRO Audit"
+            data-description="Enter your email and we’ll get in touch to schedule your free audit. Limited to 3 brands per week."
+            data-button-text="Claim my free audit"
+          >
+            Claim Audit Now
+          </button>
+          <button
+            type="button"
+            id="audit-bar-close"
+            class="p-1.5 text-slate-400 hover:text-charcoal hover:bg-slate-100 rounded transition-colors"
+            aria-label="Close audit bar"
+          >
+            <span class="material-symbols-outlined text-lg">close</span>
+          </button>
         </div>
+      </div>
     </div>
-</div>
-{% endblock %}
-<script>
-(function(){
-  var t = document.getElementById('nav-menu-toggle');
-  var m = document.getElementById('nav-menu');
-  if (!t || !m) return;
-  t.addEventListener('click', function(){
-    var open = m.classList.toggle('hidden');
-    t.setAttribute('aria-expanded', !open);
-    m.setAttribute('aria-hidden', open);
-    t.querySelector('.material-symbols-outlined').textContent = open ? 'menu' : 'close';
-  });
-})();
-</script>
-<script>
-// Ensure modal sidebar becomes full-width, static flow on small screens to avoid overlap
-(function(){
-  var MOBILE_BREAK = 640;
-  function adjustModalSidebars() {
-    var isMobile = window.innerWidth <= MOBILE_BREAK;
-    // Lead modal
-    var leadState = document.getElementById('lead-form-state');
-    if (leadState) {
-      var children = leadState.querySelectorAll(':scope > div');
-      if (children.length >= 2) {
-        var formCol = children[0];
-        var sideCol = children[1];
-        if (isMobile) {
-          sideCol.dataset._origStyle = sideCol.getAttribute('style') || '';
-          sideCol.style.width = '100%';
-          sideCol.style.maxWidth = '100%';
-          sideCol.style.minWidth = '0';
-          sideCol.style.overflow = 'visible';
-          sideCol.style.padding = '1rem';
-          sideCol.style.borderLeft = 'none';
-          sideCol.style.borderTop = '1px solid rgba(229,231,235,1)';
-          sideCol.style.borderRadius = '0 0 1rem 1rem';
-          // ensure any absolutely positioned children become static so they don't float over the form
-          Array.prototype.slice.call(sideCol.querySelectorAll('*')).forEach(function(el){
-            var pos = window.getComputedStyle(el).position;
-            if (pos === 'absolute' || pos === 'fixed') {
-              el.dataset._origPos = el.style.position || '';
-              el.style.position = 'static';
+    {% endblock %}
+    <script>
+      (function () {
+        var t = document.getElementById("nav-menu-toggle");
+        var m = document.getElementById("nav-menu");
+        if (!t || !m) return;
+        t.addEventListener("click", function () {
+          var open = m.classList.toggle("hidden");
+          t.setAttribute("aria-expanded", !open);
+          m.setAttribute("aria-hidden", open);
+          t.querySelector(".material-symbols-outlined").textContent = open
+            ? "menu"
+            : "close";
+        });
+      })();
+    </script>
+    <script>
+      // Ensure modal sidebar becomes full-width, static flow on small screens to avoid overlap
+      (function () {
+        var MOBILE_BREAK = 640;
+        function adjustModalSidebars() {
+          var isMobile = window.innerWidth <= MOBILE_BREAK;
+          // Lead modal
+          var leadState = document.getElementById("lead-form-state");
+          if (leadState) {
+            var children = leadState.querySelectorAll(":scope > div");
+            if (children.length >= 2) {
+              var formCol = children[0];
+              var sideCol = children[1];
+              if (isMobile) {
+                sideCol.dataset._origStyle =
+                  sideCol.getAttribute("style") || "";
+                sideCol.style.width = "100%";
+                sideCol.style.maxWidth = "100%";
+                sideCol.style.minWidth = "0";
+                sideCol.style.overflow = "visible";
+                sideCol.style.padding = "1rem";
+                sideCol.style.borderLeft = "none";
+                sideCol.style.borderTop = "1px solid rgba(229,231,235,1)";
+                sideCol.style.borderRadius = "0 0 1rem 1rem";
+                // ensure any absolutely positioned children become static so they don't float over the form
+                Array.prototype.slice
+                  .call(sideCol.querySelectorAll("*"))
+                  .forEach(function (el) {
+                    var pos = window.getComputedStyle(el).position;
+                    if (pos === "absolute" || pos === "fixed") {
+                      el.dataset._origPos = el.style.position || "";
+                      el.style.position = "static";
+                    }
+                  });
+              } else {
+                // revert
+                if (sideCol.dataset._origStyle !== undefined) {
+                  sideCol.setAttribute("style", sideCol.dataset._origStyle);
+                  delete sideCol.dataset._origStyle;
+                } else {
+                  sideCol.removeAttribute("style");
+                }
+                Array.prototype.slice
+                  .call(sideCol.querySelectorAll("*"))
+                  .forEach(function (el) {
+                    if (el.dataset._origPos !== undefined) {
+                      el.style.position = el.dataset._origPos;
+                      delete el.dataset._origPos;
+                    }
+                  });
+              }
             }
-          });
-        } else {
-          // revert
-          if (sideCol.dataset._origStyle !== undefined) {
-            sideCol.setAttribute('style', sideCol.dataset._origStyle);
-            delete sideCol.dataset._origStyle;
-          } else {
-            sideCol.removeAttribute('style');
           }
-          Array.prototype.slice.call(sideCol.querySelectorAll('*')).forEach(function(el){
-            if (el.dataset._origPos !== undefined) {
-              el.style.position = el.dataset._origPos;
-              delete el.dataset._origPos;
-            }
-          });
-        }
-      }
-    }
 
-    // Schedule modal (same logic if present)
-    var sched = document.querySelector('#schedule-modal .max-w-5xl > .flex');
-    if (sched) {
-      var kids = sched.querySelectorAll(':scope > div');
-      if (kids.length >= 2) {
-        var left = kids[0], right = kids[1];
-        if (isMobile) {
-          right.dataset._origStyle = right.getAttribute('style') || '';
-          right.style.width = '100%';
-          right.style.maxWidth = '100%';
-          right.style.minWidth = '0';
-          right.style.overflow = 'visible';
-          right.style.padding = '1rem';
-          right.style.borderLeft = 'none';
-          right.style.borderTop = '1px solid rgba(229,231,235,1)';
-          right.style.borderRadius = '0 0 1rem 1rem';
-        } else {
-          if (right.dataset._origStyle !== undefined) {
-            right.setAttribute('style', right.dataset._origStyle);
-            delete right.dataset._origStyle;
-          } else {
-            right.removeAttribute('style');
+          // Schedule modal (same logic if present)
+          var sched = document.querySelector(
+            "#schedule-modal .max-w-5xl > .flex",
+          );
+          if (sched) {
+            var kids = sched.querySelectorAll(":scope > div");
+            if (kids.length >= 2) {
+              var left = kids[0],
+                right = kids[1];
+              if (isMobile) {
+                right.dataset._origStyle = right.getAttribute("style") || "";
+                right.style.width = "100%";
+                right.style.maxWidth = "100%";
+                right.style.minWidth = "0";
+                right.style.overflow = "visible";
+                right.style.padding = "1rem";
+                right.style.borderLeft = "none";
+                right.style.borderTop = "1px solid rgba(229,231,235,1)";
+                right.style.borderRadius = "0 0 1rem 1rem";
+              } else {
+                if (right.dataset._origStyle !== undefined) {
+                  right.setAttribute("style", right.dataset._origStyle);
+                  delete right.dataset._origStyle;
+                } else {
+                  right.removeAttribute("style");
+                }
+              }
+            }
           }
         }
-      }
-    }
-  }
-  window.addEventListener('resize', function(){ adjustModalSidebars(); });
-  document.addEventListener('DOMContentLoaded', adjustModalSidebars);
-})();
-</script>
-<script src="{{ url_for('static', filename='js/audit-bar.js') }}" defer></script>
-<script src="{{ url_for('static', filename='js/checklist-modal.js') }}?v=3" defer></script>
-{% if request.endpoint != 'main.cro_scan_landing' and request.endpoint != 'main.cro_cost_roi_landing' %}
-<script src="{{ url_for('static', filename='js/video-cta.js') }}" defer></script>
-{% endif %}
-<script>
-(function(){
-  function initVideoPlayOverlay() {
-    document.querySelectorAll('[data-video-play-overlay]').forEach(function(wrapper) {
-      var video = wrapper.querySelector('video');
-      var btn = wrapper.querySelector('.video-play-overlay');
-      if (!video || !btn) return;
-      btn.addEventListener('click', function(e) {
-        e.preventDefault();
-        video.play();
-        wrapper.setAttribute('data-playing', 'true');
-      });
-      video.addEventListener('click', function() {
-        if (!video.paused) {
-          video.pause();
-          wrapper.removeAttribute('data-playing');
+        window.addEventListener("resize", function () {
+          adjustModalSidebars();
+        });
+        document.addEventListener("DOMContentLoaded", adjustModalSidebars);
+      })();
+    </script>
+    <script
+      src="{{ url_for('static', filename='js/audit-bar.js') }}"
+      defer
+    ></script>
+    <script
+      src="{{ url_for('static', filename='js/checklist-modal.js') }}?v=3"
+      defer
+    ></script>
+    {% if request.endpoint != 'main.cro_scan_landing' and request.endpoint !=
+    'main.cro_cost_roi_landing' %}
+    <script
+      src="{{ url_for('static', filename='js/video-cta.js') }}"
+      defer
+    ></script>
+    {% endif %}
+    <script>
+      (function () {
+        function initVideoPlayOverlay() {
+          document
+            .querySelectorAll("[data-video-play-overlay]")
+            .forEach(function (wrapper) {
+              var video = wrapper.querySelector("video");
+              var btn = wrapper.querySelector(".video-play-overlay");
+              if (!video || !btn) return;
+              btn.addEventListener("click", function (e) {
+                e.preventDefault();
+                video.play();
+                wrapper.setAttribute("data-playing", "true");
+              });
+              video.addEventListener("click", function () {
+                if (!video.paused) {
+                  video.pause();
+                  wrapper.removeAttribute("data-playing");
+                }
+              });
+              video.addEventListener("play", function () {
+                wrapper.setAttribute("data-playing", "true");
+              });
+              video.addEventListener("pause", function () {
+                wrapper.removeAttribute("data-playing");
+              });
+              video.addEventListener("ended", function () {
+                wrapper.removeAttribute("data-playing");
+              });
+            });
         }
-      });
-      video.addEventListener('play', function() { wrapper.setAttribute('data-playing', 'true'); });
-      video.addEventListener('pause', function() { wrapper.removeAttribute('data-playing'); });
-      video.addEventListener('ended', function() { wrapper.removeAttribute('data-playing'); });
-    });
-  }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initVideoPlayOverlay);
-  else initVideoPlayOverlay();
-})();
-</script>
-<script>
-(function(){
-  var CALENDLY_URL = 'https://calendly.com/stijn-wollerich/free-30-minute-strategy-session?hide_gdpr_banner=1';
-  var modal = document.getElementById('schedule-modal');
-  var iframe = document.getElementById('schedule-calendly-iframe');
-  if (!modal || !iframe) return;
-  function openScheduleModal(){
-    iframe.src = CALENDLY_URL;
-    modal.classList.remove('hidden');
-    modal.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-    try {
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({
-        event: "schedule_modal_open",
-        source: "header_link",
-        url: CALENDLY_URL,
-        path: window.location.pathname,
-        timestamp: new Date().toISOString()
-      });
-    } catch (err) {}
-  }
-  function closeScheduleModal(){
-    modal.classList.add('hidden');
-    modal.setAttribute('aria-hidden', 'true');
-    iframe.src = 'about:blank';
-    document.body.style.overflow = '';
-  }
-  document.addEventListener('click', function(e){
-    var a = e.target.closest('a[href*="schedule-a-call"]');
-    if (a) { e.preventDefault(); openScheduleModal(); }
-  });
-  modal.querySelectorAll('[data-schedule-close]').forEach(function(btn){
-    btn.addEventListener('click', closeScheduleModal);
-  });
-  document.addEventListener('keydown', function(e){
-    if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeScheduleModal();
-  });
-})();
-</script>
-<script>
-(function(){
-  // Generic form submit datalayer pusher (skips lead-form which is handled separately)
-  try {
-    document.addEventListener('submit', function(e){
-      try {
-        var form = e.target;
-        if (!form || form.id === 'lead-form') return;
-        var formData = {};
-        Array.prototype.slice.call(form.elements || []).forEach(function(el){
-          if (!el.name) return;
-          if (['password', 'csrf_token'].indexOf(el.type) !== -1) return;
-          var v = el.value;
-          if (el.type === 'email' && v) formData.email = v;
-          if (el.name === 'fname' || el.name === 'first_name') formData.fname = v;
-          if (!formData[el.name]) formData[el.name] = v;
+        if (document.readyState === "loading")
+          document.addEventListener("DOMContentLoaded", initVideoPlayOverlay);
+        else initVideoPlayOverlay();
+      })();
+    </script>
+    <script>
+      (function () {
+        var CALENDLY_URL =
+          "https://calendly.com/stijn-wollerich/free-30-minute-strategy-session?hide_gdpr_banner=1";
+        var modal = document.getElementById("schedule-modal");
+        var iframe = document.getElementById("schedule-calendly-iframe");
+        if (!modal || !iframe) return;
+        function openScheduleModal() {
+          iframe.src = CALENDLY_URL;
+          modal.classList.remove("hidden");
+          modal.setAttribute("aria-hidden", "false");
+          document.body.style.overflow = "hidden";
+          try {
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+              event: "schedule_modal_open",
+              source: "header_link",
+              url: CALENDLY_URL,
+              path: window.location.pathname,
+              timestamp: new Date().toISOString(),
+            });
+          } catch (err) {}
+        }
+        function closeScheduleModal() {
+          modal.classList.add("hidden");
+          modal.setAttribute("aria-hidden", "true");
+          iframe.src = "about:blank";
+          document.body.style.overflow = "";
+        }
+        document.addEventListener("click", function (e) {
+          var a = e.target.closest('a[href*="schedule-a-call"]');
+          if (a) {
+            e.preventDefault();
+            openScheduleModal();
+          }
         });
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({
-          event: 'generic_form_submitted',
-          form_id: form.id || null,
-          form_action: form.getAttribute('action') || null,
-          form_method: (form.getAttribute('method') || 'GET').toUpperCase(),
-          data: formData,
-          path: window.location.pathname,
-          timestamp: new Date().toISOString()
+        modal.querySelectorAll("[data-schedule-close]").forEach(function (btn) {
+          btn.addEventListener("click", closeScheduleModal);
         });
-      } catch (err) {}
-    }, true);
-  } catch (err) {}
-})();
-</script>
-<script>
-/* Analytics Mania compatible Calendly listener
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" && !modal.classList.contains("hidden"))
+            closeScheduleModal();
+        });
+      })();
+    </script>
+    <script>
+      (function () {
+        // Generic form submit datalayer pusher (skips lead-form which is handled separately)
+        try {
+          document.addEventListener(
+            "submit",
+            function (e) {
+              try {
+                var form = e.target;
+                if (!form || form.id === "lead-form") return;
+                var formData = {};
+                Array.prototype.slice
+                  .call(form.elements || [])
+                  .forEach(function (el) {
+                    if (!el.name) return;
+                    if (["password", "csrf_token"].indexOf(el.type) !== -1)
+                      return;
+                    var v = el.value;
+                    if (el.type === "email" && v) formData.email = v;
+                    if (el.name === "fname" || el.name === "first_name")
+                      formData.fname = v;
+                    if (!formData[el.name]) formData[el.name] = v;
+                  });
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({
+                  event: "generic_form_submitted",
+                  form_id: form.id || null,
+                  form_action: form.getAttribute("action") || null,
+                  form_method: (
+                    form.getAttribute("method") || "GET"
+                  ).toUpperCase(),
+                  data: formData,
+                  path: window.location.pathname,
+                  timestamp: new Date().toISOString(),
+                });
+              } catch (err) {}
+            },
+            true,
+          );
+        } catch (err) {}
+      })();
+    </script>
+    <script>
+      /* Analytics Mania compatible Calendly listener
    Uses Calendly's postMessage events and pushes analytics-friendly events to the dataLayer.
    Keeps origin checks permissive for reliability; tighten to specific origins if desired. */
-(function(){
-  try {
-    window.dataLayer = window.dataLayer || [];
-    function isCalendlyOrigin(origin) {
-      if (!origin) return false;
-      return origin.indexOf('calendly.com') !== -1 || origin.indexOf('assets.calendly.com') !== -1;
-    }
-
-    window.addEventListener('message', function(e){
-      try {
-        // Optional origin guard - Analytics Mania examples often check origin
-        if (!isCalendlyOrigin(e.origin)) return;
-
-        var payload = e.data;
-        // payload may be string or object
-        if (typeof payload === 'string') {
-          // Calendly sometimes sends plain strings like "calendly.event_scheduled"
-          // or JSON strings; leave as-is for event detection.
-        } else if (payload && typeof payload === 'object' && payload.event) {
-          // payload.event expected like "calendly.event_scheduled"
-          payload = payload.event;
-        }
-
-          if (typeof payload === 'string' && payload.indexOf('calendly') === 0) {
-          var parts = payload.split('.');
-          var calendlyEvent = parts.length > 1 ? parts.slice(1).join('.') : payload;
+      (function () {
+        try {
           window.dataLayer = window.dataLayer || [];
-          window.dataLayer.push({
-            event: 'calendly.' + calendlyEvent,
-            calendly_event: calendlyEvent,
-            calendly_origin: e.origin,
-            timestamp: new Date().toISOString()
-          });
-          
+          function isCalendlyOrigin(origin) {
+            if (!origin) return false;
+            return (
+              origin.indexOf("calendly.com") !== -1 ||
+              origin.indexOf("assets.calendly.com") !== -1
+            );
+          }
+
+          window.addEventListener(
+            "message",
+            function (e) {
+              try {
+                // Optional origin guard - Analytics Mania examples often check origin
+                if (!isCalendlyOrigin(e.origin)) return;
+
+                var payload = e.data;
+                // payload may be string or object
+                if (typeof payload === "string") {
+                  // Calendly sometimes sends plain strings like "calendly.event_scheduled"
+                  // or JSON strings; leave as-is for event detection.
+                } else if (
+                  payload &&
+                  typeof payload === "object" &&
+                  payload.event
+                ) {
+                  // payload.event expected like "calendly.event_scheduled"
+                  payload = payload.event;
+                }
+
+                if (
+                  typeof payload === "string" &&
+                  payload.indexOf("calendly") === 0
+                ) {
+                  var parts = payload.split(".");
+                  var calendlyEvent =
+                    parts.length > 1 ? parts.slice(1).join(".") : payload;
+                  window.dataLayer = window.dataLayer || [];
+                  window.dataLayer.push({
+                    event: "calendly." + calendlyEvent,
+                    calendly_event: calendlyEvent,
+                    calendly_origin: e.origin,
+                    timestamp: new Date().toISOString(),
+                  });
+                }
+              } catch (err) {
+                // inner error suppressed
+              }
+            },
+            false,
+          );
+        } catch (err) {
+          // outer listener init error suppressed
         }
-      } catch (err) {
-        // inner error suppressed
-      }
-    }, false);
-  } catch (err) {
-    // outer listener init error suppressed
-  }
-})();
-</script>
-<script>
-  // Disable native lazy-loading by removing loading="lazy" attributes on DOM ready.
-  (function(){
-    try {
-      document.addEventListener('DOMContentLoaded', function(){
-        Array.prototype.slice.call(document.querySelectorAll('img[loading=\"lazy\"]')).forEach(function(img){
-          img.removeAttribute('loading');
-        });
-      });
-    } catch (e) {}
-  })();
-</script>
-{% block body_end %}{% endblock %}
-</body>
+      })();
+    </script>
+    <script>
+      // Disable native lazy-loading by removing loading="lazy" attributes on DOM ready.
+      (function () {
+        try {
+          document.addEventListener("DOMContentLoaded", function () {
+            Array.prototype.slice
+              .call(document.querySelectorAll('img[loading=\"lazy\"]'))
+              .forEach(function (img) {
+                img.removeAttribute("loading");
+              });
+          });
+        } catch (e) {}
+      })();
+    </script>
+    {% block body_end %}{% endblock %}
+  </body>
 </html>
