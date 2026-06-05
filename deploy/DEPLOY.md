@@ -37,6 +37,7 @@ If you added new DB tables or this is the first deploy: run `python3 tasks/creat
 **Env / secrets:**  
 - **Local:** `.env` can have `FLASK_DEBUG=1`, `SECRET_KEY=...`, and optionally `DATABASE_URL` if you run Postgres locally. If `DATABASE_URL` is missing, the app runs but lead forms won’t be saved to a DB.  
 - **Server:** `.env` must have `FLASK_DEBUG=0`, `SECRET_KEY=...`, and `DATABASE_URL=postgresql://sparksmetrics:YOUR_PASSWORD@localhost:5432/sparksmetrics`. Use the same password you set in PostgreSQL (section 2). Do not commit `.env`; it is in `.gitignore`.
+- **Spark integration (leads + experiments on `/free-cro-audit/`):** set `SPARK_BACKEND_URL=https://spark.sparksmetrics.com` and `SPARK_SITE_INGEST_SECRET` to the **same** value as on Spark. Deploy Spark’s `/api/site/experiments` routes before expecting experiment cards — see `docs/SPARK_EXPERIMENTS_WEBSITE.md`.
 
 ---
 

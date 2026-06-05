@@ -286,6 +286,49 @@ def check_cro_store(*, website_url: str) -> dict | None:
         return None
 
 
+def fetch_website_experiments() -> list[dict[str, Any]]:
+    """GET Spark /api/site/experiments — all experiments; marketing app filters locally."""
+    try:
+        import requests
+    except ImportError:
+        return []
+    try:
+        r = requests.get(
+            f"{_base()}/api/site/experiments",
+            headers=_headers(),
+            timeout=25,
+        )
+        if r.status_code != 200:
+            _log.warning("spark_backend experiments: HTTP %s %s", r.status_code, (r.text or "")[:300])
+            return []
+        data = r.json()
+        rows = data.get("experiments")
+        return rows if isinstance(rows, list) else []
+    except Exception as e:
+        _log.warning("spark_backend experiments: %s", e)
+        return []
+
+
+def fetch_experiment_image(*, params: dict[str, str]) -> tuple[int, bytes | None, str | None]:
+    """GET Spark /api/site/experiments/image. Returns (status, body, content_type)."""
+    try:
+        import requests
+    except ImportError:
+        return 0, None, None
+    try:
+        r = requests.get(
+            f"{_base()}/api/site/experiments/image",
+            params=params,
+            headers=_headers(),
+            timeout=20,
+        )
+        ct = (r.headers.get("Content-Type") or "").split(";")[0].strip() or None
+        return r.status_code, r.content, ct
+    except Exception as e:
+        _log.warning("spark_backend experiment image: %s", e)
+        return 0, None, None
+
+
 def fetch_cro_preview_image(*, params: dict[str, str]) -> tuple[int, bytes | None]:
     """GET Spark preview-image (secret). Returns (status_code, body or None)."""
     try:

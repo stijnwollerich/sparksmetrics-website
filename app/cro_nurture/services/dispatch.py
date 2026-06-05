@@ -343,14 +343,14 @@ def _inject_nurture_media_blocks(fragment: str, step_order: int) -> str:
             f"{marker}"
         )
     elif step_order == 9:
-        roi_page = "https://sparksmetrics.com/how-we-improve-conversions"
+        roi_page = "https://sparksmetrics.com/free-cro-audit/"
         he_page = html.escape(roi_page, quote=True)
         block = (
             f'<p><a href="{he_page}">How we improve conversions — 90-day ROI guarantee (video walkthrough)</a></p>'
             f"{marker}"
         )
     elif step_order == 10:
-        roi_page = "https://sparksmetrics.com/how-we-improve-conversions"
+        roi_page = "https://sparksmetrics.com/free-cro-audit/"
         cal_page = "https://sparksmetrics.com/schedule-a-call"
         he_roi = html.escape(roi_page, quote=True)
         he_cal = html.escape(cal_page, quote=True)
@@ -387,10 +387,10 @@ def _append_nurture_media_plaintext(text: str, step_order: int) -> str:
             f"Thumbnail: {static_origin}/static/images/youtube_thumbnails/feastables_conversion_lessons.jpg"
         )
     elif step_order == 4:
-        extra = "\n\n90-day ROI / how we improve conversions: https://sparksmetrics.com/how-we-improve-conversions"
+        extra = "\n\n90-day ROI / free CRO audit: https://sparksmetrics.com/free-cro-audit/"
     elif step_order == 10:
         extra = (
-            "\n\n90-day ROI: https://sparksmetrics.com/how-we-improve-conversions\n"
+            "\n\n90-day ROI: https://sparksmetrics.com/free-cro-audit/\n"
             "Book within 7 days: https://sparksmetrics.com/schedule-a-call"
         )
     if not extra:

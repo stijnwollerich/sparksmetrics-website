@@ -1,0 +1,19 @@
+{# Centered primary CTA block #}
+{% set audit_cta_url = strategy_session_url|default(url_for('main.thirty_minute_strategy_session')) %}
+{% set audit_cta_label = vsl_cta_label|default('Book your free CRO audit') %}
+<section class="py-8 md:py-10 {{ section_class|default('bg-white border-b border-gray-100') }}">
+  <div class="max-w-xl mx-auto px-4 sm:px-6 text-center">
+    {% if heading %}
+    <p class="text-gray-600 text-sm md:text-base mb-4 leading-relaxed">{{ heading }}</p>
+    {% endif %}
+    <a
+      href="{{ audit_cta_url }}"
+      class="inline-flex w-full items-center justify-center min-h-[52px] px-8 py-3.5 bg-primary text-white font-display text-base md:text-lg font-black uppercase rounded-xl shadow-lg shadow-primary/25 hover:brightness-110 transition-all"
+    >
+      {{ audit_cta_label }}
+    </a>
+    {% if subtext %}
+    <p class="text-gray-500 text-sm mt-3">{{ subtext }}</p>
+    {% endif %}
+  </div>
+</section>

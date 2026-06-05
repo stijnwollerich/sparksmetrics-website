@@ -1,0 +1,41 @@
+{# Deck-style process row: orange step circle · bold title · copy · large visual #}
+<article class="rounded-2xl md:rounded-3xl bg-white border border-gray-200 shadow-sm overflow-hidden">
+  <div class="p-5 md:p-8 lg:p-10">
+    <div class="flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-10">
+      <div class="flex gap-5 md:gap-8 flex-1 min-w-0 lg:items-start">
+        <div
+          class="shrink-0 w-[5.5rem] h-[5.5rem] sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full bg-primary text-white flex flex-col items-center justify-center shadow-lg shadow-primary/20"
+          aria-hidden="true"
+        >
+          <span class="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] leading-none">Step</span>
+          <span class="text-4xl sm:text-5xl md:text-[3.25rem] font-display font-black leading-none mt-1">{{ num }}</span>
+        </div>
+
+        <div class="flex-1 min-w-0 pt-0 lg:pt-1">
+          <h3 class="text-xl sm:text-2xl md:text-3xl lg:text-[2rem] font-display font-black text-deep-charcoal uppercase tracking-tight leading-[1.1]">
+            {{ title }}
+          </h3>
+          <div class="mt-4 md:mt-5 text-gray-700 text-sm md:text-base leading-relaxed space-y-3 md:space-y-4">
+            <p>{{ p1 }}</p>
+            {% if p2 %}<p>{{ p2 }}</p>{% endif %}
+            {% if p3 %}<p class="font-bold text-deep-charcoal">{{ p3 }}</p>{% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="w-full lg:w-[44%] xl:w-[42%] shrink-0 flex flex-col items-stretch lg:items-end">
+        {% if example %}
+        <p class="text-xs md:text-sm italic text-teal-700 mb-2 text-right self-end">{{ example }}</p>
+        {% endif %}
+        <img
+          src="{{ url_for('static', filename=deck ~ image) }}"
+          alt="{{ title }}"
+          class="w-full max-h-[280px] sm:max-h-[320px] md:max-h-[380px] lg:max-h-[420px] object-contain object-center rounded-xl ring-2 ring-violet-500/50 shadow-xl bg-white"
+          loading="lazy"
+          width="640"
+          height="480"
+        />
+      </div>
+    </div>
+  </div>
+</article>

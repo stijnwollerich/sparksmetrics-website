@@ -1,39 +1,57 @@
 {% extends "base.html" %} {% block title %}You're Paying for Traffic You're Not
 Converting | Sparksmetrics{% endblock %} {% block meta_description %}You have a
-monetization problem, not a traffic problem. Our CRO program finds where you're
-leaking and fixes it with data—so you convert more of the traffic you already
-have.{% endblock %} {% block og_title %}You're Paying for Traffic You're Not
+free CRO audit finds where your ecommerce funnel leaks revenue—and hands you a
+prioritized roadmap to fix it. No retainer required.{% endblock %} {% block og_title %}You're Paying for Traffic You're Not
 Converting | Sparksmetrics{% endblock %} {% block og_description %}You have a
-monetization problem, not a traffic problem. Our CRO program finds the leaks and
-fixes them with data—convert more of your traffic.{% endblock %} {% block
+free CRO audit finds where your funnel leaks—and gives you a prioritized fix list
+backed by data.{% endblock %} {% block
 twitter_title %}You're Paying for Traffic You're Not Converting |
 Sparksmetrics{% endblock %} {% block twitter_description %}You have a
-monetization problem, not a traffic problem. Our CRO program finds the leaks and
-fixes them with data—convert more of your traffic.{% endblock %} {% block footer
-%}{% endblock %} {% block audit_bar %}{% endblock %} {% block head_extras %}
+free CRO audit finds where your funnel leaks—and gives you a prioritized fix list
+backed by data.{% endblock %} {% block primary_bar %}{% endblock %} {% block header %}{%
+endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
+{% block head_extras %}
 <meta name="robots" content="noindex, follow" />
+<style>
+  #vsl-sticky-cta {
+    transform: translateY(calc(110% + 1rem));
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      transform 0.28s ease,
+      opacity 0.28s ease;
+  }
+  #vsl-sticky-cta.is-visible {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+</style>
 {% endblock %} {% block body_class %}bg-white text-gray-800 font-sans{% endblock
 %} {% block content %}
+{% set strategy_session_url = url_for('main.thirty_minute_strategy_session') %}
+{% set vsl_conversion_lift_pct = 22 %}
+{% set vsl_cta_label = "Book your free CRO audit" %}
 <div class="min-h-screen flex flex-col">
   {# 1. Above the fold #}
   <section class="pt-10 pb-6 md:pt-14 md:pb-8">
-    <div class="max-w-4xl mx-auto px-4 text-center">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center">
       <p
-        class="text-primary font-bold text-xs sm:text-sm uppercase tracking-[0.25em] mb-3"
+        class="text-primary font-bold text-xs sm:text-sm uppercase tracking-[0.2em] mb-4"
       >
-        The brands that win monetize harder.
+        For ecommerce brands spending on ads
       </p>
       <h1
-        class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-black text-deep-charcoal uppercase tracking-tight leading-tight mb-4"
+        class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5rem] font-display font-black text-deep-charcoal uppercase tracking-tight leading-[1.05] mb-6 max-w-5xl mx-auto"
       >
-        You’re paying a stupid amount for traffic you’re
-        <span class="text-primary">not converting</span>
+        Your ads aren't the problem.<br />
+        <span class="text-primary">Your website is.</span>
       </h1>
       <p
-        class="text-gray-600 text-sm md:text-base leading-relaxed max-w-[85%] mx-auto"
+        class="text-gray-600 text-base sm:text-lg md:text-xl leading-relaxed max-w-4xl mx-auto"
       >
-        Our CRO program finds where you’re leaking and fixes it with data. You
-        convert more of the traffic you already have.
+        Book a free audit. We analyze your funnel, find the 3–5 biggest conversion
+        leaks, and send you a prioritized roadmap—with test ideas your team can ship.
       </p>
       <div class="flex flex-wrap items-center justify-center gap-2 mt-6">
         <span class="flex text-primary">
@@ -65,10 +83,10 @@ fixes them with data—convert more of your traffic.{% endblock %} {% block foot
   <section class="px-4 pb-6 md:pb-8">
     <div class="max-w-3xl mx-auto flex flex-col items-center">
       <p
-        class="text-lg font-bold text-gray-500 uppercase tracking-widest flex items-center gap-3 mb-4"
+        class="text-[11px] sm:text-xs md:text-sm font-bold text-gray-500 uppercase tracking-[0.14em] text-center leading-relaxed max-w-3xl mb-4 mx-auto"
       >
-        <span class="w-3 h-3 rounded-full bg-primary animate-pulse"></span>
-        Watch: How we find and fix conversion leaks
+        Watch: How we added {{ vsl_conversion_lift_pct }}% more conversions for a
+        Shopify brand without touching their ads
       </p>
       <div
         class="vsl-youtube-wrap w-full aspect-video bg-black rounded-lg overflow-hidden relative group"
@@ -304,116 +322,86 @@ fixes them with data—convert more of your traffic.{% endblock %} {% block foot
     </div>
   </section>
 
-  {# 4. VSL CTA: button → form → Calendly #}
-  <section id="calendly" class="flex-1 py-8 md:py-12">
-    <div class="w-full max-w-xl mx-auto px-4 md:px-6">
-      {# Step 1: CTA button #}
-      <div id="vsl-cta-wrap" class="text-center">
-        <button
-          type="button"
-          id="vsl-cta-btn"
-          class="w-full min-h-[56px] px-8 py-4 bg-primary text-white font-display text-lg md:text-xl font-black uppercase rounded-xl shadow-lg shadow-primary/25 hover:brightness-110 transition-all"
-        >
-          Book your free CRO audit
-        </button>
-        <p class="text-center text-gray-500 text-sm mt-3">
-          100% ROI guarantee · No pitch, just your funnel
-        </p>
-      </div>
-
-      {# Step 2: Short form (hidden until CTA clicked) #}
-      <div id="vsl-form-wrap" class="hidden">
-        <p class="text-center text-gray-600 text-sm mb-6">
-          A few details, then pick a time.
-        </p>
-        <form id="vsl-audit-form" class="space-y-4">
-          <div>
-            <label
-              for="vsl-fname"
-              class="block text-xs font-bold uppercase tracking-widest text-deep-charcoal mb-1"
-              >First name</label
-            >
-            <input
-              type="text"
-              id="vsl-fname"
-              name="fname"
-              required
-              placeholder="Your first name"
-              class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-primary"
-              autocomplete="given-name"
-            />
-          </div>
-          <div>
-            <label
-              for="vsl-email"
-              class="block text-xs font-bold uppercase tracking-widest text-deep-charcoal mb-1"
-              >Email</label
-            >
-            <input
-              type="email"
-              id="vsl-email"
-              name="email"
-              required
-              placeholder="you@company.com"
-              class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-primary"
-              autocomplete="email"
-            />
-          </div>
-          <div>
-            <label
-              for="vsl-website"
-              class="block text-xs font-bold uppercase tracking-widest text-deep-charcoal mb-1"
-              >Website URL</label
-            >
-            <input
-              type="url"
-              id="vsl-website"
-              name="website_url"
-              required
-              placeholder="yourstore.com"
-              class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-primary"
-              autocomplete="url"
-            />
-          </div>
-          <button
-            type="submit"
-            id="vsl-form-submit"
-            class="w-full min-h-[48px] px-6 py-3 bg-primary text-white font-display font-black uppercase rounded-xl hover:brightness-110 transition-all"
-          >
-            See available times
-          </button>
-          <p class="text-center text-gray-500 text-sm mt-3">
-            100% ROI guarantee · No pitch, just your funnel
-          </p>
-        </form>
-      </div>
-
-      {# Step 3: Calendly (hidden until form submitted) #}
-      <div id="vsl-calendly-wrap" class="hidden">
-        <h2
-          class="text-xl font-display font-black text-deep-charcoal uppercase tracking-tight text-center mb-1"
-        >
-          Schedule your free audit
-        </h2>
-        <p class="text-gray-500 text-sm text-center mb-4">
-          Pick a time below. No strings attached.
-        </p>
-        <div
-          class="calendly-inline-widget w-full"
-          data-url="https://calendly.com/stijn-wollerich/free-30-minute-strategy-session?hide_gdpr_banner=1"
-          style="min-width: 320px; height: 700px"
-        ></div>
-        <p class="text-center text-gray-500 text-sm mt-4">
-          Having trouble scheduling? Email us at
-          <a
-            href="mailto:connect@sparksmetrics.com"
-            class="text-primary font-bold underline"
-            >connect@sparksmetrics.com</a
-          >
-        </p>
-      </div>
+  {# 4. VSL CTA → 30-minute strategy session funnel #}
+  <section
+    id="calendly"
+    class="flex-1 py-8 md:py-12 scroll-mt-8"
+    data-vsl-primary-cta
+  >
+    <div class="w-full max-w-xl mx-auto px-4 md:px-6 text-center">
+      <a
+        href="{{ strategy_session_url }}"
+        class="inline-flex w-full items-center justify-center min-h-[56px] px-8 py-4 bg-primary text-white font-display text-lg md:text-xl font-black uppercase rounded-xl shadow-lg shadow-primary/25 hover:brightness-110 transition-all"
+      >
+        {{ vsl_cta_label }}
+      </a>
+      <p class="text-center text-gray-500 text-sm mt-3">
+        ROI guaranteed—or your money back. No pitch, just your funnel.
+      </p>
     </div>
   </section>
+
+  {# Social proof — immediately below CTA #}
+  {% if spark_experiments or spark_experiments_configured %}
+  <section class="py-10 md:py-14 bg-light-base border-t border-gray-100" id="ab-tests">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-6 md:mb-8 max-w-2xl mx-auto">
+        <h2
+          class="text-2xl md:text-3xl font-display font-black text-deep-charcoal uppercase tracking-tighter"
+        >
+          The recommendations aren't <span class="text-primary">theory.</span>
+        </h2>
+        <p class="text-gray-600 text-sm md:text-base mt-3 leading-relaxed">
+          Your audit roadmap is built from the same testing playbook we use on client stores—here are real before/after results.
+        </p>
+      </div>
+      {% if spark_experiments %}
+      {% set spark_exp_count = spark_experiments|length %}
+      <div class="relative spark-exp-strip">
+        {% if spark_exp_count > 1 %}
+        <button
+          type="button"
+          class="spark-exp-strip-prev hidden sm:flex absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 items-center justify-center rounded-full bg-white border border-gray-200 shadow-md text-deep-charcoal hover:bg-light-base -ml-2"
+          aria-label="Scroll experiments left"
+        >
+          <span class="material-symbols-outlined">chevron_left</span>
+        </button>
+        <button
+          type="button"
+          class="spark-exp-strip-next hidden sm:flex absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 items-center justify-center rounded-full bg-white border border-gray-200 shadow-md text-deep-charcoal hover:bg-light-base -mr-2"
+          aria-label="Scroll experiments right"
+        >
+          <span class="material-symbols-outlined">chevron_right</span>
+        </button>
+        {% endif %}
+        <div
+          class="spark-exp-strip-track flex gap-3 md:gap-4 pb-2 {% if spark_exp_count == 1 %}justify-center{% else %}overflow-x-auto scroll-smooth snap-x snap-mandatory -mx-1 px-1{% endif %}"
+          {% if spark_exp_count > 1 %}tabindex="0"{% endif %}
+        >
+          {% for exp in spark_experiments %}
+          <div
+            class="shrink-0 w-[min(88vw,19rem)] sm:w-80 {% if spark_exp_count > 1 %}snap-center{% endif %} flex {% if spark_exp_count == 1 %}mx-auto{% endif %}"
+          >
+            {% include '_experiment_showcase_card.html' %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% else %}
+      <p class="text-center text-gray-500 text-sm max-w-lg mx-auto">
+        Published test examples coming soon.
+      </p>
+      {% endif %}
+    </div>
+  </section>
+  {% endif %}
+
+  {% set heading = "Ready to see what we'd find on your store?" %}
+  {% set subtext = "This is where other million-dollar brands started." %}
+  {% set section_class = 'bg-light-base border-b border-gray-100' %}
+  {% include '_audit_cta_center.html' %}
+
+  {% include '_cro_program_sections.html' %}
 
   <!-- Proven ROI in the Wild (copied from homepage) -->
   <section class="py-20 md:py-24 bg-deep-charcoal border-t border-white/5">
@@ -427,8 +415,7 @@ fixes them with data—convert more of your traffic.{% endblock %} {% block foot
         <p
           class="text-slate-500 font-bold uppercase tracking-widest text-sm mt-4"
         >
-          These companies were right here on this very page before you—and they
-          booked a call. See what happened after they did.
+          Brands that booked a free audit—and what changed after they implemented the roadmap.
         </p>
       </div>
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
@@ -472,6 +459,11 @@ fixes them with data—convert more of your traffic.{% endblock %} {% block foot
       </div>
     </div>
   </section>
+
+  {% set heading = "Your funnel is leaking somewhere. Let's find it." %}
+  {% set subtext = "They were skeptical too—then they saw exactly where revenue was hiding." %}
+  {% set section_class = 'bg-white border-b border-gray-100' %}
+  {% include '_audit_cta_center.html' %}
 
   <section class="py-20 md:py-24 bg-white border-b border-gray-100">
     <div class="max-w-7xl mx-auto px-6">
@@ -1283,131 +1275,101 @@ fixes them with data—convert more of your traffic.{% endblock %} {% block foot
       </div>
     </div>
   </section>
+
+</div>
+<div
+  id="vsl-sticky-cta"
+  class="fixed left-0 right-0 bottom-4 sm:bottom-6 z-[90] flex justify-center px-4 pb-[env(safe-area-inset-bottom)]"
+  aria-hidden="true"
+>
+  <div
+    class="inline-flex items-center gap-3 sm:gap-5 max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.14)] border border-gray-200/90 px-3.5 sm:px-5 py-3"
+  >
+    <p
+      class="inline-flex items-center flex-wrap sm:flex-nowrap gap-x-1.5 sm:gap-x-2 gap-y-0.5 text-deep-charcoal font-display font-black uppercase tracking-tight text-sm sm:text-lg leading-none m-0"
+    >
+      <span
+        class="inline-flex items-center gap-0.5 sm:gap-1 shrink-0"
+        aria-hidden="true"
+      >
+        <span
+          data-audit-queue-tens
+          class="inline-flex items-center justify-center w-[1.35em] h-[1.35em] rounded-md bg-deep-charcoal text-white tabular-nums"
+          >0</span
+        >
+        <span
+          data-audit-queue-ones
+          class="inline-flex items-center justify-center w-[1.35em] h-[1.35em] rounded-md bg-deep-charcoal text-white tabular-nums"
+          >0</span
+        >
+      </span>
+      <span>CRO audits in the queue</span>
+    </p>
+    <a
+      href="{{ strategy_session_url }}"
+      class="inline-flex items-center shrink-0 pl-4 sm:pl-6 pr-1.5 py-1.5 min-h-[44px] sm:min-h-[48px] bg-deep-charcoal text-white font-display text-[11px] sm:text-sm font-black uppercase rounded-full hover:brightness-110 transition-all"
+    >
+      <span class="whitespace-nowrap">Book yours now</span>
+      <span
+        class="ml-2 sm:ml-3 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-primary flex items-center justify-center shrink-0"
+        aria-hidden="true"
+      >
+        <span class="material-symbols-outlined text-white text-lg sm:text-xl"
+          >arrow_outward</span
+        >
+      </span>
+    </a>
+  </div>
 </div>
 
-{# One floating CTA #}
-<a
-  href="#calendly"
-  class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 z-[90] flex justify-center sm:justify-end"
->
-  <span
-    class="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-primary text-white text-sm font-bold uppercase rounded-lg shadow-lg hover:brightness-110 transition-all min-h-[48px]"
-  >
-    Book your free call
-  </span>
-</a>
+<script>
+  (function () {
+    var strategyUrl = {{ strategy_session_url|tojson }};
+    if (window.location.hash === "#calendly") {
+      window.location.replace(strategyUrl);
+    }
 
-<script>
-  (function () {
-    var ctaWrap = document.getElementById("vsl-cta-wrap");
-    var formWrap = document.getElementById("vsl-form-wrap");
-    var calendlyWrap = document.getElementById("vsl-calendly-wrap");
-    var ctaBtn = document.getElementById("vsl-cta-btn");
-    var form = document.getElementById("vsl-audit-form");
-    var submitBtn = document.getElementById("vsl-form-submit");
-    if (ctaBtn && formWrap) {
-      ctaBtn.addEventListener("click", function () {
-        if (ctaWrap) ctaWrap.classList.add("hidden");
-        formWrap.classList.remove("hidden");
-      });
+    var primaryCta = document.querySelector("[data-vsl-primary-cta]");
+    var stickyCta = document.getElementById("vsl-sticky-cta");
+
+    function updateStickyCta() {
+      if (!primaryCta || !stickyCta) return;
+      var rect = primaryCta.getBoundingClientRect();
+      var passedPrimary = rect.bottom < 0;
+      var show = passedPrimary;
+      stickyCta.classList.toggle("is-visible", show);
+      stickyCta.setAttribute("aria-hidden", show ? "false" : "true");
     }
-    if (form && calendlyWrap) {
-      form.addEventListener("submit", function (e) {
-        e.preventDefault();
-        var fname =
-          document.getElementById("vsl-fname") &&
-          document.getElementById("vsl-fname").value
-            ? document.getElementById("vsl-fname").value.trim()
-            : "";
-        var email =
-          document.getElementById("vsl-email") &&
-          document.getElementById("vsl-email").value
-            ? document.getElementById("vsl-email").value.trim()
-            : "";
-        var website =
-          document.getElementById("vsl-website") &&
-          document.getElementById("vsl-website").value
-            ? document.getElementById("vsl-website").value.trim()
-            : "";
-        if (!fname || !email || !website) {
-          form.reportValidity && form.reportValidity();
-          return;
-        }
-        if (submitBtn) {
-          submitBtn.disabled = true;
-          submitBtn.textContent = "Sending…";
-        }
-        fetch("/request-audit", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Requested-With": "XMLHttpRequest",
-          },
-          body: JSON.stringify({
-            fname: fname,
-            email: email,
-            website_url: website,
-          }),
-        })
-          .then(function (r) {
-            return r.json();
-          })
-          .then(function (data) {
-            if (data && data.success) {
-              if (formWrap) formWrap.classList.add("hidden");
-              calendlyWrap.classList.remove("hidden");
-              calendlyWrap.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-              });
-              if (
-                window.Calendly &&
-                document.querySelector(".calendly-inline-widget")
-              ) {
-                try {
-                  window.Calendly.initInlineWidget();
-                } catch (err) {}
-              }
-            }
-          })
-          .finally(function () {
-            if (submitBtn) {
-              submitBtn.disabled = false;
-              submitBtn.textContent = "See available times";
-            }
-          });
-      });
+
+    function setAuditQueueCount() {
+      if (!stickyCta) return;
+      var tens = stickyCta.querySelector("[data-audit-queue-tens]");
+      var ones = stickyCta.querySelector("[data-audit-queue-ones]");
+      if (!tens || !ones) return;
+      var day = String(new Date().getDate()).padStart(2, "0");
+      tens.textContent = day[0];
+      ones.textContent = day[1];
     }
-  })();
-</script>
-<script
-  type="text/javascript"
-  src="https://assets.calendly.com/assets/external/widget.js"
-  async
-></script>
-<script>
-  (function () {
-    var container = document.querySelector(".calendly-inline-widget");
-    if (!container) return;
-    var mo = new MutationObserver(function (mutations) {
-      mutations.forEach(function (m) {
-        m.addedNodes.forEach(function (node) {
-          if (node.tagName === "IFRAME") {
-            node.addEventListener("load", function () {
-              try {
-                window.dataLayer = window.dataLayer || [];
-                window.dataLayer.push({
-                  event: "calendly_inline_loaded",
-                  path: window.location.pathname,
-                  timestamp: new Date().toISOString(),
-                });
-              } catch (err) {}
-            });
-          }
-        });
-      });
+
+    if (primaryCta && stickyCta) {
+      setAuditQueueCount();
+      updateStickyCta();
+      window.addEventListener("scroll", updateStickyCta, { passive: true });
+      window.addEventListener("resize", updateStickyCta);
+    }
+
+    document.querySelectorAll(".spark-exp-strip").forEach(function (sec) {
+      var track = sec.querySelector(".spark-exp-strip-track");
+      var prev = sec.querySelector(".spark-exp-strip-prev");
+      var next = sec.querySelector(".spark-exp-strip-next");
+      if (!track) return;
+      function scrollByDir(dir) {
+        var amount = Math.max(track.clientWidth * 0.85, 300);
+        track.scrollBy({ left: dir * amount, behavior: "smooth" });
+      }
+      if (prev) prev.addEventListener("click", function () { scrollByDir(-1); });
+      if (next) next.addEventListener("click", function () { scrollByDir(1); });
     });
-    mo.observe(container, { childList: true, subtree: true });
   })();
 </script>
 {% endblock %}

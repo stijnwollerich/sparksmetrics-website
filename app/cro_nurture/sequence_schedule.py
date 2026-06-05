@@ -26,7 +26,7 @@ Public links (also referenced inside step prompts)
 - Book a call: https://sparksmetrics.com/schedule-a-call
 - YouTube: https://www.youtube.com/@stijnwollerich
 - CRO ebook: https://sparksmetrics.com/13-actionable-conversion-rate-optimization-strategies-ebook/
-- How we improve conversions (90-day ROI / video): https://sparksmetrics.com/how-we-improve-conversions
+- Free CRO audit (90-day ROI / video): https://sparksmetrics.com/free-cro-audit/
 
 Timing rules
 ------------
@@ -154,7 +154,7 @@ STEPS: list[dict] = [
             "Optional one-sentence nod to their audit (audit_store_name or industry) for warmth—without repeating leaks, tests, "
             "or hooks already used in emails 1–3.\n"
             "Do not rehash the same CRO test suggestions or homepage/PDP beats from emails 1–3.\n"
-            "Page (for your context only; link is injected): https://sparksmetrics.com/how-we-improve-conversions\n"
+            "Page (for your context only; link is injected): https://sparksmetrics.com/free-cro-audit/\n"
             "~110–170 words. Subject: ROI guarantee / confidence / risk angle—not ‘another scan thought’. "
             "Optional soft reply or https://sparksmetrics.com/schedule-a-call.\n"
             "JSON: subject, html, text."

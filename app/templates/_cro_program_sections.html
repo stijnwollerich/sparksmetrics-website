@@ -1,0 +1,319 @@
+{# /free-cro-audit/ — below the fold: what the free audit is and what they receive #}
+{% set deck = 'images/cro-deck-v2/' %}
+
+{# —— Full audit examples (FigJam boards — lead with proof) —— #}
+<section class="py-12 md:py-16 bg-white border-b border-gray-100" id="audit-examples">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-10 md:mb-14 max-w-3xl mx-auto">
+      <p class="text-primary font-bold text-[10px] uppercase tracking-[0.35em] mb-2">Audit examples</p>
+      <h2 class="text-2xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tighter">
+        Full-funnel maps from real clients
+      </h2>
+      <p class="text-gray-600 text-sm md:text-base mt-4 leading-relaxed">
+        Every audit includes a homepage-to-checkout review like these—annotated, scored, and tied to revenue impact.
+      </p>
+    </div>
+
+    <div class="space-y-14 md:space-y-20">
+      {% set brand = none %}
+      {% set title = 'Every page, every leak' %}
+      {% set description = 'FigJam map from homepage through product, cart, and checkout. Severity scores show what blocks revenue today vs. what can wait.' %}
+      {% set src = 'steps/step-03-ux-review-nooktales.png' %}
+      {% set alt = 'Full-funnel CRO audit example for Nook Tales' %}
+      {% set width = 2080 %}
+      {% set height = 1166 %}
+      {% include '_audit_example_full.html' %}
+
+      {% set brand = none %}
+      {% set title = 'High-AOV funnel, step by step' %}
+      {% set description = 'Luxury ecommerce needs trust at every touchpoint. PDP, cart, and checkout annotated for clarity, friction, and merchandising.' %}
+      {% set src = 'steps/step-04-ux-review-spinelli.png' %}
+      {% set alt = 'Full-funnel CRO audit example for Spinelli Kilcollin' %}
+      {% set width = 2692 %}
+      {% set height = 1084 %}
+      {% include '_audit_example_full.html' %}
+    </div>
+  </div>
+</section>
+
+{% set heading = 'Want a full-funnel map like this for your brand?' %}
+{% set subtext = "Your checkout is bleeding money—you just can't see it yet." %}
+{% set section_class = 'bg-white border-b border-gray-100' %}
+{% include '_audit_cta_center.html' %}
+
+{# —— Deliverable deep-dives (other audit artifacts) —— #}
+<section class="py-12 md:py-16 bg-light-base border-b border-gray-100" id="audit-deliverables">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-8 md:mb-10 max-w-3xl mx-auto">
+      <p class="text-primary font-bold text-[10px] uppercase tracking-[0.35em] mb-2">Inside every audit</p>
+      <h2 class="text-2xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tighter">
+        The supporting detail behind the map
+      </h2>
+      <p class="text-gray-600 text-sm md:text-base mt-4 leading-relaxed">
+        Data, prioritization, and test concepts that back up the full-funnel review.
+      </p>
+    </div>
+
+    <div class="space-y-5 md:space-y-7">
+      {% set eyebrow = 'Findings' %}
+      {% set badge = 'search' %}
+      {% set title = 'Page-by-page UX & data findings' %}
+      {% set paragraphs = [
+        'We annotate the pages your ads send traffic to—hero, PDP, cart, checkout—and tie each issue to data.',
+        'You see what confuses visitors, what they skip, and what blocks the click you paid for.',
+        'No generic “best practices” list. Every note is about your site.',
+      ] %}
+      {% set bold_last = false %}
+      {% set example = '*Example of Secret Food Tours*' %}
+      {% set image = 'steps/step-01-audit-example.png' %}
+      {% set placeholder = none %}
+      {% include '_audit_section_block.html' %}
+
+      {% set eyebrow = 'Data analysis' %}
+      {% set badge = 'filter_alt' %}
+      {% set title = 'Where buyers drop in your funnel' %}
+      {% set paragraphs = [
+        'Session-to-purchase funnel with completion and abandon rates at every step—product view, add to cart, checkout, purchase.',
+        'You see the biggest leak in one view instead of guessing which stage is costing you revenue.',
+      ] %}
+      {% set example = none %}
+      {% set image = 'steps/step-data-funnel-analysis.png' %}
+      {% include '_audit_section_block.html' %}
+
+      {% set eyebrow = 'Data' %}
+      {% set badge = 'monitoring' %}
+      {% set title = 'Where attention dies on the page' %}
+      {% set paragraphs = [
+        'Scroll-depth and heatmaps on high-traffic URLs, segmented by device and source where it matters.',
+        'We show the exact sections users never reach—so you stop optimizing parts of the page nobody sees.',
+      ] %}
+      {% set example = none %}
+      {% set image = 'steps/step-01-findings-heatmap.png' %}
+      {% include '_audit_section_block.html' %}
+
+      {% set eyebrow = 'Roadmap' %}
+      {% set badge = 'format_list_numbered' %}
+      {% set title = 'What to fix first — and why' %}
+      {% set paragraphs = [
+        'Every insight gets scored for impact, confidence, and effort. You get a ranked list—not a backlog of 40 random ideas.',
+        'Your team knows the top 3–5 moves that move revenue before anything goes live.',
+      ] %}
+      {% set image = 'steps/step-02-roadmap-prioritization.png' %}
+      {% include '_audit_section_block.html' %}
+
+      {% set eyebrow = 'Test concepts' %}
+      {% set badge = 'science' %}
+      {% set title = 'Hypotheses you can approve in one read' %}
+      {% set paragraphs = [
+        'Clear hypothesis, control vs. variant, and what we expect to move—ready for your designer or dev.',
+        'Not “improve the CTA.” Specific changes tied to the data we found.',
+      ] %}
+      {% set example = '*Example · Secret Food Tours · tour page*' %}
+      {% set image = 'steps/step-03-design-tour-page.png' %}
+      {% include '_audit_section_block.html' %}
+
+      {% set eyebrow = none %}
+      {% set badge = 'web' %}
+      {% set title = 'Landing pages that catch paid traffic' %}
+      {% set paragraphs = [
+        'City pages, collection landers, campaign URLs—we audit the pages ads actually hit, not just the homepage.',
+      ] %}
+      {% set example = '*Example · Hamburg city page*' %}
+      {% set image = 'steps/step-05-test-city-page.png' %}
+      {% include '_audit_section_block.html' %}
+
+      {% set eyebrow = 'Variant direction' %}
+      {% set badge = 'palette' %}
+      {% set title = 'What “good” looks like on mobile' %}
+      {% set paragraphs = [
+        'When the data points to a UX change, we show reference direction—subscription layouts, cart upsells, social proof placement—grounded in tests we have run.',
+      ] %}
+      {% set example = '*Example van Canopy*' %}
+      {% set image = 'steps/step-03-design-canopy.png' %}
+      {% include '_audit_section_block.html' %}
+    </div>
+  </div>
+</section>
+
+{% set heading = 'Want this level of detail on your store?' %}
+{% set subtext = 'The roadmap is free. Staying confused costs you every single day.' %}
+{% set section_class = 'bg-light-base border-b border-gray-100' %}
+{% include '_audit_cta_center.html' %}
+
+{# —— What you walk away with (checklist — after they've seen examples) —— #}
+<section class="py-10 md:py-12 bg-white border-b border-gray-100" id="audit-includes">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+    <h2 class="text-xl md:text-2xl font-display font-black text-deep-charcoal uppercase tracking-tighter text-center mb-8">
+      What's inside your audit
+    </h2>
+    <ul class="grid sm:grid-cols-2 gap-3 md:gap-4 text-sm text-gray-700">
+      {% for item in [
+        ('analytics', 'Funnel & drop-off analysis on your money pages'),
+        ('visibility', 'Scroll-depth & heatmap findings tied to ad traffic'),
+        ('route', 'ICE-ranked roadmap — what to fix first'),
+        ('map', 'Full-funnel UX map (homepage → checkout)'),
+        ('science', 'Test hypotheses with control vs. variant direction'),
+      ] %}
+      <li class="flex gap-3 rounded-xl bg-light-base border border-gray-200 px-4 py-3.5">
+        <span class="material-symbols-outlined text-primary text-xl shrink-0">{{ item[0] }}</span>
+        <span class="leading-relaxed">{{ item[1] }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+{% set heading = 'Get the same depth of analysis on your store.' %}
+{% set subtext = "Every leak you ignore is ad spend you'll never get back." %}
+{% set section_class = 'bg-white border-b border-gray-100' %}
+{% include '_audit_cta_center.html' %}
+
+{# —— Bridge: what the audit is —— #}
+<section class="py-10 md:py-14 bg-light-base border-b border-gray-100" id="what-is-audit">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+    <p class="text-primary font-bold text-[10px] md:text-xs uppercase tracking-[0.35em] mb-3">Free CRO audit</p>
+    <h2 class="text-2xl md:text-4xl lg:text-5xl font-display font-black text-deep-charcoal uppercase tracking-tighter leading-tight">
+      Not a sales deck.<br />
+      <span class="text-primary">A forensic look at your funnel.</span>
+    </h2>
+    <p class="text-gray-600 text-sm md:text-lg mt-5 leading-relaxed max-w-2xl mx-auto">
+      You book a call. We dig into your data, pages, and checkout before we meet.
+      You leave with specific leaks, a prioritized fix list, and test ideas your team can act on—whether you work with us or not.
+    </p>
+  </div>
+</section>
+
+{% set heading = none %}
+{% set subtext = 'Or stay stuck forever—debating buttons while CAC keeps climbing.' %}
+{% set section_class = 'bg-light-base border-b border-gray-100' %}
+{% include '_audit_cta_center.html' %}
+
+{# —— Personal delivery (no placeholder boxes) —— #}
+<section class="py-10 md:py-12 bg-white border-b border-gray-100" id="audit-extras">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-6">
+      <h2 class="text-xl md:text-2xl font-display font-black text-deep-charcoal uppercase tracking-tighter">
+        Plus, on every audit
+      </h2>
+      <p class="text-gray-600 text-sm mt-2">Delivered personally—not a PDF generator.</p>
+    </div>
+    <ul class="space-y-3">
+      <li class="flex gap-4 rounded-xl bg-white border border-gray-200 p-4 md:p-5">
+        <span class="shrink-0 w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+          <span class="material-symbols-outlined text-xl">smart_display</span>
+        </span>
+        <div class="min-w-0">
+          <p class="font-display font-black text-deep-charcoal uppercase text-sm tracking-tight">Loom walkthrough</p>
+          <p class="text-gray-600 text-sm mt-1 leading-relaxed">
+            Recorded tour of your findings before the call—watch on your time, bring questions live.
+          </p>
+        </div>
+      </li>
+      <li class="flex gap-4 rounded-xl bg-white border border-gray-200 p-4 md:p-5">
+        <span class="shrink-0 w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+          <span class="material-symbols-outlined text-xl">trending_up</span>
+        </span>
+        <div class="min-w-0">
+          <p class="font-display font-black text-deep-charcoal uppercase text-sm tracking-tight">Revenue opportunity estimate</p>
+          <p class="text-gray-600 text-sm mt-1 leading-relaxed">
+            Conservative monthly $ left on the table from your top leaks—so you know if CVR is worth prioritizing now.
+          </p>
+        </div>
+      </li>
+      <li class="flex gap-4 rounded-xl bg-white border border-gray-200 p-4 md:p-5">
+        <span class="shrink-0 w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+          <span class="material-symbols-outlined text-xl">forum</span>
+        </span>
+        <div class="min-w-0">
+          <p class="font-display font-black text-deep-charcoal uppercase text-sm tracking-tight">30-min live review</p>
+          <p class="text-gray-600 text-sm mt-1 leading-relaxed">
+            Walk through the doc together. Ask anything. No obligation to hire us afterward.
+          </p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+{# —— What happens when you book —— #}
+<section class="py-10 md:py-14 bg-light-base border-b border-gray-100" id="how-it-works">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+    <h2 class="text-xl md:text-3xl font-display font-black text-deep-charcoal uppercase tracking-tighter text-center mb-8">
+      How the free audit works
+    </h2>
+    <ol class="grid md:grid-cols-3 gap-4 md:gap-6">
+      {% for num, label, detail in [
+        ('1', 'Book 30 minutes', 'Tell us your store URL and where ads send traffic. No prep deck needed.'),
+        ('2', 'We audit before the call', 'Data, heatmaps, UX review—done async so call time is insight, not discovery.'),
+        ('3', 'You get the doc + walkthrough', 'Findings, roadmap, hypotheses, and a call to decide next steps. No obligation.'),
+      ] %}
+      <li class="rounded-2xl border border-gray-200 bg-light-base p-5 md:p-6 text-center md:text-left">
+        <span class="inline-flex w-10 h-10 rounded-full bg-primary text-white text-lg font-black items-center justify-center mb-4">{{ num }}</span>
+        <p class="font-display font-black text-deep-charcoal uppercase text-sm tracking-tight">{{ label }}</p>
+        <p class="text-gray-600 text-sm mt-2 leading-relaxed">{{ detail }}</p>
+      </li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>
+
+{% set heading = 'Book your audit — we do the digging before the call' %}
+{% set subtext = '30 minutes. No deck. Just your funnel, torn apart with care.' %}
+{% set section_class = 'bg-white border-b border-gray-100' %}
+{% include '_audit_cta_center.html' %}
+
+{# —— Good fit —— #}
+<section class="py-10 md:py-12 bg-light-base border-b border-gray-100">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6">
+    <h2 class="text-xl md:text-2xl font-display font-black text-deep-charcoal uppercase tracking-tighter text-center mb-6">
+      This audit is for you if…
+    </h2>
+    <ul class="grid sm:grid-cols-2 gap-3 text-sm text-gray-700">
+      {% for text in [
+        'You spend on Meta, Google, or TikTok but CVR flatlined.',
+        'Your team debates changes without data or a test plan.',
+        'You want an outside expert to flag leaks before Q4 spend.',
+        'You need a prioritized list—not another agency pitch deck.',
+      ] %}
+      <li class="flex gap-2 rounded-xl bg-white border border-gray-200 px-4 py-3">
+        <span class="material-symbols-outlined text-primary text-lg shrink-0">check_circle</span>
+        {{ text }}
+      </li>
+      {% endfor %}
+    </ul>
+    <p class="text-center text-gray-500 text-xs md:text-sm mt-6 max-w-xl mx-auto">
+      Not a fit for pre-revenue stores or businesses without meaningful site traffic yet.
+    </p>
+  </div>
+</section>
+
+{# —— Audit FAQ —— #}
+<section class="py-10 md:py-14 bg-white border-b border-gray-100" id="audit-faq">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6">
+    <h2 class="text-xl md:text-3xl font-display font-black text-deep-charcoal uppercase tracking-tighter text-center mb-8">
+      Questions about the audit
+    </h2>
+    <div class="space-y-4 text-sm md:text-base">
+      {% for q, a in [
+        ('Is it really free?', 'Yes. You get the audit findings and walkthrough at no cost. We only discuss paid work if you ask how we would execute the roadmap.'),
+        ('How long until I get the audit?', 'We typically deliver the doc and Loom within a few business days of booking—before your scheduled call.'),
+        ('What do I need to prepare?', 'Store URL, ad platforms you use, and GA4 access if you have it. We handle the rest.'),
+        ('Is this the same as a CRO retainer?', 'No. The audit is a standalone deliverable. Many brands implement the roadmap in-house; others ask us to run tests—that is optional.'),
+        ('What platforms do you audit?', 'Shopify, WordPress, headless, and custom stacks. If it has a checkout and analytics, we can audit it.'),
+      ] %}
+      <details class="group rounded-xl border border-gray-200 bg-light-base px-5 py-4">
+        <summary class="font-bold text-deep-charcoal cursor-pointer list-none flex justify-between gap-4">
+          {{ q }}
+          <span class="material-symbols-outlined text-gray-400 group-open:rotate-180 transition-transform shrink-0">expand_more</span>
+        </summary>
+        <p class="text-gray-600 mt-3 leading-relaxed">{{ a }}</p>
+      </details>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% set heading = 'Book your free audit — no pitch, just your funnel' %}
+{% set subtext = "The audit is free. Regret isn't." %}
+{% set section_class = 'bg-white border-b border-gray-100' %}
+{% include '_audit_cta_center.html' %}

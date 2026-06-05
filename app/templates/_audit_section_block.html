@@ -1,0 +1,52 @@
+{# Audit deliverable block — copy + optional example caption + image or placeholder #}
+<article class="rounded-2xl md:rounded-3xl bg-white border border-gray-200 shadow-sm overflow-hidden">
+  <div class="p-5 md:p-8 lg:p-10">
+    <div class="flex flex-col {% if image or placeholder %}lg:flex-row lg:items-center{% endif %} gap-6 lg:gap-10">
+      <div class="flex gap-4 md:gap-6 flex-1 min-w-0 lg:items-start">
+        {% if badge %}
+        <div
+          class="shrink-0 w-12 h-12 md:w-14 md:h-14 rounded-full bg-primary/10 text-primary flex items-center justify-center"
+          aria-hidden="true"
+        >
+          <span class="material-symbols-outlined text-2xl md:text-3xl">{{ badge }}</span>
+        </div>
+        {% endif %}
+        <div class="flex-1 min-w-0">
+          {% if eyebrow %}
+          <p class="text-primary font-bold text-[10px] uppercase tracking-[0.35em] mb-2">{{ eyebrow }}</p>
+          {% endif %}
+          <h3 class="text-xl sm:text-2xl md:text-3xl font-display font-black text-deep-charcoal uppercase tracking-tight leading-[1.1]">
+            {{ title }}
+          </h3>
+          <div class="mt-4 text-gray-700 text-sm md:text-base leading-relaxed space-y-3">
+            {% for para in paragraphs %}
+            <p {% if loop.last and bold_last|default(false) %}class="font-bold text-deep-charcoal"{% endif %}>{{ para }}</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      {% if image %}
+      <div class="w-full lg:w-[44%] xl:w-[42%] shrink-0 flex flex-col items-stretch lg:items-end">
+        {% if example %}
+        <p class="text-xs md:text-sm italic text-teal-700 mb-2 text-right self-end">{{ example }}</p>
+        {% endif %}
+        <img
+          src="{{ url_for('static', filename=deck ~ image) }}"
+          alt="{{ title }}"
+          class="w-full max-h-[280px] sm:max-h-[320px] md:max-h-[380px] lg:max-h-[420px] object-contain object-center rounded-xl ring-2 ring-violet-500/50 shadow-xl bg-white"
+          loading="lazy"
+        />
+      </div>
+      {% elif placeholder %}
+      <div class="w-full lg:w-[44%] xl:w-[42%] shrink-0">
+        <div class="rounded-xl border-2 border-dashed border-gray-300 bg-light-base p-8 md:p-10 text-center min-h-[200px] flex flex-col items-center justify-center">
+          <span class="material-symbols-outlined text-4xl text-gray-300 mb-3">image</span>
+          <p class="text-sm font-bold text-gray-500 uppercase tracking-widest">{{ placeholder }}</p>
+          <p class="text-xs text-gray-400 mt-2">Visual coming soon</p>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</article>

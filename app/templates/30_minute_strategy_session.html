@@ -1,0 +1,716 @@
+{% extends "base.html" %}
+{% block title %}Free 30-Minute CRO Strategy Session | Sparksmetrics{% endblock %}
+{% block meta_description %}Claim your free 30-minute CRO strategy session. We'll review your store funnel and show you where you're leaking revenue.{% endblock %}
+{% block og_title %}Free 30-Minute CRO Strategy Session | Sparksmetrics{% endblock %}
+{% block og_description %}Free 30-minute CRO strategy session for ecommerce brands ready to convert more traffic.{% endblock %}
+{% block twitter_title %}Free 30-Minute CRO Strategy Session | Sparksmetrics{% endblock %}
+{% block twitter_description %}Free 30-minute CRO strategy session for ecommerce brands ready to convert more traffic.{% endblock %}
+{% block primary_bar %}{% endblock %}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block audit_bar %}{% endblock %}
+{% block head_extras %}
+<meta name="robots" content="noindex, follow" />
+<style>
+  .mss-shell {
+    width: 100%;
+    max-width: 56rem;
+  }
+  .mss-progress-line {
+    height: 2px;
+    background: #e5e7eb;
+    flex: 1;
+    margin-top: 7px;
+  }
+  .mss-progress-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 9999px;
+    background: #e5e7eb;
+    flex-shrink: 0;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .mss-progress-dot.is-active {
+    background: #ff4d00;
+    transform: scale(1.2);
+  }
+  .mss-progress-dot.is-done {
+    background: #ff4d00;
+    opacity: 0.4;
+  }
+  .mss-step {
+    display: none !important;
+    width: 100%;
+  }
+  .mss-step.is-active {
+    display: flex !important;
+    flex-direction: column;
+    flex: 1 1 auto;
+    animation: mssFadeIn 0.3s ease forwards;
+  }
+  @keyframes mssFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .mss-tile {
+    border: 2px solid #e5e7eb;
+    border-radius: 0.75rem;
+    padding: 1.1rem 1.25rem;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: #1a1a1b;
+    transition: border-color 0.15s ease, background 0.15s ease;
+    cursor: pointer;
+    min-height: 56px;
+  }
+  .mss-tile:hover {
+    border-color: #ff4d00;
+    background: rgba(255, 77, 0, 0.04);
+  }
+  .mss-tile.is-selected {
+    border-color: #ff4d00;
+    background: rgba(255, 77, 0, 0.08);
+  }
+  .mss-field-input {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    font-size: 1.125rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.75rem;
+  }
+  .mss-field-input:focus {
+    outline: none;
+    border-color: #ff4d00;
+  }
+  #mss-calendly-iframe {
+    min-height: 620px;
+    height: 70vh;
+    max-height: 720px;
+  }
+  #mss-exit-modal.is-open {
+    display: flex;
+  }
+  #mss-exit-modal {
+    display: none;
+  }
+  .mss-exit-wait-label {
+    font-family: Impact, "Arial Black", sans-serif;
+    font-style: italic;
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+  }
+  @keyframes mssExitPop {
+    from {
+      opacity: 0;
+      transform: scale(0.96) translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+  .mss-exit-card {
+    animation: mssExitPop 0.28s ease forwards;
+  }
+</style>
+{% endblock %}
+{% block body_class %}bg-white text-gray-800 font-sans{% endblock %}
+{% block content %}
+<div
+  id="mss-funnel"
+  class="min-h-screen flex flex-col items-center px-5 sm:px-8 py-10 md:py-14"
+  data-total-steps="6"
+  data-visitor-country="{{ visitor_country|default('', true) }}"
+>
+  <div class="mss-shell mx-auto flex flex-col flex-1">
+    <a
+      href="{{ url_for('main.index') }}"
+      class="flex items-center justify-center gap-2 mb-10 group"
+      aria-label="Sparksmetrics home"
+    >
+      <div
+        class="w-9 h-9 bg-primary rounded flex items-center justify-center rotate-3"
+      >
+        <span class="text-white font-black text-xl">S</span>
+      </div>
+      <span
+        class="font-display text-xl tracking-tighter uppercase font-extrabold text-deep-charcoal"
+        >Sparksmetrics</span
+      >
+    </a>
+
+    <div
+      class="flex items-start gap-0 w-full mb-8"
+      id="mss-progress"
+      aria-hidden="true"
+    ></div>
+    <p
+      class="text-center text-[10px] font-bold uppercase tracking-[0.35em] text-gray-400 -mt-5 mb-10"
+      id="mss-progress-label"
+    >
+      Step 1 of 6
+    </p>
+
+    {# 1 — Intro #}
+    <section
+      class="mss-step is-active text-center"
+      data-step="1"
+      aria-labelledby="mss-step1-title"
+    >
+      <p class="text-2xl mb-3" aria-hidden="true">👋</p>
+      <p
+        id="mss-geo-line"
+        class="text-xs sm:text-sm font-bold uppercase tracking-[0.15em] text-gray-500 mb-8"
+      >
+        Working with ecommerce brands worldwide
+      </p>
+      <h1
+        id="mss-step1-title"
+        class="text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] font-display font-black text-deep-charcoal uppercase tracking-tight leading-[1.05] mb-6"
+      >
+        Free 30-minute
+        <span class="text-primary">CRO strategy session</span>
+      </h1>
+      <p
+        class="text-gray-600 text-base sm:text-lg md:text-xl leading-relaxed mb-10 max-w-3xl mx-auto"
+      >
+        A free, no-obligation call. We review your store funnel live and show you
+        where you're leaking revenue—without spending more on ads.
+      </p>
+      <button
+        type="button"
+        class="w-full sm:w-auto sm:min-w-[320px] min-h-[56px] px-10 py-4 bg-primary text-white font-display text-lg font-black uppercase rounded-full shadow-lg shadow-primary/25 hover:brightness-110 transition-all"
+        data-mss-next
+      >
+        Get started →
+      </button>
+      <p class="mt-8 text-xs font-bold uppercase tracking-widest text-gray-400">
+        <span class="text-primary">★★★★★</span> 4.8 from 300+ brands
+      </p>
+    </section>
+
+    {# 2 — Revenue #}
+    <section
+      class="mss-step"
+      data-step="2"
+      aria-labelledby="mss-step2-title"
+    >
+      <h2
+        id="mss-step2-title"
+        class="text-2xl sm:text-3xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tight text-center mb-3"
+      >
+        What's your store's annual revenue?
+      </h2>
+      <p class="text-gray-500 text-center text-base sm:text-lg mb-10">
+        Tap one option to continue.
+      </p>
+      <div
+        class="grid sm:grid-cols-2 gap-3 w-full max-w-2xl mx-auto"
+        role="group"
+        aria-label="Annual revenue"
+      >
+        <button type="button" class="mss-tile" data-revenue="Under €500K">
+          Under €500K
+        </button>
+        <button type="button" class="mss-tile" data-revenue="€500K – €2M">
+          €500K – €2M
+        </button>
+        <button type="button" class="mss-tile" data-revenue="€2M – €10M">
+          €2M – €10M
+        </button>
+        <button type="button" class="mss-tile" data-revenue="€10M+">€10M+</button>
+      </div>
+      <button
+        type="button"
+        class="mt-10 text-sm text-gray-500 hover:text-deep-charcoal mx-auto"
+        data-mss-back
+      >
+        ← Back
+      </button>
+    </section>
+
+    {# 3 — First name #}
+    <section class="mss-step" data-step="3" aria-labelledby="mss-step3-title">
+      <h2
+        id="mss-step3-title"
+        class="text-2xl sm:text-3xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tight text-center mb-3"
+      >
+        What's your first name?
+      </h2>
+      <p class="text-gray-500 text-center text-base sm:text-lg mb-10">
+        So we know who we're talking to on the call.
+      </p>
+      <div class="w-full max-w-2xl mx-auto">
+        <label for="mss-fname" class="sr-only">First name</label>
+        <input
+          type="text"
+          id="mss-fname"
+          class="mss-field-input"
+          placeholder="Your first name"
+          autocomplete="given-name"
+          required
+        />
+        <button
+          type="button"
+          class="w-full mt-4 min-h-[52px] bg-primary text-white font-display font-black uppercase rounded-full hover:brightness-110"
+          data-mss-next-field="mss-fname"
+        >
+          Next →
+        </button>
+      </div>
+      <button type="button" class="mt-8 text-sm text-gray-500 mx-auto" data-mss-back>
+        ← Back
+      </button>
+    </section>
+
+    {# 4 — Email #}
+    <section class="mss-step" data-step="4" aria-labelledby="mss-step4-title">
+      <h2
+        id="mss-step4-title"
+        class="text-2xl sm:text-3xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tight text-center mb-3"
+      >
+        What's your email?
+      </h2>
+      <p class="text-gray-500 text-center text-base sm:text-lg mb-10">
+        We'll send your calendar invite here.
+      </p>
+      <div class="w-full max-w-2xl mx-auto">
+        <label for="mss-email" class="sr-only">Email</label>
+        <input
+          type="email"
+          id="mss-email"
+          class="mss-field-input"
+          placeholder="you@company.com"
+          autocomplete="email"
+          required
+        />
+        <button
+          type="button"
+          class="w-full mt-4 min-h-[52px] bg-primary text-white font-display font-black uppercase rounded-full hover:brightness-110"
+          data-mss-next-field="mss-email"
+        >
+          Next →
+        </button>
+      </div>
+      <button type="button" class="mt-8 text-sm text-gray-500 mx-auto" data-mss-back>
+        ← Back
+      </button>
+    </section>
+
+    {# 5 — Website #}
+    <section class="mss-step" data-step="5" aria-labelledby="mss-step5-title">
+      <h2
+        id="mss-step5-title"
+        class="text-2xl sm:text-3xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tight text-center mb-3"
+      >
+        What's your store URL?
+      </h2>
+      <p class="text-gray-500 text-center text-base sm:text-lg mb-10">
+        We'll review your funnel before the call.
+      </p>
+      <div class="w-full max-w-2xl mx-auto">
+        <label for="mss-website" class="sr-only">Website URL</label>
+        <input
+          type="url"
+          id="mss-website"
+          class="mss-field-input"
+          placeholder="yourstore.com"
+          autocomplete="url"
+          required
+        />
+        <button
+          type="button"
+          id="mss-submit"
+          class="w-full mt-4 min-h-[52px] bg-primary text-white font-display font-black uppercase rounded-full hover:brightness-110"
+        >
+          Show me available times →
+        </button>
+      </div>
+      <button type="button" class="mt-8 text-sm text-gray-500 mx-auto" data-mss-back>
+        ← Back
+      </button>
+    </section>
+
+    {# 6 — Calendly #}
+    <section class="mss-step" data-step="6" aria-labelledby="mss-step6-title">
+      <h2 id="mss-step6-title" class="sr-only">Schedule your call</h2>
+      <p
+        class="text-gray-600 text-base sm:text-lg text-center mb-6 max-w-2xl mx-auto"
+      >
+        Pick a time below for your free 30-minute audit call.
+      </p>
+      <iframe
+        id="mss-calendly-iframe"
+        title="Schedule your free strategy session"
+        class="w-full border-0 rounded-xl bg-gray-50"
+        src="about:blank"
+      ></iframe>
+      <p class="text-center text-gray-500 text-xs mt-6">
+        Trouble booking?
+        <a href="mailto:connect@sparksmetrics.com" class="text-primary font-bold underline"
+          >connect@sparksmetrics.com</a
+        >
+      </p>
+    </section>
+  </div>
+</div>
+
+<div
+  id="mss-exit-modal"
+  class="fixed inset-0 z-[300] items-center justify-center p-4"
+  aria-hidden="true"
+  role="dialog"
+  aria-labelledby="mss-exit-title"
+  aria-modal="true"
+>
+  <div class="absolute inset-0 bg-black/75" data-mss-exit-close></div>
+  <div
+    class="mss-exit-card relative z-10 w-full max-w-lg bg-[#f0f1f3] rounded-2xl overflow-hidden shadow-2xl"
+  >
+    <button
+      type="button"
+      class="absolute top-3 right-3 z-20 p-2 text-gray-400 hover:text-gray-600 text-2xl"
+      data-mss-exit-close
+      aria-label="Close"
+    >
+      ×
+    </button>
+    <div class="h-2 bg-gray-300">
+      <div
+        id="mss-exit-progress-fill"
+        class="h-full bg-primary transition-all duration-300"
+        style="width: 16%"
+      ></div>
+    </div>
+    <div class="px-6 pt-8 pb-6 md:px-8 text-center">
+      <h2
+        id="mss-exit-title"
+        class="text-2xl font-display font-black text-deep-charcoal uppercase mb-4"
+      >
+        Hold on — you're almost there.
+      </h2>
+      <p class="text-gray-600 text-sm md:text-base mb-6">
+        Less than two minutes left. Finish the form, then pick a time for your
+        free strategy session.
+      </p>
+      <button
+        type="button"
+        id="mss-exit-cta"
+        class="w-full min-h-[52px] bg-primary text-white font-display font-black uppercase rounded-xl"
+      >
+        Continue booking
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var CALENDLY_URL =
+      "https://calendly.com/stijn-wollerich/free-30-minute-strategy-session?hide_gdpr_banner=1";
+    var TOTAL = 6;
+    var current = 1;
+    var annualRevenue = "";
+
+    var funnel = document.getElementById("mss-funnel");
+    var progressRoot = document.getElementById("mss-progress");
+    var progressLabel = document.getElementById("mss-progress-label");
+    var geoLine = document.getElementById("mss-geo-line");
+    var submitBtn = document.getElementById("mss-submit");
+    var calendlyIframe = document.getElementById("mss-calendly-iframe");
+    var exitModal = document.getElementById("mss-exit-modal");
+    var exitProgressFill = document.getElementById("mss-exit-progress-fill");
+    var exitStorageKey = "mss_exit_popup_shown";
+    var pageReadyAt = Date.now();
+    var exitEnabled = true;
+
+    var COUNTRY_META = {
+      US: { name: "the United States", flag: "🇺🇸" },
+      GB: { name: "the United Kingdom", flag: "🇬🇧" },
+      UK: { name: "the United Kingdom", flag: "🇬🇧" },
+      NL: { name: "the Netherlands", flag: "🇳🇱" },
+      AU: { name: "Australia", flag: "🇦🇺" },
+      CA: { name: "Canada", flag: "🇨🇦" },
+      DE: { name: "Germany", flag: "🇩🇪" },
+      FR: { name: "France", flag: "🇫🇷" },
+      BE: { name: "Belgium", flag: "🇧🇪" },
+      IE: { name: "Ireland", flag: "🇮🇪" },
+      SE: { name: "Sweden", flag: "🇸🇪" },
+      DK: { name: "Denmark", flag: "🇩🇰" },
+      NO: { name: "Norway", flag: "🇳🇴" },
+      ES: { name: "Spain", flag: "🇪🇸" },
+      IT: { name: "Italy", flag: "🇮🇹" },
+      AT: { name: "Austria", flag: "🇦🇹" },
+      CH: { name: "Switzerland", flag: "🇨🇭" },
+      NZ: { name: "New Zealand", flag: "🇳🇿" },
+      SG: { name: "Singapore", flag: "🇸🇬" },
+    };
+
+    function buildProgressDots() {
+      if (!progressRoot) return;
+      progressRoot.innerHTML = "";
+      for (var i = 1; i <= TOTAL; i++) {
+        if (i > 1) {
+          var line = document.createElement("div");
+          line.className = "mss-progress-line";
+          progressRoot.appendChild(line);
+        }
+        var dot = document.createElement("div");
+        dot.className = "mss-progress-dot";
+        dot.setAttribute("data-progress-dot", String(i));
+        progressRoot.appendChild(dot);
+      }
+    }
+
+    function setGeoLine(code) {
+      if (!geoLine) return;
+      var c = (code || "").toUpperCase();
+      var meta = COUNTRY_META[c];
+      if (meta) {
+        geoLine.textContent =
+          "Working with ecommerce brands in " + meta.name + " " + meta.flag;
+      } else if (c) {
+        geoLine.textContent =
+          "Working with ecommerce brands in your region \uD83C\uDF0D";
+      }
+    }
+
+    function resolveVisitorCountry() {
+      var fromServer = funnel && funnel.getAttribute("data-visitor-country");
+      if (fromServer && fromServer.length === 2) {
+        setGeoLine(fromServer);
+        return;
+      }
+      fetch("https://ipapi.co/json/", { credentials: "omit" })
+        .then(function (r) {
+          return r.json();
+        })
+        .then(function (data) {
+          if (data && data.country_code) setGeoLine(data.country_code);
+        })
+        .catch(function () {
+          var lang = (navigator.language || "").split("-")[1];
+          if (lang && lang.length === 2) setGeoLine(lang);
+        });
+    }
+
+    function steps() {
+      return document.querySelectorAll(".mss-step");
+    }
+
+    function dots() {
+      return document.querySelectorAll("[data-progress-dot]");
+    }
+
+    function setProgress(n) {
+      current = n;
+      if (progressLabel) {
+        progressLabel.textContent = "Step " + n + " of " + TOTAL;
+      }
+      dots().forEach(function (dot) {
+        var idx = parseInt(dot.getAttribute("data-progress-dot"), 10);
+        dot.classList.remove("is-active", "is-done");
+        if (idx < n) dot.classList.add("is-done");
+        else if (idx === n) dot.classList.add("is-active");
+      });
+      steps().forEach(function (el) {
+        var s = parseInt(el.getAttribute("data-step"), 10);
+        el.classList.toggle("is-active", s === n);
+      });
+      var active = document.querySelector('.mss-step[data-step="' + n + '"]');
+      var focusId =
+        n === 3 ? "mss-fname" : n === 4 ? "mss-email" : n === 5 ? "mss-website" : null;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      if (focusId) {
+        window.setTimeout(function () {
+          var el = document.getElementById(focusId);
+          if (el) el.focus();
+        }, 320);
+      }
+      try {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: "strategy_session_step",
+          step: n,
+          path: window.location.pathname,
+        });
+      } catch (err) {}
+    }
+
+    function goNext() {
+      if (current < TOTAL) setProgress(current + 1);
+    }
+
+    function goBack() {
+      if (current > 1) setProgress(current - 1);
+    }
+
+    function validateField(id) {
+      var el = document.getElementById(id);
+      if (!el) return false;
+      if (!el.value || !el.value.trim()) {
+        el.focus();
+        el.reportValidity && el.reportValidity();
+        return false;
+      }
+      if (el.type === "email" && !el.checkValidity()) {
+        el.focus();
+        el.reportValidity && el.reportValidity();
+        return false;
+      }
+      return true;
+    }
+
+    function submitLead() {
+      if (!validateField("mss-fname") || !validateField("mss-email") || !validateField("mss-website")) {
+        if (!document.getElementById("mss-fname").value.trim()) setProgress(3);
+        else if (!document.getElementById("mss-email").value.trim()) setProgress(4);
+        return;
+      }
+      var fname = document.getElementById("mss-fname").value.trim();
+      var email = document.getElementById("mss-email").value.trim();
+      var website = document.getElementById("mss-website").value.trim();
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Sending…";
+      }
+      fetch("/request-audit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        body: JSON.stringify({
+          fname: fname,
+          email: email,
+          website_url: website,
+          annual_revenue: annualRevenue || undefined,
+          form_page_url: window.location.href,
+        }),
+      })
+        .then(function (r) {
+          return r.json();
+        })
+        .then(function (data) {
+          if (data && data.success) {
+            exitEnabled = false;
+            if (calendlyIframe) calendlyIframe.src = CALENDLY_URL;
+            setProgress(6);
+          }
+        })
+        .finally(function () {
+          if (submitBtn && current < 6) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Show me available times →";
+          }
+        });
+    }
+
+    buildProgressDots();
+    resolveVisitorCountry();
+    setProgress(1);
+
+    document.querySelectorAll("[data-mss-next]").forEach(function (btn) {
+      btn.addEventListener("click", goNext);
+    });
+    document.querySelectorAll("[data-mss-back]").forEach(function (btn) {
+      btn.addEventListener("click", goBack);
+    });
+    document.querySelectorAll("[data-mss-next-field]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var id = btn.getAttribute("data-mss-next-field");
+        if (validateField(id)) goNext();
+      });
+    });
+
+    ["mss-fname", "mss-email", "mss-website"].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener("keydown", function (e) {
+        if (e.key !== "Enter") return;
+        e.preventDefault();
+        if (id === "mss-website") submitLead();
+        else if (validateField(id)) goNext();
+      });
+    });
+
+    document.querySelectorAll("[data-revenue]").forEach(function (tile) {
+      tile.addEventListener("click", function () {
+        document.querySelectorAll("[data-revenue]").forEach(function (t) {
+          t.classList.remove("is-selected");
+        });
+        tile.classList.add("is-selected");
+        annualRevenue = tile.getAttribute("data-revenue") || "";
+        window.setTimeout(goNext, 200);
+      });
+    });
+
+    if (submitBtn) submitBtn.addEventListener("click", submitLead);
+
+    function updateExitProgressBar() {
+      if (exitProgressFill) {
+        exitProgressFill.style.width =
+          Math.min(100, Math.round((current / TOTAL) * 100)) + "%";
+      }
+    }
+
+    function closeExitModal() {
+      if (!exitModal) return;
+      exitModal.classList.remove("is-open");
+      exitModal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+    }
+
+    function openExitModal() {
+      if (!exitModal || !exitEnabled || current >= TOTAL) return;
+      try {
+        if (sessionStorage.getItem(exitStorageKey) === "1") return;
+        sessionStorage.setItem(exitStorageKey, "1");
+      } catch (err) {}
+      updateExitProgressBar();
+      exitModal.classList.add("is-open");
+      exitModal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+
+    function maybeShowExitIntent(e) {
+      if (!exitEnabled || current >= TOTAL) return;
+      if (Date.now() - pageReadyAt < 4000) return;
+      if (e && typeof e.clientY === "number" && e.clientY > 12) return;
+      openExitModal();
+    }
+
+    document.addEventListener("mouseout", function (e) {
+      if (!e.relatedTarget && !e.toElement) maybeShowExitIntent(e);
+    });
+    document.addEventListener("mouseleave", maybeShowExitIntent);
+    document.querySelectorAll("[data-mss-exit-close]").forEach(function (el) {
+      el.addEventListener("click", closeExitModal);
+    });
+    var exitCta = document.getElementById("mss-exit-cta");
+    if (exitCta) exitCta.addEventListener("click", closeExitModal);
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && exitModal && exitModal.classList.contains("is-open")) {
+        closeExitModal();
+      }
+    });
+
+    if (funnel) {
+      try {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: "page_view",
+          page_type: "strategy_session_funnel",
+          page_path: window.location.pathname,
+        });
+      } catch (err) {}
+    }
+  })();
+</script>
+{% endblock %}

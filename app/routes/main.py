@@ -25,8 +25,12 @@ def inject_enable_gtm():
 # Central redirects: (from_paths, target_view_name, status_code). Add new redirects here.
 REDIRECTS = [
     (["/cro"], "main.cro", 301),
-    (["/30-minute-strategy-session/", "/30-minute-strategy-session"], "main.schedule_a_call", 301),
     (["/case-studies"], "main.results", 301),
+    (
+        ["/how-we-improve-conversions/", "/how-we-improve-conversions"],
+        "main.free_cro_audit_landing",
+        301,
+    ),
 ]
 
 
@@ -1273,18 +1277,33 @@ RESOURCE_DOWNLOADS = {
     "13-bulletproof-strategies": {"filename": "sm-cro-ebook.pdf"},
 }
 
-@main_bp.route("/how-we-improve-conversions/")
-@main_bp.route("/how-we-improve-conversions")
-def how_we_improve_conversions():
-    """VSL page: video + CTA button → short form (name, email, website) → Calendly. Goal: schedule a meeting."""
-    return render_template("how-we-improve-conversions.html")
+@main_bp.route("/30-minute-strategy-session/")
+@main_bp.route("/30-minute-strategy-session")
+def thirty_minute_strategy_session():
+    """Multi-step booking funnel: intro → revenue → contact fields → Calendly."""
+    country = (
+        (request.headers.get("CF-IPCountry") or request.headers.get("X-Vercel-IP-Country") or "")
+        .strip()
+        .upper()
+    )
+    return render_template(
+        "30_minute_strategy_session.html",
+        visitor_country=country if len(country) == 2 else "",
+    )
 
 
 @main_bp.route("/free-cro-audit/")
 @main_bp.route("/free-cro-audit")
 def free_cro_audit_landing():
-    """Landing page focused on free CRO audit requests."""
-    return render_template("free_cro_audit.html")
+    """VSL landing: video + booking → strategy session; Spark A/B test showcase when configured."""
+    from app.services.spark_experiments import get_website_experiments
+
+    experiments = get_website_experiments()
+    return render_template(
+        "how-we-improve-conversions.html",
+        spark_experiments=experiments,
+        spark_experiments_configured=spark_backend.enabled(),
+    )
 
 
 def _ingest_form_page_url(data: dict | None) -> str | None:
@@ -1907,7 +1926,14 @@ def request_audit():
     if not website_url:
         return jsonify({"success": False, "error": "Store URL required"}), 400
     website_url = _normalize_shopify_url(website_url) or website_url
-    audit_business_stage: str | None = None
+    audit_business_stage: str | None = (data.get("business_stage") or "").strip() or None
+    annual_revenue = (data.get("annual_revenue") or "").strip()
+    if annual_revenue:
+        audit_business_stage = (
+            f"{audit_business_stage} | annual revenue: {annual_revenue}"
+            if audit_business_stage
+            else f"annual revenue: {annual_revenue}"
+        )
     if orders_pm or cvr or aov:
         if not orders_pm or not cvr or not aov:
             return jsonify(
@@ -2020,6 +2046,27 @@ def serve_download(slug: str):
 def analytics():
     """Marketing analytics & tracking service landing."""
     return render_template("analytics.html")
+
+
+@main_bp.route("/spark-experiments/image", methods=["GET"])
+def spark_experiment_image():
+    """Proxy experiment screenshots from Spark (published tests only)."""
+    if not spark_backend.enabled():
+        abort(503)
+    path = (request.args.get("path") or "").strip()
+    if not path:
+        abort(404)
+    params = {"path": path}
+    for key in ("w", "h", "q"):
+        val = (request.args.get(key) or "").strip()
+        if val:
+            params[key] = val
+    status, body, content_type = spark_backend.fetch_experiment_image(params=params)
+    if status != 200 or not body:
+        abort(404)
+    resp = Response(body, mimetype=content_type or "image/webp")
+    resp.headers["Cache-Control"] = "public, max-age=86400"
+    return resp
 
 
 @main_bp.route("/results")
