@@ -1277,18 +1277,64 @@ RESOURCE_DOWNLOADS = {
     "13-bulletproof-strategies": {"filename": "sm-cro-ebook.pdf"},
 }
 
+VISITOR_COUNTRY_GEO: dict[str, tuple[str, str]] = {
+    "US": ("the United States", "🇺🇸"),
+    "GB": ("the United Kingdom", "🇬🇧"),
+    "UK": ("the United Kingdom", "🇬🇧"),
+    "NL": ("the Netherlands", "🇳🇱"),
+    "AU": ("Australia", "🇦🇺"),
+    "CA": ("Canada", "🇨🇦"),
+    "DE": ("Germany", "🇩🇪"),
+    "FR": ("France", "🇫🇷"),
+    "BE": ("Belgium", "🇧🇪"),
+    "IE": ("Ireland", "🇮🇪"),
+    "SE": ("Sweden", "🇸🇪"),
+    "DK": ("Denmark", "🇩🇰"),
+    "NO": ("Norway", "🇳🇴"),
+    "ES": ("Spain", "🇪🇸"),
+    "IT": ("Italy", "🇮🇹"),
+    "AT": ("Austria", "🇦🇹"),
+    "CH": ("Switzerland", "🇨🇭"),
+    "NZ": ("New Zealand", "🇳🇿"),
+    "SG": ("Singapore", "🇸🇬"),
+}
+
+
+def _visitor_country_code() -> str:
+    for header in (
+        "CF-IPCountry",
+        "X-Vercel-IP-Country",
+        "CloudFront-Viewer-Country",
+        "X-Country-Code",
+    ):
+        code = (request.headers.get(header) or "").strip().upper()
+        if len(code) == 2:
+            return code
+    return ""
+
+
+def _visitor_geo_line(country: str) -> tuple[str, bool]:
+    """Return (geo line copy, whether client-side geo lookup is still needed)."""
+    code = (country or "").upper()
+    meta = VISITOR_COUNTRY_GEO.get(code)
+    if meta:
+        return f"Working with ecommerce brands in {meta[0]} {meta[1]}", False
+    if code:
+        return "Working with ecommerce brands in your region 🌍", False
+    return "Working with ecommerce brands worldwide", True
+
+
 @main_bp.route("/30-minute-strategy-session/")
 @main_bp.route("/30-minute-strategy-session")
 def thirty_minute_strategy_session():
     """Multi-step booking funnel: intro → revenue → contact fields → Calendly."""
-    country = (
-        (request.headers.get("CF-IPCountry") or request.headers.get("X-Vercel-IP-Country") or "")
-        .strip()
-        .upper()
-    )
+    country = _visitor_country_code()
+    geo_line, geo_lookup_needed = _visitor_geo_line(country)
     return render_template(
         "30_minute_strategy_session.html",
-        visitor_country=country if len(country) == 2 else "",
+        visitor_country=country,
+        visitor_geo_line=geo_line,
+        visitor_geo_lookup_needed=geo_lookup_needed,
     )
 
 
@@ -1615,6 +1661,8 @@ def _notify_slack_lead(
         label = "CRO scan (Shopify)"
     elif submission_type == "cro_cost_roi":
         label = "CRO cost / ROI calculator"
+    elif submission_type == "strategy_session":
+        label = "30-minute strategy session funnel"
     else:
         label = "Resource download"
     text = "New lead: *{}* <{}> – {}".format(fname, email, label)
@@ -1793,6 +1841,221 @@ def _merge_audit_lead_metrics_postgres(
     except Exception as e:
         current_app.logger.warning("Failed to merge audit lead metrics (postgres): %s", e)
         db.session.rollback()
+
+
+_STRATEGY_SESSION_STEP_LABELS = {
+    2: "annual revenue",
+    3: "first name",
+    4: "email",
+    5: "store URL (form complete — Calendly next)",
+    6: "reached Calendly scheduling",
+}
+
+
+def _persist_strategy_session_step(record: dict) -> None:
+    """Append each funnel step to JSONL (including partial / no-email steps)."""
+    try:
+        log_dir = Path(__file__).resolve().parents[1] / "strategy_session_logs"
+        log_dir.mkdir(parents=True, exist_ok=True)
+        fp = log_dir / "steps.jsonl"
+        with fp.open("a", encoding="utf-8") as fh:
+            fh.write(
+                json.dumps(
+                    {"ts": datetime.now(timezone.utc).isoformat(), **record},
+                    ensure_ascii=False,
+                )
+                + "\n"
+            )
+    except Exception as e:
+        current_app.logger.warning("Failed to persist strategy session step: %s", e)
+
+
+def _notify_slack_strategy_session_step(
+    *,
+    step: int,
+    funnel_session_id: str,
+    annual_revenue: str | None = None,
+    fname: str | None = None,
+    email: str | None = None,
+    website_url: str | None = None,
+    visitor_country: str | None = None,
+    completed: bool = False,
+) -> None:
+    """Slack alert for each strategy-session funnel answer (complete or abandoned)."""
+    webhook_url = (current_app.config.get("SLACK_SPARKSMETRICS_WEBHOOK_URL") or "").strip() or (
+        current_app.config.get("SLACK_WEBHOOK_URL") or ""
+    ).strip()
+    if not webhook_url:
+        return
+
+    field_label = _STRATEGY_SESSION_STEP_LABELS.get(step, f"step {step}")
+    status = "completed funnel" if completed else "did not finish funnel"
+    lines = [
+        f"*Strategy session · step {step}/6* — {field_label} ({status})",
+        f"Session: `{funnel_session_id}`",
+    ]
+    if annual_revenue:
+        lines.append(f"Annual revenue: {annual_revenue}")
+    if fname:
+        lines.append(f"First name: {fname}")
+    if email:
+        lines.append(f"Email: {email}")
+    if website_url:
+        lines.append(f"Website: {website_url}")
+    if visitor_country:
+        lines.append(f"Visitor country: {visitor_country}")
+
+    try:
+        import requests
+    except ModuleNotFoundError:
+        current_app.logger.warning("Slack notify skipped: install requests (pip install requests)")
+        return
+    try:
+        r = requests.post(
+            webhook_url,
+            json={"text": "\n".join(lines)},
+            headers={"Content-Type": "application/json"},
+            timeout=5,
+        )
+        if r.status_code != 200:
+            current_app.logger.warning("Slack webhook failed: HTTP %s – %s", r.status_code, (r.text or "")[:200])
+    except Exception as e:
+        current_app.logger.warning("Slack notify error: %s", e)
+
+
+def _save_strategy_session_lead(
+    *,
+    step: int,
+    funnel_session_id: str,
+    fname: str | None,
+    email: str,
+    annual_revenue: str | None,
+    website_url: str | None,
+    form_page_url: str | None,
+    visitor_country: str | None,
+    completed: bool,
+) -> None:
+    """Upsert lead in Spark/Postgres when we have a valid email."""
+    business_stage = (annual_revenue or "").strip() or None
+    use_fname = (fname or "").strip() or (email.split("@", 1)[0] or "").strip() or "there"
+    website_norm = None
+    if website_url:
+        website_norm = _normalize_shopify_url(website_url) or website_url
+
+    if spark_backend.enabled():
+        payload: dict[str, Any] = {
+            "fname": use_fname,
+            "email": email,
+            "submission_type": "strategy_session",
+            "lead_origin": "sparksmetrics.com",
+            "business_stage": business_stage,
+            "website_url": website_norm,
+            "form_page_url": form_page_url,
+            "funnel_session_id": funnel_session_id,
+            "strategy_session_step": step,
+            "funnel_completed": completed,
+            "enroll_nurture": False,
+        }
+        if visitor_country:
+            payload["visitor_country"] = visitor_country
+        try:
+            ok, _ = spark_backend.post_site_lead(payload, timeout=25)
+            if (
+                ok
+                and website_norm
+                and spark_backend.enabled()
+            ):
+                from app.config import spark_background_cro_scan_after_ingest_enabled
+
+                if spark_background_cro_scan_after_ingest_enabled():
+                    _maybe_enqueue_lead_magnet_background_scan(
+                        website_url=website_norm,
+                        email=email,
+                        fname=use_fname,
+                        submission_type="strategy_session",
+                    )
+        except Exception as e:
+            current_app.logger.warning("spark_backend strategy_session step failed: %s", e)
+        return
+
+    if not current_app.config.get("SQLALCHEMY_DATABASE_URI"):
+        return
+    try:
+        lead = Lead(
+            fname=use_fname,
+            email=email,
+            submission_type="strategy_session",
+            business_stage=business_stage,
+            website_url=website_norm,
+        )
+        db.session.add(lead)
+        db.session.commit()
+    except Exception as e:
+        current_app.logger.warning("Failed to save strategy session lead (postgres): %s", e)
+        db.session.rollback()
+
+
+@main_bp.route("/strategy-session-step", methods=["POST"])
+def strategy_session_step():
+    """Capture each strategy-session funnel answer; persist + Slack even if user abandons."""
+    data = request.get_json(silent=True) or {}
+    try:
+        step = int(data.get("step"))
+    except (TypeError, ValueError):
+        return jsonify({"success": False, "error": "Invalid step"}), 400
+    if step not in _STRATEGY_SESSION_STEP_LABELS:
+        return jsonify({"success": False, "error": "Invalid step"}), 400
+
+    funnel_session_id = (data.get("funnel_session_id") or "").strip()
+    if not funnel_session_id:
+        return jsonify({"success": False, "error": "Session id required"}), 400
+
+    annual_revenue = (data.get("annual_revenue") or "").strip() or None
+    fname = (data.get("fname") or "").strip() or None
+    email = (data.get("email") or "").strip() or None
+    website_url = (data.get("website_url") or "").strip() or None
+    visitor_country = (data.get("visitor_country") or "").strip() or None
+    form_page_url = _ingest_form_page_url(data)
+    completed = bool(data.get("completed"))
+
+    record = {
+        "step": step,
+        "funnel_session_id": funnel_session_id,
+        "annual_revenue": annual_revenue,
+        "fname": fname,
+        "email": email,
+        "website_url": website_url,
+        "visitor_country": visitor_country,
+        "form_page_url": form_page_url,
+        "completed": completed,
+    }
+    _persist_strategy_session_step(record)
+
+    _notify_slack_strategy_session_step(
+        step=step,
+        funnel_session_id=funnel_session_id,
+        annual_revenue=annual_revenue,
+        fname=fname,
+        email=email,
+        website_url=website_url,
+        visitor_country=visitor_country,
+        completed=completed,
+    )
+
+    if email and re.match(r"^[^\s@]+@[^\s@]+\.[^\s@]+$", email):
+        _save_strategy_session_lead(
+            step=step,
+            funnel_session_id=funnel_session_id,
+            fname=fname,
+            email=email,
+            annual_revenue=annual_revenue,
+            website_url=website_url,
+            form_page_url=form_page_url,
+            visitor_country=visitor_country,
+            completed=completed,
+        )
+
+    return jsonify({"success": True})
 
 
 @main_bp.route("/request-audit", methods=["POST"])

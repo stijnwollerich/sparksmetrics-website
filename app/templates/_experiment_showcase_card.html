@@ -1,87 +1,113 @@
-{# Spark experiment card — before/after + performance lift #}
-<article class="rounded-2xl overflow-hidden bg-white border border-gray-200 shadow-sm flex flex-col h-full">
-  <div class="px-4 pt-4 pb-3 border-b border-gray-100">
-    <h3 class="text-sm md:text-base font-display font-black text-deep-charcoal uppercase tracking-tight leading-snug line-clamp-2">
+{# Spark experiment card — before/after on top, stats below #}
+<article
+  class="spark-exp-card group flex flex-col w-full h-full rounded-2xl overflow-hidden bg-white border border-gray-200/90 shadow-sm hover:shadow-md hover:border-gray-300/90 transition-shadow"
+>
+  <div class="shrink-0 px-3 pt-3 pb-2">
+    <h3
+      class="text-xs font-display font-black text-deep-charcoal uppercase tracking-tight leading-snug line-clamp-2 text-center"
+    >
       {{ exp.test_name }}
     </h3>
   </div>
 
-  {% if exp.conv_improvement is not none or exp.rev_added is not none %}
-  <div class="px-3 py-3 bg-deep-charcoal text-white border-b border-gray-800">
-    <p class="text-[9px] font-bold uppercase tracking-[0.25em] text-gray-400 mb-3 text-center">
-      Performance change vs. control
-    </p>
-    <div class="flex w-full items-stretch divide-x divide-white/15">
+  <div
+    class="relative flex-1 min-h-0 grid grid-cols-2 divide-x divide-gray-200/90 bg-gray-50/60"
+  >
+    <span
+      class="pointer-events-none absolute left-1/2 top-[calc(50%-0.25rem)] z-10 -translate-x-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center rounded-full border border-gray-200 bg-white text-[8px] font-black uppercase tracking-wide text-gray-500 shadow-sm"
+      aria-hidden="true"
+      >vs</span
+    >
+
+    <div class="flex min-h-0 flex-col">
+      <div class="shrink-0 px-2 pt-1 pb-0.5 text-center">
+        <span
+          class="text-[10px] font-black uppercase tracking-widest text-gray-600 leading-none"
+          >Before</span
+        >
+      </div>
+      <div class="min-h-0 flex-1 px-2 pb-2">
+        <div
+          class="flex h-full min-h-[12rem] items-start justify-center overflow-hidden rounded-xl border border-gray-200/90 bg-white"
+        >
+          {% if exp.control and exp.control.image_url %}
+          <img
+            src="{{ exp.control.image_url }}"
+            alt="Before — {{ exp.test_name }}"
+            class="h-full w-full object-contain object-top"
+            loading="lazy"
+            width="280"
+            height="360"
+          />
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="flex min-h-0 flex-col bg-primary/[0.03]">
+      <div class="shrink-0 px-2 pt-1 pb-0.5 text-center">
+        <span
+          class="text-[10px] font-black uppercase tracking-widest text-primary leading-none"
+          >After</span
+        >
+      </div>
+      <div class="min-h-0 flex-1 px-2 pb-2">
+        <div
+          class="flex h-full min-h-[12rem] items-start justify-center overflow-hidden rounded-xl border-2 border-primary/30 bg-white ring-1 ring-primary/10"
+        >
+          {% if exp.challenger and exp.challenger.image_url %}
+          <img
+            src="{{ exp.challenger.image_url }}"
+            alt="After — {{ exp.test_name }}"
+            class="h-full w-full object-contain object-top"
+            loading="lazy"
+            width="280"
+            height="360"
+          />
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="shrink-0 border-t border-gray-100 px-3 py-3 grid grid-cols-2 divide-x divide-gray-200"
+  >
+    <div class="text-center px-2">
+      <p
+        class="text-[10px] font-bold uppercase tracking-widest text-gray-500 leading-none"
+      >
+        Conv. rate
+      </p>
       {% if exp.conv_improvement is not none %}
-      <div class="flex-1 min-w-0 flex flex-col items-center text-center px-3 py-0.5">
-        <span class="text-[9px] font-bold uppercase tracking-widest text-gray-400 leading-tight">Conv. rate</span>
-        <span class="text-xl md:text-2xl font-display font-black leading-none mt-1 {% if exp.conv_improvement < 0 %}text-red-400{% else %}text-primary{% endif %}">
-          {% if exp.conv_improvement > 0 %}+{% endif %}{{ '%.1f'|format(exp.conv_improvement) }}%
-        </span>
-      </div>
+      <p
+        class="mt-1 text-2xl font-display font-black leading-none tabular-nums {% if exp.conv_improvement < 0 %}text-red-500{% else %}text-primary{% endif %}"
+      >
+        {% if exp.conv_improvement > 0 %}+{% endif %}{{ '%.1f'|format(exp.conv_improvement) }}%
+      </p>
+      {% else %}
+      <p class="mt-1 text-2xl font-display font-black leading-none text-gray-400">
+        —
+      </p>
       {% endif %}
+    </div>
+    <div class="text-center px-2">
+      <p
+        class="text-[10px] font-bold uppercase tracking-widest text-gray-500 leading-none"
+      >
+        Additional revenue
+      </p>
       {% if exp.rev_added is not none %}
-      <div class="flex-1 min-w-0 flex flex-col items-center text-center px-3 py-0.5">
-        <span class="text-[9px] font-bold uppercase tracking-widest text-gray-400 leading-tight">Additional rev.</span>
-        <span class="text-xl md:text-2xl font-display font-black leading-none mt-1 text-white tabular-nums">
-          +{{ '{:,.0f}'.format(exp.rev_added) }}
-        </span>
-      </div>
+      <p
+        class="mt-1 text-2xl font-display font-black leading-none text-deep-charcoal tabular-nums"
+      >
+        +{% if exp.rev_added >= 1000 %}${{ '%.1f'|format(exp.rev_added / 1000) }}k{% else %}${{ '{:,.0f}'.format(exp.rev_added) }}{% endif %}
+      </p>
+      {% else %}
+      <p class="mt-1 text-2xl font-display font-black leading-none text-gray-400">
+        —
+      </p>
       {% endif %}
     </div>
   </div>
-  {% endif %}
-
-  {% if exp.control and exp.control.image_url and exp.challenger and exp.challenger.image_url %}
-  <div class="p-3 md:p-4 bg-light-base flex-1">
-    <div class="grid grid-cols-[1fr_auto_1fr] gap-x-2 md:gap-x-3 gap-y-2 items-center">
-      <div class="flex items-center justify-between gap-1">
-        <span class="text-[10px] font-black uppercase tracking-widest text-deep-charcoal">Before</span>
-        <span class="text-[9px] font-bold uppercase tracking-wide text-gray-400">Control</span>
-      </div>
-      <div aria-hidden="true"></div>
-      <div class="flex items-center justify-between gap-1">
-        <span class="text-[10px] font-black uppercase tracking-widest text-primary">After</span>
-        <span class="text-[9px] font-bold uppercase tracking-wide text-gray-400">Variant</span>
-      </div>
-
-      <div
-        class="relative h-40 sm:h-44 md:h-48 rounded-lg border-2 border-deep-charcoal/15 bg-gray-100 overflow-hidden flex items-center justify-center p-1.5"
-      >
-        <img
-          src="{{ exp.control.image_url }}"
-          alt="Before — control"
-          class="max-w-full max-h-full w-auto h-auto object-contain"
-          loading="lazy"
-          width="280"
-          height="224"
-        />
-      </div>
-
-      <div class="flex items-center justify-center" aria-hidden="true">
-        <span class="flex items-center justify-center w-8 h-8 md:w-9 md:h-9 rounded-full bg-primary text-white shadow-md shadow-primary/30 shrink-0">
-          <span class="material-symbols-outlined text-lg md:text-xl">arrow_forward</span>
-        </span>
-      </div>
-
-      <div
-        class="relative h-40 sm:h-44 md:h-48 rounded-lg border-2 border-primary/35 bg-gray-100 overflow-hidden flex items-center justify-center p-1.5 ring-1 ring-primary/15"
-      >
-        <img
-          src="{{ exp.challenger.image_url }}"
-          alt="After — variant"
-          class="max-w-full max-h-full w-auto h-auto object-contain"
-          loading="lazy"
-          width="280"
-          height="224"
-        />
-      </div>
-    </div>
-  </div>
-  {% elif exp.control and exp.control.image_url %}
-  <div class="p-3 bg-light-base">
-    <img src="{{ exp.control.image_url }}" alt="{{ exp.test_name }}" class="w-full rounded-lg border border-gray-200 object-contain bg-white" loading="lazy" />
-  </div>
-  {% endif %}
-
 </article>

@@ -357,30 +357,32 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
       </div>
       {% if spark_experiments %}
       {% set spark_exp_count = spark_experiments|length %}
-      <div class="relative spark-exp-strip">
+      <div
+        class="relative spark-exp-strip {% if spark_exp_count > 1 %}sm:px-12{% endif %}"
+      >
         {% if spark_exp_count > 1 %}
         <button
           type="button"
-          class="spark-exp-strip-prev hidden sm:flex absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 items-center justify-center rounded-full bg-white border border-gray-200 shadow-md text-deep-charcoal hover:bg-light-base -ml-2"
+          class="spark-exp-strip-prev hidden sm:flex absolute left-0 top-[calc(50%+0.5rem)] -translate-y-1/2 z-20 w-10 h-10 items-center justify-center rounded-full bg-white border border-gray-200 shadow-md text-deep-charcoal hover:bg-light-base"
           aria-label="Scroll experiments left"
         >
           <span class="material-symbols-outlined">chevron_left</span>
         </button>
         <button
           type="button"
-          class="spark-exp-strip-next hidden sm:flex absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 items-center justify-center rounded-full bg-white border border-gray-200 shadow-md text-deep-charcoal hover:bg-light-base -mr-2"
+          class="spark-exp-strip-next hidden sm:flex absolute right-0 top-[calc(50%+0.5rem)] -translate-y-1/2 z-20 w-10 h-10 items-center justify-center rounded-full bg-white border border-gray-200 shadow-md text-deep-charcoal hover:bg-light-base"
           aria-label="Scroll experiments right"
         >
           <span class="material-symbols-outlined">chevron_right</span>
         </button>
         {% endif %}
         <div
-          class="spark-exp-strip-track flex gap-3 md:gap-4 pb-2 {% if spark_exp_count == 1 %}justify-center{% else %}overflow-x-auto scroll-smooth snap-x snap-mandatory -mx-1 px-1{% endif %}"
+          class="spark-exp-strip-track flex gap-4 pb-2 {% if spark_exp_count == 1 %}justify-center{% else %}overflow-x-auto scroll-smooth snap-x snap-mandatory{% endif %}"
           {% if spark_exp_count > 1 %}tabindex="0"{% endif %}
         >
           {% for exp in spark_experiments %}
           <div
-            class="shrink-0 w-[min(88vw,19rem)] sm:w-80 {% if spark_exp_count > 1 %}snap-center{% endif %} flex {% if spark_exp_count == 1 %}mx-auto{% endif %}"
+            class="shrink-0 w-[21rem] sm:w-[23rem] h-[27rem] sm:h-[29rem] flex {% if spark_exp_count > 1 %}snap-center{% endif %}"
           >
             {% include '_experiment_showcase_card.html' %}
           </div>
@@ -872,7 +874,7 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
     </div>
   </section>
 
-  {% set strip_cta = 'calendly' %} {% include
+  {% set strip_cta = 'strategy_session' %} {% include
   'includes/_youtube_cro_thumb_strip.html' %}
 
   <section class="py-20 md:py-24 bg-white border-b border-gray-100">

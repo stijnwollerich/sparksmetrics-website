@@ -91,7 +91,9 @@ Examples:
 - `cro_scan,audit`: audit requests also request enrollment.
 - Empty value: no form sends `enroll_nurture: true` (all false).
 
-Form → `submission_type`: **`/cro-scan/submit-email`** → `cro_scan`; **`/cro-cost-roi/submit`** → `cro_cost_roi`; **`/request-audit`** → `audit`; **`/download-resource`** → `resource`; Calendly webhook → `calendly`.
+Form → `submission_type`: **`/cro-scan/submit-email`** → `cro_scan`; **`/cro-cost-roi/submit`** → `cro_cost_roi`; **`/request-audit`** → `audit`; **`/download-resource`** → `resource`; **`/strategy-session-step`** (steps 4–6 when email present) → `strategy_session`; Calendly webhook → `calendly`.
+
+**Strategy session funnel** (`/30-minute-strategy-session/`): each step POSTs to **`/strategy-session-step`** with `funnel_session_id`, `step` (2–6), and any answers so far. Steps **2–3** (revenue, name only) log to `app/strategy_session_logs/steps.jsonl` + Slack; from **step 4** onward (valid email), Spark/Postgres upsert runs as `strategy_session` with extra fields `funnel_session_id`, `strategy_session_step`, `funnel_completed` on `site_ingest_payload`.
 
 ### CRO cost / ROI calculator (`cro_cost_roi`)
 

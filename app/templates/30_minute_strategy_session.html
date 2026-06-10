@@ -11,6 +11,9 @@
 {% block audit_bar %}{% endblock %}
 {% block head_extras %}
 <meta name="robots" content="noindex, follow" />
+<link rel="preconnect" href="https://calendly.com" />
+<link rel="preconnect" href="https://assets.calendly.com" crossorigin />
+<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet" />
 <style>
   .mss-shell {
     width: 100%;
@@ -89,10 +92,60 @@
     outline: none;
     border-color: #ff4d00;
   }
-  #mss-calendly-iframe {
-    min-height: 620px;
-    height: 70vh;
-    max-height: 720px;
+  #mss-funnel.is-calendly-step {
+    align-items: stretch;
+    min-height: 100vh;
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+    padding: 0;
+  }
+  body.mss-calendly-active {
+    overflow: hidden;
+  }
+  #mss-funnel.is-calendly-step .mss-shell {
+    max-width: none;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    min-height: 0;
+  }
+  #mss-funnel.is-calendly-step .mss-funnel-chrome {
+    display: none;
+  }
+  .mss-step-calendly.is-active {
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+  .mss-step-calendly-copy {
+    flex-shrink: 0;
+    margin: 0;
+    padding: 0.65rem 1rem 0.35rem;
+    font-size: 0.8125rem;
+    line-height: 1.25;
+    text-align: center;
+    color: #6b7280;
+  }
+  #mss-calendly-inline {
+    width: 100%;
+    min-width: 100%;
+    flex: 1 1 auto;
+    min-height: 0;
+    border-radius: 0;
+    overflow: hidden;
+    background: #fff;
+    border: 0;
+  }
+  #mss-funnel.is-calendly-step #mss-calendly-inline {
+    height: 100%;
+  }
+  #mss-calendly-inline iframe {
+    margin: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
   }
   #mss-exit-modal.is-open {
     display: flex;
@@ -118,6 +171,12 @@
   .mss-exit-card {
     animation: mssExitPop 0.28s ease forwards;
   }
+  .mss-exit-gif {
+    display: block;
+    width: 100%;
+    max-height: 11rem;
+    object-fit: cover;
+  }
 </style>
 {% endblock %}
 {% block body_class %}bg-white text-gray-800 font-sans{% endblock %}
@@ -127,35 +186,38 @@
   class="min-h-screen flex flex-col items-center px-5 sm:px-8 py-10 md:py-14"
   data-total-steps="6"
   data-visitor-country="{{ visitor_country|default('', true) }}"
+  data-geo-lookup-needed="{{ '1' if visitor_geo_lookup_needed else '0' }}"
 >
-  <div class="mss-shell mx-auto flex flex-col flex-1">
-    <a
-      href="{{ url_for('main.index') }}"
-      class="flex items-center justify-center gap-2 mb-10 group"
-      aria-label="Sparksmetrics home"
-    >
-      <div
-        class="w-9 h-9 bg-primary rounded flex items-center justify-center rotate-3"
+  <div class="mss-shell mx-auto flex flex-col flex-1 min-h-0">
+    <div class="mss-funnel-chrome">
+      <a
+        href="{{ url_for('main.index') }}"
+        class="flex items-center justify-center gap-2 mb-10 group"
+        aria-label="Sparksmetrics home"
       >
-        <span class="text-white font-black text-xl">S</span>
-      </div>
-      <span
-        class="font-display text-xl tracking-tighter uppercase font-extrabold text-deep-charcoal"
-        >Sparksmetrics</span
-      >
-    </a>
+        <div
+          class="w-9 h-9 bg-primary rounded flex items-center justify-center rotate-3"
+        >
+          <span class="text-white font-black text-xl">S</span>
+        </div>
+        <span
+          class="font-display text-xl tracking-tighter uppercase font-extrabold text-deep-charcoal"
+          >Sparksmetrics</span
+        >
+      </a>
 
-    <div
-      class="flex items-start gap-0 w-full mb-8"
-      id="mss-progress"
-      aria-hidden="true"
-    ></div>
-    <p
-      class="text-center text-[10px] font-bold uppercase tracking-[0.35em] text-gray-400 -mt-5 mb-10"
-      id="mss-progress-label"
-    >
-      Step 1 of 6
-    </p>
+      <div
+        class="flex items-start gap-0 w-full mb-8"
+        id="mss-progress"
+        aria-hidden="true"
+      ></div>
+      <p
+        class="text-center text-[10px] font-bold uppercase tracking-[0.35em] text-gray-400 -mt-5 mb-10"
+        id="mss-progress-label"
+      >
+        Step 1 of 6
+      </p>
+    </div>
 
     {# 1 — Intro #}
     <section
@@ -168,7 +230,7 @@
         id="mss-geo-line"
         class="text-xs sm:text-sm font-bold uppercase tracking-[0.15em] text-gray-500 mb-8"
       >
-        Working with ecommerce brands worldwide
+        {{ visitor_geo_line|default('Working with ecommerce brands worldwide') }}
       </p>
       <h1
         id="mss-step1-title"
@@ -337,25 +399,33 @@
       </button>
     </section>
 
-    {# 6 — Calendly #}
-    <section class="mss-step" data-step="6" aria-labelledby="mss-step6-title">
+    {# 6 — Calendly full-viewport #}
+    <section
+      class="mss-step mss-step-calendly"
+      data-step="6"
+      aria-labelledby="mss-step6-title"
+    >
       <h2 id="mss-step6-title" class="sr-only">Schedule your call</h2>
-      <p
-        class="text-gray-600 text-base sm:text-lg text-center mb-6 max-w-2xl mx-auto"
-      >
-        Pick a time below for your free 30-minute audit call.
+      <p class="mss-step-calendly-copy">
+        Pick a time — 30 minutes, video call.
       </p>
-      <iframe
-        id="mss-calendly-iframe"
-        title="Schedule your free strategy session"
-        class="w-full border-0 rounded-xl bg-gray-50"
-        src="about:blank"
-      ></iframe>
-      <p class="text-center text-gray-500 text-xs mt-6">
+      <!-- Calendly inline widget begin -->
+      <div
+        id="mss-calendly-inline"
+        class="calendly-inline-widget"
+        data-url="https://calendly.com/stijn-wollerich/conversion-rate-optimization?hide_gdpr_banner=1"
+        data-auto-load="false"
+        style="min-width: 320px; height: 700px"
+      ></div>
+      <script
+        type="text/javascript"
+        src="https://assets.calendly.com/assets/external/widget.js"
+        async
+      ></script>
+      <!-- Calendly inline widget end -->
+      <p class="sr-only">
         Trouble booking?
-        <a href="mailto:connect@sparksmetrics.com" class="text-primary font-bold underline"
-          >connect@sparksmetrics.com</a
-        >
+        <a href="mailto:connect@sparksmetrics.com">connect@sparksmetrics.com</a>
       </p>
     </section>
   </div>
@@ -388,7 +458,15 @@
         style="width: 16%"
       ></div>
     </div>
-    <div class="px-6 pt-8 pb-6 md:px-8 text-center">
+    <img
+      src="https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3bGdldmtrbGg3YThiYWltcWFlc2Q3bnpqMjNrcTQ3Y21ua2E2dXc4NCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/l4FGFW4Vpz6w42TRu/giphy.gif"
+      alt=""
+      class="mss-exit-gif"
+      width="480"
+      height="270"
+      decoding="async"
+    />
+    <div class="px-6 pt-6 pb-6 md:px-8 text-center">
       <h2
         id="mss-exit-title"
         class="text-2xl font-display font-black text-deep-charcoal uppercase mb-4"
@@ -413,17 +491,19 @@
 <script>
   (function () {
     var CALENDLY_URL =
-      "https://calendly.com/stijn-wollerich/free-30-minute-strategy-session?hide_gdpr_banner=1";
+      "https://calendly.com/stijn-wollerich/conversion-rate-optimization?hide_gdpr_banner=1";
     var TOTAL = 6;
     var current = 1;
     var annualRevenue = "";
+    var calendlyMounted = false;
+    var lastSyncedStep = {};
 
     var funnel = document.getElementById("mss-funnel");
     var progressRoot = document.getElementById("mss-progress");
     var progressLabel = document.getElementById("mss-progress-label");
     var geoLine = document.getElementById("mss-geo-line");
     var submitBtn = document.getElementById("mss-submit");
-    var calendlyIframe = document.getElementById("mss-calendly-iframe");
+    var calendlyInline = document.getElementById("mss-calendly-inline");
     var exitModal = document.getElementById("mss-exit-modal");
     var exitProgressFill = document.getElementById("mss-exit-progress-fill");
     var exitStorageKey = "mss_exit_popup_shown";
@@ -482,22 +562,129 @@
     }
 
     function resolveVisitorCountry() {
-      var fromServer = funnel && funnel.getAttribute("data-visitor-country");
-      if (fromServer && fromServer.length === 2) {
-        setGeoLine(fromServer);
-        return;
-      }
-      fetch("https://ipapi.co/json/", { credentials: "omit" })
+      if (!funnel || funnel.getAttribute("data-geo-lookup-needed") !== "1") return;
+      fetch("https://ipapi.co/country_code/", { credentials: "omit" })
         .then(function (r) {
-          return r.json();
+          return r.text();
         })
-        .then(function (data) {
-          if (data && data.country_code) setGeoLine(data.country_code);
+        .then(function (code) {
+          if (code && code.trim().length === 2) setGeoLine(code.trim());
         })
         .catch(function () {
           var lang = (navigator.language || "").split("-")[1];
           if (lang && lang.length === 2) setGeoLine(lang);
         });
+    }
+
+    function getFunnelSessionId() {
+      try {
+        var id = sessionStorage.getItem("mss_funnel_session_id");
+        if (!id) {
+          id =
+            "mss_" +
+            Date.now().toString(36) +
+            "_" +
+            Math.random().toString(36).slice(2, 10);
+          sessionStorage.setItem("mss_funnel_session_id", id);
+        }
+        return id;
+      } catch (err) {
+        return "mss_anon";
+      }
+    }
+
+    function syncStrategyStep(step) {
+      var payload = {
+        step: step,
+        funnel_session_id: getFunnelSessionId(),
+        form_page_url: window.location.href,
+      };
+      if (annualRevenue) payload.annual_revenue = annualRevenue;
+      if (funnel) {
+        var country = funnel.getAttribute("data-visitor-country");
+        if (country) payload.visitor_country = country;
+      }
+      var fnameEl = document.getElementById("mss-fname");
+      var emailEl = document.getElementById("mss-email");
+      var websiteEl = document.getElementById("mss-website");
+      if (fnameEl && fnameEl.value.trim()) payload.fname = fnameEl.value.trim();
+      if (emailEl && emailEl.value.trim()) payload.email = emailEl.value.trim();
+      if (websiteEl && websiteEl.value.trim()) {
+        payload.website_url = websiteEl.value.trim();
+      }
+
+      var snapshot =
+        step +
+        "|" +
+        (payload.annual_revenue || "") +
+        "|" +
+        (payload.fname || "") +
+        "|" +
+        (payload.email || "") +
+        "|" +
+        (payload.website_url || "");
+      if (lastSyncedStep[step] === snapshot) return;
+      lastSyncedStep[step] = snapshot;
+
+      fetch("/strategy-session-step", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        keepalive: true,
+        body: JSON.stringify(payload),
+      }).catch(function () {});
+    }
+
+    function buildCalendlyUrl(fname, email) {
+      var url = CALENDLY_URL;
+      if (fname) url += "&name=" + encodeURIComponent(fname);
+      if (email) url += "&email=" + encodeURIComponent(email);
+      return url;
+    }
+
+    function sizeCalendlyViewport() {
+      if (!calendlyInline || !funnel || !funnel.classList.contains("is-calendly-step")) {
+        return;
+      }
+      var copy = document.querySelector(".mss-step-calendly-copy");
+      var copyHeight = copy ? copy.offsetHeight : 0;
+      var height = Math.max(320, window.innerHeight - copyHeight);
+      calendlyInline.style.height = height + "px";
+      calendlyInline.style.minWidth = "100%";
+    }
+
+    function mountCalendly() {
+      if (calendlyMounted || !calendlyInline) return;
+      calendlyMounted = true;
+
+      var fname = document.getElementById("mss-fname").value.trim();
+      var email = document.getElementById("mss-email").value.trim();
+      var widgetUrl = buildCalendlyUrl(fname, email);
+
+      calendlyInline.setAttribute("data-url", widgetUrl);
+      calendlyInline.innerHTML = "";
+      calendlyInline.removeAttribute("data-processed");
+      sizeCalendlyViewport();
+
+      var attempts = 0;
+      function initWidget() {
+        if (window.Calendly && window.Calendly.initInlineWidget) {
+          window.Calendly.initInlineWidget({
+            url: widgetUrl,
+            parentElement: calendlyInline,
+            prefill: { name: fname, email: email },
+            resize: true,
+          });
+          window.setTimeout(sizeCalendlyViewport, 120);
+          return;
+        }
+        if (++attempts > 160) return;
+        window.setTimeout(initWidget, 50);
+      }
+      initWidget();
+      syncStrategyStep(6);
     }
 
     function steps() {
@@ -523,6 +710,11 @@
         var s = parseInt(el.getAttribute("data-step"), 10);
         el.classList.toggle("is-active", s === n);
       });
+      if (funnel) funnel.classList.toggle("is-calendly-step", n === 6);
+      document.body.classList.toggle("mss-calendly-active", n === 6);
+      if (n === 6) {
+        window.setTimeout(sizeCalendlyViewport, 0);
+      }
       var active = document.querySelector('.mss-step[data-step="' + n + '"]');
       var focusId =
         n === 3 ? "mss-fname" : n === 4 ? "mss-email" : n === 5 ? "mss-website" : null;
@@ -576,45 +768,17 @@
       var fname = document.getElementById("mss-fname").value.trim();
       var email = document.getElementById("mss-email").value.trim();
       var website = document.getElementById("mss-website").value.trim();
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.textContent = "Sending…";
-      }
-      fetch("/request-audit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-        },
-        body: JSON.stringify({
-          fname: fname,
-          email: email,
-          website_url: website,
-          annual_revenue: annualRevenue || undefined,
-          form_page_url: window.location.href,
-        }),
-      })
-        .then(function (r) {
-          return r.json();
-        })
-        .then(function (data) {
-          if (data && data.success) {
-            exitEnabled = false;
-            if (calendlyIframe) calendlyIframe.src = CALENDLY_URL;
-            setProgress(6);
-          }
-        })
-        .finally(function () {
-          if (submitBtn && current < 6) {
-            submitBtn.disabled = false;
-            submitBtn.textContent = "Show me available times →";
-          }
-        });
+
+      exitEnabled = false;
+      syncStrategyStep(5);
+      setProgress(6);
+      mountCalendly();
     }
 
     buildProgressDots();
     resolveVisitorCountry();
     setProgress(1);
+    window.addEventListener("resize", sizeCalendlyViewport);
 
     document.querySelectorAll("[data-mss-next]").forEach(function (btn) {
       btn.addEventListener("click", goNext);
@@ -622,10 +786,16 @@
     document.querySelectorAll("[data-mss-back]").forEach(function (btn) {
       btn.addEventListener("click", goBack);
     });
+    function advanceAfterField(id) {
+      if (!validateField(id)) return;
+      if (id === "mss-fname") syncStrategyStep(3);
+      if (id === "mss-email") syncStrategyStep(4);
+      goNext();
+    }
+
     document.querySelectorAll("[data-mss-next-field]").forEach(function (btn) {
       btn.addEventListener("click", function () {
-        var id = btn.getAttribute("data-mss-next-field");
-        if (validateField(id)) goNext();
+        advanceAfterField(btn.getAttribute("data-mss-next-field"));
       });
     });
 
@@ -636,7 +806,7 @@
         if (e.key !== "Enter") return;
         e.preventDefault();
         if (id === "mss-website") submitLead();
-        else if (validateField(id)) goNext();
+        else advanceAfterField(id);
       });
     });
 
@@ -647,6 +817,7 @@
         });
         tile.classList.add("is-selected");
         annualRevenue = tile.getAttribute("data-revenue") || "";
+        syncStrategyStep(2);
         window.setTimeout(goNext, 200);
       });
     });

@@ -1,5 +1,6 @@
-{# Horizontal thumbnail strip. Context: cro_video_thumb_strip. Before include set strip_cta: audit | ebook | calendly | strategy_session | youtube_channel. Optional: strip_heading, show_youtube_channel_link (bool). #}
-{% set cta = strip_cta|default('audit') %}
+{# Horizontal thumbnail strip. Context: cro_video_thumb_strip. Before include set strip_cta: audit | ebook | strategy_session | youtube_channel (calendly → strategy_session). Optional: strip_heading, show_youtube_channel_link (bool). #}
+{% set cta = strip_cta|default('strategy_session') %}
+{% set strategy_session_href = url_for('main.thirty_minute_strategy_session') %}
 <section
   class="py-16 md:py-20 bg-white border-t border-gray-100 yt-cro-thumb-strip"
   data-strip-cta="{{ cta }}"
@@ -70,22 +71,9 @@
                 >
               </div>
             </a>
-            {% elif cta == 'calendly' %}
+            {% elif cta in ('calendly', 'strategy_session') %}
             <a
-              href="#calendly"
-              class="absolute inset-0 z-10 flex items-center justify-center"
-            >
-              <div
-                class="w-14 h-14 md:w-16 md:h-16 bg-primary rounded-full flex items-center justify-center shadow-lg"
-              >
-                <span class="material-symbols-outlined text-white text-2xl md:text-3xl"
-                  >play_arrow</span
-                >
-              </div>
-            </a>
-            {% elif cta == 'strategy_session' %}
-            <a
-              href="{{ url_for('main.thirty_minute_strategy_session') }}"
+              href="{{ strategy_session_href }}"
               class="absolute inset-0 z-10 flex items-center justify-center"
             >
               <div

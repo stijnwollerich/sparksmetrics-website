@@ -32,6 +32,8 @@ Thumbs.db
 instance/
 .webassets-cache
 local.db
+app/strategy_session_logs/
+app/client_logs/
 
 # Testing
 .pytest_cache/
