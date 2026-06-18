@@ -576,6 +576,111 @@
         });
     }
 
+    function getFormAnswersSnapshot() {
+      var fnameEl = document.getElementById("mss-fname");
+      var emailEl = document.getElementById("mss-email");
+      var websiteEl = document.getElementById("mss-website");
+      return {
+        annual_revenue: annualRevenue || "",
+        fname: fnameEl && fnameEl.value.trim() ? fnameEl.value.trim() : "",
+        email: emailEl && emailEl.value.trim() ? emailEl.value.trim() : "",
+        website_url:
+          websiteEl && websiteEl.value.trim() ? websiteEl.value.trim() : "",
+      };
+    }
+
+    var STEP_META = {
+      1: {
+        key: "intro",
+        question: "Free 30-minute CRO strategy session",
+        field_name: null,
+      },
+      2: {
+        key: "annual_revenue",
+        question: "What's your store's annual revenue?",
+        field_name: "annual_revenue",
+      },
+      3: {
+        key: "fname",
+        question: "What's your first name?",
+        field_name: "fname",
+      },
+      4: {
+        key: "email",
+        question: "What's your email?",
+        field_name: "email",
+      },
+      5: {
+        key: "website_url",
+        question: "What's your store URL?",
+        field_name: "website_url",
+      },
+      6: {
+        key: "schedule",
+        question: "Schedule your call",
+        field_name: null,
+      },
+    };
+
+    function pushStrategySessionGtm(formAction, step, fieldValue, extra) {
+      extra = extra || {};
+      try {
+        var meta = STEP_META[step] || {};
+        var answers = getFormAnswersSnapshot();
+        var payload = {
+          event: "strategy_session_form",
+          form_action: formAction,
+          form_id: "mss-funnel",
+          form_name: "30 Minute Strategy Session",
+          form_step: step,
+          form_step_total: TOTAL,
+          form_step_name: meta.key || "",
+          form_step_question: meta.question || "",
+          form_progress_pct: Math.min(
+            100,
+            Math.max(0, Math.round((step / TOTAL) * 100)),
+          ),
+          funnel_session_id: getFunnelSessionId(),
+          page_type: "strategy_session_funnel",
+          page_path: window.location.pathname,
+          page_location: window.location.href,
+          timestamp: new Date().toISOString(),
+          form_answers: {
+            annual_revenue: answers.annual_revenue,
+            fname: answers.fname,
+            email: answers.email,
+            website_url: answers.website_url,
+          },
+          annual_revenue: answers.annual_revenue,
+          fname: answers.fname,
+          email: answers.email,
+          website_url: answers.website_url,
+          field_name: meta.field_name || "",
+          field_value: "",
+        };
+        if (fieldValue !== undefined && fieldValue !== null) {
+          payload.field_value = String(fieldValue);
+        }
+        if (funnel) {
+          var country = funnel.getAttribute("data-visitor-country");
+          if (country) payload.visitor_country = country;
+        }
+        Object.keys(extra).forEach(function (key) {
+          payload[key] = extra[key];
+        });
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push(payload);
+      } catch (err) {}
+    }
+
+    function pushStepView(step) {
+      pushStrategySessionGtm("step_view", step);
+    }
+
+    function pushStepCompleted(step, stepAnswer) {
+      pushStrategySessionGtm("step_complete", step, stepAnswer);
+    }
+
     function getFunnelSessionId() {
       try {
         var id = sessionStorage.getItem("mss_funnel_session_id");
@@ -685,6 +790,9 @@
       }
       initWidget();
       syncStrategyStep(6);
+      pushStrategySessionGtm("calendly_open", 6, "", {
+        calendly_url: widgetUrl,
+      });
     }
 
     function steps() {
@@ -726,12 +834,7 @@
         }, 320);
       }
       try {
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({
-          event: "strategy_session_step",
-          step: n,
-          path: window.location.pathname,
-        });
+        pushStepView(n);
       } catch (err) {}
     }
 
@@ -771,25 +874,41 @@
 
       exitEnabled = false;
       syncStrategyStep(5);
+      pushStepCompleted(5, website);
+      pushStrategySessionGtm("form_submit", 5, website);
       setProgress(6);
       mountCalendly();
     }
 
     buildProgressDots();
     resolveVisitorCountry();
+    pushStrategySessionGtm("page_load", 1);
     setProgress(1);
     window.addEventListener("resize", sizeCalendlyViewport);
 
     document.querySelectorAll("[data-mss-next]").forEach(function (btn) {
-      btn.addEventListener("click", goNext);
+      btn.addEventListener("click", function () {
+        if (current === 1) {
+          pushStepCompleted(1, "started");
+        }
+        goNext();
+      });
     });
     document.querySelectorAll("[data-mss-back]").forEach(function (btn) {
       btn.addEventListener("click", goBack);
     });
     function advanceAfterField(id) {
       if (!validateField(id)) return;
-      if (id === "mss-fname") syncStrategyStep(3);
-      if (id === "mss-email") syncStrategyStep(4);
+      if (id === "mss-fname") {
+        var fnameVal = document.getElementById("mss-fname").value.trim();
+        syncStrategyStep(3);
+        pushStepCompleted(3, fnameVal);
+      }
+      if (id === "mss-email") {
+        var emailVal = document.getElementById("mss-email").value.trim();
+        syncStrategyStep(4);
+        pushStepCompleted(4, emailVal);
+      }
       goNext();
     }
 
@@ -818,6 +937,7 @@
         tile.classList.add("is-selected");
         annualRevenue = tile.getAttribute("data-revenue") || "";
         syncStrategyStep(2);
+        pushStepCompleted(2, annualRevenue);
         window.setTimeout(goNext, 200);
       });
     });
@@ -871,17 +991,6 @@
         closeExitModal();
       }
     });
-
-    if (funnel) {
-      try {
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({
-          event: "page_view",
-          page_type: "strategy_session_funnel",
-          page_path: window.location.pathname,
-        });
-      } catch (err) {}
-    }
   })();
 </script>
 {% endblock %}

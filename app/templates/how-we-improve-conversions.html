@@ -1,17 +1,20 @@
 {% extends "base.html" %} {% block title %}You're Paying for Traffic You're Not
 Converting | Sparksmetrics{% endblock %} {% block meta_description %}You have a
-free CRO audit finds where your ecommerce funnel leaks revenue—and hands you a
+free CRO audit finds where your ecommerce funnel leaks revenue and hands you a
 prioritized roadmap to fix it. No retainer required.{% endblock %} {% block og_title %}You're Paying for Traffic You're Not
 Converting | Sparksmetrics{% endblock %} {% block og_description %}You have a
-free CRO audit finds where your funnel leaks—and gives you a prioritized fix list
+free CRO audit finds where your funnel leaks and gives you a prioritized fix list
 backed by data.{% endblock %} {% block
 twitter_title %}You're Paying for Traffic You're Not Converting |
 Sparksmetrics{% endblock %} {% block twitter_description %}You have a
-free CRO audit finds where your funnel leaks—and gives you a prioritized fix list
+free CRO audit finds where your funnel leaks and gives you a prioritized fix list
 backed by data.{% endblock %} {% block primary_bar %}{% endblock %} {% block header %}{%
 endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
 {% block head_extras %}
 <meta name="robots" content="noindex, follow" />
+<link rel="preconnect" href="https://www.youtube.com" />
+<script src="https://www.youtube.com/iframe_api" async></script>
+<script src="{{ url_for('static', filename='js/vsl-video-analytics.js') }}" defer></script>
 <style>
   #vsl-sticky-cta {
     transform: translateY(calc(110% + 1rem));
@@ -25,6 +28,157 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
     transform: translateY(0);
     opacity: 1;
     pointer-events: auto;
+  }
+  .vsl-chapter-timeline {
+    position: relative;
+    padding: 0;
+  }
+  .vsl-chapter-track {
+    position: relative;
+    height: 3px;
+    border-radius: 9999px;
+    background: #e5e7eb;
+    margin-bottom: 0.625rem;
+  }
+  .vsl-chapter-progress {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 0;
+    border-radius: inherit;
+    background: #ff4d00;
+    transition: width 0.35s ease;
+  }
+  .vsl-chapter-markers {
+    display: grid;
+    grid-template-columns: repeat(var(--vsl-chapter-count, 9), minmax(0, 1fr));
+    gap: 0.25rem 0.125rem;
+    pointer-events: auto;
+  }
+  .vsl-chapter-marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.375rem;
+    min-width: 0;
+    pointer-events: auto;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-align: center;
+  }
+  .vsl-chapter-dot {
+    display: block;
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 9999px;
+    border: 2px solid #fff;
+    background: #d1d5db;
+    box-shadow: 0 0 0 1px #e5e7eb;
+    transition:
+      transform 0.2s ease,
+      background 0.2s ease,
+      box-shadow 0.2s ease;
+    flex-shrink: 0;
+  }
+  .vsl-chapter-marker:hover .vsl-chapter-dot,
+  .vsl-chapter-marker:focus-visible .vsl-chapter-dot {
+    transform: scale(1.15);
+    background: #ff4d00;
+    box-shadow: 0 0 0 2px rgba(255, 77, 0, 0.25);
+  }
+  .vsl-chapter-marker.is-active .vsl-chapter-dot {
+    transform: scale(1.2);
+    background: #ff4d00;
+    box-shadow: 0 0 0 3px rgba(255, 77, 0, 0.22);
+  }
+  .vsl-chapter-label {
+    display: block;
+    width: 100%;
+    font-size: 0.5625rem;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: #6b7280;
+    transition: color 0.2s ease;
+    overflow-wrap: anywhere;
+    hyphens: auto;
+  }
+  .vsl-chapter-time {
+    display: none;
+  }
+  @media (min-width: 768px) {
+    .vsl-chapter-label {
+      font-size: 0.625rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .vsl-chapter-label {
+      font-size: 0.6875rem;
+    }
+  }
+  .vsl-chapter-marker:hover .vsl-chapter-label,
+  .vsl-chapter-marker:focus-visible .vsl-chapter-label,
+  .vsl-chapter-marker.is-active .vsl-chapter-label {
+    color: #ff4d00;
+  }
+  .vsl-chapter-marker:focus-visible {
+    outline: none;
+  }
+  .vsl-chapter-marker:focus-visible .vsl-chapter-dot {
+    outline: 2px solid #ff4d00;
+    outline-offset: 2px;
+  }
+  @media (max-width: 767px) {
+    .vsl-chapter-markers {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x proximity;
+      gap: 0.5rem;
+      padding: 0.125rem 0.125rem 0.25rem;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .vsl-chapter-markers::-webkit-scrollbar {
+      display: none;
+    }
+    .vsl-chapter-marker {
+      flex: 0 0 auto;
+      scroll-snap-align: start;
+      flex-direction: row;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.4375rem 0.75rem;
+      border-radius: 9999px;
+      border: 1px solid #e5e7eb;
+      background: #fff;
+      text-align: left;
+    }
+    .vsl-chapter-marker.is-active {
+      border-color: rgba(255, 77, 0, 0.45);
+      background: rgba(255, 77, 0, 0.06);
+    }
+    .vsl-chapter-marker.is-active .vsl-chapter-dot {
+      transform: none;
+    }
+    .vsl-chapter-label {
+      white-space: nowrap;
+      overflow-wrap: normal;
+      hyphens: manual;
+      width: auto;
+      font-size: 0.6875rem;
+    }
+    .vsl-chapter-time {
+      display: inline;
+      font-size: 0.625rem;
+      font-weight: 700;
+      color: #9ca3af;
+      white-space: nowrap;
+    }
+    .vsl-chapter-marker.is-active .vsl-chapter-time {
+      color: #ff4d00;
+    }
   }
 </style>
 {% endblock %} {% block body_class %}bg-white text-gray-800 font-sans{% endblock
@@ -51,9 +205,13 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
         class="text-gray-600 text-base sm:text-lg md:text-xl leading-relaxed max-w-4xl mx-auto"
       >
         Book a free audit. We analyze your funnel, find the 3–5 biggest conversion
-        leaks, and send you a prioritized roadmap—with test ideas your team can ship.
+        leaks, and send you a prioritized roadmap with test ideas your team can ship.
       </p>
-      <div class="flex flex-wrap items-center justify-center gap-2 mt-6">
+      <a
+        href="#reviews"
+        class="inline-flex flex-wrap items-center justify-center gap-2 mt-6 group no-underline hover:opacity-90 transition-opacity"
+        aria-label="Read reviews from 318 brands"
+      >
         <span class="flex text-primary">
           <span class="material-symbols-outlined star-filled text-lg md:text-xl"
             >star</span
@@ -71,14 +229,15 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
             >star</span
           >
         </span>
-        <span class="text-gray-500 text-sm font-bold uppercase tracking-widest"
+        <span
+          class="text-gray-500 text-sm font-bold uppercase tracking-widest group-hover:text-primary transition-colors"
           >4.8 by 318 brands</span
         >
-      </div>
+      </a>
     </div>
   </section>
 
-  {# 2. Video — YouTube with thumbnail + play; iframe loads on click (minimal YT
+  {# 2. Video: YouTube with thumbnail + play; iframe loads on click (minimal YT
   UI) #}
   <section class="px-4 pb-6 md:pb-8">
     <div class="max-w-3xl mx-auto flex flex-col items-center">
@@ -90,10 +249,11 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
       </p>
       <div
         class="vsl-youtube-wrap w-full aspect-video bg-black rounded-lg overflow-hidden relative group"
-        data-youtube-id="_37bgcwfLbg"
+        data-youtube-id="wwWZImpQ4cc"
+        data-vsl-chapters='[{"label":"Intro","seconds":0},{"label":"Audit deliverable","seconds":73},{"label":"Market research","seconds":107},{"label":"Data analysis","seconds":133},{"label":"UI/UX and Figma","seconds":190},{"label":"Prioritization","seconds":293},{"label":"Revenue impact","seconds":378},{"label":"Test results","seconds":420},{"label":"Book your audit","seconds":566}]'
       >
         <img
-          src="https://img.youtube.com/vi/_37bgcwfLbg/sddefault.jpg"
+          src="https://img.youtube.com/vi/wwWZImpQ4cc/sddefault.jpg"
           alt=""
           class="vsl-youtube-poster w-full h-full object-cover"
           loading="lazy"
@@ -119,6 +279,10 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
           aria-hidden="true"
         ></div>
       </div>
+      <div
+        class="vsl-youtube-chapters mt-4 w-full max-w-5xl empty:hidden"
+        aria-label="Video chapters"
+      ></div>
     </div>
   </section>
   <script>
@@ -126,22 +290,172 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
       var origin =
         window.location.origin ||
         window.location.protocol + "//" + window.location.host;
-      var embedParams =
-        "autoplay=1&controls=1&modestbranding=1&rel=0&iv_load_policy=3&enablejsapi=1&origin=" +
-        encodeURIComponent(origin);
+      var vslPlayerVars = {
+        autoplay: 1,
+        controls: 1,
+        modestbranding: 1,
+        rel: 0,
+        iv_load_policy: 3,
+        cc_load_policy: 0,
+        playsinline: 1,
+        enablejsapi: 1,
+        origin: origin,
+      };
 
-      function pushVideoEvent(eventName, videoId, extra) {
+      function freezeAtEnd(player) {
+        if (!player || !player.getDuration || !player.seekTo) return;
         try {
-          window.dataLayer = window.dataLayer || [];
-          window.dataLayer.push({
-            event: eventName,
-            video_id: videoId,
-            video_provider: "youtube",
-            video_url: "https://www.youtube.com/watch?v=" + videoId,
-            video_percent:
-              extra && extra.percent !== undefined ? extra.percent : undefined,
+          var duration = player.getDuration();
+          if (duration > 0) {
+            player.seekTo(Math.max(0, duration - 0.3), true);
+          }
+          if (player.pauseVideo) player.pauseVideo();
+        } catch (freezeErr) {}
+      }
+
+      function parseChapters(wrap) {
+        try {
+          var raw = wrap.getAttribute("data-vsl-chapters") || "[]";
+          var list = JSON.parse(raw);
+          if (!Array.isArray(list)) return [];
+          return list.filter(function (c) {
+            return (
+              c &&
+              typeof c.label === "string" &&
+              c.label.trim() &&
+              typeof c.seconds === "number" &&
+              c.seconds >= 0
+            );
           });
-        } catch (e) {}
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function chapterDuration(wrap, chapters) {
+        var fromAttr = parseInt(wrap.getAttribute("data-vsl-duration") || "", 10);
+        if (fromAttr > 0) return fromAttr;
+        var maxSeconds = chapters.reduce(function (max, chapter) {
+          return Math.max(max, chapter.seconds);
+        }, 0);
+        return Math.max(maxSeconds + 12, 576);
+      }
+
+      function formatChapterTime(seconds) {
+        var mins = Math.floor(seconds / 60);
+        var secs = Math.floor(seconds % 60);
+        return mins + ":" + (secs < 10 ? "0" : "") + secs;
+      }
+
+      function renderChapterTimeline(wrap, chapters, onChapterClick) {
+        var host = wrap.parentElement
+          ? wrap.parentElement.querySelector(".vsl-youtube-chapters")
+          : null;
+        if (!host || !chapters.length) return;
+
+        var totalDuration = chapterDuration(wrap, chapters);
+        wrap._vslChapterDuration = totalDuration;
+
+        host.innerHTML =
+          '<p class="text-[11px] sm:text-xs font-bold uppercase tracking-[0.14em] text-gray-400 text-center mb-1">Jump to section</p>' +
+          '<p class="vsl-chapter-mobile-hint text-[10px] text-gray-400 text-center mb-2 md:hidden">Swipe for all sections</p>' +
+          '<div class="vsl-chapter-timeline">' +
+          '<div class="vsl-chapter-track" aria-hidden="true">' +
+          '<div class="vsl-chapter-progress"></div>' +
+          "</div>" +
+          '<div class="vsl-chapter-markers"></div>' +
+          "</div>";
+
+        var markersHost = host.querySelector(".vsl-chapter-markers");
+        if (!markersHost) return;
+        markersHost.style.setProperty("--vsl-chapter-count", String(chapters.length));
+
+        chapters.forEach(function (chapter, index) {
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "vsl-chapter-marker" + (index === 0 ? " is-active" : "");
+          btn.setAttribute(
+            "aria-label",
+            "Jump to " +
+              chapter.label.trim() +
+              " at " +
+              formatChapterTime(chapter.seconds),
+          );
+          btn.title =
+            chapter.label.trim() + " · " + formatChapterTime(chapter.seconds);
+          btn.innerHTML =
+            '<span class="vsl-chapter-dot" aria-hidden="true"></span>' +
+            '<span class="vsl-chapter-label">' +
+            chapter.label.trim() +
+            "</span>" +
+            '<span class="vsl-chapter-time">' +
+            formatChapterTime(chapter.seconds) +
+            "</span>";
+          btn.addEventListener("click", function () {
+            onChapterClick(chapter, index);
+          });
+          markersHost.appendChild(btn);
+        });
+      }
+
+      function scrollActiveChapterIntoView(wrap, activeIndex) {
+        var host = wrap.parentElement
+          ? wrap.parentElement.querySelector(".vsl-youtube-chapters")
+          : null;
+        if (!host || window.matchMedia("(min-width: 768px)").matches) return;
+        var markers = host.querySelectorAll(".vsl-chapter-marker");
+        var active = markers[activeIndex];
+        if (!active || !active.scrollIntoView) return;
+        active.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+          inline: "center",
+        });
+      }
+
+      function setActiveChapter(wrap, activeIndex) {
+        var host = wrap.parentElement
+          ? wrap.parentElement.querySelector(".vsl-youtube-chapters")
+          : null;
+        if (!host) return;
+        host.querySelectorAll(".vsl-chapter-marker").forEach(function (btn, i) {
+          btn.classList.toggle("is-active", i === activeIndex);
+        });
+        scrollActiveChapterIntoView(wrap, activeIndex);
+      }
+
+      function updateChapterProgress(wrap, currentSeconds, totalDuration) {
+        var host = wrap.parentElement
+          ? wrap.parentElement.querySelector(".vsl-youtube-chapters")
+          : null;
+        if (!host) return;
+        var progress = host.querySelector(".vsl-chapter-progress");
+        if (!progress || !totalDuration) return;
+        var pct = Math.min(
+          100,
+          Math.max(0, (currentSeconds / totalDuration) * 100),
+        );
+        progress.style.width = pct + "%";
+      }
+
+      function chapterIndexAtTime(chapters, currentSeconds) {
+        var activeIndex = 0;
+        for (var i = chapters.length - 1; i >= 0; i--) {
+          if (currentSeconds >= chapters[i].seconds) {
+            activeIndex = i;
+            break;
+          }
+        }
+        return activeIndex;
+      }
+
+      function pushVslVideoEvent(eventName, wrap, player, videoId, extra) {
+        if (!window.VslVideoAnalytics) return;
+        window.VslVideoAnalytics.push(
+          eventName,
+          window.VslVideoAnalytics.buildYoutubeMeta(wrap, player, videoId),
+          extra,
+        );
       }
 
       function loadYouTubeAPI(callback) {
@@ -178,47 +492,122 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
         var poster = wrap.querySelector(".vsl-youtube-poster");
         var playBtn = wrap.querySelector(".vsl-youtube-play");
         var iframeContainer = wrap.querySelector(".vsl-youtube-iframe");
+        var chapters = parseChapters(wrap);
         if (!id || !playBtn || !iframeContainer) return;
 
+        function seekToChapter(chapter, index) {
+          var seconds = chapter.seconds;
+          function startPlayback(player) {
+            if (!player || !player.seekTo) return;
+            player.seekTo(seconds, true);
+            if (player.playVideo) player.playVideo();
+            setActiveChapter(wrap, index);
+            updateChapterProgress(
+              wrap,
+              seconds,
+              wrap._vslChapterDuration || chapterDuration(wrap, chapters),
+            );
+            var totalDuration =
+              wrap._vslChapterDuration || chapterDuration(wrap, chapters);
+            pushVslVideoEvent("video_chapter_click", wrap, player, id, {
+              video_current_time: seconds,
+              video_percent:
+                totalDuration > 0
+                  ? Math.min(100, Math.floor((seconds / totalDuration) * 100))
+                  : 0,
+              chapter_index: index,
+              chapter_seconds: seconds,
+              chapter_label: chapter.label.trim(),
+              chapter_time: formatChapterTime(seconds),
+            });
+          }
+          if (wrap._ytPlayer && wrap._ytPlayerReady) {
+            startPlayback(wrap._ytPlayer);
+            return;
+          }
+          playBtn.click();
+          var attempts = 0;
+          var wait = setInterval(function () {
+            attempts += 1;
+            if (wrap._ytPlayer && wrap._ytPlayerReady) {
+              clearInterval(wait);
+              startPlayback(wrap._ytPlayer);
+            } else if (attempts > 40) {
+              clearInterval(wait);
+            }
+          }, 100);
+        }
+
+        if (chapters.length) {
+          renderChapterTimeline(wrap, chapters, seekToChapter);
+        }
+
         playBtn.addEventListener("click", function () {
+          if (wrap._vslStarted) return;
+          wrap._vslStarted = true;
+
           var iframeId = "vsl-yt-iframe-" + id;
-          var src =
-            "https://www.youtube-nocookie.com/embed/" + id + "?" + embedParams;
           iframeContainer.innerHTML =
-            '<iframe id="' +
-            iframeId +
-            '" class="w-full h-full" src="' +
-            src +
-            '" title="YouTube video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+            '<div id="' + iframeId + '" class="w-full h-full"></div>';
           iframeContainer.classList.remove("hidden");
+          wrap.classList.add("is-playing");
           if (poster) poster.classList.add("hidden");
           playBtn.classList.add("hidden");
 
-          pushVideoEvent("video_start", id);
-
           loadYouTubeAPI(function () {
-            var iframe = document.getElementById(iframeId);
-            if (!iframe) return;
-            var player = new window.YT.Player(iframeId, {
+            new window.YT.Player(iframeId, {
+              videoId: id,
+              playerVars: vslPlayerVars,
               events: {
-                onStateChange: function (e) {
-                  if (e.data === window.YT.PlayerState.PLAYING) {
+                onReady: function (event) {
+                  wrap._ytPlayer = event.target;
+                  wrap._ytPlayerReady = true;
+                  try {
+                    var playerDuration =
+                      event.target.getDuration && event.target.getDuration();
+                    if (playerDuration > 0) {
+                      wrap._vslChapterDuration = playerDuration;
+                    }
+                  } catch (readyErr) {}
+                },
+                onStateChange: function (event) {
+                  var player = event.target;
+                  if (event.data === window.YT.PlayerState.PLAYING) {
+                    if (!wrap._vslVideoStarted) {
+                      wrap._vslVideoStarted = true;
+                      pushVslVideoEvent("video_start", wrap, player, id);
+                    }
                     if (wrap._progressIntervalId) {
                       clearInterval(wrap._progressIntervalId);
                       wrap._progressIntervalId = null;
                     }
-                    var milestones = [10, 25, 50, 75, 90, 100];
                     var sent = {};
-                    milestones.forEach(function (m) {
+                    (window.VslVideoAnalytics
+                      ? window.VslVideoAnalytics.milestones
+                      : [10, 25, 50, 75, 90, 100]
+                    ).forEach(function (m) {
                       sent[m] = false;
                     });
                     wrap._progressIntervalId = setInterval(function () {
                       try {
                         if (!player.getCurrentTime) return;
                         var current = player.getCurrentTime();
-                        var duration = player.getDuration();
+                        var duration =
+                          wrap._vslChapterDuration ||
+                          player.getDuration() ||
+                          0;
                         if (duration <= 0) return;
+                        if (chapters.length) {
+                          setActiveChapter(
+                            wrap,
+                            chapterIndexAtTime(chapters, current),
+                          );
+                          updateChapterProgress(wrap, current, duration);
+                        }
                         var pct = Math.floor((current / duration) * 100);
+                        var milestones = window.VslVideoAnalytics
+                          ? window.VslVideoAnalytics.milestones
+                          : [10, 25, 50, 75, 90, 100];
                         var toSend = null;
                         for (var i = 0; i < milestones.length; i++) {
                           var m = milestones[i];
@@ -234,12 +623,16 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
                         }
                         if (toSend !== null) {
                           sent[toSend] = true;
-                          pushVideoEvent("video_progress", id, {
-                            percent: toSend,
+                          pushVslVideoEvent("video_progress", wrap, player, id, {
+                            video_percent: toSend,
                           });
                           if (toSend === 100) {
-                            wrap._videoCompleteSent = true;
-                            pushVideoEvent("video_complete", id);
+                            if (!wrap._vslVideoCompleteSent) {
+                              wrap._vslVideoCompleteSent = true;
+                              pushVslVideoEvent("video_complete", wrap, player, id, {
+                                video_percent: 100,
+                              });
+                            }
                             clearInterval(wrap._progressIntervalId);
                             wrap._progressIntervalId = null;
                           }
@@ -250,12 +643,17 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
                       }
                     }, 500);
                   }
-                  if (
-                    e.data === window.YT.PlayerState.ENDED &&
-                    !wrap._videoCompleteSent
-                  ) {
-                    wrap._videoCompleteSent = true;
-                    pushVideoEvent("video_complete", id);
+                  if (event.data === window.YT.PlayerState.PAUSED) {
+                    pushVslVideoEvent("video_pause", wrap, player, id);
+                  }
+                  if (event.data === window.YT.PlayerState.ENDED) {
+                    freezeAtEnd(player);
+                    if (!wrap._vslVideoCompleteSent) {
+                      wrap._vslVideoCompleteSent = true;
+                      pushVslVideoEvent("video_complete", wrap, player, id, {
+                        video_percent: 100,
+                      });
+                    }
                   }
                 },
               },
@@ -266,7 +664,7 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
     })();
   </script>
 
-  {# 3. Logo strip — one row, minimal #}
+  {# 3. Logo strip: one row, minimal #}
   <section class="py-4 border-t border-gray-100">
     <div class="max-w-4xl mx-auto px-4">
       <div class="flex flex-wrap justify-center items-center gap-6 md:gap-8">
@@ -330,18 +728,19 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
   >
     <div class="w-full max-w-xl mx-auto px-4 md:px-6 text-center">
       <a
+        id="button-below-vsl"
         href="{{ strategy_session_url }}"
         class="inline-flex w-full items-center justify-center min-h-[56px] px-8 py-4 bg-primary text-white font-display text-lg md:text-xl font-black uppercase rounded-xl shadow-lg shadow-primary/25 hover:brightness-110 transition-all"
       >
         {{ vsl_cta_label }}
       </a>
       <p class="text-center text-gray-500 text-sm mt-3">
-        ROI guaranteed—or your money back. No pitch, just your funnel.
+        ROI guaranteed, or your money back. No pitch, just your funnel.
       </p>
     </div>
   </section>
 
-  {# Social proof — immediately below CTA #}
+  {# Social proof: immediately below CTA #}
   {% if spark_experiments or spark_experiments_configured %}
   <section class="py-10 md:py-14 bg-light-base border-t border-gray-100" id="ab-tests">
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
@@ -352,7 +751,7 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
           The recommendations aren't <span class="text-primary">theory.</span>
         </h2>
         <p class="text-gray-600 text-sm md:text-base mt-3 leading-relaxed">
-          Your audit roadmap is built from the same testing playbook we use on client stores—here are real before/after results.
+          Your audit roadmap is built from the same testing playbook we use on client stores. Here are real before/after results.
         </p>
       </div>
       {% if spark_experiments %}
@@ -401,6 +800,7 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
   {% set heading = "Ready to see what we'd find on your store?" %}
   {% set subtext = "This is where other million-dollar brands started." %}
   {% set section_class = 'bg-light-base border-b border-gray-100' %}
+  {% set audit_cta_id = 'button-ab-tests' %}
   {% include '_audit_cta_center.html' %}
 
   {% include '_cro_program_sections.html' %}
@@ -417,7 +817,7 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
         <p
           class="text-slate-500 font-bold uppercase tracking-widest text-sm mt-4"
         >
-          Brands that booked a free audit—and what changed after they implemented the roadmap.
+          Brands that booked a free audit. Here's what changed after they implemented the roadmap.
         </p>
       </div>
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
@@ -463,11 +863,12 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
   </section>
 
   {% set heading = "Your funnel is leaking somewhere. Let's find it." %}
-  {% set subtext = "They were skeptical too—then they saw exactly where revenue was hiding." %}
+  {% set subtext = "They were skeptical too. Then they saw exactly where revenue was hiding." %}
   {% set section_class = 'bg-white border-b border-gray-100' %}
+  {% set audit_cta_id = 'button-case-studies' %}
   {% include '_audit_cta_center.html' %}
 
-  <section class="py-20 md:py-24 bg-white border-b border-gray-100">
+  <section id="reviews" class="py-20 md:py-24 bg-white border-b border-gray-100">
     <div class="max-w-7xl mx-auto px-6">
       <div class="text-center mb-14">
         <h2
@@ -874,8 +1275,9 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
     </div>
   </section>
 
-  {% set strip_cta = 'strategy_session' %} {% include
-  'includes/_youtube_cro_thumb_strip.html' %}
+  {% set strip_cta = 'strategy_session' %}
+  {% set strip_link_id_prefix = 'yt-thumb' %}
+  {% include 'includes/_youtube_cro_thumb_strip.html' %}
 
   <section class="py-20 md:py-24 bg-white border-b border-gray-100">
     <div class="max-w-7xl mx-auto px-6">
@@ -1308,6 +1710,7 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
       <span>CRO audits in the queue</span>
     </p>
     <a
+      id="floating-bar-bottom"
       href="{{ strategy_session_url }}"
       class="inline-flex items-center shrink-0 pl-4 sm:pl-6 pr-1.5 py-1.5 min-h-[44px] sm:min-h-[48px] bg-deep-charcoal text-white font-display text-[11px] sm:text-sm font-black uppercase rounded-full hover:brightness-110 transition-all"
     >

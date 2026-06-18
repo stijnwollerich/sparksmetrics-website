@@ -60,7 +60,7 @@
               data-checklist-modal
               data-resource="13-bulletproof-strategies"
               data-title="13 Bulletproof Strategies to Skyrocket Conversions"
-              data-description="Enter your email and get the free ebook right away — 13 actionable CRO strategies used by $10M+ brands."
+              data-description="Enter your email and get the free ebook right away: 13 actionable CRO strategies used by $10M+ brands."
               data-button-text="Send me the ebook"
             >
               <div
@@ -73,6 +73,7 @@
             </a>
             {% elif cta in ('calendly', 'strategy_session') %}
             <a
+              {% if strip_link_id_prefix %}id="{{ strip_link_id_prefix }}-{{ '%02d'|format(loop.index) }}"{% endif %}
               href="{{ strategy_session_href }}"
               class="absolute inset-0 z-10 flex items-center justify-center"
             >

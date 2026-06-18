@@ -1,4 +1,4 @@
-{# Spark experiment card — before/after on top, stats below #}
+{# Spark experiment card: before/after on top, stats below #}
 <article
   class="spark-exp-card group flex flex-col w-full h-full rounded-2xl overflow-hidden bg-white border border-gray-200/90 shadow-sm hover:shadow-md hover:border-gray-300/90 transition-shadow"
 >
@@ -33,7 +33,7 @@
           {% if exp.control and exp.control.image_url %}
           <img
             src="{{ exp.control.image_url }}"
-            alt="Before — {{ exp.test_name }}"
+            alt="Before: {{ exp.test_name }}"
             class="h-full w-full object-contain object-top"
             loading="lazy"
             width="280"
@@ -58,7 +58,7 @@
           {% if exp.challenger and exp.challenger.image_url %}
           <img
             src="{{ exp.challenger.image_url }}"
-            alt="After — {{ exp.test_name }}"
+            alt="After: {{ exp.test_name }}"
             class="h-full w-full object-contain object-top"
             loading="lazy"
             width="280"
@@ -87,7 +87,7 @@
       </p>
       {% else %}
       <p class="mt-1 text-2xl font-display font-black leading-none text-gray-400">
-        —
+        n/a
       </p>
       {% endif %}
     </div>
@@ -105,7 +105,7 @@
       </p>
       {% else %}
       <p class="mt-1 text-2xl font-display font-black leading-none text-gray-400">
-        —
+        n/a
       </p>
       {% endif %}
     </div>
