@@ -1,0 +1,766 @@
+{% extends "base.html" %}
+{% block title %}How Much Revenue Is Your Store Leaving on the Table? | Sparksmetrics{% endblock %}
+{% block meta_description %}Take a 2-minute assessment for Shopify brands. Get your personalized conversion score, biggest revenue leak, and clear next step.{% endblock %}
+{% block og_title %}How Much Revenue Is Your Store Leaving on the Table? | Sparksmetrics{% endblock %}
+{% block og_description %}Discover your biggest conversion bottleneck in 2 minutes. Personalized score, revenue leak estimate, and next steps.{% endblock %}
+{% block twitter_title %}How Much Revenue Is Your Store Leaving on the Table? | Sparksmetrics{% endblock %}
+{% block twitter_description %}Discover your biggest conversion bottleneck in 2 minutes. Personalized score, revenue leak estimate, and next steps.{% endblock %}
+{% block primary_bar %}{% endblock %}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block audit_bar %}{% endblock %}
+{% block head_extras %}
+<meta name="robots" content="noindex, follow" />
+<link rel="preconnect" href="https://calendly.com" />
+<link rel="preconnect" href="https://assets.calendly.com" crossorigin />
+<link rel="preconnect" href="https://www.youtube.com" />
+<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet" />
+{% include 'includes/_strategy_session_funnel_styles.html' %}
+{% include 'includes/_qualify_book_styles.html' %}
+<style>
+  .qualify-result-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 0.45rem 1rem;
+    border-radius: 9999px;
+    margin-bottom: 1.25rem;
+  }
+  .qualify-result-badge.is-strong {
+    background: rgba(255, 77, 0, 0.12);
+    color: #ff4d00;
+  }
+  .qualify-result-badge.is-almost {
+    background: rgba(234, 179, 8, 0.15);
+    color: #a16207;
+  }
+  .qualify-result-badge.is-not-yet {
+    background: #f3f4f6;
+    color: #6b7280;
+  }
+  .qualify-cta-card {
+    border: 2px solid #e5e7eb;
+    border-radius: 1rem;
+    padding: 1.25rem 1.25rem 1.5rem;
+    text-align: left;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .qualify-cta-card p {
+    margin-bottom: 1rem;
+    color: #4b5563;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    flex: 1;
+  }
+  .qualify-email-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .qualify-email-msg {
+    font-size: 0.8125rem;
+    margin-top: 0.5rem;
+    min-height: 1.25rem;
+  }
+  .qualify-email-msg.is-error {
+    color: #dc2626;
+  }
+  .qualify-email-msg.is-success {
+    color: #059669;
+  }
+  #qualify-quiz .qualify-chrome.is-hidden {
+    display: none;
+  }
+  .qualify-progress-wrap {
+    width: 100%;
+    max-width: 28rem;
+    margin: 0 auto 1.5rem;
+  }
+  .qualify-progress-track {
+    position: relative;
+    width: 100%;
+    height: 0.5rem;
+    background: #e5e7eb;
+    border-radius: 9999px;
+    overflow: hidden;
+    margin-bottom: 0.625rem;
+  }
+  .qualify-progress-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0;
+    background: #ff4d00;
+    border-radius: 9999px;
+    transition: width 0.35s ease;
+    pointer-events: none;
+  }
+  .qualify-progress-meta {
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #9ca3af;
+  }
+  .qualify-credibility {
+    text-align: center;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #9ca3af;
+    letter-spacing: 0.04em;
+    margin: -0.5rem 0 1.25rem;
+  }
+  .qualify-intro {
+    text-align: center;
+    max-width: 26rem;
+    margin: 0 auto 1rem;
+  }
+  .qualify-intro.is-hidden {
+    display: none;
+  }
+  .qualify-intro-hook {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: #4b5563;
+    line-height: 1.4;
+    margin: 0 0 0.35rem;
+  }
+  .qualify-trust-line {
+    margin: 0 0 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #9ca3af;
+    text-align: center;
+  }
+  .qualify-trust-line::before {
+    content: "✓ ";
+    color: #059669;
+    font-weight: 800;
+  }
+  .qualify-findings {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin: 0 auto 1.25rem;
+    width: 100%;
+    text-align: left;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    background: #fff;
+  }
+  @media (min-width: 640px) {
+    .qualify-findings {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .qualify-findings.is-compact {
+      grid-template-columns: repeat(2, 1fr);
+      max-width: 36rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+  .qualify-finding {
+    padding: 1.125rem 1.25rem;
+    background: #fff;
+    border: 0;
+    border-bottom: 2px solid #e5e7eb;
+    border-radius: 0;
+  }
+  @media (min-width: 640px) {
+    .qualify-finding {
+      border-bottom: 0;
+    }
+    .qualify-finding:not(:last-child) {
+      border-right: 2px solid #e5e7eb;
+    }
+  }
+  .qualify-finding:last-child {
+    border-bottom: 0;
+  }
+  .qualify-finding-label {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #9ca3af;
+    margin-bottom: 0.35rem;
+  }
+  .qualify-finding-value {
+    display: block;
+    font-family: var(--font-display, inherit);
+    font-size: clamp(0.8125rem, 2.5vw, 1rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    color: #111827;
+    line-height: 1.25;
+    word-break: break-word;
+  }
+  .qualify-finding.is-accent .qualify-finding-value {
+    color: #ff4d00;
+    font-size: 1.125rem;
+  }
+  .qualify-step--result.is-active {
+    width: 100%;
+    max-width: 44rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .qualify-result-subtitle {
+    color: #4b5563;
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    margin: 0 auto 1.5rem;
+    text-align: left;
+  }
+  .qualify-result-peak {
+    width: 100%;
+    margin: 0 auto;
+    padding: 1.75rem 1.25rem 2rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 1rem;
+    background: #fafafa;
+    text-align: center;
+  }
+  @media (min-width: 640px) {
+    .qualify-result-peak {
+      padding: 2.25rem 2.5rem 2.5rem;
+    }
+  }
+  .qualify-result-amount {
+    display: block;
+    color: #ff4d00;
+    margin: 0.35rem 0 0.4rem;
+    font-size: clamp(2rem, 7vw, 3.25rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+  }
+  #qualify-result-title {
+    margin-bottom: 1.5rem;
+    max-width: 38rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .qualify-call-primary {
+    max-width: 26rem;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .qualify-cta-primary {
+    display: inline-flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    min-height: 58px;
+    padding: 0.95rem 1.75rem;
+    background: #ff4d00;
+    color: #fff;
+    font-family: var(--font-display, inherit);
+    font-size: 1.0625rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    border: 0;
+    border-radius: 9999px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: filter 0.15s ease;
+    box-shadow: 0 4px 14px rgba(255, 77, 0, 0.28);
+  }
+  .qualify-cta-primary:hover {
+    filter: brightness(1.08);
+    color: #fff;
+  }
+  .qualify-call-promise {
+    margin: 0.875rem auto 0;
+    max-width: 34rem;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #4b5563;
+    text-align: center;
+  }
+  .qualify-result-divider {
+    border: 0;
+    border-top: 2px solid #e5e7eb;
+    width: 100%;
+    margin: 1.75rem 0;
+  }
+  .qualify-result-divider--analysis {
+    width: 100%;
+    max-width: 44rem;
+    margin: 2.25rem auto 2rem;
+  }
+  .qualify-result-analysis {
+    width: 100%;
+    max-width: 44rem;
+    margin: 0 auto;
+    text-align: left;
+  }
+  .qualify-analysis-label {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #9ca3af;
+    text-align: center;
+    margin: 0 0 1.25rem;
+  }
+  .qualify-urgency {
+    color: #374151;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0 0 1.25rem;
+    padding: 1rem 1.125rem;
+    background: #fff7ed;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(255, 77, 0, 0.2);
+    text-align: left;
+  }
+  .qualify-email-offer {
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    width: 100%;
+    margin: 0;
+    text-align: left;
+    background: transparent;
+  }
+  .qualify-email-offer h3 {
+    font-family: var(--font-display, inherit);
+    font-size: 1.1875rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    color: #111827;
+    margin: 0 0 0.5rem;
+    line-height: 1.2;
+  }
+  @media (min-width: 640px) {
+    .qualify-email-offer h3 {
+      font-size: 1.3125rem;
+    }
+  }
+  .qualify-email-offer > p {
+    color: #4b5563;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    margin: 0 0 1rem;
+  }
+  .qualify-email-perks {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.25rem;
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: 1fr;
+  }
+  .qualify-email-perks li {
+    font-size: 0.9375rem;
+    color: #374151;
+    padding-left: 1.35rem;
+    position: relative;
+  }
+  .qualify-email-perks li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: #059669;
+    font-weight: 800;
+  }
+  .qualify-email-offer .qualify-email-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+  }
+  .qualify-email-field {
+    width: 100%;
+    min-width: 0;
+  }
+  .qualify-email-field .mss-field-input {
+    display: block;
+    width: 100%;
+    min-height: 52px;
+    box-sizing: border-box;
+  }
+  .qualify-email-offer #qualify-guide-submit {
+    width: 100%;
+    min-height: 56px;
+    font-size: 1rem;
+  }
+  @media (min-width: 640px) {
+    .qualify-email-offer .qualify-email-row {
+      flex-direction: row;
+      align-items: stretch;
+    }
+    .qualify-email-field {
+      flex: 1 1 0;
+    }
+    .qualify-email-offer #qualify-guide-submit {
+      width: auto;
+      flex: 0 0 auto;
+      min-width: 12rem;
+      max-width: 46%;
+      padding-left: 1.25rem;
+      padding-right: 1.25rem;
+    }
+  }
+  .qualify-email-offer.is-sent {
+    opacity: 0.85;
+  }
+  .qualify-call-secondary {
+    margin: 0 auto 1.5rem;
+    font-size: 0.9375rem;
+  }
+  .qualify-call-secondary a {
+    color: #6b7280;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .qualify-call-secondary a:hover {
+    color: #ff4d00;
+  }
+  .qualify-result-detail {
+    margin: 1.5rem 0 0;
+    text-align: left;
+  }
+  #qualify-result-body p {
+    margin-bottom: 1rem;
+    color: #4b5563;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  #qualify-result-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* —— Mobile responsive —— */
+  #qualify-quiz {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+    box-sizing: border-box;
+    padding-left: max(1rem, env(safe-area-inset-left, 0px));
+    padding-right: max(1rem, env(safe-area-inset-right, 0px));
+    padding-bottom: max(2rem, env(safe-area-inset-bottom, 0px));
+  }
+  #qualify-quiz .mss-shell {
+    min-width: 0;
+    max-width: 100%;
+  }
+  #qualify-quiz .qualify-step.mss-step.is-active,
+  #qualify-quiz .qualify-step--result.is-active,
+  #qualify-quiz .qualify-step--book.is-active {
+    min-width: 0;
+    max-width: 100%;
+  }
+  #qualify-quiz .qualify-step h2 {
+    text-wrap: balance;
+  }
+  @media (max-width: 639px) {
+    #qualify-quiz {
+      padding-top: 1.25rem;
+    }
+    #qualify-quiz > .mss-shell > a {
+      margin-bottom: 1.5rem;
+    }
+    #qualify-quiz .qualify-credibility {
+      font-size: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    #qualify-quiz .qualify-step h2 {
+      font-size: 1.375rem;
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+      padding-inline: 0.125rem;
+    }
+    #qualify-quiz .mss-tile {
+      padding: 0.875rem 0.625rem;
+      font-size: 0.9375rem;
+      line-height: 1.35;
+      min-height: 52px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .qualify-progress-wrap {
+      margin-bottom: 1.25rem;
+    }
+    .qualify-result-badge {
+      font-size: 0.6875rem;
+      letter-spacing: 0.12em;
+      padding: 0.4rem 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .qualify-result-peak {
+      padding: 1.25rem 1rem 1.5rem;
+    }
+    #qualify-result-title {
+      margin-bottom: 1.25rem;
+    }
+    .qualify-result-amount {
+      font-size: clamp(1.75rem, 9vw, 2.5rem);
+    }
+    .qualify-call-promise {
+      font-size: 0.9375rem;
+    }
+    .qualify-cta-primary,
+    .qualify-book-cta-primary {
+      font-size: 0.9375rem;
+      min-height: 54px;
+      padding-inline: 1rem;
+    }
+    #qualify-quiz .grid {
+      gap: 0.625rem;
+    }
+    .qualify-result-divider {
+      margin: 1.25rem 0;
+    }
+    .qualify-result-divider--analysis {
+      margin: 1.75rem auto 1.5rem;
+    }
+    .qualify-result-subtitle,
+    .qualify-urgency {
+      font-size: 0.9375rem;
+    }
+    .qualify-urgency {
+      padding: 0.875rem 1rem;
+    }
+    .qualify-email-offer h3 {
+      font-size: 1.0625rem;
+    }
+    .qualify-email-offer #qualify-guide-submit {
+      white-space: normal;
+      text-align: center;
+      line-height: 1.2;
+      padding-top: 0.75rem;
+      padding-bottom: 0.75rem;
+    }
+    .qualify-finding {
+      padding: 1rem;
+    }
+    .qualify-finding.is-accent .qualify-finding-value {
+      font-size: 1rem;
+    }
+    #qualify-result-personal {
+      font-size: 0.9375rem;
+    }
+    #qualify-result-body p {
+      font-size: 0.9375rem;
+    }
+  }
+</style>
+{% endblock %}
+{% block body_class %}bg-white text-gray-800 font-sans overflow-x-hidden{% endblock %}
+{% block content %}
+{% set strategy_session_url = url_for('main.thirty_minute_strategy_session') %}
+<div
+  id="qualify-quiz"
+  class="min-h-screen flex flex-col items-center sm:px-8 py-6 sm:py-10 md:py-14"
+  data-strategy-session-url="{{ strategy_session_url }}"
+  data-resource-slug="7-questions-cro-agency"
+>
+  <div class="mss-shell mx-auto flex flex-col flex-1 min-h-0 w-full">
+    <a
+      href="{{ url_for('main.index') }}"
+      class="flex items-center justify-center gap-2 mb-6 sm:mb-10 group"
+      aria-label="Sparksmetrics home"
+    >
+      <div class="w-9 h-9 bg-primary rounded flex items-center justify-center rotate-3">
+        <span class="text-white font-black text-xl">S</span>
+      </div>
+      <span
+        class="font-display text-xl tracking-tighter uppercase font-extrabold text-deep-charcoal"
+        >Sparksmetrics</span
+      >
+    </a>
+    <p class="qualify-credibility">Rated 4.8 by 2188+ Shopify brands</p>
+
+    <div class="qualify-intro" id="qualify-intro">
+      <p class="qualify-intro-hook">Will CRO actually increase your revenue?</p>
+    </div>
+
+    <div class="qualify-chrome mss-funnel-chrome" id="qualify-chrome">
+      <p class="qualify-trust-line">Instant results • No email required</p>
+      <div class="qualify-progress-wrap">
+        <div
+          class="qualify-progress-track"
+          id="qualify-progress-track"
+          role="progressbar"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0"
+          aria-labelledby="qualify-progress-label"
+        >
+          <div class="qualify-progress-fill" id="qualify-progress-fill"></div>
+        </div>
+        <p class="qualify-progress-meta" id="qualify-progress-label">Question 1 of 6</p>
+      </div>
+    </div>
+
+    {# Q1 — Conversion rate #}
+    <section class="qualify-step mss-step is-active" data-step="2" aria-labelledby="qualify-q3-title">
+      <h2 id="qualify-q3-title" class="text-xl sm:text-3xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tight text-center mb-6 sm:mb-10">
+        What is your current conversion rate?
+      </h2>
+      <div class="grid sm:grid-cols-2 gap-3 w-full max-w-2xl mx-auto" role="group">
+        <button type="button" class="mss-tile" data-qualify-answer data-q="q3" data-value="unknown" data-score="2">I don't know</button>
+        <button type="button" class="mss-tile" data-qualify-answer data-q="q3" data-value="under-1" data-score="3">Under 1%</button>
+        <button type="button" class="mss-tile" data-qualify-answer data-q="q3" data-value="1-3" data-score="1">1% – 3%</button>
+        <button type="button" class="mss-tile" data-qualify-answer data-q="q3" data-value="over-3" data-score="0">Over 3%</button>
+      </div>
+    </section>
+
+    {# Q2 — Ad spend #}
+    <section class="qualify-step mss-step" data-step="3" aria-labelledby="qualify-q1-title">
+      <h2 id="qualify-q1-title" class="text-xl sm:text-3xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tight text-center mb-6 sm:mb-10">
+        How much do you spend on paid ads per month?
+      </h2>
+      <div class="grid sm:grid-cols-2 gap-3 w-full max-w-2xl mx-auto" role="group">
+        <button type="button" class="mss-tile" data-qualify-answer data-q="q1" data-value="under-10k" data-score="0">Under $10,000</button>
+        <button type="button" class="mss-tile" data-qualify-answer data-q="q1" data-value="10k-100k" data-score="1">$10,000 – $100,000</button>
+        <button type="button" class="mss-tile" data-qualify-answer data-q="q1" data-value="100k-500k" data-score="2">$100,000 – $500,000</button>
+        <button type="button" class="mss-tile" data-qualify-answer data-q="q1" data-value="500k-plus" data-score="3">$500,000+</button>
+      </div>
+    </section>
+
+    {# Q3 — Revenue #}
+    <section class="qualify-step mss-step" data-step="4" aria-labelledby="qualify-q2-title">
+      <h2 id="qualify-q2-title" class="text-xl sm:text-3xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tight text-center mb-6 sm:mb-10">
+        What is your store's monthly revenue?
+      </h2>
+      <div class="grid sm:grid-cols-2 gap-3 w-full max-w-2xl mx-auto" role="group">
+        <button type="button" class="mss-tile" data-qualify-answer data-q="q2" data-value="under-100k" data-score="0">Under $100,000</button>
+        <button type="button" class="mss-tile" data-qualify-answer data-q="q2" data-value="100k-500k" data-score="1">$100,000 – $500,000</button>
+        <button type="button" class="mss-tile" data-qualify-answer data-q="q2" data-value="500k-2m" data-score="3">$500,000 – $2M</button>
+        <button type="button" class="mss-tile" data-qualify-answer data-q="q2" data-value="2m-plus" data-score="3">$2M+</button>
+      </div>
+    </section>
+
+    {# Q4 — Traffic #}
+    <section class="qualify-step mss-step" data-step="5" aria-labelledby="qualify-q4-title">
+      <h2 id="qualify-q4-title" class="text-xl sm:text-3xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tight text-center mb-6 sm:mb-10">
+        How many visitors does your store get per month?
+      </h2>
+      <div class="grid sm:grid-cols-2 gap-3 w-full max-w-2xl mx-auto" role="group">
+        <button type="button" class="mss-tile" data-qualify-answer data-q="q4" data-value="under-50k" data-score="0">Under 50,000</button>
+        <button type="button" class="mss-tile" data-qualify-answer data-q="q4" data-value="50k-250k" data-score="2">50,000 – 250,000</button>
+        <button type="button" class="mss-tile" data-qualify-answer data-q="q4" data-value="250k-1m" data-score="3">250,000 – 1M</button>
+        <button type="button" class="mss-tile" data-qualify-answer data-q="q4" data-value="1m-plus" data-score="3">1M+</button>
+      </div>
+    </section>
+
+    {# Q5 — CRO experience #}
+    <section class="qualify-step mss-step" data-step="6" aria-labelledby="qualify-q5-title">
+      <h2 id="qualify-q5-title" class="text-xl sm:text-3xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tight text-center mb-6 sm:mb-10">
+        What have you done for CRO so far?
+      </h2>
+      <div class="grid sm:grid-cols-2 gap-3 w-full max-w-2xl mx-auto" role="group">
+        <button type="button" class="mss-tile" data-qualify-answer data-q="q5" data-value="nothing" data-score="2">No CRO work yet</button>
+        <button type="button" class="mss-tile" data-qualify-answer data-q="q5" data-value="diy" data-score="2">DIY site changes</button>
+        <button type="button" class="mss-tile" data-qualify-answer data-q="q5" data-value="ab-tests" data-score="3">Ran A/B tests</button>
+        <button type="button" class="mss-tile" data-qualify-answer data-q="q5" data-value="agency" data-score="2">Used a CRO agency</button>
+      </div>
+    </section>
+
+    {# Q6 — Biggest problem (no score) #}
+    <section class="qualify-step mss-step" data-step="7" aria-labelledby="qualify-q6-title">
+      <h2 id="qualify-q6-title" class="text-xl sm:text-3xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tight text-center mb-6 sm:mb-10">
+        What's holding your store back?
+      </h2>
+      <div class="grid sm:grid-cols-2 gap-3 w-full max-w-2xl mx-auto" role="group">
+        <button type="button" class="mss-tile" data-qualify-answer data-q="q6" data-value="low-cvr" data-score="0">Low conversion rate</button>
+        <button type="button" class="mss-tile" data-qualify-answer data-q="q6" data-value="high-ad-costs" data-score="0">Ad costs too high</button>
+        <button type="button" class="mss-tile" data-qualify-answer data-q="q6" data-value="few-sales" data-score="0">Traffic, few sales</button>
+        <button type="button" class="mss-tile" data-qualify-answer data-q="q6" data-value="cant-grow" data-score="0">Can't grow profitably</button>
+      </div>
+    </section>
+
+    {# Results: peak (badge + headline + CTAs) then analysis below #}
+    <section class="qualify-step mss-step qualify-step--result text-center" data-step="8" aria-labelledby="qualify-result-title">
+      <div class="qualify-result-peak">
+        <span id="qualify-result-badge" class="qualify-result-badge is-strong">Your results are ready</span>
+        <h2
+          id="qualify-result-title"
+          class="text-[1.375rem] sm:text-3xl md:text-[2.125rem] font-display font-black text-deep-charcoal uppercase tracking-tight leading-[1.15] max-w-3xl mx-auto"
+        ></h2>
+
+        <div class="qualify-call-primary" id="qualify-call-primary">
+          <button type="button" id="qualify-cta-call" class="qualify-cta-primary">
+            Book free CRO audit
+          </button>
+          <p id="qualify-call-promise" class="qualify-call-promise"></p>
+        </div>
+
+        <hr class="qualify-result-divider" id="qualify-result-divider-email" />
+
+        <div class="qualify-email-offer" id="qualify-email-offer">
+          <h3>Want the full breakdown?</h3>
+          <p>Enter your email and we'll send:</p>
+          <ul class="qualify-email-perks">
+            <li>The 3 highest-impact tests we'd run</li>
+            <li>Your personalized CRO scorecard</li>
+            <li>Priority fixes ranked by ROI</li>
+          </ul>
+          <div class="qualify-email-row">
+            <div class="qualify-email-field">
+              <label for="qualify-guide-email" class="sr-only">Email</label>
+              <input
+                type="email"
+                id="qualify-guide-email"
+                class="mss-field-input text-base"
+                placeholder="you@company.com"
+                autocomplete="email"
+              />
+            </div>
+            <button
+              type="button"
+              id="qualify-guide-submit"
+              class="min-h-[52px] px-4 sm:px-6 py-3 bg-deep-charcoal text-white font-display font-black uppercase rounded-full hover:brightness-110 transition-all sm:whitespace-nowrap text-sm sm:text-base"
+            >
+              Send my action plan
+            </button>
+          </div>
+          <p id="qualify-guide-msg" class="qualify-email-msg" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+
+      <hr class="qualify-result-divider qualify-result-divider--analysis" />
+
+      <div class="qualify-result-analysis">
+        <span class="qualify-analysis-label">Your breakdown</span>
+        <p id="qualify-result-subtitle" class="qualify-result-subtitle"></p>
+        <div id="qualify-result-findings" class="qualify-findings" aria-label="Quiz findings"></div>
+        <p id="qualify-result-urgency" class="qualify-urgency"></p>
+        <div class="qualify-result-detail">
+          <p
+            id="qualify-result-personal"
+            class="text-deep-charcoal text-base sm:text-lg font-semibold leading-relaxed mb-5"
+          ></p>
+          <div id="qualify-result-body" class="leading-relaxed mb-2"></div>
+        </div>
+      </div>
+
+      <button type="button" class="mt-10 text-sm text-gray-500 hover:text-deep-charcoal mx-auto" data-qualify-restart>
+        Retake the quiz
+      </button>
+    </section>
+
+    {% include 'includes/_qualify_book_step.html' %}
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/qualify-quiz-gtm.js') }}?v=1" defer></script>
+<script src="{{ url_for('static', filename='js/vsl-video-analytics.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/vsl-youtube-simple.js') }}?v=2" defer></script>
+<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+<script src="{{ url_for('static', filename='js/qualify-book.js') }}?v=7" defer></script>
+<script src="{{ url_for('static', filename='js/cro-qualify-quiz.js') }}?v=16" defer></script>
+{% endblock %}

@@ -1,0 +1,168 @@
+<style>
+  .mss-shell {
+    width: 100%;
+    max-width: 56rem;
+  }
+  .mss-progress-line {
+    height: 2px;
+    background: #e5e7eb;
+    flex: 1;
+    margin-top: 7px;
+  }
+  .mss-progress-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 9999px;
+    background: #e5e7eb;
+    flex-shrink: 0;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .mss-progress-dot.is-active {
+    background: #ff4d00;
+    transform: scale(1.2);
+  }
+  .mss-progress-dot.is-done {
+    background: #ff4d00;
+    opacity: 0.4;
+  }
+  .mss-step {
+    display: none !important;
+    width: 100%;
+  }
+  .mss-step.is-active {
+    display: flex !important;
+    flex-direction: column;
+    flex: 1 1 auto;
+    animation: mssFadeIn 0.3s ease forwards;
+  }
+  @keyframes mssFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .mss-tile {
+    border: 2px solid #e5e7eb;
+    border-radius: 0.75rem;
+    padding: 1.1rem 1.25rem;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: #1a1a1b;
+    transition: border-color 0.15s ease, background 0.15s ease;
+    cursor: pointer;
+    min-height: 56px;
+  }
+  .mss-tile:hover {
+    border-color: #ff4d00;
+    background: rgba(255, 77, 0, 0.04);
+  }
+  .mss-tile.is-selected {
+    border-color: #ff4d00;
+    background: rgba(255, 77, 0, 0.08);
+  }
+  .mss-field-input {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    font-size: 1.125rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.75rem;
+  }
+  .mss-field-input:focus {
+    outline: none;
+    border-color: #ff4d00;
+  }
+  #mss-funnel.is-calendly-step {
+    align-items: stretch;
+    min-height: 100vh;
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+    padding: 0;
+  }
+  body.mss-calendly-active {
+    overflow: hidden;
+  }
+  #mss-funnel.is-calendly-step .mss-shell {
+    max-width: none;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    min-height: 0;
+  }
+  #mss-funnel.is-calendly-step .mss-funnel-chrome {
+    display: none;
+  }
+  .mss-step-calendly.is-active {
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+  .mss-step-calendly-copy {
+    flex-shrink: 0;
+    margin: 0;
+    padding: 0.65rem 1rem 0.35rem;
+    font-size: 0.8125rem;
+    line-height: 1.25;
+    text-align: center;
+    color: #6b7280;
+  }
+  #mss-calendly-inline {
+    width: 100%;
+    min-width: 100%;
+    flex: 1 1 auto;
+    min-height: 0;
+    border-radius: 0;
+    overflow: hidden;
+    background: #fff;
+    border: 0;
+  }
+  #mss-funnel.is-calendly-step #mss-calendly-inline {
+    height: 100%;
+  }
+  #mss-calendly-inline iframe {
+    margin: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  #mss-exit-modal.is-open {
+    display: flex;
+  }
+  #mss-exit-modal {
+    display: none;
+  }
+  .mss-exit-wait-label {
+    font-family: Impact, "Arial Black", sans-serif;
+    font-style: italic;
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+  }
+  @keyframes mssExitPop {
+    from {
+      opacity: 0;
+      transform: scale(0.96) translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+  .mss-exit-card {
+    animation: mssExitPop 0.28s ease forwards;
+  }
+  .mss-exit-gif {
+    display: block;
+    width: 100%;
+    max-height: 11rem;
+    object-fit: cover;
+  }
+  #mss-funnel.mss-funnel--embed { min-height: 0; padding: 0; }
+  #mss-funnel.mss-funnel--embed.is-calendly-step { height: auto; max-height: none; min-height: 0; overflow: visible; }
+  #mss-funnel.mss-funnel--embed.is-calendly-step .mss-shell { max-width: 56rem; height: auto; }
+  #mss-funnel.mss-funnel--embed #mss-calendly-inline { height: 640px; min-height: 640px; border-radius: 0.75rem; border: 1px solid #e5e7eb; }
+</style>

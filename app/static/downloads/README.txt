@@ -2,6 +2,7 @@ Add your resource files here. Each resource is registered in app/routes/main.py 
 
 Current:
 - sm-cro-ebook.pdf (slug: 13-bulletproof-strategies). Served via /download/13-bulletproof-strategies (attachment, noindex).
+- sm-cro-ebook.pdf (slug: 7-questions-cro-agency) — used by /do-i-qualify quiz until a dedicated PDF is added.
 
 To add a new resource:
 1. Add the PDF/file to this folder.

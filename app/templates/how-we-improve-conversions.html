@@ -130,6 +130,26 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
     outline: 2px solid #ff4d00;
     outline-offset: 2px;
   }
+  .vsl-chapter-marker.is-active .vsl-chapter-time {
+    color: #ff4d00;
+  }
+  h1.vsl-hero-title {
+    font-family: Inter, ui-sans-serif, system-ui, sans-serif !important;
+    font-size: clamp(1.5rem, 0.85rem + 2.4vw, 2.625rem) !important;
+    line-height: 1.15 !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.02em !important;
+    text-transform: none !important;
+    max-width: 56rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  #vsl-above-fold .vsl-fold-video {
+    width: 100%;
+    max-width: 48rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
   @media (max-width: 767px) {
     .vsl-chapter-markers {
       display: flex;
@@ -184,32 +204,15 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
 {% endblock %} {% block body_class %}bg-white text-gray-800 font-sans{% endblock
 %} {% block content %}
 {% set strategy_session_url = url_for('main.thirty_minute_strategy_session') %}
-{% set vsl_conversion_lift_pct = 22 %}
 {% set vsl_cta_label = "Book your free CRO audit" %}
 <div class="min-h-screen flex flex-col">
-  {# 1. Above the fold #}
-  <section class="pt-10 pb-6 md:pt-14 md:pb-8">
+  {# Above the fold: hero + video + CTA #}
+  <section id="vsl-above-fold" class="pt-6 pb-6 md:pt-8 md:pb-8">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center">
-      <p
-        class="text-primary font-bold text-xs sm:text-sm uppercase tracking-[0.2em] mb-4"
-      >
-        For ecommerce brands spending on ads
-      </p>
-      <h1
-        class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5rem] font-display font-black text-deep-charcoal uppercase tracking-tight leading-[1.05] mb-6 max-w-5xl mx-auto"
-      >
-        Your ads aren't the problem.<br />
-        <span class="text-primary">Your website is.</span>
-      </h1>
-      <p
-        class="text-gray-600 text-base sm:text-lg md:text-xl leading-relaxed max-w-4xl mx-auto"
-      >
-        Book a free audit. We analyze your funnel, find the 3–5 biggest conversion
-        leaks, and send you a prioritized roadmap with test ideas your team can ship.
-      </p>
+      <div class="vsl-hero-copy">
       <a
         href="#reviews"
-        class="inline-flex flex-wrap items-center justify-center gap-2 mt-6 group no-underline hover:opacity-90 transition-opacity"
+        class="inline-flex flex-wrap items-center justify-center gap-2 mb-3 group no-underline hover:opacity-90 transition-opacity"
         aria-label="Read reviews from 318 brands"
       >
         <span class="flex text-primary">
@@ -234,55 +237,79 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
           >4.8 by 318 brands</span
         >
       </a>
-    </div>
-  </section>
-
-  {# 2. Video: YouTube with thumbnail + play; iframe loads on click (minimal YT
-  UI) #}
-  <section class="px-4 pb-6 md:pb-8">
-    <div class="max-w-3xl mx-auto flex flex-col items-center">
       <p
-        class="text-[11px] sm:text-xs md:text-sm font-bold text-gray-500 uppercase tracking-[0.14em] text-center leading-relaxed max-w-3xl mb-4 mx-auto"
+        class="text-primary font-semibold text-sm sm:text-base mb-2 max-w-3xl mx-auto leading-snug"
       >
-        Watch: How we added {{ vsl_conversion_lift_pct }}% more conversions for a
-        Shopify brand without touching their ads
+        For Shopify &amp; DTC brands doing 1,000–10,000 transactions per month
       </p>
-      <div
-        class="vsl-youtube-wrap w-full aspect-video bg-black rounded-lg overflow-hidden relative group"
-        data-youtube-id="wwWZImpQ4cc"
-        data-vsl-chapters='[{"label":"Intro","seconds":0},{"label":"Audit deliverable","seconds":73},{"label":"Market research","seconds":107},{"label":"Data analysis","seconds":133},{"label":"UI/UX and Figma","seconds":190},{"label":"Prioritization","seconds":293},{"label":"Revenue impact","seconds":378},{"label":"Test results","seconds":420},{"label":"Book your audit","seconds":566}]'
+      <h1 class="vsl-hero-title text-deep-charcoal mb-3 md:mb-4 mx-auto">
+        <span>We'll Turn More of Your Visitors Into Paying Customers With Our CRO Lift System So You Can Scale More Profitably.</span>
+      </h1>
+      <p
+        class="text-gray-600 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto mb-4 md:mb-5"
       >
-        <img
-          src="https://img.youtube.com/vi/wwWZImpQ4cc/sddefault.jpg"
-          alt=""
-          class="vsl-youtube-poster w-full h-full object-cover"
-          loading="lazy"
-          width="1280"
-          height="720"
-        />
-        <button
-          type="button"
-          class="vsl-youtube-play absolute inset-0 z-10 flex items-center justify-center bg-black/30 hover:bg-black/40 transition-colors"
-          aria-label="Play video"
+        And if we don't perform, you don't pay. Watch the video to see how.
+      </p>
+      </div>
+
+      <div class="vsl-fold-video">
+        <div
+          class="vsl-youtube-wrap w-full aspect-video bg-black rounded-lg overflow-hidden relative group"
+          data-youtube-id="wwWZImpQ4cc"
+          data-vsl-chapters='[{"label":"Intro","seconds":0},{"label":"Audit deliverable","seconds":73},{"label":"Market research","seconds":107},{"label":"Data analysis","seconds":133},{"label":"UI/UX and Figma","seconds":190},{"label":"Prioritization","seconds":293},{"label":"Revenue impact","seconds":378},{"label":"Test results","seconds":420},{"label":"Book your audit","seconds":566}]'
         >
-          <span
-            class="w-20 h-20 md:w-24 md:h-24 rounded-full bg-primary flex items-center justify-center shadow-[0_0_40px_rgba(255,77,0,0.5)] hover:scale-110 transition-transform"
+          <img
+            src="{{ url_for('static', filename='images/youtube_thumbnails/vsl-free-cro-audit-poster.png') }}"
+            alt="Watch how we improved Shopify conversion rate from 2.59% to 3.42%"
+            class="vsl-youtube-poster w-full h-full object-cover object-center"
+            loading="eager"
+            fetchpriority="high"
+            width="800"
+            height="500"
+          />
+          <button
+            type="button"
+            class="vsl-youtube-play absolute inset-0 z-10 flex items-center justify-center bg-black/30 hover:bg-black/40 transition-colors"
+            aria-label="Play video"
           >
             <span
-              class="material-symbols-outlined text-white text-4xl md:text-5xl ml-1"
-              >play_arrow</span
+              class="w-20 h-20 md:w-24 md:h-24 rounded-full bg-primary flex items-center justify-center shadow-[0_0_40px_rgba(255,77,0,0.5)] hover:scale-110 transition-transform"
             >
-          </span>
-        </button>
+              <span
+                class="material-symbols-outlined text-white text-4xl md:text-5xl ml-1"
+                >play_arrow</span
+              >
+            </span>
+          </button>
+          <div
+            class="vsl-youtube-iframe absolute inset-0 hidden w-full h-full"
+            aria-hidden="true"
+          ></div>
+        </div>
+        {# Jump to section — disabled
         <div
-          class="vsl-youtube-iframe absolute inset-0 hidden w-full h-full"
-          aria-hidden="true"
+          class="vsl-youtube-chapters mt-4 w-full empty:hidden"
+          aria-label="Video chapters"
         ></div>
+        #}
       </div>
+
       <div
-        class="vsl-youtube-chapters mt-4 w-full max-w-5xl empty:hidden"
-        aria-label="Video chapters"
-      ></div>
+        id="calendly"
+        class="max-w-xl mx-auto pt-6 md:pt-8 scroll-mt-8"
+        data-vsl-primary-cta
+      >
+        <a
+          id="button-below-vsl"
+          href="{{ strategy_session_url }}"
+          class="inline-flex w-full items-center justify-center min-h-[56px] px-8 py-4 bg-primary text-white font-display text-lg md:text-xl font-black uppercase rounded-xl shadow-lg shadow-primary/25 hover:brightness-110 transition-all"
+        >
+          {{ vsl_cta_label }}
+        </a>
+        <p class="text-center text-gray-500 text-sm mt-3">
+          ROI guaranteed, or your money back. No pitch, just your funnel.
+        </p>
+      </div>
     </div>
   </section>
   <script>
@@ -538,9 +565,11 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
           }, 100);
         }
 
+        /* Jump to section — disabled
         if (chapters.length) {
           renderChapterTimeline(wrap, chapters, seekToChapter);
         }
+        */
 
         playBtn.addEventListener("click", function () {
           if (wrap._vslStarted) return;
@@ -664,7 +693,7 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
     })();
   </script>
 
-  {# 3. Logo strip: one row, minimal #}
+  {# Logo strip: below above-the-fold CTA #}
   <section class="py-4 border-t border-gray-100">
     <div class="max-w-4xl mx-auto px-4">
       <div class="flex flex-wrap justify-center items-center gap-6 md:gap-8">
@@ -720,27 +749,7 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
     </div>
   </section>
 
-  {# 4. VSL CTA → 30-minute strategy session funnel #}
-  <section
-    id="calendly"
-    class="flex-1 py-8 md:py-12 scroll-mt-8"
-    data-vsl-primary-cta
-  >
-    <div class="w-full max-w-xl mx-auto px-4 md:px-6 text-center">
-      <a
-        id="button-below-vsl"
-        href="{{ strategy_session_url }}"
-        class="inline-flex w-full items-center justify-center min-h-[56px] px-8 py-4 bg-primary text-white font-display text-lg md:text-xl font-black uppercase rounded-xl shadow-lg shadow-primary/25 hover:brightness-110 transition-all"
-      >
-        {{ vsl_cta_label }}
-      </a>
-      <p class="text-center text-gray-500 text-sm mt-3">
-        ROI guaranteed, or your money back. No pitch, just your funnel.
-      </p>
-    </div>
-  </section>
-
-  {# Social proof: immediately below CTA #}
+  {# Social proof: immediately below logos #}
   {% if spark_experiments or spark_experiments_configured %}
   <section class="py-10 md:py-14 bg-light-base border-t border-gray-100" id="ab-tests">
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
@@ -1751,9 +1760,22 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
       var tens = stickyCta.querySelector("[data-audit-queue-tens]");
       var ones = stickyCta.querySelector("[data-audit-queue-ones]");
       if (!tens || !ones) return;
-      var day = String(new Date().getDate()).padStart(2, "0");
-      tens.textContent = day[0];
-      ones.textContent = day[1];
+
+      var storageKey = "vsl_audit_queue_count";
+      var count;
+      try {
+        count = parseInt(sessionStorage.getItem(storageKey), 10);
+      } catch (e) {}
+      if (!count || count < 4 || count > 10) {
+        count = Math.floor(Math.random() * 7) + 4;
+        try {
+          sessionStorage.setItem(storageKey, String(count));
+        } catch (e) {}
+      }
+
+      var digits = String(count).padStart(2, "0");
+      tens.textContent = digits[0];
+      ones.textContent = digits[1];
     }
 
     if (primaryCta && stickyCta) {

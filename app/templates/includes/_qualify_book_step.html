@@ -1,0 +1,100 @@
+{# Step 9 — Book: VSL + Calendly (qualified leads only) #}
+<section
+  class="qualify-step mss-step qualify-step--book text-center"
+  id="qualify-book-step"
+  data-step="9"
+  aria-labelledby="qualify-book-headline"
+>
+  <div class="qualify-book-hero">
+    <h1 id="qualify-book-headline">You're a strong fit for CRO</h1>
+    <span class="qualify-book-opportunity-label">Estimated revenue opportunity</span>
+    <span id="qualify-book-amount" class="qualify-book-amount">—</span>
+    <p class="qualify-book-credibility">Based on your monthly revenue, traffic, and conversion rate.</p>
+    <p id="qualify-book-personal" class="qualify-book-personal"></p>
+    <button type="button" id="qualify-book-cta-top" class="qualify-book-cta-primary">
+      Book free CRO audit
+    </button>
+    <button type="button" class="qualify-book-vsl-teaser" data-qualify-book-scroll-vsl>
+      Not ready yet? Watch the audit below.
+    </button>
+  </div>
+
+  <hr class="qualify-book-divider" />
+
+  <div id="qualify-book-vsl">
+    <div class="qualify-book-vsl-copy">
+      <h2>See exactly how we'd find your revenue leaks</h2>
+      <p class="qualify-book-vsl-duration">
+        <span class="material-symbols-outlined" aria-hidden="true">play_circle</span>
+        4-minute audit
+      </p>
+    </div>
+    <div class="qualify-book-video-wrap">
+      <div
+        class="vsl-youtube-wrap w-full aspect-video bg-black rounded-lg overflow-hidden relative group"
+        data-youtube-id="wwWZImpQ4cc"
+        data-vsl-funnel="qualify_quiz"
+        data-video-id="qualify-book-vsl"
+      >
+        <img
+          src="{{ url_for('static', filename='images/youtube_thumbnails/vsl-free-cro-audit-poster.png') }}"
+          alt="Watch a Shopify CRO audit walkthrough"
+          class="vsl-youtube-poster w-full h-full object-cover object-center"
+          loading="lazy"
+          width="800"
+          height="450"
+        />
+        <button
+          type="button"
+          class="vsl-youtube-play absolute inset-0 z-10 flex items-center justify-center bg-black/30 hover:bg-black/40 transition-colors"
+          aria-label="Play 4-minute audit video"
+        >
+          <span
+            class="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full bg-primary flex items-center justify-center shadow-[0_0_40px_rgba(255,77,0,0.5)] hover:scale-110 transition-transform"
+          >
+            <span class="material-symbols-outlined text-white text-3xl sm:text-4xl md:text-5xl ml-1">play_arrow</span>
+          </span>
+        </button>
+        <div class="vsl-youtube-iframe absolute inset-0 hidden w-full h-full"></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="qualify-book-divider" />
+
+  <blockquote class="qualify-book-proof">
+    <div class="qualify-book-proof-stars" aria-hidden="true">★★★★★</div>
+    <p class="qualify-book-proof-rating">4.9 average client rating</p>
+    <p class="qualify-book-proof-quote">
+      "Our CRO audit uncovered over $300k in hidden annual revenue within the first 90 days."
+    </p>
+    <p class="qualify-book-proof-source">Shopify Plus brand</p>
+  </blockquote>
+
+  <hr class="qualify-book-divider" />
+
+  <div id="qualify-calendly">
+    <div class="qualify-book-calendly-head">
+      <h2>Ready?</h2>
+      <ul class="qualify-book-call-perks">
+        <li>Audit your store live</li>
+        <li>Show your first 3 A/B tests</li>
+        <li>Estimate ROI before you spend anything</li>
+      </ul>
+      <button type="button" id="qualify-calendly-reveal" class="qualify-book-calendly-reveal">
+        Book free CRO audit
+      </button>
+    </div>
+    <div id="qualify-calendly-panel" class="qualify-book-calendly-panel is-hidden" aria-hidden="true">
+      <div
+        id="qualify-calendly-inline"
+        class="calendly-inline-widget qualify-calendly-widget"
+        data-url="https://calendly.com/stijn-wollerich/conversion-rate-optimization?hide_gdpr_banner=1"
+      ></div>
+    </div>
+  </div>
+
+  <button type="button" class="mt-10 text-sm text-gray-500 hover:text-deep-charcoal mx-auto" data-qualify-restart>
+    Retake the quiz
+  </button>
+</section>

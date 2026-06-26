@@ -31,6 +31,9 @@ REDIRECTS = [
         "main.free_cro_audit_landing",
         301,
     ),
+    (["/quiz/", "/quiz"], "main.do_i_qualify", 301),
+    (["/quiz/book/", "/quiz/book"], "main.do_i_qualify", 301),
+    (["/do-i-qualify/book/", "/do-i-qualify/book"], "main.do_i_qualify", 301),
 ]
 
 
@@ -1275,6 +1278,7 @@ def cro_scan_submit_email():
 # Downloadable resources: slug -> filename in static/downloads/. Add new resources here.
 RESOURCE_DOWNLOADS = {
     "13-bulletproof-strategies": {"filename": "sm-cro-ebook.pdf"},
+    "7-questions-cro-agency": {"filename": "sm-cro-ebook.pdf"},
 }
 
 VISITOR_COUNTRY_GEO: dict[str, tuple[str, str]] = {
@@ -1336,6 +1340,13 @@ def thirty_minute_strategy_session():
         visitor_geo_line=geo_line,
         visitor_geo_lookup_needed=geo_lookup_needed,
     )
+
+
+@main_bp.route("/do-i-qualify/")
+@main_bp.route("/do-i-qualify")
+def do_i_qualify():
+    """Shopify CRO readiness quiz — intro, 6 questions, scored result, book step."""
+    return render_template("do_i_qualify.html")
 
 
 @main_bp.route("/free-cro-audit/")
@@ -1993,6 +2004,126 @@ def _save_strategy_session_lead(
     except Exception as e:
         current_app.logger.warning("Failed to save strategy session lead (postgres): %s", e)
         db.session.rollback()
+
+
+def _persist_qualify_quiz_lead(record: dict) -> None:
+    try:
+        log_dir = Path(__file__).resolve().parents[1] / "qualify_quiz_logs"
+        log_dir.mkdir(parents=True, exist_ok=True)
+        ts = datetime.utcnow().strftime("%Y%m%dT%H%M%S")
+        sid = (record.get("funnel_session_id") or "unknown")[:32]
+        path = log_dir / f"{ts}_{sid}.json"
+        path.write_text(json.dumps(record, ensure_ascii=False), encoding="utf-8")
+    except Exception as e:
+        current_app.logger.warning("Failed to persist qualify quiz lead: %s", e)
+
+
+def _save_qualify_quiz_lead(
+    *,
+    email: str,
+    fname: str | None,
+    funnel_session_id: str,
+    tier: str | None,
+    score: int | None,
+    revenue_left: str | None,
+    quiz_summary: str | None,
+    answers: dict | None,
+    form_page_url: str | None,
+) -> None:
+    use_fname = (fname or "").strip() or (email.split("@", 1)[0] or "").strip() or "there"
+    business_stage = None
+    if isinstance(answers, dict):
+        q2 = answers.get("q2") or {}
+        if isinstance(q2, dict):
+            business_stage = (q2.get("label") or "").strip() or None
+
+    if spark_backend.enabled():
+        payload: dict[str, Any] = {
+            "fname": use_fname,
+            "email": email,
+            "submission_type": "qualify_quiz",
+            "lead_origin": "sparksmetrics.com",
+            "business_stage": business_stage,
+            "form_page_url": form_page_url,
+            "funnel_session_id": funnel_session_id,
+            "funnel_completed": False,
+            "enroll_nurture": False,
+            "qualify_tier": tier,
+            "qualify_score": score,
+            "qualify_revenue_left": revenue_left,
+            "qualify_quiz_summary": quiz_summary,
+            "qualify_answers": answers,
+        }
+        try:
+            spark_backend.post_site_lead(payload, timeout=25)
+        except Exception as e:
+            current_app.logger.warning("spark_backend qualify_quiz lead failed: %s", e)
+        return
+
+    if not current_app.config.get("SQLALCHEMY_DATABASE_URI"):
+        return
+    try:
+        lead = Lead(
+            fname=use_fname,
+            email=email,
+            submission_type="qualify_quiz",
+            business_stage=business_stage,
+        )
+        db.session.add(lead)
+        db.session.commit()
+    except Exception as e:
+        current_app.logger.warning("Failed to save qualify quiz lead (postgres): %s", e)
+        db.session.rollback()
+
+
+@main_bp.route("/qualify-quiz-lead", methods=["POST"])
+def qualify_quiz_lead():
+    """Capture quiz answers when a qualified lead reaches the book page."""
+    data = request.get_json(silent=True) or {}
+    funnel_session_id = (data.get("funnel_session_id") or "").strip()
+    if not funnel_session_id:
+        return jsonify({"success": False, "error": "Session id required"}), 400
+
+    email = (data.get("email") or "").strip() or None
+    fname = (data.get("fname") or "").strip() or None
+    tier = (data.get("tier") or "").strip() or None
+    try:
+        score = int(data.get("score")) if data.get("score") is not None else None
+    except (TypeError, ValueError):
+        score = None
+    revenue_left = (data.get("revenue_left") or "").strip() or None
+    quiz_summary = (data.get("quiz_summary") or "").strip() or None
+    answers = data.get("answers") if isinstance(data.get("answers"), dict) else None
+    form_page_url = _ingest_form_page_url(data)
+
+    record = {
+        "funnel_session_id": funnel_session_id,
+        "email": email,
+        "fname": fname,
+        "tier": tier,
+        "score": score,
+        "revenue_left": revenue_left,
+        "quiz_summary": quiz_summary,
+        "answers": answers,
+        "form_page_url": form_page_url,
+        "qualified": bool(data.get("qualified")),
+    }
+    _persist_qualify_quiz_lead(record)
+
+    if email and re.match(r"^[^\s@]+@[^\s@]+\.[^\s@]+$", email):
+        _save_qualify_quiz_lead(
+            email=email,
+            fname=fname,
+            funnel_session_id=funnel_session_id,
+            tier=tier,
+            score=score,
+            revenue_left=revenue_left,
+            quiz_summary=quiz_summary,
+            answers=answers,
+            form_page_url=form_page_url,
+        )
+
+    return jsonify({"success": True})
 
 
 @main_bp.route("/strategy-session-step", methods=["POST"])

@@ -1,0 +1,327 @@
+{% set mss_funnel_embed = mss_funnel_embed|default(false, true) %}
+<div
+  id="mss-funnel"
+  class="{% if mss_funnel_embed %}mss-funnel--embed flex flex-col items-center w-full{% else %}min-h-screen flex flex-col items-center px-5 sm:px-8 py-10 md:py-14{% endif %}"
+  data-total-steps="6"
+  data-embed="{{ '1' if mss_funnel_embed else '0' }}"
+  data-start-step="{{ 2 if mss_funnel_embed else 1 }}"
+  data-disable-exit="{{ '1' if mss_funnel_embed else '0' }}"
+  data-form-name="{{ 'Free CRO Audit' if mss_funnel_embed else '30 Minute Strategy Session' }}"
+  data-visitor-country="{{ visitor_country|default('', true) }}"
+  data-geo-lookup-needed="{{ '1' if visitor_geo_lookup_needed else '0' }}"
+>
+  <div class="mss-shell mx-auto flex flex-col flex-1 min-h-0 w-full">
+    {% if mss_funnel_embed %}
+    <h2
+      class="text-2xl sm:text-3xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tight text-center mb-8"
+    >
+      Book your free CRO audit
+    </h2>
+    {% endif %}
+
+    <div class="mss-funnel-chrome">
+      {% if not mss_funnel_embed %}
+      <a
+        href="{{ url_for('main.index') }}"
+        class="flex items-center justify-center gap-2 mb-10 group"
+        aria-label="Sparksmetrics home"
+      >
+        <div
+          class="w-9 h-9 bg-primary rounded flex items-center justify-center rotate-3"
+        >
+          <span class="text-white font-black text-xl">S</span>
+        </div>
+        <span
+          class="font-display text-xl tracking-tighter uppercase font-extrabold text-deep-charcoal"
+          >Sparksmetrics</span
+        >
+      </a>
+      {% endif %}
+
+      <div
+        class="flex items-start gap-0 w-full mb-8"
+        id="mss-progress"
+        aria-hidden="true"
+      ></div>
+      <p
+        class="text-center text-[10px] font-bold uppercase tracking-[0.35em] text-gray-400 -mt-5 mb-10"
+        id="mss-progress-label"
+      >
+        Step {{ 2 if mss_funnel_embed else 1 }} of 6
+      </p>
+    </div>
+
+    {% if not mss_funnel_embed %}
+    {# 1 — Intro #}
+    <section
+      class="mss-step is-active text-center"
+      data-step="1"
+      aria-labelledby="mss-step1-title"
+    >
+      <p class="text-2xl mb-3" aria-hidden="true">👋</p>
+      <p
+        id="mss-geo-line"
+        class="text-xs sm:text-sm font-bold uppercase tracking-[0.15em] text-gray-500 mb-8"
+      >
+        {{ visitor_geo_line|default('Working with ecommerce brands worldwide') }}
+      </p>
+      <h1
+        id="mss-step1-title"
+        class="text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] font-display font-black text-deep-charcoal uppercase tracking-tight leading-[1.05] mb-6"
+      >
+        Free 30-minute
+        <span class="text-primary">CRO strategy session</span>
+      </h1>
+      <p
+        class="text-gray-600 text-base sm:text-lg md:text-xl leading-relaxed mb-10 max-w-3xl mx-auto"
+      >
+        A free, no-obligation call. We review your store funnel live and show you
+        where you're leaking revenue—without spending more on ads.
+      </p>
+      <button
+        type="button"
+        class="w-full sm:w-auto sm:min-w-[320px] min-h-[56px] px-10 py-4 bg-primary text-white font-display text-lg font-black uppercase rounded-full shadow-lg shadow-primary/25 hover:brightness-110 transition-all"
+        data-mss-next
+      >
+        Get started →
+      </button>
+      <p class="mt-8 text-xs font-bold uppercase tracking-widest text-gray-400">
+        <span class="text-primary">★★★★★</span> 4.8 from 300+ brands
+      </p>
+    </section>
+    {% endif %}
+
+    {# 2 — Revenue #}
+    <section
+      class="mss-step{% if mss_funnel_embed %} is-active{% endif %}"
+      data-step="2"
+      aria-labelledby="mss-step2-title"
+    >
+      <h2
+        id="mss-step2-title"
+        class="text-2xl sm:text-3xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tight text-center mb-3"
+      >
+        What's your store's annual revenue?
+      </h2>
+      <p class="text-gray-500 text-center text-base sm:text-lg mb-10">
+        Tap one option to continue.
+      </p>
+      <div
+        class="grid sm:grid-cols-2 gap-3 w-full max-w-2xl mx-auto"
+        role="group"
+        aria-label="Annual revenue"
+      >
+        <button type="button" class="mss-tile" data-revenue="Under €500K">
+          Under €500K
+        </button>
+        <button type="button" class="mss-tile" data-revenue="€500K – €2M">
+          €500K – €2M
+        </button>
+        <button type="button" class="mss-tile" data-revenue="€2M – €10M">
+          €2M – €10M
+        </button>
+        <button type="button" class="mss-tile" data-revenue="€10M+">€10M+</button>
+      </div>
+      <button
+        type="button"
+        class="mt-10 text-sm text-gray-500 hover:text-deep-charcoal mx-auto"
+        data-mss-back
+      >
+        ← Back
+      </button>
+    </section>
+
+    {# 3 — First name #}
+    <section class="mss-step" data-step="3" aria-labelledby="mss-step3-title">
+      <h2
+        id="mss-step3-title"
+        class="text-2xl sm:text-3xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tight text-center mb-3"
+      >
+        What's your first name?
+      </h2>
+      <p class="text-gray-500 text-center text-base sm:text-lg mb-10">
+        So we know who we're talking to on the call.
+      </p>
+      <div class="w-full max-w-2xl mx-auto">
+        <label for="mss-fname" class="sr-only">First name</label>
+        <input
+          type="text"
+          id="mss-fname"
+          class="mss-field-input"
+          placeholder="Your first name"
+          autocomplete="given-name"
+          required
+        />
+        <button
+          type="button"
+          class="w-full mt-4 min-h-[52px] bg-primary text-white font-display font-black uppercase rounded-full hover:brightness-110"
+          data-mss-next-field="mss-fname"
+        >
+          Next →
+        </button>
+      </div>
+      <button type="button" class="mt-8 text-sm text-gray-500 mx-auto" data-mss-back>
+        ← Back
+      </button>
+    </section>
+
+    {# 4 — Email #}
+    <section class="mss-step" data-step="4" aria-labelledby="mss-step4-title">
+      <h2
+        id="mss-step4-title"
+        class="text-2xl sm:text-3xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tight text-center mb-3"
+      >
+        What's your email?
+      </h2>
+      <p class="text-gray-500 text-center text-base sm:text-lg mb-10">
+        We'll send your calendar invite here.
+      </p>
+      <div class="w-full max-w-2xl mx-auto">
+        <label for="mss-email" class="sr-only">Email</label>
+        <input
+          type="email"
+          id="mss-email"
+          class="mss-field-input"
+          placeholder="you@company.com"
+          autocomplete="email"
+          required
+        />
+        <button
+          type="button"
+          class="w-full mt-4 min-h-[52px] bg-primary text-white font-display font-black uppercase rounded-full hover:brightness-110"
+          data-mss-next-field="mss-email"
+        >
+          Next →
+        </button>
+      </div>
+      <button type="button" class="mt-8 text-sm text-gray-500 mx-auto" data-mss-back>
+        ← Back
+      </button>
+    </section>
+
+    {# 5 — Website #}
+    <section class="mss-step" data-step="5" aria-labelledby="mss-step5-title">
+      <h2
+        id="mss-step5-title"
+        class="text-2xl sm:text-3xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tight text-center mb-3"
+      >
+        What's your store URL?
+      </h2>
+      <p class="text-gray-500 text-center text-base sm:text-lg mb-10">
+        We'll review your funnel before the call.
+      </p>
+      <div class="w-full max-w-2xl mx-auto">
+        <label for="mss-website" class="sr-only">Website URL</label>
+        <input
+          type="url"
+          id="mss-website"
+          class="mss-field-input"
+          placeholder="yourstore.com"
+          autocomplete="url"
+          required
+        />
+        <button
+          type="button"
+          id="mss-submit"
+          class="w-full mt-4 min-h-[52px] bg-primary text-white font-display font-black uppercase rounded-full hover:brightness-110"
+        >
+          Show me available times →
+        </button>
+      </div>
+      <button type="button" class="mt-8 text-sm text-gray-500 mx-auto" data-mss-back>
+        ← Back
+      </button>
+    </section>
+
+    {# 6 — Calendly #}
+    <section
+      class="mss-step mss-step-calendly"
+      data-step="6"
+      aria-labelledby="mss-step6-title"
+    >
+      <h2 id="mss-step6-title" class="sr-only">Schedule your call</h2>
+      <p class="mss-step-calendly-copy">
+        Pick a time — 30 minutes, video call.
+      </p>
+      <!-- Calendly inline widget begin -->
+      <div
+        id="mss-calendly-inline"
+        class="calendly-inline-widget"
+        data-url="https://calendly.com/stijn-wollerich/conversion-rate-optimization?hide_gdpr_banner=1"
+        data-auto-load="false"
+        style="min-width: 320px; height: 700px"
+      ></div>
+      <!-- Calendly inline widget end -->
+      <p class="sr-only">
+        Trouble booking?
+        <a href="mailto:connect@sparksmetrics.com">connect@sparksmetrics.com</a>
+      </p>
+    </section>
+  </div>
+</div>
+
+{% if not mss_funnel_embed %}
+<div
+  id="mss-exit-modal"
+  class="fixed inset-0 z-[300] items-center justify-center p-4"
+  aria-hidden="true"
+  role="dialog"
+  aria-labelledby="mss-exit-title"
+  aria-modal="true"
+>
+  <div class="absolute inset-0 bg-black/75" data-mss-exit-close></div>
+  <div
+    class="mss-exit-card relative z-10 w-full max-w-lg bg-[#f0f1f3] rounded-2xl overflow-hidden shadow-2xl"
+  >
+    <button
+      type="button"
+      class="absolute top-3 right-3 z-20 p-2 text-gray-400 hover:text-gray-600 text-2xl"
+      data-mss-exit-close
+      aria-label="Close"
+    >
+      ×
+    </button>
+    <div class="h-2 bg-gray-300">
+      <div
+        id="mss-exit-progress-fill"
+        class="h-full bg-primary transition-all duration-300"
+        style="width: 16%"
+      ></div>
+    </div>
+    <img
+      src="https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3bGdldmtrbGg3YThiYWltcWFlc2Q3bnpqMjNrcTQ3Y21ua2E2dXc4NCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/l4FGFW4Vpz6w42TRu/giphy.gif"
+      alt=""
+      class="mss-exit-gif"
+      width="480"
+      height="270"
+      decoding="async"
+    />
+    <div class="px-6 pt-6 pb-6 md:px-8 text-center">
+      <h2
+        id="mss-exit-title"
+        class="text-2xl font-display font-black text-deep-charcoal uppercase mb-4"
+      >
+        Hold on — you're almost there.
+      </h2>
+      <p class="text-gray-600 text-sm md:text-base mb-6">
+        Less than two minutes left. Finish the form, then pick a time for your
+        free strategy session.
+      </p>
+      <button
+        type="button"
+        id="mss-exit-cta"
+        class="w-full min-h-[52px] bg-primary text-white font-display font-black uppercase rounded-xl"
+      >
+        Continue booking
+      </button>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<script
+  type="text/javascript"
+  src="https://assets.calendly.com/assets/external/widget.js"
+  async
+></script>
+<script src="{{ url_for('static', filename='js/strategy-session-funnel.js') }}" defer></script>
