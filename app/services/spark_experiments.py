@@ -16,12 +16,11 @@ _log = logging.getLogger(__name__)
 _cache: tuple[float, list[dict[str, Any]]] = (0.0, [])
 _CACHE_TTL = 300
 
-_STAT_KEYS = (
+_LIFT_KEYS = (
     "conv_improvement",
     "psv_improvement",
     "aov_improvement",
     "rev_added",
-    "testing_users_count",
 )
 
 
@@ -38,26 +37,38 @@ def _has_before_after_images(raw: dict[str, Any]) -> bool:
     return bool(ctrl.get("image_path") and chal.get("image_path"))
 
 
-def _has_marked_winner(raw: dict[str, Any]) -> bool:
-    if raw.get("successful") is True:
-        return True
-    for key in ("control", "challenger"):
-        arm = raw.get(key)
-        if isinstance(arm, dict) and arm.get("is_winner"):
+def _arm_is_winner(raw: dict[str, Any], arm_key: str) -> bool:
+    arm = raw.get(arm_key)
+    return isinstance(arm, dict) and bool(arm.get("is_winner"))
+
+
+def _has_positive_lift(raw: dict[str, Any]) -> bool:
+    for key in _LIFT_KEYS:
+        val = raw.get(key)
+        if isinstance(val, (int, float)) and val > 0:
             return True
-    return bool(raw.get("winner_name"))
+    return False
 
 
-def _has_performance_stats(raw: dict[str, Any]) -> bool:
-    return any(raw.get(k) is not None for k in _STAT_KEYS)
+def _has_marked_winner(raw: dict[str, Any]) -> bool:
+    """Only show tests where the variant won — never control or inconclusive losses."""
+    if _arm_is_winner(raw, "control"):
+        return False
+    if _arm_is_winner(raw, "challenger"):
+        return True
+    # Fallback when Spark only sends winner_name: require a positive lift so
+    # completed-but-losing tests (negative conv_improvement) stay hidden.
+    if raw.get("winner_name"):
+        return _has_positive_lift(raw)
+    return False
 
 
 def _eligible_for_website_display(raw: dict[str, Any]) -> bool:
-    """Winning test with performance stats and before/after images (no manual publish gate)."""
+    """Winning variant with positive lift and before/after images."""
     return (
         _has_before_after_images(raw)
         and _has_marked_winner(raw)
-        and _has_performance_stats(raw)
+        and _has_positive_lift(raw)
     )
 
 

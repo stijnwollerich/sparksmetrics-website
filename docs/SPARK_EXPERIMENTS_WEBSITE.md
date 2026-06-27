@@ -22,7 +22,7 @@ No browser calls Spark directly; the marketing app uses server-side `requests` w
 | **Spark** `GET /api/site/experiments/image` | Serves any experiment screenshot path (same secret + allowlist of upload paths). |
 | **Marketing** `app/services/spark_experiments.py` | **Only place** that decides what appears on `/free-cro-audit/`. Edit this file to change rules; redeploy marketing only. |
 
-Default marketing rule (`spark_experiments.py`): winner + performance stats + control & variant images. The Spark **website** checkbox is **not** required.
+Default marketing rule (`spark_experiments.py`): **variant winner** with **positive lift** (conv, revenue, PSV, or AOV) and control/challenger images. Completed tests where control won or metrics are flat/negative are excluded. The Spark **website** checkbox is **not** required.
 
 Company names are **not** exposed from Spark. Prefer **replica** mockups on client tests.
 
