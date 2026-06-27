@@ -287,6 +287,15 @@
     color: #4b5563;
     text-align: center;
   }
+  .qualify-result-roi-guarantee {
+    margin: 0.75rem auto 0;
+    max-width: 22rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #6b7280;
+    text-align: center;
+  }
   .qualify-result-divider {
     border: 0;
     border-top: 2px solid #e5e7eb;
@@ -397,21 +406,50 @@
     min-height: 56px;
     font-size: 1rem;
   }
+  .qualify-email-offer.is-ebook-offer #qualify-guide-submit {
+    background: #ff4d00;
+    box-shadow: 0 4px 14px rgba(255, 77, 0, 0.28);
+  }
+  .qualify-email-offer.is-ebook-offer #qualify-guide-submit:hover {
+    filter: brightness(1.08);
+  }
+  .qualify-ebook-preview {
+    max-width: 14rem;
+    margin: 0 auto 1.25rem;
+  }
+  .qualify-ebook-preview.is-hidden {
+    display: none;
+  }
+  .qualify-ebook-preview img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 0.75rem;
+    border: 2px solid #e5e7eb;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+  }
+  .qualify-email-privacy {
+    margin: 0.75rem 0 0;
+    font-size: 0.8125rem;
+    color: #9ca3af;
+  }
+  .qualify-email-privacy.is-hidden {
+    display: none;
+  }
   @media (min-width: 640px) {
     .qualify-email-offer .qualify-email-row {
       flex-direction: row;
+      flex-wrap: wrap;
       align-items: stretch;
     }
     .qualify-email-field {
-      flex: 1 1 0;
+      flex: 1 1 calc(50% - 0.375rem);
     }
     .qualify-email-offer #qualify-guide-submit {
-      width: auto;
-      flex: 0 0 auto;
-      min-width: 12rem;
-      max-width: 46%;
-      padding-left: 1.25rem;
-      padding-right: 1.25rem;
+      width: 100%;
+      flex: 1 1 100%;
+      max-width: none;
+      min-width: 0;
     }
   }
   .qualify-email-offer.is-sent {
@@ -445,23 +483,17 @@
 
   /* —— Mobile responsive —— */
   #qualify-quiz {
-    width: 100%;
-    max-width: 100%;
     overflow-x: clip;
     box-sizing: border-box;
-    padding-left: max(1rem, env(safe-area-inset-left, 0px));
-    padding-right: max(1rem, env(safe-area-inset-right, 0px));
+    padding-left: max(1.25rem, env(safe-area-inset-left, 0px));
+    padding-right: max(1.25rem, env(safe-area-inset-right, 0px));
     padding-bottom: max(2rem, env(safe-area-inset-bottom, 0px));
   }
   #qualify-quiz .mss-shell {
     min-width: 0;
-    max-width: 100%;
   }
-  #qualify-quiz .qualify-step.mss-step.is-active,
-  #qualify-quiz .qualify-step--result.is-active,
-  #qualify-quiz .qualify-step--book.is-active {
+  #qualify-quiz .qualify-step.mss-step.is-active {
     min-width: 0;
-    max-width: 100%;
   }
   #qualify-quiz .qualify-step h2 {
     text-wrap: balance;
@@ -517,9 +549,6 @@
       min-height: 54px;
       padding-inline: 1rem;
     }
-    #qualify-quiz .grid {
-      gap: 0.625rem;
-    }
     .qualify-result-divider {
       margin: 1.25rem 0;
     }
@@ -563,9 +592,9 @@
 {% set strategy_session_url = url_for('main.thirty_minute_strategy_session') %}
 <div
   id="qualify-quiz"
-  class="min-h-screen flex flex-col items-center sm:px-8 py-6 sm:py-10 md:py-14"
+  class="min-h-screen flex flex-col items-center px-5 sm:px-8 py-6 sm:py-10 md:py-14"
   data-strategy-session-url="{{ strategy_session_url }}"
-  data-resource-slug="7-questions-cro-agency"
+  data-resource-slug="13-bulletproof-strategies"
 >
   <div class="mss-shell mx-auto flex flex-col flex-1 min-h-0 w-full">
     <a
@@ -694,14 +723,26 @@
 
         <div class="qualify-call-primary" id="qualify-call-primary">
           <button type="button" id="qualify-cta-call" class="qualify-cta-primary">
-            Book free CRO audit
+            Book my free CRO audit
           </button>
           <p id="qualify-call-promise" class="qualify-call-promise"></p>
+          <p class="qualify-book-roi-guarantee qualify-result-roi-guarantee">
+            ROI guaranteed, or your money back. No pitch, just your funnel.
+          </p>
         </div>
 
         <hr class="qualify-result-divider" id="qualify-result-divider-email" />
 
         <div class="qualify-email-offer" id="qualify-email-offer">
+          <div id="qualify-ebook-preview" class="qualify-ebook-preview is-hidden" aria-hidden="true">
+            <img
+              src="{{ url_for('static', filename='images/ebook-thumbnail.png') }}"
+              alt="13 Bulletproof Strategies to Skyrocket Conversions ebook"
+              width="224"
+              height="280"
+              loading="lazy"
+            />
+          </div>
           <h3>Want the full breakdown?</h3>
           <p>Enter your email and we'll send:</p>
           <ul class="qualify-email-perks">
@@ -710,6 +751,16 @@
             <li>Priority fixes ranked by ROI</li>
           </ul>
           <div class="qualify-email-row">
+            <div class="qualify-email-field">
+              <label for="qualify-guide-fname" class="sr-only">First name</label>
+              <input
+                type="text"
+                id="qualify-guide-fname"
+                class="mss-field-input text-base"
+                placeholder="First name"
+                autocomplete="given-name"
+              />
+            </div>
             <div class="qualify-email-field">
               <label for="qualify-guide-email" class="sr-only">Email</label>
               <input
@@ -728,6 +779,7 @@
               Send my action plan
             </button>
           </div>
+          <p id="qualify-guide-privacy" class="qualify-email-privacy is-hidden">100% privacy. No spam.</p>
           <p id="qualify-guide-msg" class="qualify-email-msg" role="status" aria-live="polite"></p>
         </div>
       </div>
@@ -757,10 +809,10 @@
   </div>
 </div>
 
-<script src="{{ url_for('static', filename='js/qualify-quiz-gtm.js') }}?v=1" defer></script>
-<script src="{{ url_for('static', filename='js/vsl-video-analytics.js') }}" defer></script>
-<script src="{{ url_for('static', filename='js/vsl-youtube-simple.js') }}?v=2" defer></script>
+<script src="{{ url_for('static', filename='js/qualify-quiz-gtm.js') }}?v=2" defer></script>
+<script src="{{ url_for('static', filename='js/vsl-video-analytics.js') }}?v=2" defer></script>
+<script src="{{ url_for('static', filename='js/vsl-youtube-simple.js') }}?v=5" defer></script>
 <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
-<script src="{{ url_for('static', filename='js/qualify-book.js') }}?v=7" defer></script>
-<script src="{{ url_for('static', filename='js/cro-qualify-quiz.js') }}?v=16" defer></script>
+<script src="{{ url_for('static', filename='js/qualify-book.js') }}?v=13" defer></script>
+<script src="{{ url_for('static', filename='js/cro-qualify-quiz.js') }}?v=22" defer></script>
 {% endblock %}

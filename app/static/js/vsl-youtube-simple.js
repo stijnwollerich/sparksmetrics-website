@@ -24,38 +24,12 @@
     };
   }
 
-  function getFunnelExtra(wrap) {
-    if (!wrap || wrap.getAttribute("data-vsl-funnel") !== "qualify_quiz") {
-      return null;
-    }
-    var state = null;
-    try {
-      var raw = sessionStorage.getItem("qualify_quiz_results");
-      if (raw) state = JSON.parse(raw);
-    } catch (err) {}
-    if (window.QualifyQuizGtm) {
-      return window.QualifyQuizGtm.videoContext(state || {});
-    }
-    return {
-      form_id: "qualify-quiz",
-      form_step: 9,
-      page_type: "qualify_quiz_funnel",
-    };
-  }
-
-  function pushVslEvent(eventName, wrap, player, videoId, extra) {
+  function pushVslVideoEvent(eventName, wrap, player, videoId, extra) {
     if (!window.VslVideoAnalytics) return;
-    var merged = extra || {};
-    var funnelExtra = getFunnelExtra(wrap);
-    if (funnelExtra) {
-      Object.keys(funnelExtra).forEach(function (key) {
-        if (merged[key] === undefined) merged[key] = funnelExtra[key];
-      });
-    }
     window.VslVideoAnalytics.push(
       eventName,
       window.VslVideoAnalytics.buildYoutubeMeta(wrap, player, videoId),
-      merged,
+      extra,
     );
   }
 
@@ -76,7 +50,8 @@
       try {
         if (!player.getCurrentTime) return;
         var current = player.getCurrentTime();
-        var duration = player.getDuration() || 0;
+        var duration =
+          wrap._vslChapterDuration || player.getDuration() || 0;
         if (duration <= 0) return;
         var pct = Math.floor((current / duration) * 100);
         var toSend = null;
@@ -92,13 +67,13 @@
         }
         if (toSend !== null) {
           sent[toSend] = true;
-          pushVslEvent("video_progress", wrap, player, videoId, {
+          pushVslVideoEvent("video_progress", wrap, player, videoId, {
             video_percent: toSend,
           });
           if (toSend === 100) {
             if (!wrap._vslVideoCompleteSent) {
               wrap._vslVideoCompleteSent = true;
-              pushVslEvent("video_complete", wrap, player, videoId, {
+              pushVslVideoEvent("video_complete", wrap, player, videoId, {
                 video_percent: 100,
               });
             }
@@ -113,9 +88,17 @@
     }, 500);
   }
 
+  function showEndCta(wrap) {
+    var endCta = wrap.querySelector(".vsl-youtube-end-cta");
+    if (!endCta) return;
+    endCta.classList.remove("is-hidden");
+    endCta.setAttribute("aria-hidden", "false");
+  }
+
   document.querySelectorAll(".vsl-youtube-wrap[data-youtube-id]").forEach(function (wrap) {
     var videoId = wrap.getAttribute("data-youtube-id");
     var poster = wrap.querySelector(".vsl-youtube-poster");
+    var posterWrap = wrap.querySelector(".vsl-youtube-poster-wrap");
     var playBtn = wrap.querySelector(".vsl-youtube-play");
     var iframeHost = wrap.querySelector(".vsl-youtube-iframe");
     if (!videoId || !playBtn || !iframeHost) return;
@@ -124,56 +107,67 @@
       window.location.origin ||
       window.location.protocol + "//" + window.location.host;
 
+    var playerVars = {
+      autoplay: 1,
+      controls: 1,
+      modestbranding: 1,
+      rel: 0,
+      iv_load_policy: 3,
+      cc_load_policy: 0,
+      playsinline: 1,
+      enablejsapi: 1,
+      origin: origin,
+    };
+
     playBtn.addEventListener("click", function () {
       if (wrap._vslStarted) return;
       wrap._vslStarted = true;
       if (poster) poster.classList.add("hidden");
+      if (posterWrap) posterWrap.classList.add("hidden");
       playBtn.classList.add("hidden");
+      wrap.classList.add("is-playing");
 
-      pushVslEvent("video_click", wrap, null, videoId, {
-        video_id: wrap.getAttribute("data-video-id") || videoId,
-      });
-
-      var iframeId = "vsl-yt-" + videoId + "-" + Math.random().toString(36).slice(2, 8);
-      iframeHost.innerHTML = '<div id="' + iframeId + '" class="w-full h-full"></div>';
+      var iframeId = "vsl-yt-iframe-" + videoId;
+      iframeHost.innerHTML =
+        '<div id="' + iframeId + '" class="w-full h-full"></div>';
       iframeHost.classList.remove("hidden");
 
       loadYouTubeAPI(function () {
-        var player = new window.YT.Player(iframeId, {
+        new window.YT.Player(iframeId, {
           videoId: videoId,
-          playerVars: {
-            autoplay: 1,
-            controls: 1,
-            modestbranding: 1,
-            rel: 0,
-            playsinline: 1,
-            enablejsapi: 1,
-            origin: origin,
-          },
+          playerVars: playerVars,
           events: {
-            onStateChange: function (e) {
-              var player = e.target;
-              if (e.data === window.YT.PlayerState.PLAYING) {
+            onReady: function (event) {
+              wrap._ytPlayer = event.target;
+              wrap._ytPlayerReady = true;
+              try {
+                var playerDuration =
+                  event.target.getDuration && event.target.getDuration();
+                if (playerDuration > 0) {
+                  wrap._vslChapterDuration = playerDuration;
+                }
+              } catch (readyErr) {}
+            },
+            onStateChange: function (event) {
+              var player = event.target;
+              if (event.data === window.YT.PlayerState.PLAYING) {
                 if (!wrap._vslVideoStarted) {
                   wrap._vslVideoStarted = true;
-                  pushVslEvent("video_start", wrap, player, videoId, {
-                    video_id: wrap.getAttribute("data-video-id") || videoId,
-                  });
+                  pushVslVideoEvent("video_start", wrap, player, videoId);
                 }
-                pushVslEvent("video_play", wrap, player, videoId);
                 bindProgressTracking(wrap, player, videoId);
               }
-              if (e.data === window.YT.PlayerState.PAUSED) {
-                pushVslEvent("video_pause", wrap, player, videoId);
+              if (event.data === window.YT.PlayerState.PAUSED) {
+                pushVslVideoEvent("video_pause", wrap, player, videoId);
                 if (wrap._progressIntervalId) {
                   clearInterval(wrap._progressIntervalId);
                   wrap._progressIntervalId = null;
                 }
               }
-              if (e.data === window.YT.PlayerState.ENDED) {
+              if (event.data === window.YT.PlayerState.ENDED) {
                 if (!wrap._vslVideoCompleteSent) {
                   wrap._vslVideoCompleteSent = true;
-                  pushVslEvent("video_complete", wrap, player, videoId, {
+                  pushVslVideoEvent("video_complete", wrap, player, videoId, {
                     video_percent: 100,
                   });
                 }
@@ -181,11 +175,11 @@
                   clearInterval(wrap._progressIntervalId);
                   wrap._progressIntervalId = null;
                 }
+                showEndCta(wrap);
               }
             },
           },
         });
-        wrap._vslPlayer = player;
       });
     });
   });

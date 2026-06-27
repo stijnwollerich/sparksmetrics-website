@@ -14,7 +14,7 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
 <meta name="robots" content="noindex, follow" />
 <link rel="preconnect" href="https://www.youtube.com" />
 <script src="https://www.youtube.com/iframe_api" async></script>
-<script src="{{ url_for('static', filename='js/vsl-video-analytics.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/vsl-video-analytics.js') }}?v=2" defer></script>
 <style>
   #vsl-sticky-cta {
     transform: translateY(calc(110% + 1rem));
@@ -150,6 +150,43 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
     margin-left: auto;
     margin-right: auto;
   }
+  .vsl-youtube-wrap .vsl-youtube-poster-wrap {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    transition: opacity 0.2s ease;
+  }
+  .vsl-youtube-wrap.is-playing .vsl-youtube-poster-wrap {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .vsl-youtube-wrap .vsl-youtube-poster-copy {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    padding: 1rem 1.1rem 1.25rem;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.72) 100%);
+    pointer-events: none;
+  }
+  .vsl-poster-headline {
+    margin: 0;
+    color: #fff;
+    font-family: var(--font-display, inherit);
+    font-size: clamp(1.125rem, 4.5vw, 1.625rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    text-align: left;
+    max-width: 14rem;
+  }
+  .vsl-poster-amount {
+    display: block;
+    color: #ff4d00;
+    font-size: clamp(1.375rem, 5vw, 2rem);
+    margin: 0.15rem 0;
+  }
   @media (max-width: 767px) {
     .vsl-chapter-markers {
       display: flex;
@@ -256,21 +293,31 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
         <div
           class="vsl-youtube-wrap w-full aspect-video bg-black rounded-lg overflow-hidden relative group"
           data-youtube-id="wwWZImpQ4cc"
+          data-video-id="vsl-free-cro-audit"
           data-vsl-chapters='[{"label":"Intro","seconds":0},{"label":"Audit deliverable","seconds":73},{"label":"Market research","seconds":107},{"label":"Data analysis","seconds":133},{"label":"UI/UX and Figma","seconds":190},{"label":"Prioritization","seconds":293},{"label":"Revenue impact","seconds":378},{"label":"Test results","seconds":420},{"label":"Book your audit","seconds":566}]'
         >
-          <img
-            src="{{ url_for('static', filename='images/youtube_thumbnails/vsl-free-cro-audit-poster.png') }}"
-            alt="Watch how we improved Shopify conversion rate from 2.59% to 3.42%"
-            class="vsl-youtube-poster w-full h-full object-cover object-center"
-            loading="eager"
-            fetchpriority="high"
-            width="800"
-            height="500"
-          />
+          <div class="vsl-youtube-poster-wrap absolute inset-0 z-[1]">
+            <img
+              src="{{ url_for('static', filename='images/youtube_thumbnails/vsl-free-cro-audit-poster.png') }}"
+              alt="How we found $312,000 for a Shopify store"
+              class="vsl-youtube-poster w-full h-full object-cover object-center"
+              loading="eager"
+              fetchpriority="high"
+              width="800"
+              height="500"
+            />
+            <div class="vsl-youtube-poster-copy">
+              <p class="vsl-poster-headline">
+                How We Found
+                <span class="vsl-poster-amount">$312,000</span>
+                For a Shopify Store
+              </p>
+            </div>
+          </div>
           <button
             type="button"
-            class="vsl-youtube-play absolute inset-0 z-10 flex items-center justify-center bg-black/30 hover:bg-black/40 transition-colors"
-            aria-label="Play video"
+            class="vsl-youtube-play absolute inset-0 z-10 flex items-center justify-center bg-black/25 hover:bg-black/35 transition-colors"
+            aria-label="Play 4-minute CRO audit video"
           >
             <span
               class="w-20 h-20 md:w-24 md:h-24 rounded-full bg-primary flex items-center justify-center shadow-[0_0_40px_rgba(255,77,0,0.5)] hover:scale-110 transition-transform"
@@ -517,6 +564,7 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
       document.querySelectorAll(".vsl-youtube-wrap").forEach(function (wrap) {
         var id = wrap.getAttribute("data-youtube-id");
         var poster = wrap.querySelector(".vsl-youtube-poster");
+        var posterWrap = wrap.querySelector(".vsl-youtube-poster-wrap");
         var playBtn = wrap.querySelector(".vsl-youtube-play");
         var iframeContainer = wrap.querySelector(".vsl-youtube-iframe");
         var chapters = parseChapters(wrap);
@@ -581,6 +629,7 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
           iframeContainer.classList.remove("hidden");
           wrap.classList.add("is-playing");
           if (poster) poster.classList.add("hidden");
+          if (posterWrap) posterWrap.classList.add("hidden");
           playBtn.classList.add("hidden");
 
           loadYouTubeAPI(function () {

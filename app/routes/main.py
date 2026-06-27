@@ -2006,6 +2006,126 @@ def _save_strategy_session_lead(
         db.session.rollback()
 
 
+_QUALIFY_QUIZ_QUESTION_LABELS = {
+    "q1": "Ad spend per month",
+    "q2": "Monthly revenue",
+    "q3": "Conversion rate",
+    "q4": "Monthly traffic",
+    "q5": "CRO experience",
+    "q6": "Biggest bottleneck",
+}
+
+
+def _format_qualify_quiz_answer_lines(answers: dict | None) -> list[str]:
+    if not isinstance(answers, dict):
+        return []
+    lines: list[str] = []
+    for qid in ("q3", "q1", "q2", "q4", "q5", "q6"):
+        entry = answers.get(qid)
+        if not isinstance(entry, dict):
+            continue
+        answer_label = (entry.get("label") or entry.get("value") or "").strip()
+        if not answer_label:
+            continue
+        question_label = _QUALIFY_QUIZ_QUESTION_LABELS.get(qid, qid)
+        lines.append(f"• {question_label}: {answer_label}")
+    return lines
+
+
+def _qualify_quiz_slack_already_sent(funnel_session_id: str) -> bool:
+    if not funnel_session_id:
+        return False
+    try:
+        log_dir = Path(__file__).resolve().parents[1] / "qualify_quiz_logs"
+        marker = log_dir / f"{funnel_session_id}.slack_sent"
+        return marker.is_file()
+    except Exception:
+        return False
+
+
+def _mark_qualify_quiz_slack_sent(funnel_session_id: str) -> None:
+    if not funnel_session_id:
+        return
+    try:
+        log_dir = Path(__file__).resolve().parents[1] / "qualify_quiz_logs"
+        log_dir.mkdir(parents=True, exist_ok=True)
+        marker = log_dir / f"{funnel_session_id}.slack_sent"
+        marker.write_text(datetime.utcnow().isoformat(), encoding="utf-8")
+    except Exception as e:
+        current_app.logger.warning("Failed to mark qualify quiz Slack sent: %s", e)
+
+
+def _notify_slack_qualify_quiz_complete(
+    *,
+    funnel_session_id: str,
+    qualified: bool,
+    tier: str | None = None,
+    score: int | None = None,
+    revenue_left: str | None = None,
+    fname: str | None = None,
+    email: str | None = None,
+    answers: dict | None = None,
+    quiz_summary: str | None = None,
+    form_page_url: str | None = None,
+) -> None:
+    """Slack alert when someone finishes the qualify quiz and reaches the thank-you step."""
+    if _qualify_quiz_slack_already_sent(funnel_session_id):
+        return
+
+    webhook_url = (current_app.config.get("SLACK_SPARKSMETRICS_WEBHOOK_URL") or "").strip() or (
+        current_app.config.get("SLACK_WEBHOOK_URL") or ""
+    ).strip()
+    if not webhook_url:
+        return
+
+    outcome = "Qualified — book step" if qualified else "Not qualified — ebook offer"
+    lines = [
+        f"*Qualify quiz completed* — {outcome}",
+        f"Session: `{funnel_session_id}`",
+    ]
+    if fname:
+        lines.append(f"First name: {fname}")
+    if email:
+        lines.append(f"Email: {email}")
+    if tier:
+        lines.append(f"Tier: {tier}")
+    if score is not None:
+        lines.append(f"Score: {score}")
+    if revenue_left:
+        lines.append(f"Revenue opportunity: {revenue_left}")
+    if form_page_url:
+        lines.append(f"Page: {form_page_url}")
+    if quiz_summary:
+        lines.append(f"Summary: {quiz_summary}")
+
+    answer_lines = _format_qualify_quiz_answer_lines(answers)
+    lines.append("")
+    lines.append("*Answers:*")
+    if answer_lines:
+        lines.extend(answer_lines)
+    else:
+        lines.append("_(none)_")
+
+    try:
+        import requests
+    except ModuleNotFoundError:
+        current_app.logger.warning("Slack notify skipped: install requests (pip install requests)")
+        return
+    try:
+        r = requests.post(
+            webhook_url,
+            json={"text": "\n".join(lines)},
+            headers={"Content-Type": "application/json"},
+            timeout=5,
+        )
+        if r.status_code != 200:
+            current_app.logger.warning("Slack webhook failed: HTTP %s – %s", r.status_code, (r.text or "")[:200])
+            return
+        _mark_qualify_quiz_slack_sent(funnel_session_id)
+    except Exception as e:
+        current_app.logger.warning("Slack notify error: %s", e)
+
+
 def _persist_qualify_quiz_lead(record: dict) -> None:
     try:
         log_dir = Path(__file__).resolve().parents[1] / "qualify_quiz_logs"
@@ -2109,6 +2229,20 @@ def qualify_quiz_lead():
         "qualified": bool(data.get("qualified")),
     }
     _persist_qualify_quiz_lead(record)
+
+    if data.get("quiz_completed"):
+        _notify_slack_qualify_quiz_complete(
+            funnel_session_id=funnel_session_id,
+            qualified=bool(data.get("qualified")),
+            tier=tier,
+            score=score,
+            revenue_left=revenue_left,
+            fname=fname,
+            email=email,
+            answers=answers,
+            quiz_summary=quiz_summary,
+            form_page_url=form_page_url,
+        )
 
     if email and re.match(r"^[^\s@]+@[^\s@]+\.[^\s@]+$", email):
         _save_qualify_quiz_lead(

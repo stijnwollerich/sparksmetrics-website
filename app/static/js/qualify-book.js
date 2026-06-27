@@ -8,8 +8,7 @@
   if (!bookStep) return;
 
   var calendlyHost = document.getElementById("qualify-calendly-inline");
-  var calendlyPanel = document.getElementById("qualify-calendly-panel");
-  var calendlyReveal = document.getElementById("qualify-calendly-reveal");
+  var calendlySection = document.getElementById("qualify-calendly");
   var ctaTop = document.getElementById("qualify-book-cta-top");
   var calendlyMounted = false;
   var bookInitialized = false;
@@ -58,36 +57,50 @@
     return "You qualify for CRO";
   }
 
+  function auditFocusPhrase(data) {
+    var bottleneck = data && data.answers && data.answers.q6 && data.answers.q6.value;
+    if (bottleneck === "low-cvr" || bottleneck === "few-sales") {
+      return "product pages and checkout flow";
+    }
+    if (bottleneck === "high-ad-costs") {
+      return "landing pages and post-click conversion";
+    }
+    if (bottleneck === "cant-grow") {
+      return "checkout flow and offer positioning";
+    }
+    return "product pages and checkout flow";
+  }
+
   function buildPersonalizedPhrase(data) {
     var revenue = answerLabel(data, "q2");
-    var ads = answerLabel(data, "q1");
-    var traffic = answerLabel(data, "q4");
     var cvr = answerLabel(data, "q3");
+    var focus = auditFocusPhrase(data);
 
-    if (revenue && ads && traffic) {
+    if (revenue && cvr) {
       return (
         "With " +
         revenue +
-        " in monthly revenue and " +
-        ads +
-        " in ad spend, your biggest opportunity isn't traffic—it's converting more of the " +
-        traffic +
-        " visitors you're already paying for."
-      );
-    }
-    if (revenue && traffic && cvr) {
-      return (
-        "With " +
-        revenue +
-        " in monthly revenue, " +
-        traffic +
-        " monthly visitors, and a " +
+        " in revenue and a " +
         cvr +
-        " conversion rate, you're leaving revenue on the table before you need more traffic."
+        " conversion rate, we'd start by auditing your " +
+        focus +
+        ". In the 4-minute audit below, you'll see exactly how we uncover opportunities like this."
       );
     }
-    if (data.subtitle) return data.subtitle;
-    return "Based on your answers, your store appears to be a strong candidate for CRO.";
+    if (revenue) {
+      return (
+        "With " +
+        revenue +
+        " in revenue, we'd start by auditing your " +
+        focus +
+        ". In the 4-minute audit below, you'll see exactly how we uncover opportunities like this."
+      );
+    }
+    return (
+      "Based on your answers, we'd start by auditing your " +
+      focus +
+      ". In the 4-minute audit below, you'll see exactly how we uncover opportunities like this."
+    );
   }
 
   function renderHeader(data) {
@@ -132,6 +145,7 @@
         funnel_session_id:
           data.funnelSessionId ||
           (window.QualifyQuizGtm ? window.QualifyQuizGtm.getSessionId() : ""),
+        quiz_completed: true,
       }),
     }).catch(function () {});
   }
@@ -169,16 +183,11 @@
     initWidget();
   }
 
-  function revealCalendly(source) {
-    if (!calendlyPanel) return;
-    calendlyPanel.classList.remove("is-hidden");
-    calendlyPanel.setAttribute("aria-hidden", "false");
-    if (calendlyReveal) calendlyReveal.style.display = "none";
-    mountCalendly(quizData);
-    pushGtm("calendly_reveal", { source: source || "unknown" });
-    window.setTimeout(function () {
-      calendlyPanel.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 80);
+  function scrollToCalendly(source) {
+    var target = calendlySection || calendlyHost;
+    if (!target) return;
+    pushGtm("calendly_scroll", { source: source || "unknown" });
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   function observeVslSection() {
@@ -192,9 +201,10 @@
           if (!entry.isIntersecting || vslViewSent) return;
           vslViewSent = true;
           pushGtm("vsl_section_view", {
-            video_id: "qualify-book-vsl",
-            video_provider: "youtube",
+            video_id: "vsl-free-cro-audit",
             video_youtube_id: "wwWZImpQ4cc",
+            video_provider: "youtube",
+            video_url: "https://www.youtube.com/watch?v=wwWZImpQ4cc",
           });
           observer.disconnect();
         });
@@ -211,22 +221,13 @@
     if (ctaTop) {
       ctaTop.addEventListener("click", function () {
         pushGtm("book_cta_click", { source: "hero_cta" });
-        revealCalendly("hero_cta");
+        scrollToCalendly("hero_cta");
       });
     }
-    if (calendlyReveal) {
-      calendlyReveal.addEventListener("click", function () {
-        pushGtm("book_cta_click", { source: "bottom_cta" });
-        revealCalendly("bottom_cta");
-      });
-    }
-    bookStep.querySelectorAll("[data-qualify-book-scroll-vsl]").forEach(function (el) {
-      el.addEventListener("click", function (e) {
-        var target = document.getElementById("qualify-book-vsl");
-        if (!target) return;
-        e.preventDefault();
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
-        pushGtm("vsl_scroll", { source: "teaser_link" });
+    bookStep.querySelectorAll("[data-qualify-book-end-cta]").forEach(function (el) {
+      el.addEventListener("click", function () {
+        pushGtm("book_cta_click", { source: "video_end_cta" });
+        scrollToCalendly("video_end_cta");
       });
     });
   }
@@ -246,6 +247,7 @@
 
     renderHeader(quizData);
     syncQuizLead(quizData);
+    mountCalendly(quizData);
     bindEvents();
     observeVslSection();
     bookInitialized = true;
@@ -257,11 +259,6 @@
     calendlyMounted = false;
     vslViewSent = false;
     quizData = null;
-    if (calendlyPanel) {
-      calendlyPanel.classList.add("is-hidden");
-      calendlyPanel.setAttribute("aria-hidden", "true");
-    }
-    if (calendlyReveal) calendlyReveal.style.display = "";
     if (calendlyHost) {
       calendlyHost.innerHTML = "";
       calendlyHost.removeAttribute("data-processed");

@@ -6,58 +6,72 @@
   aria-labelledby="qualify-book-headline"
 >
   <div class="qualify-book-hero">
+    <p class="qualify-book-badge" aria-label="You qualify">You qualify ✓</p>
     <h1 id="qualify-book-headline">You're a strong fit for CRO</h1>
     <span class="qualify-book-opportunity-label">Estimated revenue opportunity</span>
     <span id="qualify-book-amount" class="qualify-book-amount">—</span>
-    <p class="qualify-book-credibility">Based on your monthly revenue, traffic, and conversion rate.</p>
+    <p class="qualify-book-credibility">Based on your answers.</p>
     <p id="qualify-book-personal" class="qualify-book-personal"></p>
-    <button type="button" id="qualify-book-cta-top" class="qualify-book-cta-primary">
-      Book free CRO audit
-    </button>
-    <button type="button" class="qualify-book-vsl-teaser" data-qualify-book-scroll-vsl>
-      Not ready yet? Watch the audit below.
-    </button>
   </div>
 
-  <hr class="qualify-book-divider" />
-
-  <div id="qualify-book-vsl">
-    <div class="qualify-book-vsl-copy">
-      <h2>See exactly how we'd find your revenue leaks</h2>
-      <p class="qualify-book-vsl-duration">
-        <span class="material-symbols-outlined" aria-hidden="true">play_circle</span>
-        4-minute audit
-      </p>
-    </div>
+  <div id="qualify-book-vsl" class="qualify-book-vsl">
+    <p class="qualify-book-vsl-duration">
+      <span class="material-symbols-outlined" aria-hidden="true">play_circle</span>
+      4-minute CRO audit
+    </p>
     <div class="qualify-book-video-wrap">
       <div
-        class="vsl-youtube-wrap w-full aspect-video bg-black rounded-lg overflow-hidden relative group"
+        class="vsl-youtube-wrap qualify-book-vsl-player w-full aspect-video bg-black rounded-lg overflow-hidden relative group"
         data-youtube-id="wwWZImpQ4cc"
-        data-vsl-funnel="qualify_quiz"
-        data-video-id="qualify-book-vsl"
+        data-video-id="vsl-free-cro-audit"
       >
-        <img
-          src="{{ url_for('static', filename='images/youtube_thumbnails/vsl-free-cro-audit-poster.png') }}"
-          alt="Watch a Shopify CRO audit walkthrough"
-          class="vsl-youtube-poster w-full h-full object-cover object-center"
-          loading="lazy"
-          width="800"
-          height="450"
-        />
+        <div class="vsl-youtube-poster-wrap absolute inset-0 z-[1]">
+          <img
+            src="{{ url_for('static', filename='images/youtube_thumbnails/vsl-free-cro-audit-poster.png') }}"
+            alt="How we found $312,000 for a Shopify store"
+            class="vsl-youtube-poster w-full h-full object-cover object-center"
+            loading="eager"
+            width="800"
+            height="450"
+          />
+          <div class="vsl-youtube-poster-copy">
+            <p class="vsl-poster-headline">
+              How We Found
+              <span class="vsl-poster-amount">$312,000</span>
+              For a Shopify Store
+            </p>
+          </div>
+        </div>
         <button
           type="button"
-          class="vsl-youtube-play absolute inset-0 z-10 flex items-center justify-center bg-black/30 hover:bg-black/40 transition-colors"
-          aria-label="Play 4-minute audit video"
+          class="vsl-youtube-play absolute inset-0 z-10 flex items-center justify-center bg-black/25 hover:bg-black/35 transition-colors"
+          aria-label="Play 4-minute CRO audit video"
         >
           <span
-            class="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full bg-primary flex items-center justify-center shadow-[0_0_40px_rgba(255,77,0,0.5)] hover:scale-110 transition-transform"
+            class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-primary flex items-center justify-center shadow-[0_0_40px_rgba(255,77,0,0.5)] hover:scale-110 transition-transform"
           >
-            <span class="material-symbols-outlined text-white text-3xl sm:text-4xl md:text-5xl ml-1">play_arrow</span>
+            <span class="material-symbols-outlined text-white text-3xl sm:text-4xl ml-1">play_arrow</span>
           </span>
         </button>
-        <div class="vsl-youtube-iframe absolute inset-0 hidden w-full h-full"></div>
+        <div class="vsl-youtube-iframe absolute inset-0 hidden w-full h-full z-[2]"></div>
+        <div class="vsl-youtube-end-cta is-hidden" aria-hidden="true">
+          <p class="vsl-youtube-end-cta-title">Ready for your free CRO audit?</p>
+          <button type="button" class="qualify-book-cta-primary" data-qualify-book-end-cta>
+            Book my free CRO audit
+          </button>
+          <p class="qualify-book-roi-guarantee">ROI guaranteed, or your money back.</p>
+        </div>
       </div>
     </div>
+  </div>
+
+  <div class="qualify-book-cta-block">
+    <button type="button" id="qualify-book-cta-top" class="qualify-book-cta-primary">
+      Book my free CRO audit
+    </button>
+    <p class="qualify-book-roi-guarantee">
+      ROI guaranteed, or your money back. No pitch, just your funnel.
+    </p>
   </div>
 
   <hr class="qualify-book-divider" />
@@ -75,17 +89,17 @@
 
   <div id="qualify-calendly">
     <div class="qualify-book-calendly-head">
-      <h2>Ready?</h2>
+      <h2>Pick a time for your free audit</h2>
       <ul class="qualify-book-call-perks">
         <li>Audit your store live</li>
         <li>Show your first 3 A/B tests</li>
-        <li>Estimate ROI before you spend anything</li>
+        <li>Walk away with a prioritized fix list</li>
       </ul>
-      <button type="button" id="qualify-calendly-reveal" class="qualify-book-calendly-reveal">
-        Book free CRO audit
-      </button>
+      <p class="qualify-book-roi-guarantee qualify-book-roi-guarantee--calendly">
+        ROI guaranteed, or your money back.
+      </p>
     </div>
-    <div id="qualify-calendly-panel" class="qualify-book-calendly-panel is-hidden" aria-hidden="true">
+    <div id="qualify-calendly-panel" class="qualify-book-calendly-panel">
       <div
         id="qualify-calendly-inline"
         class="calendly-inline-widget qualify-calendly-widget"

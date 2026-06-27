@@ -104,10 +104,15 @@
       duration > 0
         ? Math.min(100, Math.max(0, Math.floor((currentTime / duration) * 100)))
         : 0;
+    var analyticsId =
+      (wrap && wrap.getAttribute("data-video-id")) || videoId || "";
     return {
-      video_id: videoId,
+      video_id: analyticsId,
+      video_youtube_id: videoId || "",
       video_provider: "youtube",
-      video_url: "https://www.youtube.com/watch?v=" + videoId,
+      video_url: videoId
+        ? "https://www.youtube.com/watch?v=" + videoId
+        : "",
       video_title: title,
       video_duration: duration,
       video_current_time: currentTime,
