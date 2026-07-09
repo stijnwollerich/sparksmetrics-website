@@ -1,0 +1,36 @@
+{# Star rating + numeric score. Optional: rating_score (float), rating_align (left|center). #}
+{% set score = rating_score|default(4.7)|float %}
+{% set full = score|int %}
+{% set partial = ((score - full) * 100)|round(0, 'floor')|int %}
+<span
+  class="inline-flex items-center gap-2{% if rating_align|default('left') == 'center' %} justify-center w-full{% endif %}"
+>
+  <span
+    class="rating-score-stars inline-flex items-center gap-0.5 shrink-0"
+    role="img"
+    aria-label="{{ score }} out of 5 stars"
+  >
+    {% for i in range(full) %}
+    <span class="material-symbols-outlined star-filled rating-score-star">star</span>
+    {% endfor %}
+    {% if full < 5 %}
+    <span class="rating-star-partial relative inline-flex shrink-0">
+      <span
+        class="material-symbols-outlined rating-score-star text-gray-300 absolute inset-0"
+        >star</span
+      >
+      {% if partial > 0 %}
+      <span
+        class="absolute inset-0 overflow-hidden rating-score-stars"
+        style="width: {{ partial }}%"
+      >
+        <span class="material-symbols-outlined star-filled rating-score-star"
+          >star</span
+        >
+      </span>
+      {% endif %}
+    </span>
+    {% endif %}
+  </span>
+  <span class="text-deep-charcoal font-bold text-sm tabular-nums">{{ score }}</span>
+</span>

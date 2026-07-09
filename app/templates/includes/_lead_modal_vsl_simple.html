@@ -1,0 +1,121 @@
+{# Simplified lead gate for /free-cro-video/ — vertical poster + form, unlocks in-page video. #}
+<div
+  id="lead-modal"
+  class="fixed inset-0 z-[200] hidden"
+  aria-hidden="true"
+  aria-modal="true"
+  role="dialog"
+  aria-labelledby="lead-modal-title"
+  data-lead-vsl-simple="1"
+>
+  <div
+    class="absolute inset-0 bg-black/60 backdrop-blur-sm"
+    data-lead-close
+  ></div>
+  <div
+    class="absolute inset-0 flex items-center justify-center p-4 md:p-6 pointer-events-none"
+  >
+    <div
+      class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full pointer-events-auto border border-gray-100 overflow-hidden flex flex-col sm:flex-row"
+      id="lead-modal-panel"
+    >
+      {# Vertical poster — left on desktop, top on mobile #}
+      <div
+        class="relative bg-black shrink-0 w-full sm:w-[38%] sm:max-w-[240px] aspect-[9/16] sm:aspect-auto sm:min-h-[380px] max-h-[200px] sm:max-h-none overflow-hidden"
+      >
+        <img
+          src="{{ url_for('static', filename=vsl_video_poster|default('images/vsl-free-cro-video-hero.png')) }}"
+          alt="{{ vsl_video_poster_alt|default('Shopify conversion analytics walkthrough with Stijn Wollerich') }}"
+          class="absolute inset-0 w-full h-full object-cover object-center"
+          loading="lazy"
+          width="681"
+          height="1024"
+        />
+      </div>
+
+      <div id="lead-form-state" class="flex-1 p-7 md:p-9 relative min-w-0">
+        <button
+          type="button"
+          class="absolute top-4 right-4 p-2 text-slate-400 hover:text-deep-charcoal rounded-lg transition-colors"
+          data-lead-close
+          aria-label="Close"
+        >
+          <span class="material-symbols-outlined">close</span>
+        </button>
+        <span
+          class="inline-block px-3 py-1.5 bg-primary/10 text-primary text-xs font-black uppercase rounded-full mb-4"
+          >Free video</span
+        >
+        <h2
+          id="lead-modal-title"
+          class="text-xl md:text-2xl font-display font-black text-deep-charcoal uppercase tracking-tighter mb-2 pr-8"
+        >
+          Watch the free CRO audit walkthrough
+        </h2>
+        <p
+          id="lead-modal-description"
+          class="text-gray-600 text-sm md:text-base mb-5"
+        >
+          See how we audit funnels and prioritize fixes. Enter your details to
+          play the full video.
+        </p>
+        <form id="lead-form" class="space-y-4">
+          <input type="hidden" name="resource" id="lead-slug" value="vsl-free-cro-video" />
+          <input
+            type="hidden"
+            name="modal_type"
+            id="lead-modal-type"
+            value="resource"
+          />
+          <div>
+            <label
+              for="lead-fname"
+              class="block text-xs font-black uppercase tracking-widest text-deep-charcoal mb-1.5"
+              >First name</label
+            >
+            <input
+              type="text"
+              id="lead-fname"
+              name="fname"
+              required
+              placeholder="Your first name"
+              class="w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl text-deep-charcoal placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
+              autocomplete="given-name"
+            />
+          </div>
+          <div>
+            <label
+              for="lead-email"
+              class="block text-xs font-black uppercase tracking-widest text-deep-charcoal mb-1.5"
+              >Email</label
+            >
+            <input
+              type="email"
+              id="lead-email"
+              name="email"
+              required
+              placeholder="you@company.com"
+              class="w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl text-deep-charcoal placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
+              autocomplete="email"
+            />
+          </div>
+          <button
+            type="submit"
+            id="lead-submit"
+            class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-primary text-white font-display text-sm font-black uppercase rounded-xl hover:brightness-110 transition-all shadow-lg shadow-primary/25"
+          >
+            <span id="lead-submit-text">Watch the video</span>
+            <span class="material-symbols-outlined play-filled text-lg"
+              >play_arrow</span
+            >
+          </button>
+        </form>
+        <p class="flex items-center gap-2 text-gray-500 text-xs mt-5">
+          <span class="material-symbols-outlined text-primary text-base">lock</span>
+          Your data is private. No spam.
+        </p>
+      </div>
+      <div id="lead-thankyou-state" class="hidden" aria-hidden="true"></div>
+    </div>
+  </div>
+</div>

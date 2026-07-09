@@ -1,0 +1,106 @@
+{# Gated VSL poster — play opens lead modal until unlocked, then plays YouTube inline.
+   Optional: vsl_wrap_class, vsl_modal_trigger, vsl_vertical, vsl_ebook_hero (3:2),
+   vsl_responsive_hero (mobile + desktop posters), vsl_poster_mobile, vsl_poster_desktop
+#}
+{% set vsl_wrap_class = vsl_wrap_class|default('rounded-2xl border-2 border-gray-200 shadow-xl') %}
+{% set vsl_modal_trigger = vsl_modal_trigger|default('checklist') %}
+{% set vsl_youtube_id = vsl_youtube_id|default('wwWZImpQ4cc') %}
+{% set vsl_analytics_id = vsl_analytics_id|default('vsl-free-cro-video') %}
+{% set vsl_vertical = vsl_vertical|default(false) %}
+{% set vsl_ebook_hero = vsl_ebook_hero|default(false) %}
+{% set vsl_responsive_hero = vsl_responsive_hero|default(false) %}
+{% set vsl_poster = vsl_poster|default('images/youtube_thumbnails/vsl-free-cro-audit-poster.png') %}
+{% set vsl_poster_mobile = vsl_poster_mobile|default(vsl_poster) %}
+{% set vsl_poster_desktop = vsl_poster_desktop|default(vsl_poster) %}
+{% set vsl_poster_alt = vsl_poster_alt|default('How we found $312,000 for a Shopify store') %}
+{% set vsl_poster_alt_mobile = vsl_poster_alt_mobile|default(vsl_poster_alt) %}
+{% set vsl_poster_alt_desktop = vsl_poster_alt_desktop|default(vsl_poster_alt) %}
+{% set vsl_show_poster_copy = vsl_show_poster_copy|default(true) %}
+{% set vsl_baked_poster_ui = vsl_baked_poster_ui|default(false) %}
+<div
+  class="vsl-gated-wrap vsl-youtube-wrap w-full bg-black overflow-hidden relative group {{ vsl_wrap_class }}{% if vsl_responsive_hero %} vsl-gated-responsive-hero{% if vsl_baked_poster_ui %} vsl-gated-baked-ui{% endif %}{% elif vsl_vertical %} vsl-gated-vertical{% elif vsl_ebook_hero %} vsl-gated-ebook{% else %} aspect-video{% endif %}"
+  data-youtube-id="{{ vsl_youtube_id }}"
+  data-video-id="{{ vsl_analytics_id }}"
+>
+  <div class="vsl-youtube-poster-wrap absolute inset-0 z-[1]">
+    {% if vsl_responsive_hero %}
+    <img
+      src="{{ url_for('static', filename=vsl_poster_mobile) }}"
+      alt="{{ vsl_poster_alt_mobile }}"
+      class="vsl-youtube-poster vsl-poster-mobile absolute inset-0 w-full h-full object-cover object-center lg:hidden"
+      loading="eager"
+      fetchpriority="high"
+      width="900"
+      height="506"
+    />
+    <img
+      src="{{ url_for('static', filename=vsl_poster_desktop) }}"
+      alt="{{ vsl_poster_alt_desktop }}"
+      class="vsl-youtube-poster vsl-poster-desktop absolute inset-0 w-full h-full object-cover object-center hidden lg:block"
+      loading="eager"
+      fetchpriority="high"
+      width="1024"
+      height="1024"
+    />
+    {% if not vsl_baked_poster_ui %}
+    <div class="vsl-youtube-poster-copy lg:hidden">
+      <p class="vsl-poster-headline">
+        How We Found
+        <span class="vsl-poster-amount">$312,000</span>
+        For a Shopify Store
+      </p>
+    </div>
+    {% endif %}
+    {% else %}
+    <img
+      src="{{ url_for('static', filename=vsl_poster) }}"
+      alt="{{ vsl_poster_alt }}"
+      class="vsl-youtube-poster w-full h-full object-cover {% if vsl_show_poster_copy %}object-center{% else %}object-[center_20%]{% endif %}"
+      loading="eager"
+      fetchpriority="high"
+      width="900"
+      height="{% if vsl_ebook_hero %}600{% else %}506{% endif %}"
+    />
+    {% if vsl_show_poster_copy %}
+    <div class="vsl-youtube-poster-copy">
+      <p class="vsl-poster-headline">
+        How We Found
+        <span class="vsl-poster-amount">$312,000</span>
+        For a Shopify Store
+      </p>
+    </div>
+    {% endif %}
+    {% endif %}
+  </div>
+  <button
+    type="button"
+    class="vsl-youtube-play absolute inset-0 z-10 flex items-center justify-center {% if vsl_baked_poster_ui %}max-lg:bg-black/25 max-lg:hover:bg-black/35{% else %}bg-black/25 hover:bg-black/35{% endif %} transition-colors cursor-pointer group/play"
+    aria-label="Play 4-minute CRO audit video"
+    data-vsl-gated-play
+    {% if vsl_modal_trigger == 'audit' %}
+    data-modal-type="audit"
+    data-title="Watch the free CRO walkthrough"
+    data-description="Enter your details to unlock the full video."
+    data-button-text="Watch the video"
+    {% else %}
+    data-resource="vsl-free-cro-video"
+    data-title="Watch the free CRO audit walkthrough"
+    data-description="See how we audit funnels and prioritize fixes. Enter your details to play."
+    data-button-text="Watch the video"
+    {% endif %}
+    {{ vsl_gate_modal_attrs|default('')|safe }}
+  >
+    <span
+      class="vsl-play-icon{% if vsl_baked_poster_ui %} vsl-play-icon-mobile-only{% endif %} w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full bg-primary flex items-center justify-center shadow-[0_0_40px_rgba(255,77,0,0.5)] hover:scale-110 transition-transform"
+    >
+      <span
+        class="material-symbols-outlined play-filled text-white text-3xl sm:text-4xl md:text-5xl ml-1"
+        >play_arrow</span
+      >
+    </span>
+  </button>
+  <div
+    class="vsl-youtube-iframe absolute inset-0 hidden w-full h-full z-[2]"
+    aria-hidden="true"
+  ></div>
+</div>

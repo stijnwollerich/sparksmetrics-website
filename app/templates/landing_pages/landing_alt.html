@@ -11,7 +11,10 @@ optimization, and proven case studies. Stop guessing—turn your data into
 revenue.{% endblock %} {% block og_title %}Sparksmetrics | Results-Driven
 Conversion Rate Optimization{% endblock %} {% block twitter_title
 %}Sparksmetrics | Results-Driven Conversion Rate Optimization{% endblock %} {%
-block head_extras %}{% endblock %} {% block content %}
+block head_extras %}
+<link rel="preconnect" href="https://www.youtube.com" />
+{% include 'includes/_vsl_youtube_player_styles.html' %}
+{% endblock %} {% block content %}
 <section
   class="bg-black relative pt-8 pb-12 overflow-hidden border-b border-white/5"
   id="hero"
@@ -126,38 +129,10 @@ block head_extras %}{% endblock %} {% block content %}
 <!-- Video bridge: half on hero, half on next section -->
 <div class="relative z-10 -mt-8 md:-mt-12 -mb-36 md:-mb-52 px-4 md:px-6">
   <div class="max-w-4xl mx-auto">
-    <div
-      class="w-full aspect-video bg-black rounded-2xl border border-gray-200 overflow-hidden shadow-2xl relative group"
-      data-video-play-overlay
-      data-video-id="hero-homepage"
-    >
-      <video
-        class="w-full h-full object-contain"
-        playsinline
-        preload="metadata"
-        aria-label="How we find and fix conversion leaks"
-      >
-        <source
-          src="{{ url_for('static', filename='video/hero.mp4') }}"
-          type="video/mp4"
-        />
-        Your browser does not support the video tag.
-      </video>
-      <button
-        type="button"
-        class="video-play-overlay absolute inset-0 z-10 flex items-center justify-center bg-black/30 transition-opacity duration-300 group-data-[playing]:opacity-0 group-data-[playing]:pointer-events-none"
-        aria-label="Play video"
-      >
-        <span
-          class="w-24 h-24 md:w-32 md:h-32 rounded-full bg-primary flex items-center justify-center shadow-[0_0_60px_rgba(255,77,0,0.4)] hover:scale-110 transition-transform duration-300"
-        >
-          <span
-            class="material-symbols-outlined text-white text-5xl md:text-7xl ml-1"
-            >play_arrow</span
-          >
-        </span>
-      </button>
-    </div>
+    {% set vsl_analytics_id = 'vsl-homepage' %}
+    {% set vsl_wrap_class = 'rounded-2xl border border-gray-200 shadow-2xl' %}
+    {% set vsl_poster_fetchpriority = 'high' %}
+    {% include 'includes/_vsl_youtube_player.html' %}
   </div>
 </div>
 <main>
@@ -798,6 +773,7 @@ block head_extras %}{% endblock %} {% block content %}
       </div>
     </div>
   </section>
-  {% endblock %} {% block footer_links %}{% endblock %} {% block body_end %} {%
-  endblock %}
+  {% endblock %} {% block footer_links %}{% endblock %} {% block body_end %}
+<script src="{{ url_for('static', filename='js/vsl-youtube-simple.js') }}?v=6" defer></script>
+{% endblock %}
 </main>

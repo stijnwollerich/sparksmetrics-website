@@ -71,6 +71,24 @@
                 >
               </div>
             </a>
+            {% elif cta == 'video' %}
+            <a
+              href="#"
+              class="absolute inset-0 z-10 flex items-center justify-center"
+              data-checklist-modal
+              data-resource="13-bulletproof-strategies"
+              data-title="13 Bulletproof Strategies to Skyrocket Conversions"
+              data-description="Enter your email and get the free video right away: 13 actionable CRO strategies used by $10M+ brands."
+              data-button-text="Watch the video"
+            >
+              <div
+                class="w-14 h-14 md:w-16 md:h-16 bg-primary rounded-full flex items-center justify-center shadow-lg"
+              >
+                <span class="material-symbols-outlined text-white text-2xl md:text-3xl"
+                  >play_arrow</span
+                >
+              </div>
+            </a>
             {% elif cta in ('calendly', 'strategy_session') %}
             <a
               {% if strip_link_id_prefix %}id="{{ strip_link_id_prefix }}-{{ '%02d'|format(loop.index) }}"{% endif %}

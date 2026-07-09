@@ -427,6 +427,16 @@ def cro_ebook():
     return render_template("cro_ebook.html")
 
 
+@main_bp.route("/free-cro-video/")
+@main_bp.route("/free-cro-video")
+def cro_vsl_gated():
+    """Gated VSL landing — lead form unlocks redirect to free CRO audit page."""
+    return render_template(
+        "cro_ebook_vsl_gated.html",
+        page_updated_days_ago=3,
+    )
+
+
 @main_bp.route("/schedule-a-call/")
 def schedule_a_call():
     """Schedule a call / booking page."""
@@ -1279,6 +1289,7 @@ def cro_scan_submit_email():
 RESOURCE_DOWNLOADS = {
     "13-bulletproof-strategies": {"filename": "sm-cro-ebook.pdf"},
     "7-questions-cro-agency": {"filename": "sm-cro-ebook.pdf"},
+    "vsl-free-cro-video": {"gate_only": True},
 }
 
 VISITOR_COUNTRY_GEO: dict[str, tuple[str, str]] = {
@@ -2545,6 +2556,8 @@ def download_resource():
         business_stage=business_stage,
         website_url=website_url_lm,
     )
+    if resource.get("gate_only"):
+        return jsonify({"success": True})
     download_url = url_for("main.serve_download", slug=slug)
     return jsonify({"success": True, "download_url": download_url})
 
@@ -2553,7 +2566,7 @@ def download_resource():
 def serve_download(slug: str):
     """Serve a resource file as attachment. No HTML page—direct download. Not indexed (X-Robots-Tag)."""
     resource = RESOURCE_DOWNLOADS.get(slug.strip()) if slug else None
-    if not resource:
+    if not resource or resource.get("gate_only"):
         abort(404)
     filename = resource["filename"]
     downloads_dir = Path(current_app.static_folder) / "downloads"

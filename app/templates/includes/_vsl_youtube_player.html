@@ -1,0 +1,56 @@
+{# Shared YouTube VSL player (poster, headline overlay, play button, analytics).
+   Optional vars:
+   - vsl_analytics_id (default: vsl-free-cro-audit)
+   - vsl_youtube_id (default: wwWZImpQ4cc)
+   - vsl_wrap_class (extra classes on .vsl-youtube-wrap)
+   - vsl_chapters (JSON string for data-vsl-chapters, optional)
+   - vsl_poster_loading (default: eager)
+   - vsl_poster_fetchpriority (optional, e.g. high)
+#}
+{% set vsl_analytics_id = vsl_analytics_id|default('vsl-free-cro-audit') %}
+{% set vsl_youtube_id = vsl_youtube_id|default('wwWZImpQ4cc') %}
+{% set vsl_poster_loading = vsl_poster_loading|default('eager') %}
+{% set vsl_wrap_class = vsl_wrap_class|default('rounded-lg') %}
+<div
+  class="vsl-youtube-wrap w-full aspect-video bg-black overflow-hidden relative group {{ vsl_wrap_class }}"
+  data-youtube-id="{{ vsl_youtube_id }}"
+  data-video-id="{{ vsl_analytics_id }}"
+  {% if vsl_chapters %}data-vsl-chapters='{{ vsl_chapters }}'{% endif %}
+>
+  <div class="vsl-youtube-poster-wrap absolute inset-0 z-[1]">
+    <img
+      src="{{ url_for('static', filename='images/youtube_thumbnails/vsl-free-cro-audit-poster.png') }}"
+      alt="How we found $312,000 for a Shopify store"
+      class="vsl-youtube-poster w-full h-full object-cover object-center"
+      loading="{{ vsl_poster_loading }}"
+      {% if vsl_poster_fetchpriority %}fetchpriority="{{ vsl_poster_fetchpriority }}"{% endif %}
+      width="800"
+      height="450"
+    />
+    <div class="vsl-youtube-poster-copy">
+      <p class="vsl-poster-headline">
+        How We Found
+        <span class="vsl-poster-amount">$312,000</span>
+        For a Shopify Store
+      </p>
+    </div>
+  </div>
+  <button
+    type="button"
+    class="vsl-youtube-play absolute inset-0 z-10 flex items-center justify-center bg-black/25 hover:bg-black/35 transition-colors"
+    aria-label="Play 4-minute CRO audit video"
+  >
+    <span
+      class="w-20 h-20 md:w-24 md:h-24 rounded-full bg-primary flex items-center justify-center shadow-[0_0_40px_rgba(255,77,0,0.5)] hover:scale-110 transition-transform"
+    >
+      <span
+        class="material-symbols-outlined play-filled text-white text-4xl md:text-5xl ml-1"
+        >play_arrow</span
+      >
+    </span>
+  </button>
+  <div
+    class="vsl-youtube-iframe absolute inset-0 hidden w-full h-full z-[2]"
+    aria-hidden="true"
+  ></div>
+</div>

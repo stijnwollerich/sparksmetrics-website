@@ -37,6 +37,24 @@
     return origin + "/thank-you/?" + qs;
   }
 
+  function leadVslSimpleEnabled() {
+    return modal && modal.getAttribute("data-lead-vsl-simple") === "1";
+  }
+
+  function vslSimpleDefaults() {
+    return {
+      resource: "vsl-free-cro-video",
+      title: "Watch the free CRO walkthrough",
+      description: "Enter your name and email to unlock the full video.",
+      buttonText: "Watch the video",
+    };
+  }
+
+  function leadSubmitIcon(modalType) {
+    if (leadVslSimpleEnabled()) return "play_arrow";
+    return modalType === "audit" ? "schedule" : "download";
+  }
+
   function leadAuditMultistepEnabled() {
     return modal && modal.getAttribute("data-lead-audit-multistep") === "1";
   }
@@ -149,16 +167,23 @@
     }
     currentButtonText = buttonText;
     if (submitTextEl) submitTextEl.textContent = buttonText;
-    var icon = modalType === "audit" ? "schedule" : "download";
+    var icon = leadSubmitIcon(modalType);
+    var iconClass = leadVslSimpleEnabled()
+      ? "material-symbols-outlined play-filled text-lg"
+      : "material-symbols-outlined text-lg";
     if (submitBtn)
       submitBtn.innerHTML =
         buttonText +
-        ' <span class="material-symbols-outlined text-lg">' +
+        ' <span class="' +
+        iconClass +
+        '">' +
         icon +
         "</span>";
 
     if (badgesEl) {
-      if (modalType === "audit" && auditMinimal) {
+      if (leadVslSimpleEnabled()) {
+        badgesEl.innerHTML = "";
+      } else if (modalType === "audit" && auditMinimal) {
         badgesEl.innerHTML = "";
       } else if (modalType === "audit") {
         badgesEl.innerHTML =
@@ -330,11 +355,16 @@
     } else if (submitBtn) {
       submitBtn.disabled = false;
     }
-    var icon = currentModalType === "audit" ? "schedule" : "download";
+    var icon = leadSubmitIcon(currentModalType);
+    var iconClass = leadVslSimpleEnabled()
+      ? "material-symbols-outlined play-filled text-lg"
+      : "material-symbols-outlined text-lg";
     if (submitBtn)
       submitBtn.innerHTML =
         currentButtonText +
-        ' <span class="material-symbols-outlined text-lg">' +
+        ' <span class="' +
+        iconClass +
+        '">' +
         icon +
         "</span>";
   }
@@ -369,16 +399,24 @@
         el.getAttribute("data-checklist-modal") !== null &&
         !el.getAttribute("data-resource")
       ) {
-        el.setAttribute("data-resource", "13-bulletproof-strategies");
-        el.setAttribute(
-          "data-title",
-          "13 Bulletproof Strategies to Skyrocket Conversions",
-        );
-        el.setAttribute(
-          "data-description",
-          "Enter your email and get the free ebook right away — 13 actionable CRO strategies used by $10M+ brands.",
-        );
-        el.setAttribute("data-button-text", "Send me the ebook");
+        if (leadVslSimpleEnabled()) {
+          var vslDefaults = vslSimpleDefaults();
+          el.setAttribute("data-resource", vslDefaults.resource);
+          el.setAttribute("data-title", vslDefaults.title);
+          el.setAttribute("data-description", vslDefaults.description);
+          el.setAttribute("data-button-text", vslDefaults.buttonText);
+        } else {
+          el.setAttribute("data-resource", "13-bulletproof-strategies");
+          el.setAttribute(
+            "data-title",
+            "13 Bulletproof Strategies to Skyrocket Conversions",
+          );
+          el.setAttribute(
+            "data-description",
+            "Enter your email and get the free ebook right away — 13 actionable CRO strategies used by $10M+ brands.",
+          );
+          el.setAttribute("data-button-text", "Send me the ebook");
+        }
       }
       openModal(el);
     });
@@ -509,7 +547,8 @@
       if (
         modalType !== "audit" &&
         businessStageEl &&
-        !businessStage
+        !businessStage &&
+        !leadVslSimpleEnabled()
       ) {
         businessStageEl.focus();
         businessStageEl.reportValidity && businessStageEl.reportValidity();
@@ -635,7 +674,10 @@
         })
         .then(function (data) {
           var hasDownload =
-            modalType === "resource" && data.success && data.download_url;
+            modalType === "resource" &&
+            data.success &&
+            data.download_url &&
+            !leadVslSimpleEnabled();
           // Push success event with server response and form answers
           try {
             window.dataLayer = window.dataLayer || [];
@@ -652,8 +694,20 @@
             };
             window.dataLayer.push(successPayload);
           } catch (err) {}
+          if (leadVslSimpleEnabled()) {
+            if (data && data.success) {
+              closeModal();
+              if (window.VslGated && window.VslGated.unlockAndPlay) {
+                window.VslGated.unlockAndPlay();
+              }
+            } else if (submitBtn) {
+              submitBtn.innerHTML = "Try again";
+            }
+            return;
+          }
           // Redirect to thank-you page with source (from) and referring page (ref)
-          var fromParam = modalType === "audit" ? "audit" : resource || "ebook";
+          var fromParam =
+            modalType === "audit" ? "audit" : resource || "ebook";
           var thankYouUrl = buildThankYouRedirectUrl(fromParam);
           if (hasDownload && data.download_url) {
             triggerDownload(data.download_url);
@@ -675,20 +729,39 @@
             };
             window.dataLayer.push(errorPayload);
           } catch (err) {}
+          if (leadVslSimpleEnabled()) {
+            if (submitBtn) submitBtn.innerHTML = "Try again";
+            return;
+          }
           // On error still redirect to thank-you so user can book
-          var fromParam = modalType === "audit" ? "audit" : resource || "ebook";
+          var fromParam =
+            modalType === "audit" ? "audit" : resource || "ebook";
           var thankYouUrl = buildThankYouRedirectUrl(fromParam);
           window.location.href = thankYouUrl;
         })
         .finally(function () {
           if (!submitBtn) return;
           submitBtn.disabled = false;
-          var icon = currentModalType === "audit" ? "schedule" : "download";
+          var icon = leadSubmitIcon(currentModalType);
+          var iconClass = leadVslSimpleEnabled()
+            ? "material-symbols-outlined play-filled text-lg"
+            : "material-symbols-outlined text-lg";
           submitBtn.innerHTML =
             currentButtonText +
-            ' <span class="material-symbols-outlined text-lg">' +
+            ' <span class="' +
+            iconClass +
+            '">' +
             icon +
             "</span>";
         });
     });
+
+  window.LeadModal = {
+    openFrom: function (el) {
+      if (!el) return;
+      resetModal();
+      openModal(el);
+    },
+    close: closeModal,
+  };
 })();

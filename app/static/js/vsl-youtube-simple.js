@@ -175,7 +175,18 @@
                   clearInterval(wrap._progressIntervalId);
                   wrap._progressIntervalId = null;
                 }
-                showEndCta(wrap);
+                var endCta = wrap.querySelector(".vsl-youtube-end-cta");
+                if (endCta) {
+                  showEndCta(wrap);
+                } else {
+                  try {
+                    var duration = player.getDuration && player.getDuration();
+                    if (duration > 0 && player.seekTo) {
+                      player.seekTo(Math.max(0, duration - 0.3), true);
+                    }
+                    if (player.pauseVideo) player.pauseVideo();
+                  } catch (freezeErr) {}
+                }
               }
             },
           },
