@@ -85,23 +85,40 @@
     max-width: 100%;
     width: 100%;
   }
+  .vsl-gated-baked-ui .vsl-youtube-play {
+    background: transparent !important;
+  }
+  .vsl-gated-baked-ui .vsl-youtube-play:hover {
+    background: rgba(0, 0, 0, 0.04) !important;
+  }
+  .vsl-gated-baked-ui .vsl-play-icon,
+  .vsl-gated-baked-ui .vsl-youtube-poster-copy {
+    display: none !important;
+  }
+  .vsl-gated-baked-ui .vsl-poster-desktop {
+    filter: blur(0.6px);
+  }
   @media (min-width: 1024px) {
-    .vsl-gated-baked-ui .vsl-poster-desktop {
-      filter: blur(0.4px);
-      object-fit: contain;
-      object-position: center;
+    .vsl-gated-baked-ui.vsl-gated-responsive-hero {
+      height: auto !important;
+      min-height: 0;
+      aspect-ratio: 1 / 1;
+      box-shadow: none !important;
+      border: none !important;
+      background: transparent !important;
     }
-    .vsl-gated-baked-ui .vsl-youtube-play {
+    .vsl-gated-baked-ui .vsl-youtube-poster-wrap {
       background: transparent;
     }
-    .vsl-gated-baked-ui .vsl-youtube-play:hover {
-      background: rgba(0, 0, 0, 0.05);
+    .vsl-gated-baked-ui .vsl-poster-desktop {
+      object-fit: cover;
+      object-position: center;
     }
-    .vsl-gated-baked-ui .vsl-play-icon-mobile-only {
-      display: none;
-    }
-    .vsl-gated-baked-ui .vsl-youtube-poster-copy {
-      display: none !important;
+  }
+  @media (max-width: 1023px) {
+    .vsl-gated-baked-ui.vsl-gated-responsive-hero {
+      aspect-ratio: 1 / 1;
+      background: transparent !important;
     }
   }
   @media (min-width: 1024px) {

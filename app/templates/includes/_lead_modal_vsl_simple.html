@@ -23,14 +23,21 @@
       <div
         class="relative bg-black shrink-0 w-full sm:w-[38%] sm:max-w-[240px] aspect-[9/16] sm:aspect-auto sm:min-h-[380px] max-h-[200px] sm:max-h-none overflow-hidden"
       >
-        <img
-          src="{{ url_for('static', filename=vsl_video_poster|default('images/vsl-free-cro-video-hero.png')) }}"
-          alt="{{ vsl_video_poster_alt|default('Shopify conversion analytics walkthrough with Stijn Wollerich') }}"
-          class="absolute inset-0 w-full h-full object-cover object-center"
-          loading="lazy"
-          width="681"
-          height="1024"
-        />
+        <picture>
+          <source
+            srcset="{{ url_for('static', filename=vsl_video_poster_thumb_webp|default('images/vsl-free-cro-video-hero-320.webp')) }}"
+            type="image/webp"
+          />
+          <img
+            src="{{ url_for('static', filename=vsl_video_poster|default('images/vsl-free-cro-video-hero.png')) }}"
+            alt="{{ vsl_video_poster_alt|default('Shopify conversion analytics walkthrough with Stijn Wollerich') }}"
+            class="absolute inset-0 w-full h-full object-cover object-center"
+            loading="lazy"
+            decoding="async"
+            width="240"
+            height="380"
+          />
+        </picture>
       </div>
 
       <div id="lead-form-state" class="flex-1 p-7 md:p-9 relative min-w-0">

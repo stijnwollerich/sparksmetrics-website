@@ -17,6 +17,12 @@
       Free CRO Audit Walkthrough: How We Find Funnel Leaks | Sparksmetrics
     </title>
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg" />
+    <link
+      rel="preload"
+      as="image"
+      href="{{ url_for('static', filename='images/vsl-free-cro-video-hero-800.webp') }}"
+      type="image/webp"
+    />
     <link href="https://fonts.googleapis.com" rel="preconnect" />
     <link crossorigin href="https://fonts.gstatic.com" rel="preconnect" />
     <link
@@ -352,14 +358,14 @@
     <!-- End Google Tag Manager (noscript) -->
     {% endif %}
     {% set vsl_video_poster = 'images/vsl-free-cro-video-hero.png' %}
+    {% set vsl_video_poster_webp = 'images/vsl-free-cro-video-hero-800.webp' %}
+    {% set vsl_video_poster_thumb_webp = 'images/vsl-free-cro-video-hero-320.webp' %}
     {% set vsl_video_poster_alt = 'CRO walkthrough: conversion analytics and funnel fixes' %}
-    {% set vsl_video_poster_mobile = 'images/youtube_thumbnails/vsl-free-cro-audit-poster.png' %}
-    {% set vsl_video_poster_mobile_alt = 'How we found $312,000 for a Shopify store' %}
     <section class="bg-white py-12 md:py-16 border-b border-gray-100" id="hero">
       <div class="max-w-7xl mx-auto px-6">
         <div class="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center lg:items-start">
           <div class="order-2 lg:order-1 h-full" id="hero-vsl-shell">
-            {% with vsl_responsive_hero=true, vsl_baked_poster_ui=true, vsl_poster_mobile=vsl_video_poster_mobile, vsl_poster_desktop=vsl_video_poster, vsl_poster_alt_mobile=vsl_video_poster_mobile_alt, vsl_poster_alt_desktop=vsl_video_poster_alt %}{% include 'includes/_vsl_youtube_gated.html' %}{% endwith %}
+            {% with vsl_responsive_hero=true, vsl_baked_poster_ui=true, vsl_wrap_class='w-full overflow-hidden rounded-2xl', vsl_poster_desktop=vsl_video_poster, vsl_poster_desktop_webp=vsl_video_poster_webp, vsl_poster_alt_desktop=vsl_video_poster_alt %}{% include 'includes/_vsl_youtube_gated.html' %}{% endwith %}
           </div>
           <div class="order-1 lg:order-2">
             <div id="hero-copy-to-cta">
@@ -459,7 +465,7 @@
             <div class="logo-item" role="listitem">
               <img
                 class="logo-img"
-                src="{{ url_for('static', filename='images/logos/alle.png') }}"
+                src="{{ url_for('static', filename='images/optimized/logos/alle-48.webp') }}"
                 alt="Alle"
                 loading="lazy"
                 decoding="async"
@@ -469,7 +475,7 @@
             <div class="logo-item" role="listitem">
               <img
                 class="logo-img"
-                src="{{ url_for('static', filename='images/logos/canopy.png') }}"
+                src="{{ url_for('static', filename='images/optimized/logos/canopy-48.webp') }}"
                 alt="Canopy"
                 loading="lazy"
                 decoding="async"
@@ -480,7 +486,7 @@
             <div class="logo-item" role="listitem">
               <img
                 class="logo-img"
-                src="{{ url_for('static', filename='images/logos/argenx.png') }}"
+                src="{{ url_for('static', filename='images/optimized/logos/argenx-48.webp') }}"
                 alt="Argenx"
                 loading="lazy"
                 decoding="async"
@@ -491,7 +497,7 @@
             <div class="logo-item" role="listitem">
               <img
                 class="logo-img"
-                src="{{ url_for('static', filename='images/logos/lpc.png') }}"
+                src="{{ url_for('static', filename='images/optimized/logos/lpc-48.webp') }}"
                 alt="Le Petit Chef"
                 loading="lazy"
                 decoding="async"
@@ -502,7 +508,7 @@
             <div class="logo-item" role="listitem">
               <img
                 class="logo-img"
-                src="{{ url_for('static', filename='images/logos/outdoor-research.png') }}"
+                src="{{ url_for('static', filename='images/optimized/logos/outdoor-research-48.webp') }}"
                 alt="Outdoor Research"
                 loading="lazy"
                 decoding="async"
@@ -513,7 +519,7 @@
             <div class="logo-item" role="listitem">
               <img
                 class="logo-img"
-                src="{{ url_for('static', filename='images/logos/edikted.png') }}"
+                src="{{ url_for('static', filename='images/optimized/logos/edikted-48.webp') }}"
                 alt="Edikted"
                 loading="lazy"
                 decoding="async"
@@ -524,7 +530,7 @@
             <div class="logo-item" role="listitem">
               <img
                 class="logo-img"
-                src="{{ url_for('static', filename='images/logos/vacation-renter.png') }}"
+                src="{{ url_for('static', filename='images/optimized/logos/vacation-renter-48.webp') }}"
                 alt="Vacation Renter"
                 loading="lazy"
                 decoding="async"
@@ -535,7 +541,7 @@
             <div class="logo-item" role="listitem">
               <img
                 class="logo-img"
-                src="{{ url_for('static', filename='images/logos/client-2.png') }}"
+                src="{{ url_for('static', filename='images/optimized/logos/client-2-48.webp') }}"
                 alt="TUSHY"
                 loading="lazy"
                 decoding="async"
@@ -617,15 +623,21 @@
         <figure
           class="rounded-2xl border border-gray-200 shadow-lg bg-white overflow-hidden mb-10"
         >
-          <img
-            src="{{ url_for('static', filename='images/cro-deck-v2/steps/step-04-ux-review-spinelli.png') }}"
-            alt="Full-funnel CRO audit example for Spinelli Kilcollin"
-            class="block w-full h-auto"
-            loading="lazy"
-            decoding="async"
-            width="2692"
-            height="1084"
-          />
+          <picture>
+            <source
+              srcset="{{ url_for('static', filename='images/cro-deck-v2/steps/step-03-ux-review-nooktales-720.webp') }}"
+              type="image/webp"
+            />
+            <img
+              src="{{ url_for('static', filename='images/cro-deck-v2/steps/step-03-ux-review-nooktales.png') }}"
+              alt="Full-funnel CRO audit example for Nooktales"
+              class="block w-full h-auto"
+              loading="lazy"
+              decoding="async"
+              width="720"
+              height="404"
+            />
+          </picture>
         </figure>
         <h2 class="text-4xl md:text-5xl mb-4 text-deep-charcoal text-center">
           What You'll See Inside This
@@ -1580,20 +1592,27 @@
           </p>
         </div>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {% for slug, case in case_studies_list %}
+          {% for slug, case in case_studies_list[:3] %}
           <div
             class="rounded-3xl overflow-hidden bg-white border border-gray-200 shadow-sm p-0"
           >
             <div class="h-56 overflow-hidden">
               {% if case.main_image %}
-              <img
-                alt="{{ case.card_title|default(case.result_headline) }}"
-                class="w-full h-full object-cover"
-                src="{{ url_for('static', filename=case.main_image) }}"
-                loading="lazy"
-                width="400"
-                height="224"
-              />
+              <picture>
+                <source
+                  srcset="{{ url_for('static', filename=case.main_image|replace('.jpg', '-800.webp')) }}"
+                  type="image/webp"
+                />
+                <img
+                  alt="{{ case.card_title|default(case.result_headline) }}"
+                  class="w-full h-full object-cover"
+                  src="{{ url_for('static', filename=case.main_image) }}"
+                  loading="lazy"
+                  decoding="async"
+                  width="400"
+                  height="224"
+                />
+              </picture>
               {% endif %}
             </div>
             <div class="p-8">
@@ -1670,12 +1689,21 @@
               <div
                 class="absolute inset-0 bg-black/20 blur-2xl group-hover:scale-110 transition-transform"
               ></div>
-              <img
-                alt="{{ vsl_video_poster_alt }}"
-                class="relative rounded-lg shadow-2xl transform rotate-3 group-hover:rotate-0 transition-transform duration-500"
-                src="{{ url_for('static', filename=vsl_video_poster) }}"
-                loading="lazy"
-              />
+              <picture>
+                <source
+                  srcset="{{ url_for('static', filename=vsl_video_poster_thumb_webp) }}"
+                  type="image/webp"
+                />
+                <img
+                  alt="{{ vsl_video_poster_alt }}"
+                  class="relative rounded-lg shadow-2xl transform rotate-3 group-hover:rotate-0 transition-transform duration-500"
+                  src="{{ url_for('static', filename=vsl_video_poster) }}"
+                  loading="lazy"
+                  decoding="async"
+                  width="320"
+                  height="320"
+                />
+              </picture>
             </div>
           </div>
         </div>
@@ -1855,7 +1883,7 @@
           var shell = document.getElementById("hero-vsl-shell");
           if (!copy || !shell) return;
           var wrap = shell.querySelector(".vsl-gated-responsive-hero");
-          if (!wrap || wrap.classList.contains("is-playing")) return;
+          if (!wrap || wrap.classList.contains("is-playing") || wrap.classList.contains("vsl-gated-baked-ui")) return;
           if (window.matchMedia("(min-width: 1024px)").matches) {
             wrap.style.setProperty("--hero-vsl-height", copy.offsetHeight + "px");
             wrap.classList.add("vsl-hero-height-ready");
