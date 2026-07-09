@@ -17,6 +17,7 @@
     </script>
     <!-- End Google Tag Manager -->
     {% endif %}
+    <script src="{{ url_for('static', filename='js/sm-analytics.js') }}"></script>
     <!-- PostMessage wrapper removed to avoid interfering with third-party embeds -->
     <!-- Global error suppression removed to avoid hiding root causes -->
     <meta charset="utf-8" />
@@ -986,7 +987,7 @@
       defer
     ></script>
     <script
-      src="{{ url_for('static', filename='js/checklist-modal.js') }}?v=11"
+      src="{{ url_for('static', filename='js/checklist-modal.js') }}?v=12"
       defer
     ></script>
     {% if request.endpoint != 'main.cro_scan_landing' and request.endpoint !=
@@ -1048,16 +1049,18 @@
           modal.classList.remove("hidden");
           modal.setAttribute("aria-hidden", "false");
           document.body.style.overflow = "hidden";
-          try {
-            window.dataLayer = window.dataLayer || [];
-            window.dataLayer.push({
-              event: "schedule_modal_open",
-              source: "header_link",
-              url: CALENDLY_URL,
-              path: window.location.pathname,
-              timestamp: new Date().toISOString(),
+          if (window.SmAnalytics) {
+            window.smScheduleFormId = "schedule-modal";
+            window.smScheduleFormName = "Schedule a Call (Header Modal)";
+            window.smScheduleCalendlyUrl = CALENDLY_URL;
+            window.SmAnalytics.scheduleOpen({
+              form_id: "schedule-modal",
+              form_name: "Schedule a Call (Header Modal)",
+              lead_type: "strategy_session",
+              calendly_url: CALENDLY_URL,
+              trigger_location: "header",
             });
-          } catch (err) {}
+          }
         }
         function closeScheduleModal() {
           modal.classList.add("hidden");
@@ -1083,106 +1086,22 @@
     </script>
     <script>
       (function () {
-        // Generic form submit datalayer pusher (skips lead-form which is handled separately)
-        try {
-          document.addEventListener(
-            "submit",
-            function (e) {
-              try {
-                var form = e.target;
-                if (!form || form.id === "lead-form") return;
-                var formData = {};
-                Array.prototype.slice
-                  .call(form.elements || [])
-                  .forEach(function (el) {
-                    if (!el.name) return;
-                    if (["password", "csrf_token"].indexOf(el.type) !== -1)
-                      return;
-                    var v = el.value;
-                    if (el.type === "email" && v) formData.email = v;
-                    if (el.name === "fname" || el.name === "first_name")
-                      formData.fname = v;
-                    if (!formData[el.name]) formData[el.name] = v;
-                  });
-                window.dataLayer = window.dataLayer || [];
-                window.dataLayer.push({
-                  event: "generic_form_submitted",
-                  form_id: form.id || null,
-                  form_action: form.getAttribute("action") || null,
-                  form_method: (
-                    form.getAttribute("method") || "GET"
-                  ).toUpperCase(),
-                  data: formData,
-                  path: window.location.pathname,
-                  timestamp: new Date().toISOString(),
-                });
-              } catch (err) {}
-            },
-            true,
-          );
-        } catch (err) {}
-      })();
-    </script>
-    <script>
-      /* Analytics Mania compatible Calendly listener
-   Uses Calendly's postMessage events and pushes analytics-friendly events to the dataLayer.
-   Keeps origin checks permissive for reliability; tighten to specific origins if desired. */
-      (function () {
-        try {
-          window.dataLayer = window.dataLayer || [];
-          function isCalendlyOrigin(origin) {
-            if (!origin) return false;
-            return (
-              origin.indexOf("calendly.com") !== -1 ||
-              origin.indexOf("assets.calendly.com") !== -1
-            );
-          }
-
-          window.addEventListener(
-            "message",
-            function (e) {
-              try {
-                // Optional origin guard - Analytics Mania examples often check origin
-                if (!isCalendlyOrigin(e.origin)) return;
-
-                var payload = e.data;
-                // payload may be string or object
-                if (typeof payload === "string") {
-                  // Calendly sometimes sends plain strings like "calendly.event_scheduled"
-                  // or JSON strings; leave as-is for event detection.
-                } else if (
-                  payload &&
-                  typeof payload === "object" &&
-                  payload.event
-                ) {
-                  // payload.event expected like "calendly.event_scheduled"
-                  payload = payload.event;
-                }
-
-                if (
-                  typeof payload === "string" &&
-                  payload.indexOf("calendly") === 0
-                ) {
-                  var parts = payload.split(".");
-                  var calendlyEvent =
-                    parts.length > 1 ? parts.slice(1).join(".") : payload;
-                  window.dataLayer = window.dataLayer || [];
-                  window.dataLayer.push({
-                    event: "calendly." + calendlyEvent,
-                    calendly_event: calendlyEvent,
-                    calendly_origin: e.origin,
-                    timestamp: new Date().toISOString(),
-                  });
-                }
-              } catch (err) {
-                // inner error suppressed
-              }
-            },
-            false,
-          );
-        } catch (err) {
-          // outer listener init error suppressed
-        }
+        document.addEventListener(
+          "submit",
+          function (e) {
+            try {
+              var form = e.target;
+              if (!form || form.id === "lead-form" || !window.SmAnalytics) return;
+              window.SmAnalytics.formSubmit({
+                form_id: form.id || null,
+                form_name: form.getAttribute("data-form-name") || null,
+                lead_type: form.getAttribute("data-lead-type") || null,
+                user_data: window.SmAnalytics.collectUserDataFromForm(form),
+              });
+            } catch (err) {}
+          },
+          true,
+        );
       })();
     </script>
     <script>

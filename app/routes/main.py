@@ -1633,14 +1633,15 @@ def _notify_slack_sparksmetrics_cro_cost_roi(
     if not webhook_url:
         return
     lines = [
-        "*#sparksmetrics · CRO cost/ROI calculator* — email submitted",
-        f"Name: {fname}",
-        f"Email: {email}",
+        "*New lead · form_success*",
+        "• Form: `ccr-lead-form` — CRO Cost / ROI Calculator",
+        "• Lead type: `cro_cost_roi`",
+        f"• Name: *{fname}* <{email}>",
     ]
     if website_url:
-        lines.append(f"Store: {website_url}")
+        lines.append(f"• Website: {website_url}")
     if business_stage:
-        lines.append(f"Calculator snapshot: {business_stage}")
+        lines.append(f"• Calculator snapshot: {business_stage}")
     lines.append(
         "Spark: CRO scan pipeline started (funnel attach)."
         if spark_scan_started
@@ -1665,6 +1666,97 @@ def _notify_slack_sparksmetrics_cro_cost_roi(
         current_app.logger.warning("Slack notify error: %s", e)
 
 
+_SLACK_RESOURCE_LABELS: dict[str, str] = {
+    "13-bulletproof-strategies": "CRO Ebook — 13 Bulletproof Strategies",
+    "7-questions-cro-agency": "CRO Ebook — 7 Questions for a CRO Agency",
+    "vsl-free-cro-video": "Free CRO Video (VSL Gate)",
+}
+
+_SLACK_FORM_IDS: dict[str, str] = {
+    "audit": "lead-form",
+    "resource": "lead-form",
+    "cro_scan": "cro-scan-form",
+    "cro_cost_roi": "ccr-lead-form",
+    "strategy_session": "mss-funnel",
+}
+
+
+def _derive_lead_type(submission_type: str, resource_slug: str | None = None) -> str:
+    if submission_type == "audit":
+        return "audit"
+    if submission_type == "cro_scan":
+        return "cro_scan"
+    if submission_type == "cro_cost_roi":
+        return "cro_cost_roi"
+    if submission_type == "strategy_session":
+        return "strategy_session"
+    if resource_slug == "vsl-free-cro-video":
+        return "vsl"
+    if submission_type == "resource":
+        return "ebook"
+    return submission_type or "unknown"
+
+
+def _derive_form_name(
+    submission_type: str,
+    resource_slug: str | None,
+    lead_type: str,
+    explicit: str | None = None,
+) -> str:
+    if explicit and explicit.strip():
+        return explicit.strip()
+    if resource_slug and resource_slug in _SLACK_RESOURCE_LABELS:
+        return _SLACK_RESOURCE_LABELS[resource_slug]
+    if lead_type == "audit":
+        return "Free CRO Audit"
+    if lead_type == "cro_scan":
+        return "CRO Scan"
+    if lead_type == "cro_cost_roi":
+        return "CRO Cost / ROI Calculator"
+    if lead_type == "strategy_session":
+        return "30 Minute Strategy Session"
+    if lead_type == "vsl":
+        return "Free CRO Video (VSL Gate)"
+    if lead_type == "ebook":
+        return "Resource Download"
+    return _SLACK_FORM_IDS.get(submission_type, submission_type)
+
+
+def _build_slack_lead_lines(
+    *,
+    fname: str,
+    email: str,
+    form_id: str,
+    form_name: str,
+    lead_type: str,
+    resource_slug: str | None = None,
+    business_stage: str | None = None,
+    website_url: str | None = None,
+    slack_headline: str | None = None,
+    event: str = "form_success",
+) -> list[str]:
+    lines = []
+    if slack_headline and slack_headline.strip():
+        lines.append(slack_headline.strip())
+    lines.append(f"*New lead · {event}*")
+    lines.append(f"• Form: `{form_id}` — {form_name}")
+    lines.append(f"• Lead type: `{lead_type}`")
+    if resource_slug:
+        res_label = _SLACK_RESOURCE_LABELS.get(resource_slug, resource_slug)
+        lines.append(f"• Resource: `{resource_slug}` ({res_label})")
+    lines.append(f"• Name: *{fname}* <{email}>")
+    if business_stage:
+        if lead_type == "cro_scan":
+            lines.append(f"• Orders per month: {business_stage}")
+        elif lead_type == "cro_cost_roi":
+            lines.append(f"• Calculator snapshot: {business_stage}")
+        else:
+            lines.append(f"• Order volume / stage: {business_stage}")
+    if website_url:
+        lines.append(f"• Website: {website_url}")
+    return lines
+
+
 def _notify_slack_lead(
     fname: str,
     email: str,
@@ -1673,35 +1765,35 @@ def _notify_slack_lead(
     business_stage: str | None = None,
     website_url: str | None = None,
     slack_headline: str | None = None,
+    *,
+    form_id: str | None = None,
+    form_name: str | None = None,
+    lead_type: str | None = None,
+    event: str = "form_success",
 ) -> None:
-    """Post a short message to Slack when a lead is submitted. Logs errors, does not raise."""
+    """Post a structured message to Slack when a lead is submitted. Logs errors, does not raise."""
     webhook_url = (current_app.config.get("SLACK_WEBHOOK_URL") or "").strip()
     if not webhook_url:
         return
-    if submission_type == "audit":
-        label = "Free CRO audit"
-    elif submission_type == "resource" and resource_slug == "13-bulletproof-strategies":
-        label = "CRO ebook download"
-    elif submission_type == "cro_scan":
-        label = "CRO scan (Shopify)"
-    elif submission_type == "cro_cost_roi":
-        label = "CRO cost / ROI calculator"
-    elif submission_type == "strategy_session":
-        label = "30-minute strategy session funnel"
-    else:
-        label = "Resource download"
-    text = "New lead: *{}* <{}> – {}".format(fname, email, label)
-    if slack_headline and slack_headline.strip():
-        text = "{}\n{}".format(slack_headline.strip(), text)
-    if business_stage:
-        if submission_type == "cro_scan":
-            text += "\nOrders per month: {}".format(business_stage)
-        elif submission_type == "cro_cost_roi":
-            text += "\nCalculator snapshot: {}".format(business_stage)
-        else:
-            text += "\nOrder volume / stage: {}".format(business_stage)
-    if website_url:
-        text += "\nWebsite: {}".format(website_url)
+    resolved_lead_type = lead_type or _derive_lead_type(submission_type, resource_slug)
+    resolved_form_id = form_id or _SLACK_FORM_IDS.get(submission_type, "lead-form")
+    resolved_form_name = _derive_form_name(
+        submission_type, resource_slug, resolved_lead_type, form_name
+    )
+    text = "\n".join(
+        _build_slack_lead_lines(
+            fname=fname,
+            email=email,
+            form_id=resolved_form_id,
+            form_name=resolved_form_name,
+            lead_type=resolved_lead_type,
+            resource_slug=resource_slug,
+            business_stage=business_stage,
+            website_url=website_url,
+            slack_headline=slack_headline,
+            event=event,
+        )
+    )
     try:
         import requests
     except ModuleNotFoundError:
@@ -1916,8 +2008,10 @@ def _notify_slack_strategy_session_step(
     field_label = _STRATEGY_SESSION_STEP_LABELS.get(step, f"step {step}")
     status = "completed funnel" if completed else "did not finish funnel"
     lines = [
-        f"*Strategy session · step {step}/6* — {field_label} ({status})",
-        f"Session: `{funnel_session_id}`",
+        f"*Strategy session · form_step {step}/6* — {field_label} ({status})",
+        "• Form: `mss-funnel` — 30 Minute Strategy Session",
+        "• Lead type: `strategy_session`",
+        f"• Session: `{funnel_session_id}`",
     ]
     if annual_revenue:
         lines.append(f"Annual revenue: {annual_revenue}")
@@ -2094,13 +2188,15 @@ def _notify_slack_qualify_quiz_complete(
 
     outcome = "Qualified — book step" if qualified else "Not qualified — ebook offer"
     lines = [
-        f"*Qualify quiz completed* — {outcome}",
-        f"Session: `{funnel_session_id}`",
+        f"*Qualify quiz · form_step* — {outcome}",
+        "• Form: `qualify-quiz` — CRO Qualify Quiz",
+        "• Lead type: `qualify_quiz`",
+        f"• Session: `{funnel_session_id}`",
     ]
     if fname:
-        lines.append(f"First name: {fname}")
+        lines.append(f"• Name: *{fname}*")
     if email:
-        lines.append(f"Email: {email}")
+        lines.append(f"• Email: {email}")
     if tier:
         lines.append(f"Tier: {tier}")
     if score is not None:

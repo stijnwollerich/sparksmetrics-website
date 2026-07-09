@@ -76,14 +76,7 @@
 {% block body_class %}bg-white text-gray-800 font-sans{% endblock %}
 {% block content %}
 {% if ENABLE_GTM %}
-<script>
-  window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push({
-    event: "page_view",
-    page_type: "cro_cost_roi_landing",
-    page_path: "{{ request.path }}",
-  });
-</script>
+<script>window.smPageType = "cro_cost_roi_landing";</script>
 {% endif %}
 <div class="min-h-screen flex flex-col">
   <section class="pt-6 pb-12 md:pt-8 md:pb-16 lg:pt-10 lg:pb-20">
@@ -774,8 +767,11 @@
       unlocked = true;
       qPhase.classList.add("hidden");
       rPhase.classList.remove("hidden");
-      if (window.dataLayer) {
-        window.dataLayer.push({ event: "cro_cost_roi_calculated", page_type: "cro_cost_roi_landing" });
+      if (window.SmAnalytics) {
+        window.SmAnalytics.click({
+          click_label: "cro_cost_roi_calculated",
+          click_text: "Calculator completed",
+        });
       }
       showResultsView(3);
       try {
@@ -894,6 +890,20 @@
       var bt = submitBtn.textContent.trim();
       submitBtn.classList.add("ccr-btn-loading");
       submitBtn.innerHTML = '<span class="ccr-btn-spinner" aria-hidden="true"></span> Sending…';
+      if (window.SmAnalytics) {
+        window.SmAnalytics.formSubmit({
+          form_id: "ccr-lead-form",
+          form_name: "CRO Cost / ROI Calculator",
+          lead_type: "cro_cost_roi",
+          user_data: {
+            fname: fname,
+            email: email,
+            website_url: url,
+            monthly_revenue_usd: document.getElementById("ccr-f-revenue").value,
+            transactions_per_month: document.getElementById("ccr-f-orders").value,
+          },
+        });
+      }
       fetch('{{ url_for("main.cro_cost_roi_submit") }}', {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -914,8 +924,25 @@
         })
         .then(function (res) {
           if (res.ok && res.data.success) {
-            if (window.dataLayer) {
-              window.dataLayer.push({ event: "cro_cost_roi_lead", page_type: "cro_cost_roi_landing" });
+            if (window.SmAnalytics) {
+              window.SmAnalytics.formSuccess({
+                form_id: "ccr-lead-form",
+                form_name: "CRO Cost / ROI Calculator",
+                lead_type: window.SmAnalytics.resolveLeadType("cro_cost_roi", null, {
+                  fname: fname,
+                  email: email,
+                  website_url: url,
+                  monthly_revenue_usd: document.getElementById("ccr-f-revenue").value,
+                  transactions_per_month: document.getElementById("ccr-f-orders").value,
+                }),
+                user_data: {
+                  fname: fname,
+                  email: email,
+                  website_url: url,
+                  monthly_revenue_usd: document.getElementById("ccr-f-revenue").value,
+                  transactions_per_month: document.getElementById("ccr-f-orders").value,
+                },
+              });
             }
             ccrEmailDelivered = true;
             showResultsView(RESULT_VIEW_COUNT - 1);

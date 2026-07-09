@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html><head><meta charset='utf-8'>
+<title>GTM & dataLayer Spec — Sparksmetrics</title>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 900px; margin: 40px auto; padding: 0 24px; line-height: 1.5; color: #1a1a1a; }
+h1 { font-size: 1.8rem; border-bottom: 2px solid #ff4d00; padding-bottom: 8px; }
+h2 { font-size: 1.35rem; margin-top: 2rem; color: #333; }
+h3 { font-size: 1.1rem; margin-top: 1.5rem; }
+code { background: #f4f4f5; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+pre { background: #f4f4f5; padding: 16px; border-radius: 8px; overflow-x: auto; font-size: 0.8em; }
+table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: 0.9em; }
+th, td { border: 1px solid #ddd; padding: 8px 10px; text-align: left; }
+th { background: #f9f9fb; }
+hr { border: none; border-top: 1px solid #e5e5e5; margin: 2rem 0; }
+</style></head><body><h1 id="sparksmetrics-gtm-datalayer-spec">Sparksmetrics — GTM &amp; dataLayer Spec</h1>
+<p><strong>For:</strong> Isaac (GTM setup)<br />
+<strong>Site:</strong> sparksmetrics.com<br />
+<strong>GTM container:</strong> <code>GTM-ML2ZDNH2</code><br />
+<strong>GA4:</strong> <code>G-LHY1QG6J5T</code><br />
+<strong>Last updated:</strong> July 2026</p>
+<hr />
+<h2 id="overview">Overview</h2>
+<p>All tracking is pushed from one JavaScript module: <code>app/static/js/sm-analytics.js</code>.</p>
+<p><strong>Principles:</strong></p>
+<ol>
+<li><strong>Same <code>event</code> name</strong> for the same action across all forms (e.g. every successful lead = <code>form_success</code>).</li>
+<li><strong>Params distinguish the form</strong> — <code>form_id</code>, <code>form_name</code>, <code>lead_type</code>, <code>resource_slug</code>.</li>
+<li><strong><code>user_data</code> is always the same object</strong> with the same keys — GTM variables like <code>{{dlv - user_data.email}}</code> work on every push.</li>
+<li><strong>New forms work in GTM automatically</strong> — no new triggers/tags unless you need a new FB/Gads conversion label.</li>
+</ol>
+<p><strong>Do not push manual <code>page_view</code> events</strong> — let GTM handle pageviews.</p>
+<hr />
+<h2 id="event-names-complete-list">Event names (complete list)</h2>
+<h3 id="forms">Forms</h3>
+<table>
+<thead>
+<tr>
+<th><code>event</code></th>
+<th>When</th>
+<th>GA4 mapping (suggested)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>form_start</code></td>
+<td>User opens or first interacts with a form</td>
+<td><code>form_start</code></td>
+</tr>
+<tr>
+<td><code>form_step</code></td>
+<td>Multi-step funnel: user on step N</td>
+<td><code>form_step</code></td>
+</tr>
+<tr>
+<td><code>form_submit</code></td>
+<td>Submit clicked (before server response)</td>
+<td><code>form_submit</code></td>
+</tr>
+<tr>
+<td><code>form_success</code></td>
+<td>Server confirmed lead saved</td>
+<td><code>generate_lead</code></td>
+</tr>
+<tr>
+<td><code>form_error</code></td>
+<td>Server/network error</td>
+<td><code>form_error</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="schedule-calendly">Schedule (Calendly)</h3>
+<table>
+<thead>
+<tr>
+<th><code>event</code></th>
+<th>When</th>
+<th>GA4 mapping (suggested)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>schedule_open</code></td>
+<td>Calendly widget/modal loads</td>
+<td><code>schedule_open</code></td>
+</tr>
+<tr>
+<td><code>schedule_booked</code></td>
+<td>Calendly <code>event_scheduled</code> fires</td>
+<td><code>schedule</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="engagement">Engagement</h3>
+<table>
+<thead>
+<tr>
+<th><code>event</code></th>
+<th>When</th>
+<th>GA4 mapping (suggested)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>video_start</code></td>
+<td>Video plays</td>
+<td><code>video_start</code></td>
+</tr>
+<tr>
+<td><code>video_progress</code></td>
+<td>10/25/50/75/90% milestone</td>
+<td><code>video_progress</code></td>
+</tr>
+<tr>
+<td><code>video_complete</code></td>
+<td>Video ends</td>
+<td><code>video_complete</code></td>
+</tr>
+<tr>
+<td><code>video_pause</code></td>
+<td>User pauses</td>
+<td><code>video_pause</code></td>
+</tr>
+<tr>
+<td><code>scroll</code></td>
+<td>25/50/75/90% page scroll</td>
+<td><code>scroll</code></td>
+</tr>
+<tr>
+<td><code>click</code></td>
+<td>Tracked CTA / button click</td>
+<td><code>click</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="standard-payload-structure">Standard payload structure</h2>
+<p>Every <code>dataLayer.push()</code> uses this shape. Keys that don't apply are <code>null</code> or omitted.</p>
+<pre><code class="language-javascript">{
+  // ── Trigger (what happened) ──
+  event: &quot;form_success&quot;,
+
+  // ── Form identity (which form) ──
+  form_id: &quot;lead-form&quot;,
+  form_name: &quot;CRO Ebook — 13 Bulletproof Strategies&quot;,
+  lead_type: &quot;ebook&quot;,
+  resource_slug: &quot;13-bulletproof-strategies&quot;,
+
+  // ── Multi-step (null on single-step forms) ──
+  form_step: null,
+  form_step_total: null,
+  form_step_name: null,
+
+  // ── User data — ALWAYS this object, ALWAYS these keys ──
+  user_data: {
+    fname: &quot;Stijn&quot;,
+    email: &quot;stijn@example.com&quot;,
+    phone: null,
+    website_url: null,
+    business_stage: &quot;scaling&quot;,
+    orders_per_month: null,
+    conversion_rate: null,
+    average_order_value: null,
+    annual_revenue: null,
+    monthly_revenue_usd: null,
+    transactions_per_month: null,
+    qualify_score: null,
+    qualify_tier: null
+  },
+
+  // ── Page context (auto-filled by sm-analytics.js) ──
+  page_type: &quot;cro_ebook&quot;,
+  page_path: &quot;/cro-ebook/&quot;,
+  page_location: &quot;https://sparksmetrics.com/cro-ebook/&quot;,
+
+  // ── Session (auto-filled) ──
+  funnel_session_id: &quot;fs_abc123&quot;,
+  event_id: &quot;evt_xyz789&quot;,              // UUID on form_success + schedule_booked (dedup)
+
+  // ── Video (null on non-video events) ──
+  video_id: null,
+  video_provider: null,
+  video_url: null,
+  video_title: null,
+  video_duration: null,
+  video_current_time: null,
+  video_percent: null,
+
+  // ── Click (null on non-click events) ──
+  click_label: null,
+  click_text: null,
+  click_url: null,
+
+  // ── Schedule (null on non-schedule events) ──
+  schedule_action: null,               // open | booked | date_selected
+  calendly_event: null,
+  calendly_url: null,
+
+  // ── Quiz step context (null when N/A) ──
+  question_id: null,
+  question: null,
+  answer: null,
+  answer_label: null,
+
+  // ── Optional trigger context ──
+  trigger_text: null,
+  trigger_location: null,                // hero | header | modal | cta | inline
+
+  timestamp: &quot;2026-07-09T14:44:00Z&quot;
+}
+</code></pre>
+<hr />
+<h2 id="form-registry">Form registry</h2>
+<table>
+<thead>
+<tr>
+<th><code>form_id</code></th>
+<th><code>form_name</code></th>
+<th><code>lead_type</code> values</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lead-form</code></td>
+<td>Varies (see resource slugs below)</td>
+<td><code>ebook</code>, <code>vsl</code>, <code>audit</code>, <code>audit_qualified</code></td>
+</tr>
+<tr>
+<td><code>qualify-quiz</code></td>
+<td>CRO Qualify Quiz</td>
+<td><code>qualify_quiz</code></td>
+</tr>
+<tr>
+<td><code>mss-funnel</code></td>
+<td>30 Minute Strategy Session</td>
+<td><code>strategy_session</code></td>
+</tr>
+<tr>
+<td><code>cro-scan-form</code></td>
+<td>CRO Scan</td>
+<td><code>cro_scan</code></td>
+</tr>
+<tr>
+<td><code>cro-scan-email-form</code></td>
+<td>CRO Scan — Email Follow-up</td>
+<td><code>cro_scan</code></td>
+</tr>
+<tr>
+<td><code>ccr-lead-form</code></td>
+<td>CRO Cost / ROI Calculator</td>
+<td><code>cro_cost_roi</code>, <code>cro_cost_roi_qualified</code></td>
+</tr>
+<tr>
+<td><code>schedule-modal</code></td>
+<td>Schedule a Call (Header Modal)</td>
+<td><code>strategy_session</code></td>
+</tr>
+<tr>
+<td><code>calendly-inline</code></td>
+<td>Calendly Inline</td>
+<td><code>strategy_session</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="lead_type-values"><code>lead_type</code> values</h3>
+<table>
+<thead>
+<tr>
+<th><code>lead_type</code></th>
+<th>Meaning</th>
+<th>FB event (suggested)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ebook</code></td>
+<td>Ebook / resource download</td>
+<td>Lead</td>
+</tr>
+<tr>
+<td><code>vsl</code></td>
+<td>VSL video gate</td>
+<td>Lead</td>
+</tr>
+<tr>
+<td><code>audit</code></td>
+<td>Free CRO audit</td>
+<td>Lead</td>
+</tr>
+<tr>
+<td><code>audit_qualified</code></td>
+<td>Audit + orders NOT <code>~100/month</code></td>
+<td>Custom: Qualified Lead</td>
+</tr>
+<tr>
+<td><code>cro_scan</code></td>
+<td>CRO scan funnel</td>
+<td>Lead</td>
+</tr>
+<tr>
+<td><code>cro_cost_roi</code></td>
+<td>Cost ROI calculator</td>
+<td>Lead</td>
+</tr>
+<tr>
+<td><code>cro_cost_roi_qualified</code></td>
+<td>CCR + 500+ orders/month</td>
+<td>Custom: Qualified Lead</td>
+</tr>
+<tr>
+<td><code>qualify_quiz</code></td>
+<td>Qualify quiz</td>
+<td>SubmitApplication (book)</td>
+</tr>
+<tr>
+<td><code>strategy_session</code></td>
+<td>Strategy session funnel</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3 id="resource-slugs-resource_slug">Resource slugs (<code>resource_slug</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Slug</th>
+<th><code>form_name</code></th>
+<th><code>lead_type</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>13-bulletproof-strategies</code></td>
+<td>CRO Ebook — 13 Bulletproof Strategies</td>
+<td><code>ebook</code></td>
+</tr>
+<tr>
+<td><code>7-questions-cro-agency</code></td>
+<td>CRO Ebook — 7 Questions for a CRO Agency</td>
+<td><code>ebook</code></td>
+</tr>
+<tr>
+<td><code>vsl-free-cro-video</code></td>
+<td>Free CRO Video (VSL Gate)</td>
+<td><code>vsl</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="example-payloads-by-scenario">Example payloads by scenario</h2>
+<h3 id="ebook-download-form_success">Ebook download — <code>form_success</code></h3>
+<pre><code class="language-javascript">{
+  event: &quot;form_success&quot;,
+  form_id: &quot;lead-form&quot;,
+  form_name: &quot;CRO Ebook — 13 Bulletproof Strategies&quot;,
+  lead_type: &quot;ebook&quot;,
+  resource_slug: &quot;13-bulletproof-strategies&quot;,
+  form_step: null,
+  form_step_total: null,
+  form_step_name: null,
+  user_data: {
+    fname: &quot;Stijn&quot;,
+    email: &quot;stijn@example.com&quot;,
+    phone: null,
+    website_url: null,
+    business_stage: &quot;scaling&quot;,
+    orders_per_month: null,
+    conversion_rate: null,
+    average_order_value: null,
+    annual_revenue: null,
+    monthly_revenue_usd: null,
+    transactions_per_month: null,
+    qualify_score: null,
+    qualify_tier: null
+  },
+  page_type: &quot;cro_ebook&quot;,
+  page_path: &quot;/13-actionable-conversion-rate-optimization-strategies-ebook/&quot;,
+  funnel_session_id: &quot;fs_abc123&quot;,
+  event_id: &quot;evt_xyz789&quot;,
+  timestamp: &quot;2026-07-09T14:44:00.000Z&quot;
+}
+</code></pre>
+<h3 id="vsl-gate-form_success">VSL gate — <code>form_success</code></h3>
+<pre><code class="language-javascript">{
+  event: &quot;form_success&quot;,
+  form_id: &quot;lead-form&quot;,
+  form_name: &quot;Free CRO Video (VSL Gate)&quot;,
+  lead_type: &quot;vsl&quot;,
+  resource_slug: &quot;vsl-free-cro-video&quot;,
+  user_data: {
+    fname: &quot;Stijn&quot;,
+    email: &quot;stijn@example.com&quot;
+    // remaining keys null
+  }
+}
+</code></pre>
+<h3 id="free-cro-audit-qualified-form_success">Free CRO audit (qualified) — <code>form_success</code></h3>
+<pre><code class="language-javascript">{
+  event: &quot;form_success&quot;,
+  form_id: &quot;lead-form&quot;,
+  form_name: &quot;Free CRO Audit&quot;,
+  lead_type: &quot;audit_qualified&quot;,
+  resource_slug: null,
+  user_data: {
+    fname: &quot;Stijn&quot;,
+    email: &quot;stijn@example.com&quot;,
+    website_url: &quot;https://store.com&quot;,
+    orders_per_month: &quot;500-1000&quot;,
+    conversion_rate: &quot;2.5%&quot;,
+    average_order_value: &quot;85&quot;
+  }
+}
+</code></pre>
+<h3 id="qualify-quiz-form_step">Qualify quiz — <code>form_step</code></h3>
+<pre><code class="language-javascript">{
+  event: &quot;form_step&quot;,
+  form_id: &quot;qualify-quiz&quot;,
+  form_name: &quot;CRO Qualify Quiz&quot;,
+  lead_type: &quot;qualify_quiz&quot;,
+  form_step: 5,
+  form_step_total: 9,
+  form_step_name: &quot;monthly_traffic&quot;,
+  question_id: &quot;q4&quot;,
+  question: &quot;How many visitors does your store get per month?&quot;,
+  answer: &quot;50k-100k&quot;,
+  answer_label: &quot;50,000 – 100,000&quot;,
+  user_data: {
+    qualify_score: 45
+  }
+}
+</code></pre>
+<h3 id="strategy-session-form_step">Strategy session — <code>form_step</code></h3>
+<pre><code class="language-javascript">{
+  event: &quot;form_step&quot;,
+  form_id: &quot;mss-funnel&quot;,
+  form_name: &quot;30 Minute Strategy Session&quot;,
+  lead_type: &quot;strategy_session&quot;,
+  form_step: 4,
+  form_step_total: 6,
+  form_step_name: &quot;email&quot;,
+  question: &quot;What's your email?&quot;,
+  answer: &quot;stijn@example.com&quot;,
+  user_data: {
+    fname: &quot;Stijn&quot;,
+    email: &quot;stijn@example.com&quot;,
+    annual_revenue: &quot;1m-5m&quot;
+  }
+}
+</code></pre>
+<h3 id="cro-scan-form_submit">CRO scan — <code>form_submit</code></h3>
+<pre><code class="language-javascript">{
+  event: &quot;form_submit&quot;,
+  form_id: &quot;cro-scan-form&quot;,
+  form_name: &quot;CRO Scan&quot;,
+  lead_type: &quot;cro_scan&quot;,
+  user_data: {
+    website_url: &quot;https://store.myshopify.com&quot;
+  }
+}
+</code></pre>
+<h3 id="cro-cost-roi-form_success">CRO cost ROI — <code>form_success</code></h3>
+<pre><code class="language-javascript">{
+  event: &quot;form_success&quot;,
+  form_id: &quot;ccr-lead-form&quot;,
+  form_name: &quot;CRO Cost / ROI Calculator&quot;,
+  lead_type: &quot;cro_cost_roi_qualified&quot;,
+  user_data: {
+    fname: &quot;Stijn&quot;,
+    email: &quot;stijn@example.com&quot;,
+    website_url: &quot;https://store.com&quot;,
+    monthly_revenue_usd: &quot;150000&quot;,
+    transactions_per_month: &quot;600&quot;
+  }
+}
+</code></pre>
+<h3 id="calendly-booked-schedule_booked">Calendly booked — <code>schedule_booked</code></h3>
+<pre><code class="language-javascript">{
+  event: &quot;schedule_booked&quot;,
+  form_id: &quot;lead-form&quot;,
+  form_name: &quot;CRO Ebook — 13 Bulletproof Strategies&quot;,
+  lead_type: &quot;ebook&quot;,
+  schedule_action: &quot;booked&quot;,
+  calendly_event: &quot;event_scheduled&quot;,
+  calendly_url: &quot;https://calendly.com/stijn-wollerich/free-30-minute-strategy-session&quot;,
+  user_data: {
+    fname: &quot;Stijn&quot;,
+    email: &quot;stijn@example.com&quot;
+  },
+  event_id: &quot;evt_def456&quot;
+}
+</code></pre>
+<h3 id="video-progress-video_progress">Video progress — <code>video_progress</code></h3>
+<pre><code class="language-javascript">{
+  event: &quot;video_progress&quot;,
+  form_id: null,
+  form_name: null,
+  lead_type: null,
+  video_id: &quot;vsl-hero&quot;,
+  video_provider: &quot;youtube&quot;,
+  video_url: &quot;https://www.youtube.com/watch?v=VIDEO_ID&quot;,
+  video_title: &quot;Free CRO Walkthrough&quot;,
+  video_duration: 312,
+  video_current_time: 156,
+  video_percent: 50,
+  user_data: {
+    // all null
+  }
+}
+</code></pre>
+<h3 id="calculator-completed-click">Calculator completed — <code>click</code></h3>
+<pre><code class="language-javascript">{
+  event: &quot;click&quot;,
+  click_label: &quot;cro_cost_roi_calculated&quot;,
+  click_text: &quot;Calculator completed&quot;,
+  page_type: &quot;cro_cost_roi_landing&quot;
+}
+</code></pre>
+<h3 id="cta-opens-lead-modal-click">CTA opens lead modal — <code>click</code></h3>
+<pre><code class="language-javascript">{
+  event: &quot;click&quot;,
+  form_id: &quot;lead-form&quot;,
+  form_name: &quot;CRO Ebook — 13 Bulletproof Strategies&quot;,
+  lead_type: &quot;ebook&quot;,
+  resource_slug: &quot;13-bulletproof-strategies&quot;,
+  click_text: &quot;Download free ebook&quot;,
+  trigger_location: &quot;cta&quot;
+}
+</code></pre>
+<hr />
+<h2 id="gtm-setup-instructions">GTM setup instructions</h2>
+<h3 id="step-1-create-data-layer-variables">Step 1 — Create Data Layer Variables</h3>
+<p>Create these as <strong>Data Layer Variable</strong> (version 2) in GTM:</p>
+<table>
+<thead>
+<tr>
+<th>Variable name</th>
+<th>Data Layer Variable Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dlv - event</code></td>
+<td><code>event</code></td>
+</tr>
+<tr>
+<td><code>dlv - form_id</code></td>
+<td><code>form_id</code></td>
+</tr>
+<tr>
+<td><code>dlv - form_name</code></td>
+<td><code>form_name</code></td>
+</tr>
+<tr>
+<td><code>dlv - lead_type</code></td>
+<td><code>lead_type</code></td>
+</tr>
+<tr>
+<td><code>dlv - resource_slug</code></td>
+<td><code>resource_slug</code></td>
+</tr>
+<tr>
+<td><code>dlv - form_step</code></td>
+<td><code>form_step</code></td>
+</tr>
+<tr>
+<td><code>dlv - form_step_total</code></td>
+<td><code>form_step_total</code></td>
+</tr>
+<tr>
+<td><code>dlv - form_step_name</code></td>
+<td><code>form_step_name</code></td>
+</tr>
+<tr>
+<td><code>dlv - user_data.fname</code></td>
+<td><code>user_data.fname</code></td>
+</tr>
+<tr>
+<td><code>dlv - user_data.email</code></td>
+<td><code>user_data.email</code></td>
+</tr>
+<tr>
+<td><code>dlv - user_data.phone</code></td>
+<td><code>user_data.phone</code></td>
+</tr>
+<tr>
+<td><code>dlv - user_data.website_url</code></td>
+<td><code>user_data.website_url</code></td>
+</tr>
+<tr>
+<td><code>dlv - user_data.business_stage</code></td>
+<td><code>user_data.business_stage</code></td>
+</tr>
+<tr>
+<td><code>dlv - user_data.orders_per_month</code></td>
+<td><code>user_data.orders_per_month</code></td>
+</tr>
+<tr>
+<td><code>dlv - user_data.conversion_rate</code></td>
+<td><code>user_data.conversion_rate</code></td>
+</tr>
+<tr>
+<td><code>dlv - user_data.average_order_value</code></td>
+<td><code>user_data.average_order_value</code></td>
+</tr>
+<tr>
+<td><code>dlv - user_data.annual_revenue</code></td>
+<td><code>user_data.annual_revenue</code></td>
+</tr>
+<tr>
+<td><code>dlv - user_data.monthly_revenue_usd</code></td>
+<td><code>user_data.monthly_revenue_usd</code></td>
+</tr>
+<tr>
+<td><code>dlv - user_data.transactions_per_month</code></td>
+<td><code>user_data.transactions_per_month</code></td>
+</tr>
+<tr>
+<td><code>dlv - user_data.qualify_score</code></td>
+<td><code>user_data.qualify_score</code></td>
+</tr>
+<tr>
+<td><code>dlv - user_data.qualify_tier</code></td>
+<td><code>user_data.qualify_tier</code></td>
+</tr>
+<tr>
+<td><code>dlv - funnel_session_id</code></td>
+<td><code>funnel_session_id</code></td>
+</tr>
+<tr>
+<td><code>dlv - event_id</code></td>
+<td><code>event_id</code></td>
+</tr>
+<tr>
+<td><code>dlv - page_type</code></td>
+<td><code>page_type</code></td>
+</tr>
+<tr>
+<td><code>dlv - page_path</code></td>
+<td><code>page_path</code></td>
+</tr>
+<tr>
+<td><code>dlv - video_id</code></td>
+<td><code>video_id</code></td>
+</tr>
+<tr>
+<td><code>dlv - video_percent</code></td>
+<td><code>video_percent</code></td>
+</tr>
+<tr>
+<td><code>dlv - video_provider</code></td>
+<td><code>video_provider</code></td>
+</tr>
+<tr>
+<td><code>dlv - video_url</code></td>
+<td><code>video_url</code></td>
+</tr>
+<tr>
+<td><code>dlv - video_title</code></td>
+<td><code>video_title</code></td>
+</tr>
+<tr>
+<td><code>dlv - video_duration</code></td>
+<td><code>video_duration</code></td>
+</tr>
+<tr>
+<td><code>dlv - video_current_time</code></td>
+<td><code>video_current_time</code></td>
+</tr>
+<tr>
+<td><code>dlv - click_label</code></td>
+<td><code>click_label</code></td>
+</tr>
+<tr>
+<td><code>dlv - click_text</code></td>
+<td><code>click_text</code></td>
+</tr>
+<tr>
+<td><code>dlv - scroll_percent</code></td>
+<td><code>scroll_percent</code></td>
+</tr>
+<tr>
+<td><code>dlv - calendly_event</code></td>
+<td><code>calendly_event</code></td>
+</tr>
+<tr>
+<td><code>dlv - calendly_url</code></td>
+<td><code>calendly_url</code></td>
+</tr>
+<tr>
+<td><code>dlv - question</code></td>
+<td><code>question</code></td>
+</tr>
+<tr>
+<td><code>dlv - answer</code></td>
+<td><code>answer</code></td>
+</tr>
+<tr>
+<td><code>dlv - trigger_location</code></td>
+<td><code>trigger_location</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Delete or stop using old variables:</strong></p>
+<ul>
+<li><code>dlv - form_answers.*</code> (replaced by <code>user_data.*</code>)</li>
+<li><code>dlv - data.*</code> (replaced by <code>user_data.*</code>)</li>
+<li><code>dlv - anwer</code> (typo — use <code>dlv - answer</code>)</li>
+<li>Top-level <code>dlv - fname</code> / <code>dlv - email</code> (use <code>user_data.fname</code> / <code>user_data.email</code>)</li>
+</ul>
+<hr />
+<h3 id="step-2-create-triggers">Step 2 — Create triggers</h3>
+<table>
+<thead>
+<tr>
+<th>Trigger name</th>
+<th>Type</th>
+<th>Condition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CE - form_success</code></td>
+<td>Custom Event</td>
+<td><code>event</code> equals <code>form_success</code></td>
+</tr>
+<tr>
+<td><code>CE - form_submit</code></td>
+<td>Custom Event</td>
+<td><code>event</code> equals <code>form_submit</code></td>
+</tr>
+<tr>
+<td><code>CE - form_step</code></td>
+<td>Custom Event</td>
+<td><code>event</code> equals <code>form_step</code></td>
+</tr>
+<tr>
+<td><code>CE - form_start</code></td>
+<td>Custom Event</td>
+<td><code>event</code> equals <code>form_start</code></td>
+</tr>
+<tr>
+<td><code>CE - schedule_booked</code></td>
+<td>Custom Event</td>
+<td><code>event</code> equals <code>schedule_booked</code></td>
+</tr>
+<tr>
+<td><code>CE - schedule_open</code></td>
+<td>Custom Event</td>
+<td><code>event</code> equals <code>schedule_open</code></td>
+</tr>
+<tr>
+<td><code>CE - engagement</code></td>
+<td>Custom Event</td>
+<td><code>event</code> matches RegEx <code>video_|^scroll$|^click$</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Keep existing native GTM triggers</strong> (no code changes needed):</p>
+<ul>
+<li>Scroll Depth</li>
+<li>Social media link clicks</li>
+<li>Phone / email link clicks</li>
+<li>PDF clicks</li>
+<li>Blog internal link clicks</li>
+</ul>
+<hr />
+<h3 id="step-3-create-consolidated-tags">Step 3 — Create consolidated tags</h3>
+<h4 id="ga4-form-success">GA4 - Form Success</h4>
+<ul>
+<li><strong>Type:</strong> Google Analytics: GA4 Event</li>
+<li><strong>Trigger:</strong> <code>CE - form_success</code></li>
+<li><strong>Event name:</strong> <code>generate_lead</code></li>
+<li><strong>Event parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>form_id</code></td>
+<td><code>{{dlv - form_id}}</code></td>
+</tr>
+<tr>
+<td><code>form_name</code></td>
+<td><code>{{dlv - form_name}}</code></td>
+</tr>
+<tr>
+<td><code>lead_type</code></td>
+<td><code>{{dlv - lead_type}}</code></td>
+</tr>
+<tr>
+<td><code>resource_slug</code></td>
+<td><code>{{dlv - resource_slug}}</code></td>
+</tr>
+<tr>
+<td><code>page_type</code></td>
+<td><code>{{dlv - page_type}}</code></td>
+</tr>
+<tr>
+<td><code>funnel_session_id</code></td>
+<td><code>{{dlv - funnel_session_id}}</code></td>
+</tr>
+<tr>
+<td><code>event_id</code></td>
+<td><code>{{dlv - event_id}}</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>User properties (optional):</strong> map <code>lead_type</code>, <code>page_type</code> as needed.</li>
+</ul>
+<h4 id="ga4-form-submit">GA4 - Form Submit</h4>
+<ul>
+<li><strong>Trigger:</strong> <code>CE - form_submit</code></li>
+<li><strong>Event name:</strong> <code>form_submit</code></li>
+<li>Same parameters as Form Success.</li>
+</ul>
+<h4 id="ga4-form-step">GA4 - Form Step</h4>
+<ul>
+<li><strong>Trigger:</strong> <code>CE - form_step</code></li>
+<li><strong>Event name:</strong> <code>form_step</code></li>
+<li>Additional parameters: <code>form_step</code>, <code>form_step_total</code>, <code>form_step_name</code>, <code>question</code>, <code>answer</code>, <code>answer_label</code>.</li>
+</ul>
+<h4 id="ga4-schedule-booked">GA4 - Schedule Booked</h4>
+<ul>
+<li><strong>Trigger:</strong> <code>CE - schedule_booked</code></li>
+<li><strong>Event name:</strong> <code>schedule</code></li>
+<li>Parameters: <code>form_id</code>, <code>form_name</code>, <code>lead_type</code>, <code>calendly_event</code>, <code>funnel_session_id</code>, <code>event_id</code>.</li>
+</ul>
+<h4 id="ga4-engagement">GA4 - Engagement</h4>
+<ul>
+<li><strong>Trigger:</strong> <code>CE - engagement</code></li>
+<li><strong>Event name:</strong> <code>{{Event}}</code> (pass-through: <code>video_start</code>, <code>video_progress</code>, <code>click</code>, <code>scroll</code>, etc.)</li>
+<li>Parameters: <code>video_id</code>, <code>video_percent</code>, <code>video_provider</code>, <code>video_url</code>, <code>video_title</code>, <code>video_duration</code>, <code>video_current_time</code>, <code>click_label</code>, <code>click_text</code>, <code>scroll_percent</code>.</li>
+</ul>
+<h4 id="fb-lead-conversions">FB - Lead Conversions</h4>
+<ul>
+<li><strong>Trigger:</strong> <code>CE - form_success</code></li>
+<li><strong>Advanced matching:</strong></li>
+<li><code>em</code> → <code>{{dlv - user_data.email}}</code></li>
+<li><code>fn</code> → <code>{{dlv - user_data.fname}}</code></li>
+<li><strong>Event mapping</strong> (use lookup table on <code>lead_type</code>):</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><code>lead_type</code></th>
+<th>FB event</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ebook</code>, <code>vsl</code>, <code>audit</code>, <code>cro_scan</code>, <code>cro_cost_roi</code></td>
+<td>Lead (standard)</td>
+</tr>
+<tr>
+<td><code>audit_qualified</code>, <code>cro_cost_roi_qualified</code></td>
+<td>Custom: Qualified Lead</td>
+</tr>
+<tr>
+<td><code>qualify_quiz</code></td>
+<td>SubmitApplication</td>
+</tr>
+</tbody>
+</table>
+<h4 id="fb-schedule">FB - Schedule</h4>
+<ul>
+<li><strong>Trigger:</strong> <code>CE - schedule_booked</code></li>
+<li><strong>Event:</strong> Schedule (standard)</li>
+<li>Advanced matching from <code>user_data</code>.</li>
+</ul>
+<h4 id="gads-conversions">Gads - Conversions</h4>
+<ul>
+<li><strong>Trigger:</strong> <code>CE - form_success</code> OR <code>CE - schedule_booked</code></li>
+<li><strong>Conversion label:</strong> Lookup table on <code>lead_type</code> (and <code>form_id</code> if needed)</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><code>lead_type</code> / event</th>
+<th>Gads label (existing)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ebook</code></td>
+<td><code>4yqYCKvn0ocaEJHd0OQ9</code></td>
+</tr>
+<tr>
+<td><code>cro_scan</code></td>
+<td>CRO Scan Submit label</td>
+</tr>
+<tr>
+<td><code>schedule_booked</code></td>
+<td>Calendly Scheduled label</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="step-4-enhanced-conversions">Step 4 — Enhanced conversions</h3>
+<p>GA4 enhanced conversions / Google Ads user-provided data:</p>
+<ul>
+<li>Email: <code>{{dlv - user_data.email}}</code></li>
+<li>First name: <code>{{dlv - user_data.fname}}</code></li>
+</ul>
+<p>Use the <strong>User-Provided Data</strong> variable in GTM set to automatic mode, or map manually from the variables above.</p>
+<p>For Meta CAPI (if using sGTM): hash <code>user_data.email</code> and <code>user_data.fname</code> server-side. Pass <code>event_id</code> for deduplication on <code>form_success</code> and <code>schedule_booked</code>.</p>
+<hr />
+<h3 id="step-5-archive-old-tags">Step 5 — Archive old tags</h3>
+<p>Once validated in GTM Preview, <strong>pause then archive</strong> these old patterns:</p>
+<ul>
+<li>Per-event GA4 tags (<code>GA4 - EBook CTA Clicked</code>, <code>GA4 - Audit CTA Clicked</code>, <code>GA4 - Lead Modal Open</code>, etc.)</li>
+<li>Per-event CE triggers (<code>CE - lead_form_success - Free CRO Audit - 500+ Orders</code>, etc.)</li>
+<li>Duplicate Calendly tags (consolidate to schedule tags above)</li>
+<li>Legacy pageview-based ebook conversion trigger (<code>CRO Lead Form Submit</code> on <code>/thank-you/</code> + referrer)</li>
+</ul>
+<p>Run <strong>old and new tags in parallel</strong> for 1–2 weeks before fully removing old ones.</p>
+<hr />
+<h2 id="testing-checklist">Testing checklist</h2>
+<p>Use GTM Preview + GA4 DebugView. Confirm each row fires the correct <code>event</code> and parameters.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Action</th>
+<th>Expected <code>event</code></th>
+<th>Key params to verify</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Click ebook CTA</td>
+<td><code>click</code></td>
+<td><code>form_id=lead-form</code>, <code>lead_type=ebook</code>, <code>resource_slug</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Open lead modal</td>
+<td><code>form_start</code></td>
+<td><code>form_id</code>, <code>form_name</code>, <code>lead_type</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Submit ebook form</td>
+<td><code>form_submit</code> then <code>form_success</code></td>
+<td><code>user_data.email</code>, <code>event_id</code> on success</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Submit VSL gate</td>
+<td><code>form_success</code></td>
+<td><code>lead_type=vsl</code>, <code>resource_slug=vsl-free-cro-video</code></td>
+</tr>
+<tr>
+<td>5</td>
+<td>Submit audit (qualified)</td>
+<td><code>form_success</code></td>
+<td><code>lead_type=audit_qualified</code>, <code>user_data.orders_per_month</code></td>
+</tr>
+<tr>
+<td>6</td>
+<td>Book Calendly after ebook</td>
+<td><code>schedule_booked</code></td>
+<td><code>user_data.email</code>, <code>event_id</code></td>
+</tr>
+<tr>
+<td>7</td>
+<td>Qualify quiz step</td>
+<td><code>form_step</code></td>
+<td><code>form_id=qualify-quiz</code>, <code>form_step</code>, <code>question</code></td>
+</tr>
+<tr>
+<td>8</td>
+<td>Strategy session step</td>
+<td><code>form_step</code></td>
+<td><code>form_id=mss-funnel</code>, <code>user_data.annual_revenue</code></td>
+</tr>
+<tr>
+<td>9</td>
+<td>CRO scan URL submit</td>
+<td><code>form_submit</code></td>
+<td><code>form_id=cro-scan-form</code></td>
+</tr>
+<tr>
+<td>10</td>
+<td>CRO cost ROI lead</td>
+<td><code>form_success</code></td>
+<td><code>form_id=ccr-lead-form</code>, <code>lead_type</code></td>
+</tr>
+<tr>
+<td>11</td>
+<td>Play VSL video</td>
+<td><code>video_start</code></td>
+<td><code>video_id</code>, <code>video_provider</code></td>
+</tr>
+<tr>
+<td>12</td>
+<td>Video 50%</td>
+<td><code>video_progress</code></td>
+<td><code>video_percent=50</code></td>
+</tr>
+<tr>
+<td>13</td>
+<td>Scroll 50%</td>
+<td><code>scroll</code></td>
+<td><code>scroll_percent=50</code></td>
+</tr>
+<tr>
+<td>14</td>
+<td>Header schedule link</td>
+<td><code>schedule_open</code></td>
+<td><code>form_id=schedule-modal</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="adding-a-new-form-no-gtm-changes-required">Adding a new form (no GTM changes required)</h2>
+<p>In code:</p>
+<pre><code class="language-javascript">SmAnalytics.formSuccess({
+  form_id: &quot;webinar-signup&quot;,
+  form_name: &quot;Webinar Signup&quot;,
+  lead_type: &quot;webinar&quot;,
+  user_data: {
+    fname: &quot;Jane&quot;,
+    email: &quot;jane@example.com&quot;
+  }
+});
+</code></pre>
+<p>GTM: <code>CE - form_success</code> fires automatically. GA4 <code>generate_lead</code> tag receives <code>form_id=webinar-signup</code>.</p>
+<p>Only add a Gads/FB lookup row if the new form should fire a paid conversion.</p>
+<hr />
+<h2 id="old-event-new-event-mapping">Old event → new event mapping</h2>
+<table>
+<thead>
+<tr>
+<th>Old dataLayer <code>event</code></th>
+<th>New <code>event</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lead_modal_open</code></td>
+<td><code>form_start</code></td>
+</tr>
+<tr>
+<td><code>lead_form_submitted</code></td>
+<td><code>form_submit</code></td>
+</tr>
+<tr>
+<td><code>lead_form_success</code></td>
+<td><code>form_success</code></td>
+</tr>
+<tr>
+<td><code>lead_form_error</code></td>
+<td><code>form_error</code></td>
+</tr>
+<tr>
+<td><code>ebook_cta_clicked</code> / <code>audit_cta_clicked</code> / <code>video_cta_clicked</code></td>
+<td><code>click</code></td>
+</tr>
+<tr>
+<td><code>cro_qualify_quiz</code></td>
+<td><code>form_step</code></td>
+</tr>
+<tr>
+<td><code>strategy_session_form</code></td>
+<td><code>form_step</code> / <code>form_submit</code></td>
+</tr>
+<tr>
+<td><code>calendly_open_from_lead</code></td>
+<td><code>schedule_open</code></td>
+</tr>
+<tr>
+<td><code>calendly.event_scheduled</code></td>
+<td><code>schedule_booked</code></td>
+</tr>
+<tr>
+<td><code>schedule_modal_open</code></td>
+<td><code>schedule_open</code></td>
+</tr>
+<tr>
+<td><code>generic_form_submitted</code></td>
+<td><code>form_submit</code></td>
+</tr>
+<tr>
+<td><code>cro_cost_roi_calculated</code></td>
+<td><code>click</code> (<code>click_label=cro_cost_roi_calculated</code>)</td>
+</tr>
+<tr>
+<td><code>cro_cost_roi_lead</code></td>
+<td><code>form_success</code></td>
+</tr>
+<tr>
+<td><code>cro_scan_email_submitted</code></td>
+<td><code>form_success</code></td>
+</tr>
+<tr>
+<td>Manual <code>page_view</code></td>
+<td><strong>Removed</strong> — use GTM pageview</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="code-reference">Code reference</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>app/static/js/sm-analytics.js</code></td>
+<td><strong>Only file that calls <code>dataLayer.push()</code></strong></td>
+</tr>
+<tr>
+<td><code>app/static/js/checklist-modal.js</code></td>
+<td>Lead modal (ebook, VSL, audit)</td>
+</tr>
+<tr>
+<td><code>app/static/js/qualify-quiz-gtm.js</code></td>
+<td>Qualify quiz tracking</td>
+</tr>
+<tr>
+<td><code>app/static/js/strategy-session-funnel.js</code></td>
+<td>Strategy session funnel</td>
+</tr>
+<tr>
+<td><code>app/static/js/vsl-video-analytics.js</code></td>
+<td>Video engagement</td>
+</tr>
+<tr>
+<td><code>app/templates/base.html</code></td>
+<td>Loads <code>sm-analytics.js</code>, generic form submit listener</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="questions">Questions?</h2>
+<p>Contact Stijn if payloads in GTM Preview don't match this doc.</p></body></html>

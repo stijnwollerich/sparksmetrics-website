@@ -13,15 +13,7 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
 <meta name="robots" content="noindex, follow" />
 {% endblock %} {% block body_class %}bg-white text-gray-800 font-sans{% endblock
 %} {% block content %} {% if ENABLE_GTM %}
-<script>
-  window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push({
-    event: "page_view",
-    page_type: "thank_you",
-    page_path: "{{ request.path }}",
-    from_param: '{{ from_param|default("", true) }}',
-  });
-</script>
+<script>window.smPageType = "thank_you";</script>
 {% endif %}
 <div class="min-h-screen flex flex-col">
   {% if (from_param|default('')) == 'cro_scan' %}
@@ -1068,14 +1060,17 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
         m.addedNodes.forEach(function (node) {
           if (node.tagName === "IFRAME") {
             node.addEventListener("load", function () {
-              try {
-                window.dataLayer = window.dataLayer || [];
-                window.dataLayer.push({
-                  event: "calendly_inline_loaded",
-                  path: window.location.pathname,
-                  timestamp: new Date().toISOString(),
+              if (window.SmAnalytics) {
+                window.smScheduleFormId = "calendly-inline";
+                window.smScheduleFormName = "Thank You — Calendly";
+                window.smScheduleCalendlyUrl = container.getAttribute("data-url");
+                window.SmAnalytics.scheduleOpen({
+                  form_id: "calendly-inline",
+                  form_name: "Thank You — Calendly",
+                  lead_type: "strategy_session",
+                  calendly_url: container.getAttribute("data-url"),
                 });
-              } catch (err) {}
+              }
             });
           }
         });

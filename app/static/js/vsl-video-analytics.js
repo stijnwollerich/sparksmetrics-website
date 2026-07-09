@@ -13,32 +13,22 @@
   }
 
   function pushVslVideoEvent(eventName, videoMeta, extra) {
-    try {
-      var payload = {
-        event: eventName,
-        video_id: videoMeta.video_id || "",
-        video_provider: videoMeta.video_provider || "",
-        video_url: videoMeta.video_url || "",
-        video_title: videoMeta.video_title || "",
-        video_duration: videoMeta.video_duration || 0,
-        video_current_time: videoMeta.video_current_time || 0,
-        video_percent: videoMeta.video_percent || 0,
-        video_visible:
-          videoMeta.video_visible !== undefined
-            ? videoMeta.video_visible
-            : true,
-        page_path: global.location.pathname,
-        page_location: global.location.href,
-        timestamp: new Date().toISOString(),
-      };
-      if (extra) {
-        Object.keys(extra).forEach(function (key) {
-          if (extra[key] !== undefined) payload[key] = extra[key];
-        });
-      }
-      global.dataLayer = global.dataLayer || [];
-      global.dataLayer.push(payload);
-    } catch (err) {}
+    if (!global.SmAnalytics) return;
+    var data = {
+      video_id: videoMeta.video_id || null,
+      video_provider: videoMeta.video_provider || null,
+      video_url: videoMeta.video_url || null,
+      video_title: videoMeta.video_title || null,
+      video_duration: videoMeta.video_duration || 0,
+      video_current_time: videoMeta.video_current_time || 0,
+      video_percent: videoMeta.video_percent || 0,
+    };
+    if (extra) {
+      Object.keys(extra).forEach(function (key) {
+        if (extra[key] !== undefined) data[key] = extra[key];
+      });
+    }
+    global.SmAnalytics.videoEvent(eventName, data);
   }
 
   function getHtml5VideoMeta(video, wrapper) {

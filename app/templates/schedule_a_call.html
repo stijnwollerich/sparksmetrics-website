@@ -104,15 +104,17 @@ your funnel and next steps. Used by 200+ brands.{% endblock %} {% block og_title
           m.addedNodes.forEach(function (node) {
             if (node.tagName === "IFRAME") {
               node.addEventListener("load", function () {
-                try {
-                  window.dataLayer = window.dataLayer || [];
-                  window.dataLayer.push({
-                    event: "calendly_inline_loaded",
-                    url: container.getAttribute("data-url"),
-                    path: window.location.pathname,
-                    timestamp: new Date().toISOString(),
+                if (window.SmAnalytics) {
+                  window.smScheduleFormId = "calendly-inline";
+                  window.smScheduleFormName = "Schedule a Call — Calendly";
+                  window.smScheduleCalendlyUrl = container.getAttribute("data-url");
+                  window.SmAnalytics.scheduleOpen({
+                    form_id: "calendly-inline",
+                    form_name: "Schedule a Call — Calendly",
+                    lead_type: "strategy_session",
+                    calendly_url: container.getAttribute("data-url"),
                   });
-                } catch (err) {}
+                }
               });
             }
           });

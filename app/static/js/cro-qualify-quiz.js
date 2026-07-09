@@ -695,25 +695,25 @@
   }
 
   function pushLeadFormEvent(eventName, extra) {
-    try {
-      window.dataLayer = window.dataLayer || [];
-      var payload = {
-        event: eventName,
-        form_id: "lead-form",
-        modal_type: "resource",
-        resource: EBOOK_RESOURCE_SLUG,
-        form_answers: {
-          fname_initial: maskNameInitial(extra.fname || ""),
-          email_masked: maskEmailForDataLayer(extra.email || ""),
-          business_stage: answerLabel("q2") || undefined,
-        },
-        path: window.location.pathname,
-        timestamp: new Date().toISOString(),
-      };
-      if (extra.download_url) payload.download_url = extra.download_url;
-      if (extra.success !== undefined) payload.success = extra.success;
-      window.dataLayer.push(payload);
-    } catch (err) {}
+    if (!window.SmAnalytics) return;
+    extra = extra || {};
+    var eventMap = {
+      lead_form_submitted: "form_submit",
+      lead_form_success: "form_success",
+      lead_form_error: "form_error",
+    };
+    var ev = eventMap[eventName] || eventName;
+    window.SmAnalytics.push(ev, {
+      form_id: "lead-form",
+      form_name: "CRO Ebook — Qualify Quiz Book Step",
+      lead_type: "qualify_quiz",
+      resource_slug: EBOOK_RESOURCE_SLUG,
+      user_data: window.SmAnalytics.mergeUserData({
+        fname: extra.fname || "",
+        email: extra.email || "",
+        business_stage: answerLabel("q2") || null,
+      }),
+    });
   }
 
   function triggerDownload(url) {

@@ -34,14 +34,7 @@ store. Free CRO scan—detect issues and get a prioritized report.{% endblock %}
 {% endblock %} {% block footer %}{% endblock %} {% block primary_bar %}{%
 endblock %} {% block audit_bar %}{% endblock %} {% block body_class %}bg-white
 text-gray-800 font-sans{% endblock %} {% block content %} {% if ENABLE_GTM %}
-<script>
-  window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push({
-    event: "page_view",
-    page_type: "cro_scan_landing",
-    page_path: "{{ request.path }}",
-  });
-</script>
+<script>window.smPageType = "cro_scan_landing";</script>
 {% endif %}
 <div class="min-h-screen flex flex-col pb-28 md:pb-0">
   {# Above-the-fold hero: left = social proof + headline + form; right = report
@@ -1006,6 +999,14 @@ text-gray-800 font-sans{% endblock %} {% block content %} {% if ENABLE_GTM %}
         submitBtn.classList.add("cro-scan-btn-loading");
         submitBtn.innerHTML =
           '<span class="cro-scan-btn-spinner" aria-hidden="true"></span> Checking…';
+        if (window.SmAnalytics) {
+          window.SmAnalytics.formSubmit({
+            form_id: "cro-scan-form",
+            form_name: "CRO Scan",
+            lead_type: "cro_scan",
+            user_data: { website_url: url },
+          });
+        }
         fetch('{{ url_for("main.cro_scan_check") }}', {
           method: "POST",
           headers: { "Content-Type": "application/json" },

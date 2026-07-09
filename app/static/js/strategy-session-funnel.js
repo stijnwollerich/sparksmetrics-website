@@ -143,50 +143,43 @@
 
   function pushStrategySessionGtm(formAction, step, fieldValue, extra) {
     extra = extra || {};
+    if (!window.SmAnalytics) return;
     try {
       var meta = STEP_META[step] || {};
       var answers = getFormAnswersSnapshot();
-      var payload = {
-        event: "strategy_session_form",
-        form_action: formAction,
-        form_id: "mss-funnel",
-        form_name: FORM_NAME,
-        form_step: step,
-        form_step_total: TOTAL,
-        form_step_name: meta.key || "",
-        form_step_question: meta.question || "",
-        form_progress_pct: Math.min(
-          100,
-          Math.max(0, Math.round((step / TOTAL) * 100)),
-        ),
-        funnel_session_id: getFunnelSessionId(),
-        page_type: PAGE_TYPE,
-        page_path: window.location.pathname,
-        page_location: window.location.href,
-        timestamp: new Date().toISOString(),
-        form_answers: {
-          annual_revenue: answers.annual_revenue,
-          fname: answers.fname,
-          email: answers.email,
-          website_url: answers.website_url,
-        },
+      var userData = window.SmAnalytics.mergeUserData({
         annual_revenue: answers.annual_revenue,
         fname: answers.fname,
         email: answers.email,
         website_url: answers.website_url,
-        field_name: meta.field_name || "",
-        field_value: "",
-      };
-      if (fieldValue !== undefined && fieldValue !== null) {
-        payload.field_value = String(fieldValue);
-      }
-      var country = funnel.getAttribute("data-visitor-country");
-      if (country) payload.visitor_country = country;
-      Object.keys(extra).forEach(function (key) {
-        payload[key] = extra[key];
       });
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push(payload);
+
+      var eventName = "form_step";
+      if (formAction === "form_submit") eventName = "form_submit";
+      if (formAction === "calendly_open") {
+        window.SmAnalytics.scheduleOpen({
+          form_id: "mss-funnel",
+          form_name: FORM_NAME,
+          lead_type: "strategy_session",
+          user_data: userData,
+          calendly_url: extra.calendly_url || null,
+        });
+        return;
+      }
+
+      window.SmAnalytics.push(eventName, {
+        form_id: "mss-funnel",
+        form_name: FORM_NAME,
+        lead_type: "strategy_session",
+        page_type: PAGE_TYPE,
+        form_step: step,
+        form_step_total: TOTAL,
+        form_step_name: meta.key || "",
+        funnel_session_id: getFunnelSessionId(),
+        user_data: userData,
+        answer: fieldValue !== undefined && fieldValue !== null ? String(fieldValue) : "",
+        question: meta.question || "",
+      });
     } catch (err) {}
   }
 

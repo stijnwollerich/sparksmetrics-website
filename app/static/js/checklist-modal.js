@@ -20,6 +20,63 @@
   var slugInput = document.getElementById("lead-slug");
   var typeInput = document.getElementById("lead-modal-type");
   var leadAuditNextDefaultHtml = "";
+  var currentResourceSlug = "";
+
+  function collectLeadUserData(opts) {
+    opts = opts || {};
+    if (!window.SmAnalytics) return {};
+    var fnameEl = document.getElementById("lead-fname");
+    var emailEl = document.getElementById("lead-email");
+    var websiteUrlInput = document.getElementById("lead-website-url");
+    var businessStageEl = document.getElementById("lead-business-stage");
+    var ud = window.SmAnalytics.emptyUserData();
+    ud.fname = opts.fname || (fnameEl && fnameEl.value ? fnameEl.value.trim() : null);
+    ud.email = opts.email || (emailEl && emailEl.value ? emailEl.value.trim() : null);
+    ud.website_url =
+      opts.website_url ||
+      (websiteUrlInput && websiteUrlInput.value ? websiteUrlInput.value.trim() : null);
+    ud.business_stage =
+      opts.business_stage ||
+      (businessStageEl && businessStageEl.value ? businessStageEl.value.trim() : null);
+    if (opts.orders_per_month) ud.orders_per_month = opts.orders_per_month;
+    if (opts.conversion_rate) ud.conversion_rate = opts.conversion_rate;
+    if (opts.average_order_value) ud.average_order_value = opts.average_order_value;
+    return ud;
+  }
+
+  function leadFormMeta(modalType, resourceSlug) {
+    var leadType = window.SmAnalytics
+      ? window.SmAnalytics.resolveLeadType(modalType, resourceSlug, collectLeadUserData())
+      : modalType;
+    return {
+      form_id: "lead-form",
+      form_name: window.SmAnalytics
+        ? window.SmAnalytics.resolveFormName("lead-form", leadType, resourceSlug, null)
+        : "Lead Form",
+      lead_type: leadType,
+      resource_slug: resourceSlug || null,
+      modal_type: modalType,
+    };
+  }
+
+  function trackLead(eventName, extra) {
+    if (!window.SmAnalytics) return;
+    extra = extra || {};
+    var meta = leadFormMeta(extra.modal_type || currentModalType, extra.resource_slug || currentResourceSlug);
+    window.SmAnalytics.push(eventName, {
+      form_id: meta.form_id,
+      form_name: meta.form_name,
+      lead_type: meta.lead_type,
+      resource_slug: meta.resource_slug,
+      modal_type: meta.modal_type,
+      user_data: extra.user_data || collectLeadUserData(extra),
+      trigger_text: extra.trigger_text || null,
+      trigger_location: extra.trigger_location || null,
+      form_step: extra.form_step || null,
+      form_step_total: extra.form_step_total || null,
+      form_step_name: extra.form_step_name || null,
+    });
+  }
 
   function buildThankYouRedirectUrl(fromParam) {
     var modalEl = document.getElementById("lead-modal");
@@ -99,25 +156,6 @@
     if (submitBtn && leadAuditMultistepEnabled()) submitBtn.disabled = true;
   }
 
-  function maskEmailForDataLayer(e) {
-    try {
-      if (!e) return null;
-      var parts = e.split("@");
-      if (parts.length !== 2) return null;
-      return parts[0].charAt(0) + "***@" + parts[1];
-    } catch (err) {
-      return null;
-    }
-  }
-
-  function maskNameInitial(n) {
-    try {
-      return n ? n.charAt(0) : null;
-    } catch (err) {
-      return null;
-    }
-  }
-
   function showLeadAuditStep2() {
     var primary = document.getElementById("lead-form-primary-fields");
     var nextBtn = document.getElementById("lead-audit-btn-next");
@@ -162,6 +200,7 @@
 
     if (typeInput) typeInput.value = modalType;
     if (slugInput) slugInput.value = resource;
+    currentResourceSlug = resource;
     if (titleEl) titleEl.textContent = title;
     if (descriptionEl) {
       var descText = (description || "").trim();
@@ -264,22 +303,7 @@
     modal.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
     document.getElementById("lead-fname").focus();
-    // debug: push modal open event
-    try {
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({
-        event: "lead_modal_open",
-        modal_type: currentModalType,
-        resource: resource || null,
-        trigger_text:
-          (trigger &&
-            trigger.getAttribute &&
-            (trigger.getAttribute("data-title") || trigger.textContent)) ||
-          null,
-        path: window.location.pathname,
-        timestamp: new Date().toISOString(),
-      });
-    } catch (err) {}
+    trackLead("form_start", { trigger_location: "modal" });
   }
 
   function closeModal() {
@@ -314,27 +338,19 @@
     }
     if (calendlyIframe) {
       calendlyIframe.src = CALENDLY_URL;
-      try {
-        var fnameEl = document.getElementById("lead-fname");
-        var emailEl = document.getElementById("lead-email");
-        var stageEl = document.getElementById("lead-business-stage");
-        var calFormAnswer = {
-          fname: fnameEl && fnameEl.value ? fnameEl.value.trim() : null,
-          email: emailEl && emailEl.value ? emailEl.value.trim() : null,
-        };
-        if (stageEl && stageEl.value)
-          calFormAnswer.business_stage = stageEl.value;
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({
-          event: "calendly_open_from_lead",
+      if (window.SmAnalytics) {
+        window.smScheduleFormId = "lead-form";
+        window.smScheduleFormName = leadFormMeta(currentModalType, currentResourceSlug).form_name;
+        window.smScheduleLeadType = leadFormMeta(currentModalType, currentResourceSlug).lead_type;
+        window.smScheduleCalendlyUrl = CALENDLY_URL;
+        window.SmAnalytics.scheduleOpen({
           form_id: "lead-form",
-          modal_type: currentModalType,
-          form_answer: calFormAnswer,
-          url: CALENDLY_URL,
-          path: window.location.pathname,
-          timestamp: new Date().toISOString(),
+          form_name: window.smScheduleFormName,
+          lead_type: window.smScheduleLeadType,
+          user_data: collectLeadUserData(),
+          calendly_url: CALENDLY_URL,
         });
-      } catch (err) {}
+      }
     }
   }
 
@@ -366,40 +382,23 @@
         "</span>";
   }
 
-  function leadCtaClickEvent(triggerModalType, triggerResource) {
-    if (triggerModalType === "audit") return "audit_cta_clicked";
-    if (
-      leadVslSimpleEnabled() ||
-      triggerResource === "vsl-free-cro-video"
-    ) {
-      return "video_cta_clicked";
-    }
-    return "ebook_cta_clicked";
-  }
-
   function bindTrigger(el) {
     el.addEventListener("click", function (e) {
       e.preventDefault();
       resetModal();
-      // Push a datalayer event when CTA is clicked to open lead modal
-      try {
-        var triggerModalType =
-          el.getAttribute("data-modal-type") ||
-          (el.getAttribute("data-resource") ? "resource" : "audit");
-        var triggerResource = el.getAttribute("data-resource") || null;
-        var triggerPayload = {
-          event: leadCtaClickEvent(triggerModalType, triggerResource),
-          trigger_text:
-            el.getAttribute("data-title") ||
-            (el.textContent || "").trim().slice(0, 120),
-          modal_type: triggerModalType,
-          resource: triggerResource,
-          path: window.location.pathname,
-          timestamp: new Date().toISOString(),
-        };
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push(triggerPayload);
-      } catch (err) {}
+      var triggerModalType =
+        el.getAttribute("data-modal-type") ||
+        (el.getAttribute("data-resource") ? "resource" : "audit");
+      var triggerResource = el.getAttribute("data-resource") || null;
+      trackLead("click", {
+        modal_type: triggerModalType,
+        resource_slug: triggerResource,
+        trigger_text:
+          el.getAttribute("data-title") ||
+          (el.textContent || "").trim().slice(0, 120),
+        trigger_location: "cta",
+        user_data: window.SmAnalytics ? window.SmAnalytics.emptyUserData() : {},
+      });
       if (
         el.getAttribute("data-checklist-modal") !== null &&
         !el.getAttribute("data-resource")
@@ -487,21 +486,17 @@
             leadAuditNext.innerHTML = leadAuditNextDefaultHtml;
             return;
           }
-          try {
-            window.dataLayer = window.dataLayer || [];
-            window.dataLayer.push({
-              event: "audit_multistep_primary_saved",
-              form_id: "lead-form",
-              modal_type: "audit",
-              form_answer: {
-                fname: fname,
-                email: email,
-                website_url: websiteUrlOpt,
-              },
-              path: window.location.pathname,
-              timestamp: new Date().toISOString(),
-            });
-          } catch (err) {}
+          trackLead("form_step", {
+            modal_type: "audit",
+            form_step: 1,
+            form_step_total: 2,
+            form_step_name: "contact_and_url",
+            user_data: collectLeadUserData({
+              fname: fname,
+              email: email,
+              website_url: websiteUrlOpt,
+            }),
+          });
           leadAuditNext.disabled = false;
           leadAuditNext.innerHTML = leadAuditNextDefaultHtml;
           showLeadAuditStep2();
@@ -620,22 +615,15 @@
         if (businessStage) formAnswer.business_stage = businessStage;
       }
 
-      // Push a datalayer event with form answers (useful for GTM)
-      try {
-        window.dataLayer = window.dataLayer || [];
-        var submittedPayload = {
-          event: "lead_form_submitted",
-          form_id: "lead-form",
-          modal_type: modalType,
-          resource: resource,
-          form_answer: formAnswer,
-          path: window.location.pathname,
-          timestamp: new Date().toISOString(),
-        };
-        window.dataLayer.push(submittedPayload);
-      } catch (err) {
-        // ignore
-      }
+      trackLead("form_submit", {
+        modal_type: modalType,
+        resource_slug: resource,
+        user_data: collectLeadUserData(
+          modalType === "audit" && leadAuditMultistepEnabled()
+            ? formAnswer
+            : Object.assign({}, formAnswer, { website_url: websiteUrlOpt || null }),
+        ),
+      });
 
       var url = modalType === "audit" ? "/request-audit" : "/download-resource";
       var body =
@@ -684,22 +672,15 @@
             data.success &&
             data.download_url &&
             !leadVslSimpleEnabled();
-          // Push success event with server response and form answers
-          try {
-            window.dataLayer = window.dataLayer || [];
-            var successPayload = {
-              event: "lead_form_success",
-              form_id: "lead-form",
-              modal_type: modalType,
-              resource: resource,
-              form_answer: formAnswer,
-              success: !!data.success,
-              download_url: data.download_url || null,
-              path: window.location.pathname,
-              timestamp: new Date().toISOString(),
-            };
-            window.dataLayer.push(successPayload);
-          } catch (err) {}
+          trackLead("form_success", {
+            modal_type: modalType,
+            resource_slug: resource,
+            user_data: collectLeadUserData(
+              modalType === "audit" && leadAuditMultistepEnabled()
+                ? formAnswer
+                : Object.assign({}, formAnswer, { website_url: websiteUrlOpt || null }),
+            ),
+          });
           if (leadVslSimpleEnabled()) {
             if (data && data.success) {
               closeModal();
@@ -721,20 +702,11 @@
           window.location.href = thankYouUrl;
         })
         .catch(function () {
-          // Push error event with form answers
-          try {
-            window.dataLayer = window.dataLayer || [];
-            var errorPayload = {
-              event: "lead_form_error",
-              form_id: "lead-form",
-              modal_type: modalType,
-              resource: resource,
-              form_answer: formAnswer,
-              path: window.location.pathname,
-              timestamp: new Date().toISOString(),
-            };
-            window.dataLayer.push(errorPayload);
-          } catch (err) {}
+          trackLead("form_error", {
+            modal_type: modalType,
+            resource_slug: resource,
+            user_data: collectLeadUserData(formAnswer),
+          });
           if (leadVslSimpleEnabled()) {
             if (submitBtn) submitBtn.innerHTML = "Try again";
             return;

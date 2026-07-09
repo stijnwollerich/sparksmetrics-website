@@ -101,14 +101,7 @@
 {% block body_class %}bg-white text-gray-800 font-sans{% endblock %}
 {% block content %}
 {% if ENABLE_GTM %}
-<script>
-  window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push({
-    event: 'page_view',
-    page_type: 'cro_scan_thank_you',
-    page_path: '{{ request.path }}'
-  });
-</script>
+<script>window.smPageType = "cro_scan_thank_you";</script>
 {% endif %}
 <div class="min-h-screen flex flex-col">
   {# Progress bar — 0→100% in 15s with fake “what we’re doing” steps #}
@@ -378,6 +371,19 @@
     submitBtn.disabled = true;
     submitBtn.textContent = 'Sending…';
 
+    if (window.SmAnalytics) {
+      window.SmAnalytics.formSubmit({
+        form_id: "cro-scan-email-form",
+        form_name: "CRO Scan — Email Follow-up",
+        lead_type: "cro_scan",
+        user_data: {
+          email: email,
+          website_url: url,
+          orders_per_month: ordersPerMonth || null,
+        },
+      });
+    }
+
     var payload = { email: email, url: url, website_url: url };
     if (ordersPerMonth) payload.orders_per_month = ordersPerMonth;
 
@@ -389,8 +395,17 @@
     .then(function(r) { return r.json().then(function(data) { return { ok: r.ok, data: data }; }); })
     .then(function(result) {
       if (result.ok) {
-        if (window.dataLayer) {
-          window.dataLayer.push({ event: 'cro_scan_email_submitted', page_type: 'cro_scan_thank_you' });
+        if (window.SmAnalytics) {
+          window.SmAnalytics.formSuccess({
+            form_id: "cro-scan-email-form",
+            form_name: "CRO Scan — Email Follow-up",
+            lead_type: "cro_scan",
+            user_data: {
+              email: email,
+              website_url: url,
+              orders_per_month: ordersPerMonth || null,
+            },
+          });
         }
         window.location.href = '{{ url_for("main.thank_you") }}?from=cro_scan';
         return;

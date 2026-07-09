@@ -1,6 +1,6 @@
 (function (global) {
   var FORM_ID = "qualify-quiz";
-  var FORM_NAME = "CRO Agency Qualify Quiz";
+  var FORM_NAME = "CRO Qualify Quiz";
   var TOTAL = 9;
   var PAGE_TYPE = "qualify_quiz_funnel";
   var SESSION_KEY = "qualify_quiz_funnel_session_id";
@@ -58,6 +58,7 @@
   };
 
   function getFunnelSessionId() {
+    if (global.SmAnalytics) return global.SmAnalytics.getFunnelSessionId();
     try {
       var id = sessionStorage.getItem(SESSION_KEY);
       if (!id) {
@@ -74,91 +75,42 @@
     }
   }
 
-  function buildFormAnswers(answers) {
+  function buildUserDataFromAnswers(answers, state) {
     answers = answers || {};
-    var snap = {};
-    Object.keys(answers).forEach(function (questionId) {
-      var entry = answers[questionId];
-      if (!entry || !entry.value) return;
-      var meta = QUESTION_META[questionId] || {};
-      snap[questionId] = {
-        question_id: questionId,
-        question: meta.question || "",
-        answer: entry.value,
-        answer_label: entry.label || "",
-        score: typeof entry.score === "number" ? entry.score : undefined,
-      };
-    });
-    if (answers.email) {
-      snap.email = answers.email;
-    }
-    return snap;
+    state = state || {};
+    var ud = global.SmAnalytics ? global.SmAnalytics.emptyUserData() : {};
+    if (state.email) ud.email = state.email;
+    if (state.fname) ud.fname = state.fname;
+    if (typeof state.score === "number") ud.qualify_score = state.score;
+    if (state.tier) ud.qualify_tier = state.tier;
+    return ud;
   }
 
   function pushQualifyGtm(formAction, step, answer, extra, state) {
+    if (!global.SmAnalytics) return;
     extra = extra || {};
     state = state || {};
     try {
       var meta = STEP_META[step] || {};
-      var answers = state.answers || {};
-      var formAnswers = buildFormAnswers(answers);
-      if (state.email) {
-        formAnswers.email = state.email;
-      }
+      var eventName = "form_step";
+      if (formAction === "form_submit") eventName = "form_submit";
+      if (formAction === "form_success") eventName = "form_success";
 
-      var payload = {
-        event: "cro_qualify_quiz",
-        form_action: formAction,
+      global.SmAnalytics.push(eventName, {
         form_id: FORM_ID,
         form_name: FORM_NAME,
+        lead_type: "qualify_quiz",
+        page_type: PAGE_TYPE,
         form_step: step,
         form_step_total: TOTAL,
         form_step_name: meta.key || "",
-        form_progress_pct: Math.min(
-          100,
-          Math.max(0, Math.round((step / TOTAL) * 100)),
-        ),
         funnel_session_id: getFunnelSessionId(),
-        page_type: PAGE_TYPE,
-        page_path: global.location.pathname,
-        page_location: global.location.href,
-        timestamp: new Date().toISOString(),
+        user_data: buildUserDataFromAnswers(state.answers, state),
         question_id: meta.question_id || "",
         question: meta.question || "",
         answer: answer !== undefined && answer !== null ? String(answer) : "",
         answer_label: extra.answer_label || "",
-        form_answers: formAnswers,
-      };
-
-      if (extra.answer_score !== undefined) {
-        payload.answer_score = extra.answer_score;
-      }
-      if (typeof state.score === "number") {
-        payload.qualify_score = state.score;
-      }
-      if (state.tier) {
-        payload.qualify_tier = state.tier;
-      }
-      if (state.email) {
-        payload.email = state.email;
-      }
-
-      Object.keys(extra).forEach(function (key) {
-        if (
-          key === "answer_label" ||
-          key === "answer_score" ||
-          key === "qualify_question" ||
-          key === "qualify_answer" ||
-          key === "qualify_answer_label" ||
-          key === "qualify_answer_score"
-        ) {
-          return;
-        }
-        payload[key] = extra[key];
       });
-
-      global.dataLayer = global.dataLayer || [];
-      global.dataLayer.push(payload);
     } catch (err) {}
   }
 
