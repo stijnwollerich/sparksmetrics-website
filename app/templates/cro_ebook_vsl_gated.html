@@ -438,7 +438,9 @@
               class="block w-full text-center px-8 py-5 bg-primary text-white font-display text-xl md:text-2xl font-black rounded-xl shadow-[0_16px_40px_rgba(255,77,0,0.35)] hover:scale-[1.02] transition-all uppercase"
               href="#"
               data-checklist-modal
-              >Watch my free video now</a
+              data-resource="vsl-free-cro-video"
+              data-button-text="Continue free"
+              >Watch the free walkthrough</a
             >
             </div>
 
@@ -606,7 +608,9 @@
             class="inline-flex items-center justify-center px-8 py-6 bg-primary text-white font-display text-xl md:text-2xl font-black rounded-xl shadow-[0_20px_50px_rgba(255,77,0,0.3)] hover:scale-[1.02] transition-all uppercase"
             href="#"
             data-checklist-modal
-            >Watch my free video now</a
+            data-resource="vsl-free-cro-video"
+            data-button-text="Continue free"
+            >Watch free</a
           >
           <p class="mt-4 text-gray-500 text-sm font-bold text-center">
             ⭐⭐⭐⭐⭐ 2540+ views
@@ -713,7 +717,9 @@
             class="inline-flex items-center justify-center px-8 py-6 bg-primary text-white font-display text-xl md:text-2xl font-black rounded-xl shadow-[0_20px_50px_rgba(255,77,0,0.3)] hover:scale-[1.02] transition-all uppercase"
             href="#"
             data-checklist-modal
-            >Watch my free video now</a
+            data-resource="vsl-free-cro-video"
+            data-button-text="Continue free"
+            >Get the walkthrough</a
           >
           <p class="mt-4 text-gray-500 text-sm font-bold text-center">
             ⭐⭐⭐⭐⭐ 2540+ views
@@ -760,7 +766,9 @@
             class="inline-flex items-center justify-center px-8 py-6 bg-primary text-white font-display text-xl md:text-2xl font-black rounded-xl shadow-[0_20px_50px_rgba(255,77,0,0.3)] hover:scale-[1.02] transition-all uppercase"
             href="#"
             data-checklist-modal
-            >Watch my free video now</a
+            data-resource="vsl-free-cro-video"
+            data-button-text="Continue free"
+            >Watch the video</a
           >
           <p class="mt-4 text-gray-500 text-sm font-bold text-center">
             ⭐⭐⭐⭐⭐ 2540+ views
@@ -1671,11 +1679,11 @@
               class="inline-flex items-center justify-center px-8 py-4 bg-white text-primary font-black uppercase rounded-xl hover:scale-105 transition-all shadow-2xl cursor-pointer"
               data-download-modal
               data-resource="vsl-free-cro-video"
-              data-title="Watch the free CRO audit walkthrough"
-              data-description="See how we audit funnels and prioritize fixes. Enter your details to play."
-              data-button-text="Watch the video"
+              data-title="Watch the free walkthrough"
+              data-description="Enter your details to watch the full walkthrough."
+              data-button-text="Continue free"
             >
-              Watch The Video
+              Watch now
               <span class="material-symbols-outlined play-filled ml-2">play_arrow</span>
             </button>
             <p
@@ -1751,8 +1759,8 @@
               >
             </summary>
             <div class="p-6 pt-0 text-gray-600">
-              Yes, it's free. Enter your name and email to unlock the video on
-              this page. No spam; you can unsubscribe from follow-ups at any
+              Yes, it's free. Enter your name and email and we'll send you to
+              the full walkthrough. No spam; you can unsubscribe from follow-ups at any
               time.
             </div>
           </details>
@@ -1810,8 +1818,8 @@
               >
             </summary>
             <div class="p-6 pt-0 text-gray-600">
-              Submit the short form, and the video unlocks right here on this
-              page. No waiting for an email. If you want the same analysis on
+              Submit the short form and you'll go straight to the full video on
+              our free CRO audit page. No waiting for an email. If you want the same analysis on
               your own store, you can book a free CRO audit afterward. No
               obligation.
             </div>
@@ -1842,15 +1850,11 @@
     {% include 'includes/_lead_modal_vsl_simple.html' %}
 
     <script
-      src="{{ url_for('static', filename='js/vsl-video-analytics.js') }}?v=2"
+      src="{{ url_for('static', filename='js/checklist-modal.js') }}?v=15"
       defer
     ></script>
     <script
-      src="{{ url_for('static', filename='js/checklist-modal.js') }}?v=13"
-      defer
-    ></script>
-    <script
-      src="{{ url_for('static', filename='js/vsl-youtube-gated.js') }}?v=2"
+      src="{{ url_for('static', filename='js/vsl-youtube-gated.js') }}?v=3"
       defer
     ></script>
     <script>
@@ -1920,10 +1924,10 @@
           class="fixed-cta-btn"
           data-checklist-modal
           data-resource="vsl-free-cro-video"
-          data-title="Watch the free CRO audit walkthrough"
-          data-description="See how we audit funnels and prioritize fixes. Enter your details to play."
-          data-button-text="Watch the video"
-          >Watch the video (free)</a
+          data-title="Watch the free walkthrough"
+          data-description="Enter your details to watch the full walkthrough."
+          data-button-text="Continue free"
+          >Watch free</a
         >
         <p class="fixed-cta-note">Get it right now. No hoops.</p>
       </div>

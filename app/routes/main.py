@@ -430,7 +430,7 @@ def cro_ebook():
 @main_bp.route("/free-cro-video/")
 @main_bp.route("/free-cro-video")
 def cro_vsl_gated():
-    """Gated VSL landing — lead form unlocks redirect to free CRO audit page."""
+    """Gated VSL landing — lead form redirects to /free-cro-audit/ (video plays there)."""
     return render_template(
         "cro_ebook_vsl_gated.html",
         page_updated_days_ago=3,
@@ -1289,7 +1289,10 @@ def cro_scan_submit_email():
 RESOURCE_DOWNLOADS = {
     "13-bulletproof-strategies": {"filename": "sm-cro-ebook.pdf"},
     "7-questions-cro-agency": {"filename": "sm-cro-ebook.pdf"},
-    "vsl-free-cro-video": {"gate_only": True},
+    "vsl-free-cro-video": {
+        "gate_only": True,
+        "redirect_endpoint": "main.free_cro_audit_landing",
+    },
 }
 
 VISITOR_COUNTRY_GEO: dict[str, tuple[str, str]] = {
@@ -2557,7 +2560,11 @@ def download_resource():
         website_url=website_url_lm,
     )
     if resource.get("gate_only"):
-        return jsonify({"success": True})
+        payload: dict = {"success": True}
+        redirect_endpoint = (resource.get("redirect_endpoint") or "").strip()
+        if redirect_endpoint:
+            payload["redirect_url"] = url_for(redirect_endpoint)
+        return jsonify(payload)
     download_url = url_for("main.serve_download", slug=slug)
     return jsonify({"success": True, "download_url": download_url})
 

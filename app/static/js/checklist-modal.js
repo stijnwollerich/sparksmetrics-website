@@ -37,6 +37,10 @@
     return origin + "/thank-you/?" + qs;
   }
 
+  function vslSimpleRedirectUrl() {
+    return "/free-cro-audit";
+  }
+
   function leadVslSimpleEnabled() {
     return modal && modal.getAttribute("data-lead-vsl-simple") === "1";
   }
@@ -45,8 +49,8 @@
     return {
       resource: "vsl-free-cro-video",
       title: "Watch the free CRO walkthrough",
-      description: "Enter your name and email to unlock the full video.",
-      buttonText: "Watch the video",
+      description: "Enter your name and email to watch the full walkthrough.",
+      buttonText: "Continue free",
     };
   }
 
@@ -644,6 +648,9 @@
               form_page_url: window.location.href || "",
             }
           : { resource: resource, fname: fname, email: email };
+      if (modalType === "resource" && leadVslSimpleEnabled()) {
+        body.form_page_url = window.location.href || "";
+      }
       if (modalType === "resource" && businessStage)
         body.business_stage = businessStage;
       if (modalType === "resource" && websiteUrlOpt)
@@ -697,9 +704,9 @@
           if (leadVslSimpleEnabled()) {
             if (data && data.success) {
               closeModal();
-              if (window.VslGated && window.VslGated.unlockAndPlay) {
-                window.VslGated.unlockAndPlay();
-              }
+              window.location.href =
+                (data.redirect_url && String(data.redirect_url)) ||
+                vslSimpleRedirectUrl();
             } else if (submitBtn) {
               submitBtn.innerHTML = "Try again";
             }

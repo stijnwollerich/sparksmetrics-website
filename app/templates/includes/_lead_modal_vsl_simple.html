@@ -1,4 +1,4 @@
-{# Simplified lead gate for /free-cro-video/ — vertical poster + form, unlocks in-page video. #}
+{# Simplified lead gate for /free-cro-video/ — form then redirect to /free-cro-audit/. #}
 <div
   id="lead-modal"
   class="fixed inset-0 z-[200] hidden"
@@ -25,7 +25,7 @@
       >
         <picture>
           <source
-            srcset="{{ url_for('static', filename=vsl_video_poster_thumb_webp|default('images/vsl-free-cro-video-hero-320.webp')) }}"
+            srcset="{{ url_for('static', filename=vsl_video_poster_webp|default('images/vsl-free-cro-video-hero-800.webp')) }}"
             type="image/webp"
           />
           <img
@@ -34,8 +34,8 @@
             class="absolute inset-0 w-full h-full object-cover object-center"
             loading="lazy"
             decoding="async"
-            width="240"
-            height="380"
+            width="800"
+            height="800"
           />
         </picture>
       </div>
@@ -57,14 +57,13 @@
           id="lead-modal-title"
           class="text-xl md:text-2xl font-display font-black text-deep-charcoal uppercase tracking-tighter mb-2 pr-8"
         >
-          Watch the free CRO audit walkthrough
+          Watch the free walkthrough
         </h2>
         <p
           id="lead-modal-description"
           class="text-gray-600 text-sm md:text-base mb-5"
         >
-          See how we audit funnels and prioritize fixes. Enter your details to
-          play the full video.
+          Enter your name and email to watch the full walkthrough.
         </p>
         <form id="lead-form" class="space-y-4">
           <input type="hidden" name="resource" id="lead-slug" value="vsl-free-cro-video" />
@@ -111,7 +110,7 @@
             id="lead-submit"
             class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-primary text-white font-display text-sm font-black uppercase rounded-xl hover:brightness-110 transition-all shadow-lg shadow-primary/25"
           >
-            <span id="lead-submit-text">Watch the video</span>
+            <span id="lead-submit-text">Continue free</span>
             <span class="material-symbols-outlined play-filled text-lg"
               >play_arrow</span
             >

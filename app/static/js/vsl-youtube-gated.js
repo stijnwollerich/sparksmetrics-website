@@ -1,6 +1,15 @@
 (function () {
   var UNLOCK_KEY = "vsl-free-cro-video-unlocked";
 
+  function isFreeCroVideoLandingPage() {
+    var path = (window.location && window.location.pathname) || "";
+    return path.indexOf("/free-cro-video") !== -1;
+  }
+
+  function vslRedirectUrl() {
+    return "/free-cro-audit";
+  }
+
   function isUnlocked() {
     try {
       return sessionStorage.getItem(UNLOCK_KEY) === "1";
@@ -194,6 +203,10 @@
 
   window.VslGated = {
     unlockAndPlay: function () {
+      if (isFreeCroVideoLandingPage()) {
+        window.location.href = vslRedirectUrl();
+        return;
+      }
       try {
         sessionStorage.setItem(UNLOCK_KEY, "1");
       } catch (err) {}
@@ -213,6 +226,12 @@
 
       playBtn.addEventListener("click", function (e) {
         e.preventDefault();
+        if (isFreeCroVideoLandingPage()) {
+          if (window.LeadModal && window.LeadModal.openFrom) {
+            window.LeadModal.openFrom(playBtn);
+          }
+          return;
+        }
         if (isUnlocked()) {
           startPlayback(wrap);
           return;
