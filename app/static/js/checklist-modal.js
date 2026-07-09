@@ -318,25 +318,18 @@
         var fnameEl = document.getElementById("lead-fname");
         var emailEl = document.getElementById("lead-email");
         var stageEl = document.getElementById("lead-business-stage");
-        var calFormAnswers = {
-          fname_initial:
-            fnameEl && fnameEl.value ? fnameEl.value.charAt(0) : null,
-          email_masked: (function (e) {
-            if (!e || !e.value) return null;
-            var parts = e.value.split("@");
-            return parts.length === 2
-              ? parts[0].charAt(0) + "***@" + parts[1]
-              : null;
-          })(emailEl),
+        var calFormAnswer = {
+          fname: fnameEl && fnameEl.value ? fnameEl.value.trim() : null,
+          email: emailEl && emailEl.value ? emailEl.value.trim() : null,
         };
         if (stageEl && stageEl.value)
-          calFormAnswers.business_stage = stageEl.value;
+          calFormAnswer.business_stage = stageEl.value;
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({
           event: "calendly_open_from_lead",
           form_id: "lead-form",
           modal_type: currentModalType,
-          form_answers: calFormAnswers,
+          form_answer: calFormAnswer,
           url: CALENDLY_URL,
           path: window.location.pathname,
           timestamp: new Date().toISOString(),
@@ -373,6 +366,17 @@
         "</span>";
   }
 
+  function leadCtaClickEvent(triggerModalType, triggerResource) {
+    if (triggerModalType === "audit") return "audit_cta_clicked";
+    if (
+      leadVslSimpleEnabled() ||
+      triggerResource === "vsl-free-cro-video"
+    ) {
+      return "video_cta_clicked";
+    }
+    return "ebook_cta_clicked";
+  }
+
   function bindTrigger(el) {
     el.addEventListener("click", function (e) {
       e.preventDefault();
@@ -384,10 +388,7 @@
           (el.getAttribute("data-resource") ? "resource" : "audit");
         var triggerResource = el.getAttribute("data-resource") || null;
         var triggerPayload = {
-          event:
-            triggerModalType === "audit"
-              ? "audit_cta_clicked"
-              : "ebook_cta_clicked",
+          event: leadCtaClickEvent(triggerModalType, triggerResource),
           trigger_text:
             el.getAttribute("data-title") ||
             (el.textContent || "").trim().slice(0, 120),
@@ -492,7 +493,7 @@
               event: "audit_multistep_primary_saved",
               form_id: "lead-form",
               modal_type: "audit",
-              form_answers: {
+              form_answer: {
                 fname: fname,
                 email: email,
                 website_url: websiteUrlOpt,
@@ -595,14 +596,12 @@
         submitBtn.innerHTML = "Sending…";
       }
 
-      var maskedEmail = maskEmailForDataLayer(email);
-      var fnameInitial = maskNameInitial(fname);
-      var formAnswers;
+      var formAnswer;
       if (modalType === "audit" && leadAuditMultistepEnabled()) {
         var omAns = document.getElementById("lead-audit-orders-per-month");
         var cvrAns = document.getElementById("lead-audit-conversion-rate");
         var aovAns = document.getElementById("lead-audit-aov");
-        formAnswers = {
+        formAnswer = {
           fname: fname,
           email: email,
           website_url: websiteUrlOpt,
@@ -614,11 +613,11 @@
             aovAns && aovAns.value ? aovAns.value.trim() : "",
         };
       } else {
-        formAnswers = {
-          fname_initial: fnameInitial,
-          email_masked: maskedEmail,
+        formAnswer = {
+          fname: fname,
+          email: email,
         };
-        if (businessStage) formAnswers.business_stage = businessStage;
+        if (businessStage) formAnswer.business_stage = businessStage;
       }
 
       // Push a datalayer event with form answers (useful for GTM)
@@ -629,7 +628,7 @@
           form_id: "lead-form",
           modal_type: modalType,
           resource: resource,
-          form_answers: formAnswers,
+          form_answer: formAnswer,
           path: window.location.pathname,
           timestamp: new Date().toISOString(),
         };
@@ -693,7 +692,7 @@
               form_id: "lead-form",
               modal_type: modalType,
               resource: resource,
-              form_answers: formAnswers,
+              form_answer: formAnswer,
               success: !!data.success,
               download_url: data.download_url || null,
               path: window.location.pathname,
@@ -730,7 +729,7 @@
               form_id: "lead-form",
               modal_type: modalType,
               resource: resource,
-              form_answers: formAnswers,
+              form_answer: formAnswer,
               path: window.location.pathname,
               timestamp: new Date().toISOString(),
             };
