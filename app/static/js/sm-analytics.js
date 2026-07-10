@@ -135,6 +135,44 @@
     return formId;
   }
 
+  function isQualifiedLeadType(leadType) {
+    return (
+      leadType === "audit_qualified" || leadType === "cro_cost_roi_qualified"
+    );
+  }
+
+  function conversionType(leadType) {
+    if (!leadType) return null;
+    if (leadType === "qualify_quiz") return "qualify_quiz";
+    // Every lead form (including qualified) is a Lead. Qualified is an extra flag.
+    if (
+      leadType === "ebook" ||
+      leadType === "vsl" ||
+      leadType === "audit" ||
+      leadType === "audit_qualified" ||
+      leadType === "cro_scan" ||
+      leadType === "cro_cost_roi" ||
+      leadType === "cro_cost_roi_qualified" ||
+      leadType === "strategy_session"
+    ) {
+      return "lead";
+    }
+    return "lead";
+  }
+
+  var GADS_LABEL_BY_LEAD_TYPE = {
+    ebook: "4yqYCKvn0ocaEJHd0OQ9",
+    vsl: "4yqYCKvn0ocaEJHd0OQ9",
+    cro_scan: "ecdbCNLgroIcEJHd0OQ9",
+  };
+
+  var GADS_SCHEDULE_LABEL = "KO_0CPODpskZEJHd0OQ9";
+
+  function resolveGadsLabel(leadType, eventName) {
+    if (eventName === "schedule_booked") return GADS_SCHEDULE_LABEL;
+    return GADS_LABEL_BY_LEAD_TYPE[leadType] || null;
+  }
+
   function buildPayload(eventName, data) {
     data = data || {};
     var userData = mergeUserData(data.user_data);
@@ -152,6 +190,9 @@
       form_id: formId,
       form_name: resolveFormName(formId, leadType, resourceSlug, data.form_name),
       lead_type: leadType,
+      conversion_type: null,
+      is_qualified: false,
+      gads_conversion_label: null,
       resource_slug: resourceSlug,
       form_step: data.form_step != null ? data.form_step : null,
       form_step_total: data.form_step_total != null ? data.form_step_total : null,
@@ -188,6 +229,13 @@
 
     if (eventName === "form_success" || eventName === "schedule_booked") {
       if (!payload.event_id) payload.event_id = uuid();
+      payload.conversion_type =
+        eventName === "schedule_booked" ? "schedule" : conversionType(leadType);
+      payload.is_qualified =
+        eventName === "form_success" && isQualifiedLeadType(leadType)
+          ? "true"
+          : "false";
+      payload.gads_conversion_label = resolveGadsLabel(leadType, eventName);
     }
 
     return payload;
@@ -213,7 +261,7 @@
   }
 
   function formSuccess(data) {
-    push("form_success", data);
+    pushPayload(buildPayload("form_success", data));
   }
 
   function formError(data) {
@@ -226,14 +274,14 @@
 
   function scheduleOpen(data) {
     var d = data || {};
-    d.schedule_action = "open";
+    if (!d.schedule_action) d.schedule_action = "open";
     push("schedule_open", d);
   }
 
   function scheduleBooked(data) {
     var d = data || {};
     d.schedule_action = "booked";
-    push("schedule_booked", d);
+    pushPayload(buildPayload("schedule_booked", d));
   }
 
   function videoEvent(action, data) {

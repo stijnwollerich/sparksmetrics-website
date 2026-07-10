@@ -681,12 +681,19 @@
                 : Object.assign({}, formAnswer, { website_url: websiteUrlOpt || null }),
             ),
           });
+          // Give GTM/Meta a beat to fire before navigating away.
+          var navigateAfterTags = function (url) {
+            setTimeout(function () {
+              window.location.href = url;
+            }, 400);
+          };
           if (leadVslSimpleEnabled()) {
             if (data && data.success) {
               closeModal();
-              window.location.href =
+              navigateAfterTags(
                 (data.redirect_url && String(data.redirect_url)) ||
-                vslSimpleRedirectUrl();
+                  vslSimpleRedirectUrl(),
+              );
             } else if (submitBtn) {
               submitBtn.innerHTML = "Try again";
             }
@@ -699,7 +706,7 @@
           if (hasDownload && data.download_url) {
             triggerDownload(data.download_url);
           }
-          window.location.href = thankYouUrl;
+          navigateAfterTags(thankYouUrl);
         })
         .catch(function () {
           trackLead("form_error", {
@@ -715,7 +722,9 @@
           var fromParam =
             modalType === "audit" ? "audit" : resource || "ebook";
           var thankYouUrl = buildThankYouRedirectUrl(fromParam);
-          window.location.href = thankYouUrl;
+          setTimeout(function () {
+            window.location.href = thankYouUrl;
+          }, 400);
         })
         .finally(function () {
           if (!submitBtn) return;

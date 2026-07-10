@@ -15,9 +15,10 @@ All tracking is pushed from one JavaScript module: `app/static/js/sm-analytics.j
 **Principles:**
 
 1. **Same `event` name** for the same action across all forms (e.g. every successful lead = `form_success`).
-2. **Params distinguish the form** — `form_id`, `form_name`, `lead_type`, `resource_slug`.
+2. **Params distinguish the form** — `form_id`, `form_name`, `lead_type`, `resource_slug`, `conversion_type`.
 3. **`user_data` is always the same object** with the same keys — GTM variables like `{{dlv - user_data.email}}` work on every push.
-4. **New forms work in GTM automatically** — no new triggers/tags unless you need a new FB/Gads conversion label.
+4. **One dataLayer push per action** — e.g. a single `form_success` push. Platform tags (FB, GAds, GA4) all listen to the same event; GTM filters on semantic fields like `conversion_type`, not platform-specific event names.
+5. **Routing logic lives in code** — `sm-analytics.js` sets `conversion_type` and `gads_conversion_label`. GTM uses simple equals filters on those fields — never `lead_type` regex.
 
 **Do not push manual `page_view` events** — let GTM handle pageviews.
 
@@ -39,8 +40,10 @@ All tracking is pushed from one JavaScript module: `app/static/js/sm-analytics.j
 
 | `event`           | When                              | GA4 mapping (suggested) |
 |-------------------|-----------------------------------|-------------------------|
-| `schedule_open`   | Calendly widget/modal loads       | `schedule_open`         |
+| `schedule_open`   | Calendly widget/modal loads or funnel step | `schedule_step`         |
 | `schedule_booked` | Calendly `event_scheduled` fires  | `schedule`              |
+
+**`schedule_action` on `schedule_open`:** `open` (widget viewed) | `date_selected` (time slot picked)
 
 ### Engagement
 
@@ -52,6 +55,33 @@ All tracking is pushed from one JavaScript module: `app/static/js/sm-analytics.j
 | `video_pause`     | User pauses                   | `video_pause`           |
 | `scroll`          | 25/50/75/90% page scroll      | `scroll`                |
 | `click`           | Tracked CTA / button click    | `click`                 |
+
+### Conversion fields (on `form_success` and `schedule_booked` only)
+
+One push carries everything. GTM tags filter on these fields:
+
+| Field | Values | Used by |
+|-------|--------|---------|
+| `conversion_type` | `lead`, `qualify_quiz`, `schedule` | FB Lead / Quiz / Schedule |
+| `is_qualified` | `"true"` / `"false"` | FB Qualified Lead (extra) |
+| `gads_conversion_label` | GAds label string, or `null` | GAds tag (fires when label is set) |
+
+**Every lead form fires `conversion_type: "lead"`** — including qualified audits. Qualified is an additional flag, not a replacement.
+
+| `lead_type` | `conversion_type` | `is_qualified` |
+|-------------|-------------------|----------------|
+| `ebook`, `vsl`, `audit`, `cro_scan`, `cro_cost_roi`, `strategy_session` | `lead` | `false` |
+| `audit_qualified`, `cro_cost_roi_qualified` | `lead` | `true` |
+| `qualify_quiz` | `qualify_quiz` | `false` |
+| *(schedule_booked event)* | `schedule` | `false` |
+
+**GAds labels** (set in code as `gads_conversion_label`):
+
+| `lead_type` / event | Label |
+|---------------------|-------|
+| `ebook`, `vsl` | `4yqYCKvn0ocaEJHd0OQ9` |
+| `cro_scan` | `ecdbCNLgroIcEJHd0OQ9` |
+| `schedule_booked` | `KO_0CPODpskZEJHd0OQ9` |
 
 ---
 
@@ -68,6 +98,7 @@ Every `dataLayer.push()` uses this shape. Keys that don't apply are `null` or om
   form_id: "lead-form",
   form_name: "CRO Ebook — 13 Bulletproof Strategies",
   lead_type: "ebook",
+  conversion_type: "lead",
   resource_slug: "13-bulletproof-strategies",
 
   // ── Multi-step (null on single-step forms) ──
@@ -175,7 +206,7 @@ Every `dataLayer.push()` uses this shape. Keys that don't apply are `null` or om
 
 ## Example payloads by scenario
 
-### Ebook download — `form_success`
+### Ebook download — `form_success` (single push)
 
 ```javascript
 {
@@ -183,32 +214,18 @@ Every `dataLayer.push()` uses this shape. Keys that don't apply are `null` or om
   form_id: "lead-form",
   form_name: "CRO Ebook — 13 Bulletproof Strategies",
   lead_type: "ebook",
+  conversion_type: "lead",
+  gads_conversion_label: "4yqYCKvn0ocaEJHd0OQ9",
   resource_slug: "13-bulletproof-strategies",
-  form_step: null,
-  form_step_total: null,
-  form_step_name: null,
-  user_data: {
-    fname: "Stijn",
-    email: "stijn@example.com",
-    phone: null,
-    website_url: null,
-    business_stage: "scaling",
-    orders_per_month: null,
-    conversion_rate: null,
-    average_order_value: null,
-    annual_revenue: null,
-    monthly_revenue_usd: null,
-    transactions_per_month: null,
-    qualify_score: null,
-    qualify_tier: null
-  },
-  page_type: "cro_ebook",
-  page_path: "/13-actionable-conversion-rate-optimization-strategies-ebook/",
-  funnel_session_id: "fs_abc123",
-  event_id: "evt_xyz789",
-  timestamp: "2026-07-09T14:44:00.000Z"
+  user_data: { fname: "Stijn", email: "stijn@example.com" },
+  event_id: "evt_xyz789"
 }
 ```
+
+GTM fires on this **one push**:
+- `GA4 - Form Success` → `CE - form_success`
+- `FB - Lead` → `CE - form_success - lead` (`conversion_type` = `lead`)
+- `Gads - Conversion` → `CE - conversion - Gads` (`gads_conversion_label` is set)
 
 ### VSL gate — `form_success`
 
@@ -390,6 +407,50 @@ Every `dataLayer.push()` uses this shape. Keys that don't apply are `null` or om
 
 ## GTM setup instructions
 
+### Quick start — import JSON (recommended)
+
+A **full workspace overwrite** file is ready — it replaces the entire workspace (deletes all ~77 old tags) with a clean setup.
+
+**File:** `docs/gtm-import-sm-analytics.json` (also copied to Downloads as `gtm-import-sm-analytics-GTM-ML2ZDNH2-OVERWRITE.json`)
+
+**Regenerate after changes:** `python3 scripts/generate_gtm_sm_import.py` (requires `~/Downloads/GTM-ML2ZDNH2_workspace51.json` as source for foundation tags)
+
+**Import steps:**
+
+1. **Export a backup first** — Admin → Export Container → save current workspace
+2. GTM → Admin → **Import Container**
+3. Choose the JSON file
+4. Select workspace: **Default** (or create a fresh test workspace first)
+5. Import option: **Overwrite** — this replaces the whole workspace
+6. **Confirm** → review the diff → **Preview** on site → **Publish**
+
+**What's kept from the old container (14 tags):**
+
+- GA4 config, Gads conversion linker, FB PageView
+- Hotjar, Clarity, Twitter, Sparksmetrics script
+- Native GA4 tags: scroll depth, social/phone/email/PDF/blog/button clicks
+
+**What's new (9 SM tags, 12 CE triggers, 46 variables):**
+
+| Tag | Trigger | Condition |
+|-----|---------|-----------|
+| `GA4 - Form Success` | `CE - form_success` | — |
+| `GA4 - Form Step` | `CE - form_step` | — |
+| `GA4 - Schedule Step` | `CE - schedule_open` | `schedule_step` + `schedule_action` |
+| `GA4 - Schedule Booked` | `CE - schedule_booked` | `schedule` |
+| `GA4 - Engagement` | `CE - engagement` | — |
+| `FB - Lead` | `CE - form_success - lead` | `conversion_type` = `lead` |
+| `FB - Qualified Lead` | `CE - form_success - qualified_lead` | `is_qualified` = `true` |
+| `FB - Qualify Quiz Complete` | `CE - form_success - qualify_quiz` | `conversion_type` = `qualify_quiz` |
+| `FB - Schedule` | `CE - schedule_booked - schedule` | `conversion_type` = `schedule` |
+| `Gads - Conversion` | `CE - conversion - Gads` + `CE - schedule_booked - Gads` | `gads_conversion_label` is set |
+
+**No platform-specific event names.** Same `form_success` push powers GA4, FB, and GAds.
+
+---
+
+### Manual setup (if not importing)
+
 ### Step 1 — Create Data Layer Variables
 
 Create these as **Data Layer Variable** (version 2) in GTM:
@@ -400,6 +461,9 @@ Create these as **Data Layer Variable** (version 2) in GTM:
 | `dlv - form_id`                    | `form_id`                          |
 | `dlv - form_name`                  | `form_name`                        |
 | `dlv - lead_type`                  | `lead_type`                        |
+| `dlv - conversion_type`            | `conversion_type`                    |
+| `dlv - is_qualified`               | `is_qualified`                       |
+| `dlv - gads_conversion_label`      | `gads_conversion_label`              |
 | `dlv - resource_slug`              | `resource_slug`                    |
 | `dlv - form_step`                  | `form_step`                        |
 | `dlv - form_step_total`            | `form_step_total`                  |
@@ -448,15 +512,22 @@ Create these as **Data Layer Variable** (version 2) in GTM:
 
 ### Step 2 — Create triggers
 
-| Trigger name          | Type          | Condition                                              |
-|-----------------------|---------------|--------------------------------------------------------|
-| `CE - form_success`   | Custom Event  | `event` equals `form_success`                          |
-| `CE - form_submit`    | Custom Event  | `event` equals `form_submit`                           |
-| `CE - form_step`      | Custom Event  | `event` equals `form_step`                             |
-| `CE - form_start`     | Custom Event  | `event` equals `form_start`                            |
-| `CE - schedule_booked`| Custom Event  | `event` equals `schedule_booked`                       |
-| `CE - schedule_open`  | Custom Event  | `event` equals `schedule_open`                         |
-| `CE - engagement`     | Custom Event  | `event` matches RegEx `video_|^scroll$|^click$`         |
+| Trigger name               | Type          | Condition                                              |
+|----------------------------|---------------|--------------------------------------------------------|
+| `CE - form_success`                | Custom Event  | `event` equals `form_success`                          |
+| `CE - form_success - lead`         | Custom Event  | `form_success` + `conversion_type` equals `lead`       |
+| `CE - form_success - qualified_lead` | Custom Event | `form_success` + `is_qualified` equals `true`          |
+| `CE - form_success - qualify_quiz` | Custom Event  | `form_success` + `conversion_type` equals `qualify_quiz` |
+| `CE - conversion - Gads`           | Custom Event  | `form_success` + `gads_conversion_label` is set        |
+| `CE - schedule_booked - schedule`  | Custom Event  | `schedule_booked` + `conversion_type` equals `schedule` |
+| `CE - schedule_booked - Gads`      | Custom Event  | `schedule_booked` + `gads_conversion_label` is set     |
+| `CE - form_step`                   | Custom Event  | `event` equals `form_step`                             |
+| `CE - form_start`                  | Custom Event  | `event` equals `form_start`                            |
+| `CE - schedule_booked`             | Custom Event  | `event` equals `schedule_booked`                       |
+| `CE - schedule_open`               | Custom Event  | `event` equals `schedule_open`                         |
+| `CE - engagement`                  | Custom Event  | `event` matches RegEx `video_|^scroll$|^click$`         |
+
+**Do not filter on `lead_type` in GTM** — use `conversion_type` instead.
 
 **Keep existing native GTM triggers** (no code changes needed):
 
@@ -501,6 +572,12 @@ Create these as **Data Layer Variable** (version 2) in GTM:
 - **Event name:** `form_step`
 - Additional parameters: `form_step`, `form_step_total`, `form_step_name`, `question`, `answer`, `answer_label`.
 
+#### GA4 - Schedule Step
+
+- **Trigger:** `CE - schedule_open`
+- **Event name:** `schedule_step`
+- Parameters: `form_id`, `form_name`, `lead_type`, `schedule_action`, `calendly_event`, `calendly_url`, `page_type`, `funnel_session_id`
+
 #### GA4 - Schedule Booked
 
 - **Trigger:** `CE - schedule_booked`
@@ -513,36 +590,22 @@ Create these as **Data Layer Variable** (version 2) in GTM:
 - **Event name:** `{{Event}}` (pass-through: `video_start`, `video_progress`, `click`, `scroll`, etc.)
 - Parameters: `video_id`, `video_percent`, `video_provider`, `video_url`, `video_title`, `video_duration`, `video_current_time`, `click_label`, `click_text`, `scroll_percent`.
 
-#### FB - Lead Conversions
+#### FB conversions
 
-- **Trigger:** `CE - form_success`
-- **Advanced matching:**
-  - `em` → `{{dlv - user_data.email}}`
-  - `fn` → `{{dlv - user_data.fname}}`
-- **Event mapping** (use lookup table on `lead_type`):
+Each FB tag fires on `form_success` or `schedule_booked` with a `conversion_type` filter:
 
-| `lead_type`                                              | FB event                |
-|----------------------------------------------------------|-------------------------|
-| `ebook`, `vsl`, `audit`, `cro_scan`, `cro_cost_roi`      | Lead (standard)         |
-| `audit_qualified`, `cro_cost_roi_qualified`              | Custom: Qualified Lead  |
-| `qualify_quiz`                                           | SubmitApplication       |
+| GTM tag | Trigger | Condition |
+|---------|---------|-----------|
+| `FB - Lead` | `CE - form_success - lead` | `conversion_type` = `lead` (all lead forms) |
+| `FB - Qualified Lead` | `CE - form_success - qualified_lead` | `is_qualified` = `true` |
+| `FB - Qualify Quiz Complete` | `CE - form_success - qualify_quiz` | `conversion_type` = `qualify_quiz` |
+| `FB - Schedule` | `CE - schedule_booked - schedule` | `conversion_type` = `schedule` |
 
-#### FB - Schedule
+#### Gads - Conversion
 
-- **Trigger:** `CE - schedule_booked`
-- **Event:** Schedule (standard)
-- Advanced matching from `user_data`.
-
-#### Gads - Conversions
-
-- **Trigger:** `CE - form_success` OR `CE - schedule_booked`
-- **Conversion label:** Lookup table on `lead_type` (and `form_id` if needed)
-
-| `lead_type` / event        | Gads label (existing)        |
-|----------------------------|------------------------------|
-| `ebook`                    | `4yqYCKvn0ocaEJHd0OQ9`      |
-| `cro_scan`                 | CRO Scan Submit label        |
-| `schedule_booked`          | Calendly Scheduled label     |
+- **Triggers:** `CE - conversion - Gads` (form) + `CE - schedule_booked - Gads`
+- **Conversion label:** `{{dlv - gads_conversion_label}}`
+- Fires only when code sets a label (null = no GAds conversion for that form)
 
 ---
 
@@ -595,7 +658,7 @@ Use GTM Preview + GA4 DebugView. Confirm each row fires the correct `event` and 
 
 ---
 
-## Adding a new form (no GTM changes required)
+## Adding a new form
 
 In code:
 
@@ -611,9 +674,7 @@ SmAnalytics.formSuccess({
 });
 ```
 
-GTM: `CE - form_success` fires automatically. GA4 `generate_lead` tag receives `form_id=webinar-signup`.
-
-Only add a Gads/FB lookup row if the new form should fire a paid conversion.
+GTM: `CE - form_success` fires GA4 automatically. For FB/GAds, update `conversionType()` and `GADS_LABEL_BY_LEAD_TYPE` in `sm-analytics.js`. Only add a new GTM tag if you need a new `conversion_type` value.
 
 ---
 
