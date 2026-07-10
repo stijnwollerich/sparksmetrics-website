@@ -17,7 +17,7 @@
     </script>
     <!-- End Google Tag Manager -->
     {% endif %}
-    <script src="{{ url_for('static', filename='js/sm-analytics.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/sm-analytics.js') }}?v=3"></script>
     <!-- PostMessage wrapper removed to avoid interfering with third-party embeds -->
     <!-- Global error suppression removed to avoid hiding root causes -->
     <meta charset="utf-8" />
@@ -987,7 +987,7 @@
       defer
     ></script>
     <script
-      src="{{ url_for('static', filename='js/checklist-modal.js') }}?v=12"
+      src="{{ url_for('static', filename='js/checklist-modal.js') }}?v=13"
       defer
     ></script>
     {% if request.endpoint != 'main.cro_scan_landing' and request.endpoint !=

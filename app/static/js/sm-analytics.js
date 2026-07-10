@@ -190,8 +190,8 @@
       form_id: formId,
       form_name: resolveFormName(formId, leadType, resourceSlug, data.form_name),
       lead_type: leadType,
-      conversion_type: null,
-      is_qualified: false,
+      conversion_type: leadType ? conversionType(leadType) : null,
+      is_qualified: "false",
       gads_conversion_label: null,
       resource_slug: resourceSlug,
       form_step: data.form_step != null ? data.form_step : null,
@@ -227,10 +227,12 @@
       timestamp: new Date().toISOString(),
     };
 
+    if (eventName === "schedule_booked") {
+      payload.conversion_type = "schedule";
+    }
+
     if (eventName === "form_success" || eventName === "schedule_booked") {
       if (!payload.event_id) payload.event_id = uuid();
-      payload.conversion_type =
-        eventName === "schedule_booked" ? "schedule" : conversionType(leadType);
       payload.is_qualified =
         eventName === "form_success" && isQualifiedLeadType(leadType)
           ? "true"
