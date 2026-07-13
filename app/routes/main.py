@@ -1292,6 +1292,7 @@ RESOURCE_DOWNLOADS = {
     "vsl-free-cro-video": {
         "gate_only": True,
         "redirect_endpoint": "main.free_cro_audit_landing",
+        "enroll_nurture": True,
     },
 }
 
@@ -2073,7 +2074,7 @@ def _save_strategy_session_lead(
             "funnel_session_id": funnel_session_id,
             "strategy_session_step": step,
             "funnel_completed": completed,
-            "enroll_nurture": False,
+            "enroll_nurture": True,
         }
         if visitor_country:
             payload["visitor_country"] = visitor_country
@@ -2638,6 +2639,7 @@ def download_resource():
         business_stage=business_stage,
         website_url=website_url_lm,
         form_page_url=_ingest_form_page_url(data),
+        enroll_nurture_override=resource.get("enroll_nurture", False) or None,
     )
     _sync_lead_to_brevo(
         fname,
