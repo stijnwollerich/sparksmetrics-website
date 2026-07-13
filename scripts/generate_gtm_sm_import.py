@@ -475,13 +475,35 @@ def build_new_tags(source: dict) -> list[dict]:
     ]
 
 
+def cjs_is_cta_click() -> dict:
+    """True when the click target (or a parent) is a real CTA — not just class name."""
+    js = """function () {
+  var el = {{Click Element}};
+  if (!el || !el.closest) return false;
+  var sel = 'button, .btn, .fixed-cta-btn, [role="button"], [data-checklist-modal], [data-download-modal], [data-audit-modal], [data-track]';
+  return !!el.closest(sel);
+}"""
+    return {
+        "accountId": ACCOUNT_ID,
+        "containerId": CONTAINER_ID,
+        "variableId": next_id(),
+        "name": "cjs - Is CTA Click",
+        "type": "jsm",
+        "parameter": [{"type": "TEMPLATE", "key": "javascript", "value": js}],
+        "fingerprint": FP,
+        "formatValue": {},
+    }
+
+
 def patch_button_click_trigger(trigger: dict) -> dict:
+    # Prefer closest()-based CJS over Click Classes — child text/icon clicks
+    # and Tailwind CTAs (no "btn" class) otherwise miss the trigger.
     trigger["filter"] = [
         {
-            "type": "MATCH_REGEX",
+            "type": "EQUALS",
             "parameter": [
-                {"type": "TEMPLATE", "key": "arg0", "value": "{{Click Classes}}"},
-                {"type": "TEMPLATE", "key": "arg1", "value": "(btn|button)"},
+                {"type": "TEMPLATE", "key": "arg0", "value": "{{cjs - Is CTA Click}}"},
+                {"type": "TEMPLATE", "key": "arg1", "value": "true"},
             ],
         }
     ]
@@ -524,7 +546,7 @@ def build() -> dict:
     cv = out["containerVersion"]
     cv["tag"] = kept_tags + new_tags
     cv["trigger"] = kept_triggers + new_triggers
-    cv["variable"] = kept_variables + build_new_variables()
+    cv["variable"] = kept_variables + [cjs_is_cta_click()] + build_new_variables()
     out["exportTime"] = time.strftime("%Y-%m-%d %H:%M:%S")
     return out
 

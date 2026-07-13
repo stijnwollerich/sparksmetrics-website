@@ -1,6 +1,6 @@
 {
     "exportFormatVersion": 2,
-    "exportTime": "2026-07-10 13:25:33",
+    "exportTime": "2026-07-10 14:31:14",
     "containerVersion": {
         "path": "accounts/6197865940/containers/166824053/versions/0",
         "accountId": "6197865940",
@@ -869,7 +869,7 @@
                         "value": "{{Measurement ID}}"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "firingTriggerId": [
                     "9001"
                 ],
@@ -1120,7 +1120,7 @@
                         "value": "{{Measurement ID}}"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "firingTriggerId": [
                     "9002"
                 ],
@@ -1251,7 +1251,7 @@
                         "value": "{{Measurement ID}}"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "firingTriggerId": [
                     "9004"
                 ],
@@ -1412,7 +1412,7 @@
                         "value": "{{Measurement ID}}"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "firingTriggerId": [
                     "9005"
                 ],
@@ -1633,7 +1633,7 @@
                         "value": "{{Measurement ID}}"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "firingTriggerId": [
                     "9012"
                 ],
@@ -1703,7 +1703,7 @@
                         "value": "false"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "firingTriggerId": [
                     "9006"
                 ],
@@ -1783,7 +1783,7 @@
                         "value": "true"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "firingTriggerId": [
                     "9008"
                 ],
@@ -1940,7 +1940,7 @@
                         "value": "true"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "firingTriggerId": [
                     "9007"
                 ],
@@ -2010,7 +2010,7 @@
                         "value": "false"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "firingTriggerId": [
                     "9009"
                 ],
@@ -2075,7 +2075,7 @@
                         "value": "false"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "firingTriggerId": [
                     "9010",
                     "9011"
@@ -2143,22 +2143,22 @@
                 "type": "CLICK",
                 "filter": [
                     {
-                        "type": "MATCH_REGEX",
+                        "type": "EQUALS",
                         "parameter": [
                             {
                                 "type": "TEMPLATE",
                                 "key": "arg0",
-                                "value": "{{Click Classes}}"
+                                "value": "{{cjs - Is CTA Click}}"
                             },
                             {
                                 "type": "TEMPLATE",
                                 "key": "arg1",
-                                "value": "(btn|button)"
+                                "value": "true"
                             }
                         ]
                     }
                 ],
-                "fingerprint": "1783675533830"
+                "fingerprint": "1783679474170"
             },
             {
                 "accountId": "6197865940",
@@ -2403,7 +2403,7 @@
                         ]
                     }
                 ],
-                "fingerprint": "1783675533830"
+                "fingerprint": "1783679474170"
             },
             {
                 "accountId": "6197865940",
@@ -2428,7 +2428,7 @@
                         ]
                     }
                 ],
-                "fingerprint": "1783675533830"
+                "fingerprint": "1783679474170"
             },
             {
                 "accountId": "6197865940",
@@ -2453,7 +2453,7 @@
                         ]
                     }
                 ],
-                "fingerprint": "1783675533830"
+                "fingerprint": "1783679474170"
             },
             {
                 "accountId": "6197865940",
@@ -2478,7 +2478,7 @@
                         ]
                     }
                 ],
-                "fingerprint": "1783675533830"
+                "fingerprint": "1783679474170"
             },
             {
                 "accountId": "6197865940",
@@ -2503,7 +2503,7 @@
                         ]
                     }
                 ],
-                "fingerprint": "1783675533830"
+                "fingerprint": "1783679474170"
             },
             {
                 "accountId": "6197865940",
@@ -2528,7 +2528,7 @@
                         ]
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "filter": [
                     {
                         "type": "EQUALS",
@@ -2570,7 +2570,7 @@
                         ]
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "filter": [
                     {
                         "type": "EQUALS",
@@ -2612,7 +2612,7 @@
                         ]
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "filter": [
                     {
                         "type": "EQUALS",
@@ -2654,7 +2654,7 @@
                         ]
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "filter": [
                     {
                         "type": "EQUALS",
@@ -2696,7 +2696,7 @@
                         ]
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "filter": [
                     {
                         "type": "MATCH_REGEX",
@@ -2738,7 +2738,7 @@
                         ]
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "filter": [
                     {
                         "type": "MATCH_REGEX",
@@ -2780,7 +2780,7 @@
                         ]
                     }
                 ],
-                "fingerprint": "1783675533830"
+                "fingerprint": "1783679474170"
             }
         ],
         "variable": [
@@ -3005,6 +3005,22 @@
                 "accountId": "6197865940",
                 "containerId": "166824053",
                 "variableId": "9023",
+                "name": "cjs - Is CTA Click",
+                "type": "jsm",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "javascript",
+                        "value": "function () {\n  var el = {{Click Element}};\n  if (!el || !el.closest) return false;\n  var sel = 'button, .btn, .fixed-cta-btn, [role=\"button\"], [data-checklist-modal], [data-download-modal], [data-audit-modal], [data-track]';\n  return !!el.closest(sel);\n}"
+                    }
+                ],
+                "fingerprint": "1783679474170",
+                "formatValue": {}
+            },
+            {
+                "accountId": "6197865940",
+                "containerId": "166824053",
+                "variableId": "9024",
                 "name": "dlv - user_data.fname",
                 "type": "v",
                 "parameter": [
@@ -3024,13 +3040,13 @@
                         "value": "user_data.fname"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9024",
+                "variableId": "9025",
                 "name": "dlv - user_data.email",
                 "type": "v",
                 "parameter": [
@@ -3050,13 +3066,13 @@
                         "value": "user_data.email"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9025",
+                "variableId": "9026",
                 "name": "dlv - user_data.phone",
                 "type": "v",
                 "parameter": [
@@ -3076,13 +3092,13 @@
                         "value": "user_data.phone"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9026",
+                "variableId": "9027",
                 "name": "dlv - user_data.website_url",
                 "type": "v",
                 "parameter": [
@@ -3102,13 +3118,13 @@
                         "value": "user_data.website_url"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9027",
+                "variableId": "9028",
                 "name": "dlv - user_data.business_stage",
                 "type": "v",
                 "parameter": [
@@ -3128,13 +3144,13 @@
                         "value": "user_data.business_stage"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9028",
+                "variableId": "9029",
                 "name": "dlv - user_data.orders_per_month",
                 "type": "v",
                 "parameter": [
@@ -3154,13 +3170,13 @@
                         "value": "user_data.orders_per_month"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9029",
+                "variableId": "9030",
                 "name": "dlv - user_data.conversion_rate",
                 "type": "v",
                 "parameter": [
@@ -3180,13 +3196,13 @@
                         "value": "user_data.conversion_rate"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9030",
+                "variableId": "9031",
                 "name": "dlv - user_data.average_order_value",
                 "type": "v",
                 "parameter": [
@@ -3206,13 +3222,13 @@
                         "value": "user_data.average_order_value"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9031",
+                "variableId": "9032",
                 "name": "dlv - user_data.annual_revenue",
                 "type": "v",
                 "parameter": [
@@ -3232,13 +3248,13 @@
                         "value": "user_data.annual_revenue"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9032",
+                "variableId": "9033",
                 "name": "dlv - user_data.monthly_revenue_usd",
                 "type": "v",
                 "parameter": [
@@ -3258,13 +3274,13 @@
                         "value": "user_data.monthly_revenue_usd"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9033",
+                "variableId": "9034",
                 "name": "dlv - user_data.transactions_per_month",
                 "type": "v",
                 "parameter": [
@@ -3284,13 +3300,13 @@
                         "value": "user_data.transactions_per_month"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9034",
+                "variableId": "9035",
                 "name": "dlv - user_data.qualify_score",
                 "type": "v",
                 "parameter": [
@@ -3310,13 +3326,13 @@
                         "value": "user_data.qualify_score"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9035",
+                "variableId": "9036",
                 "name": "dlv - user_data.qualify_tier",
                 "type": "v",
                 "parameter": [
@@ -3336,13 +3352,13 @@
                         "value": "user_data.qualify_tier"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9036",
+                "variableId": "9037",
                 "name": "dlv - lead_type",
                 "type": "v",
                 "parameter": [
@@ -3362,13 +3378,13 @@
                         "value": "lead_type"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9037",
+                "variableId": "9038",
                 "name": "dlv - conversion_type",
                 "type": "v",
                 "parameter": [
@@ -3388,13 +3404,13 @@
                         "value": "conversion_type"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9038",
+                "variableId": "9039",
                 "name": "dlv - is_qualified",
                 "type": "v",
                 "parameter": [
@@ -3414,13 +3430,13 @@
                         "value": "is_qualified"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9039",
+                "variableId": "9040",
                 "name": "dlv - resource_slug",
                 "type": "v",
                 "parameter": [
@@ -3440,13 +3456,13 @@
                         "value": "resource_slug"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9040",
+                "variableId": "9041",
                 "name": "dlv - event_id",
                 "type": "v",
                 "parameter": [
@@ -3466,13 +3482,13 @@
                         "value": "event_id"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9041",
+                "variableId": "9042",
                 "name": "dlv - funnel_session_id",
                 "type": "v",
                 "parameter": [
@@ -3492,13 +3508,13 @@
                         "value": "funnel_session_id"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9042",
+                "variableId": "9043",
                 "name": "dlv - page_type",
                 "type": "v",
                 "parameter": [
@@ -3518,13 +3534,13 @@
                         "value": "page_type"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9043",
+                "variableId": "9044",
                 "name": "dlv - page_path",
                 "type": "v",
                 "parameter": [
@@ -3544,13 +3560,13 @@
                         "value": "page_path"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9044",
+                "variableId": "9045",
                 "name": "dlv - form_id",
                 "type": "v",
                 "parameter": [
@@ -3570,13 +3586,13 @@
                         "value": "form_id"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9045",
+                "variableId": "9046",
                 "name": "dlv - form_name",
                 "type": "v",
                 "parameter": [
@@ -3596,13 +3612,13 @@
                         "value": "form_name"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9046",
+                "variableId": "9047",
                 "name": "dlv - form_step",
                 "type": "v",
                 "parameter": [
@@ -3622,13 +3638,13 @@
                         "value": "form_step"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9047",
+                "variableId": "9048",
                 "name": "dlv - form_step_total",
                 "type": "v",
                 "parameter": [
@@ -3648,13 +3664,13 @@
                         "value": "form_step_total"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9048",
+                "variableId": "9049",
                 "name": "dlv - form_step_name",
                 "type": "v",
                 "parameter": [
@@ -3674,13 +3690,13 @@
                         "value": "form_step_name"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9049",
+                "variableId": "9050",
                 "name": "dlv - gads_conversion_label",
                 "type": "v",
                 "parameter": [
@@ -3700,13 +3716,13 @@
                         "value": "gads_conversion_label"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9050",
+                "variableId": "9051",
                 "name": "dlv - video_id",
                 "type": "v",
                 "parameter": [
@@ -3726,13 +3742,13 @@
                         "value": "video_id"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9051",
+                "variableId": "9052",
                 "name": "dlv - video_percent",
                 "type": "v",
                 "parameter": [
@@ -3752,13 +3768,13 @@
                         "value": "video_percent"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9052",
+                "variableId": "9053",
                 "name": "dlv - video_provider",
                 "type": "v",
                 "parameter": [
@@ -3778,13 +3794,13 @@
                         "value": "video_provider"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9053",
+                "variableId": "9054",
                 "name": "dlv - video_url",
                 "type": "v",
                 "parameter": [
@@ -3804,13 +3820,13 @@
                         "value": "video_url"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9054",
+                "variableId": "9055",
                 "name": "dlv - video_title",
                 "type": "v",
                 "parameter": [
@@ -3830,13 +3846,13 @@
                         "value": "video_title"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9055",
+                "variableId": "9056",
                 "name": "dlv - video_duration",
                 "type": "v",
                 "parameter": [
@@ -3856,13 +3872,13 @@
                         "value": "video_duration"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9056",
+                "variableId": "9057",
                 "name": "dlv - video_current_time",
                 "type": "v",
                 "parameter": [
@@ -3882,13 +3898,13 @@
                         "value": "video_current_time"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9057",
+                "variableId": "9058",
                 "name": "dlv - click_label",
                 "type": "v",
                 "parameter": [
@@ -3908,13 +3924,13 @@
                         "value": "click_label"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9058",
+                "variableId": "9059",
                 "name": "dlv - click_text",
                 "type": "v",
                 "parameter": [
@@ -3934,13 +3950,13 @@
                         "value": "click_text"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9059",
+                "variableId": "9060",
                 "name": "dlv - click_url",
                 "type": "v",
                 "parameter": [
@@ -3960,13 +3976,13 @@
                         "value": "click_url"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9060",
+                "variableId": "9061",
                 "name": "dlv - scroll_percent",
                 "type": "v",
                 "parameter": [
@@ -3986,13 +4002,13 @@
                         "value": "scroll_percent"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9061",
+                "variableId": "9062",
                 "name": "dlv - calendly_event",
                 "type": "v",
                 "parameter": [
@@ -4012,13 +4028,13 @@
                         "value": "calendly_event"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9062",
+                "variableId": "9063",
                 "name": "dlv - calendly_url",
                 "type": "v",
                 "parameter": [
@@ -4038,13 +4054,13 @@
                         "value": "calendly_url"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9063",
+                "variableId": "9064",
                 "name": "dlv - schedule_action",
                 "type": "v",
                 "parameter": [
@@ -4064,13 +4080,13 @@
                         "value": "schedule_action"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9064",
+                "variableId": "9065",
                 "name": "dlv - question",
                 "type": "v",
                 "parameter": [
@@ -4090,13 +4106,13 @@
                         "value": "question"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9065",
+                "variableId": "9066",
                 "name": "dlv - answer",
                 "type": "v",
                 "parameter": [
@@ -4116,13 +4132,13 @@
                         "value": "answer"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             },
             {
                 "accountId": "6197865940",
                 "containerId": "166824053",
-                "variableId": "9066",
+                "variableId": "9067",
                 "name": "dlv - trigger_location",
                 "type": "v",
                 "parameter": [
@@ -4142,7 +4158,7 @@
                         "value": "trigger_location"
                     }
                 ],
-                "fingerprint": "1783675533830",
+                "fingerprint": "1783679474170",
                 "formatValue": {}
             }
         ],
