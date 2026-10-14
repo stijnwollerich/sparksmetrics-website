@@ -1,11 +1,9 @@
-{# Horizontally scrolling 3-row × N-col A/B test gallery. Requires spark_experiments context var. #}
+{# A/B test gallery — 4-col grid, max 12 cards, full width. Requires spark_experiments context var. #}
 {% if spark_experiments and spark_experiments|length > 0 %}
-<style>
-  #exp-gallery-track::-webkit-scrollbar { display: none; }
-</style>
-<section class="py-16 md:py-20 bg-light-base border-t border-gray-100 overflow-hidden">
-  <div class="max-w-7xl mx-auto px-6 mb-8">
-    <div class="flex items-end justify-between flex-wrap gap-4">
+{% set display_exps = spark_experiments[:12] %}
+<section class="py-16 md:py-20 bg-light-base border-t border-gray-100">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex items-end justify-between flex-wrap gap-4 mb-10">
       <div>
         <p class="text-primary font-bold text-xs uppercase tracking-[0.3em] mb-2">A/B Test Archive</p>
         <h2 class="text-3xl md:text-5xl font-display font-black text-deep-charcoal uppercase tracking-tighter leading-tight">
@@ -16,152 +14,102 @@
         {{ spark_experiments|length }}+ tests from live client programs — every card is a real before&hairsp;/&hairsp;after.
       </p>
     </div>
-  </div>
 
-  <div class="relative">
-    <button
-      type="button"
-      id="exp-gallery-prev"
-      class="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 items-center justify-center rounded-full bg-white border border-gray-200 shadow-md text-deep-charcoal hover:bg-gray-50 transition-colors"
-      aria-label="Scroll experiments left"
-      style="display:none"
-    >
-      <span class="material-symbols-outlined">chevron_left</span>
-    </button>
-    <button
-      type="button"
-      id="exp-gallery-next"
-      class="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 items-center justify-center rounded-full bg-white border border-gray-200 shadow-md text-deep-charcoal hover:bg-gray-50 transition-colors"
-      aria-label="Scroll experiments right"
-    >
-      <span class="material-symbols-outlined">chevron_right</span>
-    </button>
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+      {% for exp in display_exps %}
+      <article class="flex flex-col rounded-2xl overflow-hidden bg-white border border-gray-200/90 shadow-sm hover:shadow-md hover:border-gray-300/90 transition-all duration-200" style="min-height:320px">
 
-    {# flex of columns; each column = 3 stacked cards, snaps on scroll #}
-    <div
-      id="exp-gallery-track"
-      class="flex gap-3 overflow-x-auto scroll-smooth px-6 md:px-14 pb-4"
-      style="scrollbar-width:none; -ms-overflow-style:none; scroll-snap-type:x proximity;"
-    >
-      {% for col in spark_experiments | batch(3) %}
-      <div class="shrink-0 flex flex-col gap-3" style="scroll-snap-align:start; width:256px">
-        {% for exp in col %}
-        <article class="group flex flex-col rounded-2xl overflow-hidden bg-white border border-gray-200/90 shadow-sm hover:shadow-md hover:border-gray-300/90 transition-all duration-200" style="height:328px">
+        {# title + page type #}
+        <div class="shrink-0 px-3 pt-3 pb-1 text-center">
+          <h3 class="text-[10px] font-display font-black text-deep-charcoal uppercase tracking-tight leading-snug line-clamp-2">{{ exp.test_name }}</h3>
+          {% if exp.page %}
+          <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-0.5 truncate">{{ exp.page }}</p>
+          {% endif %}
+        </div>
 
-          {# title + page type #}
-          <div class="shrink-0 px-3 pt-2.5 pb-1 text-center">
-            <h3 class="text-[10px] font-display font-black text-deep-charcoal uppercase tracking-tight leading-snug line-clamp-2">{{ exp.test_name }}</h3>
-            {% if exp.page %}
-            <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-0.5 truncate">{{ exp.page }}</p>
+        {# before / after split #}
+        <div class="relative flex-1 min-h-0 grid grid-cols-2 divide-x divide-gray-200/90 bg-gray-50/60">
+          <span
+            class="pointer-events-none absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full border border-gray-200 bg-white text-[7px] font-black uppercase tracking-wide text-gray-500 shadow-sm"
+            aria-hidden="true"
+          >vs</span>
+
+          <div class="flex min-h-0 flex-col">
+            <div class="shrink-0 px-2 pt-1 pb-0.5 text-center">
+              <span class="text-[8px] font-black uppercase tracking-widest text-gray-500 leading-none">Before</span>
+            </div>
+            <div class="min-h-0 flex-1 px-2 pb-2" style="min-height:160px">
+              <div class="flex h-full items-start justify-center overflow-hidden rounded-lg border border-gray-200/90 bg-white">
+                {% if exp.control and exp.control.image_url %}
+                <img
+                  src="{{ exp.control.image_url }}"
+                  alt="Before: {{ exp.test_name }}"
+                  class="h-full w-full object-contain object-top"
+                  loading="lazy"
+                  width="160"
+                  height="200"
+                />
+                {% else %}
+                <div class="w-full h-full flex items-center justify-center bg-gray-50">
+                  <span class="text-[9px] text-gray-300 font-bold uppercase">—</span>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          <div class="flex min-h-0 flex-col bg-primary/[0.03]">
+            <div class="shrink-0 px-2 pt-1 pb-0.5 text-center">
+              <span class="text-[8px] font-black uppercase tracking-widest text-primary leading-none">After</span>
+            </div>
+            <div class="min-h-0 flex-1 px-2 pb-2" style="min-height:160px">
+              <div class="flex h-full items-start justify-center overflow-hidden rounded-lg border-2 border-primary/30 bg-white ring-1 ring-primary/10">
+                {% if exp.challenger and exp.challenger.image_url %}
+                <img
+                  src="{{ exp.challenger.image_url }}"
+                  alt="After: {{ exp.test_name }}"
+                  class="h-full w-full object-contain object-top"
+                  loading="lazy"
+                  width="160"
+                  height="200"
+                />
+                {% else %}
+                <div class="w-full h-full flex items-center justify-center bg-primary/5">
+                  <span class="text-[9px] text-primary/40 font-bold uppercase">—</span>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {# performance stats #}
+        <div class="shrink-0 border-t border-gray-100 px-3 py-2.5 grid grid-cols-2 divide-x divide-gray-200">
+          <div class="text-center px-2">
+            <p class="text-[8px] font-bold uppercase tracking-widest text-gray-500 leading-none">CVR</p>
+            {% if exp.conv_improvement is not none %}
+            <p class="mt-1 text-xl font-display font-black leading-none tabular-nums {{ 'text-red-500' if exp.conv_improvement < 0 else 'text-primary' }}">
+              {% if exp.conv_improvement > 0 %}+{% endif %}{{ '%.1f'|format(exp.conv_improvement) }}%
+            </p>
+            {% else %}
+            <p class="mt-1 text-xl font-display font-black leading-none text-gray-300">n/a</p>
             {% endif %}
           </div>
-
-          {# before / after split #}
-          <div class="relative flex-1 min-h-0 grid grid-cols-2 divide-x divide-gray-200/90 bg-gray-50/60">
-            <span
-              class="pointer-events-none absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full border border-gray-200 bg-white text-[7px] font-black uppercase tracking-wide text-gray-500 shadow-sm"
-              aria-hidden="true"
-            >vs</span>
-
-            <div class="flex min-h-0 flex-col">
-              <div class="shrink-0 px-1.5 pt-1 pb-0.5 text-center">
-                <span class="text-[8px] font-black uppercase tracking-widest text-gray-500 leading-none">Before</span>
-              </div>
-              <div class="min-h-0 flex-1 px-1.5 pb-1.5">
-                <div class="flex h-full items-start justify-center overflow-hidden rounded-lg border border-gray-200/90 bg-white">
-                  {% if exp.control and exp.control.image_url %}
-                  <img
-                    src="{{ exp.control.image_url }}"
-                    alt="Before: {{ exp.test_name }}"
-                    class="h-full w-full object-contain object-top"
-                    loading="lazy"
-                    width="116"
-                    height="176"
-                  />
-                  {% else %}
-                  <div class="w-full h-full flex items-center justify-center bg-gray-50">
-                    <span class="text-[9px] text-gray-300 font-bold uppercase tracking-widest">—</span>
-                  </div>
-                  {% endif %}
-                </div>
-              </div>
-            </div>
-
-            <div class="flex min-h-0 flex-col bg-primary/[0.03]">
-              <div class="shrink-0 px-1.5 pt-1 pb-0.5 text-center">
-                <span class="text-[8px] font-black uppercase tracking-widest text-primary leading-none">After</span>
-              </div>
-              <div class="min-h-0 flex-1 px-1.5 pb-1.5">
-                <div class="flex h-full items-start justify-center overflow-hidden rounded-lg border-2 border-primary/30 bg-white ring-1 ring-primary/10">
-                  {% if exp.challenger and exp.challenger.image_url %}
-                  <img
-                    src="{{ exp.challenger.image_url }}"
-                    alt="After: {{ exp.test_name }}"
-                    class="h-full w-full object-contain object-top"
-                    loading="lazy"
-                    width="116"
-                    height="176"
-                  />
-                  {% else %}
-                  <div class="w-full h-full flex items-center justify-center bg-primary/5">
-                    <span class="text-[9px] text-primary/40 font-bold uppercase tracking-widest">—</span>
-                  </div>
-                  {% endif %}
-                </div>
-              </div>
-            </div>
+          <div class="text-center px-2">
+            <p class="text-[8px] font-bold uppercase tracking-widest text-gray-500 leading-none">Rev added</p>
+            {% if exp.rev_added is not none %}
+            <p class="mt-1 text-xl font-display font-black leading-none text-deep-charcoal tabular-nums">
+              +{% if exp.rev_added >= 1000 %}${{ '%.1f'|format(exp.rev_added / 1000) }}k{% else %}${{ '{:,.0f}'.format(exp.rev_added) }}{% endif %}
+            </p>
+            {% else %}
+            <p class="mt-1 text-xl font-display font-black leading-none text-gray-300">n/a</p>
+            {% endif %}
           </div>
+        </div>
 
-          {# performance stats #}
-          <div class="shrink-0 border-t border-gray-100 px-3 py-2 grid grid-cols-2 divide-x divide-gray-200">
-            <div class="text-center px-1.5">
-              <p class="text-[8px] font-bold uppercase tracking-widest text-gray-500 leading-none">CVR</p>
-              {% if exp.conv_improvement is not none %}
-              <p class="mt-0.5 text-xl font-display font-black leading-none tabular-nums {{ 'text-red-500' if exp.conv_improvement < 0 else 'text-primary' }}">
-                {% if exp.conv_improvement > 0 %}+{% endif %}{{ '%.1f'|format(exp.conv_improvement) }}%
-              </p>
-              {% else %}
-              <p class="mt-0.5 text-xl font-display font-black leading-none text-gray-300">n/a</p>
-              {% endif %}
-            </div>
-            <div class="text-center px-1.5">
-              <p class="text-[8px] font-bold uppercase tracking-widest text-gray-500 leading-none">Rev added</p>
-              {% if exp.rev_added is not none %}
-              <p class="mt-0.5 text-xl font-display font-black leading-none text-deep-charcoal tabular-nums">
-                +{% if exp.rev_added >= 1000 %}${{ '%.1f'|format(exp.rev_added / 1000) }}k{% else %}${{ '{:,.0f}'.format(exp.rev_added) }}{% endif %}
-              </p>
-              {% else %}
-              <p class="mt-0.5 text-xl font-display font-black leading-none text-gray-300">n/a</p>
-              {% endif %}
-            </div>
-          </div>
-
-        </article>
-        {% endfor %}
-      </div>
+      </article>
       {% endfor %}
     </div>
   </div>
 </section>
-
-<script>
-(function () {
-  var track = document.getElementById('exp-gallery-track');
-  var prev  = document.getElementById('exp-gallery-prev');
-  var next  = document.getElementById('exp-gallery-next');
-  if (!track) return;
-  function scrollAmt() { return Math.max(track.clientWidth * 0.75, 280); }
-  function update() {
-    var atStart = track.scrollLeft < 10;
-    var atEnd   = track.scrollWidth - track.clientWidth - track.scrollLeft < 10;
-    if (prev) prev.style.display = atStart ? 'none' : 'flex';
-    if (next) next.style.display = atEnd   ? 'none' : 'flex';
-  }
-  if (prev) prev.addEventListener('click', function () { track.scrollBy({ left: -scrollAmt(), behavior: 'smooth' }); });
-  if (next) next.addEventListener('click', function () { track.scrollBy({ left:  scrollAmt(), behavior: 'smooth' }); });
-  track.addEventListener('scroll', update);
-  window.addEventListener('resize', update);
-  update();
-})();
-</script>
 {% endif %}
