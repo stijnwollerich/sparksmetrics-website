@@ -406,7 +406,11 @@ BLOG_POSTS: list[dict] = _load_blog_posts()
 @main_bp.route("/")
 def index():
     """Home page — CRO landing (light theme)."""
-    return render_template("landing_pages/landing_alt.html")
+    from app.services.spark_experiments import get_website_experiments
+    return render_template(
+        "landing_pages/landing_alt.html",
+        spark_experiments=get_website_experiments(),
+    )
 
 
 @main_bp.route("/favicon.ico")
@@ -1378,6 +1382,162 @@ def free_cro_audit_landing():
     )
 
 
+@main_bp.route("/pdp-redesign/")
+@main_bp.route("/pdp-redesign")
+def pdp_redesign_landing():
+    """$500 PDP redesign offer — Meta cold traffic, Stripe Checkout primary CTA."""
+    from app.services.pdp_redesign import get_calendly_url, get_meta_pixel_id, resolve_vertical
+
+    vertical = resolve_vertical(request.args.get("v"))
+    return render_template(
+        "landing_pages/pdp_redesign.html",
+        vertical=vertical,
+        calendly_url=get_calendly_url(),
+        meta_pixel_id=get_meta_pixel_id(),
+        stripe_ready=bool(current_app.config.get("STRIPE_SECRET_KEY")),
+    )
+
+
+@main_bp.route("/pdp-redesign/checkout", methods=["GET", "POST"])
+def pdp_redesign_checkout():
+    """Create Stripe Checkout Session and redirect. Persists UTMs in session metadata."""
+    from app.services.pdp_redesign import (
+        append_query,
+        collect_utm_params,
+        create_checkout_session,
+        resolve_vertical,
+        stripe_configured,
+    )
+
+    args = request.values
+    utm = collect_utm_params(args)
+    vertical = resolve_vertical(args.get("v"))
+    position = (args.get("position") or "hero").strip()[:40]
+
+    cancel_params = dict(utm)
+    if vertical["key"] != "default":
+        cancel_params["v"] = vertical["key"]
+    cancel_url = append_query(url_for("main.pdp_redesign_landing", _external=True), cancel_params)
+    success_params = dict(utm)
+    if vertical["key"] != "default":
+        success_params["v"] = vertical["key"]
+    success_base = url_for("main.pdp_redesign_thanks", _external=True)
+    success_url = append_query(success_base, success_params)
+    # Stripe replaces {CHECKOUT_SESSION_ID}
+    success_url = (
+        success_url
+        + ("&" if "?" in success_url else "?")
+        + "session_id={CHECKOUT_SESSION_ID}"
+    )
+
+    if not stripe_configured():
+        if current_app.config.get("DEBUG"):
+            return redirect(
+                append_query(
+                    url_for("main.pdp_redesign_thanks"),
+                    {**utm, "dev": "1", **({"v": vertical["key"]} if vertical["key"] != "default" else {})},
+                )
+            )
+        return (
+            "Stripe is not configured. Set STRIPE_SECRET_KEY to enable checkout.",
+            503,
+        )
+
+    metadata = {
+        "offer": "pdp_redesign",
+        "position": position,
+        "vertical": vertical["key"],
+        **utm,
+    }
+    try:
+        checkout_url = create_checkout_session(
+            success_url=success_url,
+            cancel_url=cancel_url,
+            metadata={k: str(v)[:500] for k, v in metadata.items() if v},
+        )
+    except Exception as e:
+        current_app.logger.exception("PDP redesign Stripe checkout failed: %s", e)
+        return ("Checkout unavailable right now. Please try again shortly.", 502)
+
+    return redirect(checkout_url, code=303)
+
+
+@main_bp.route("/pdp-redesign/thanks/")
+@main_bp.route("/pdp-redesign/thanks")
+def pdp_redesign_thanks():
+    """Post-purchase thank-you: intake form (3 questions) + optional Calendly."""
+    from app.services.pdp_redesign import get_calendly_url, get_meta_pixel_id, retrieve_checkout_session
+
+    session_id = (request.args.get("session_id") or "").strip()
+    is_dev = current_app.config.get("DEBUG") and request.args.get("dev") == "1"
+    stripe_info = retrieve_checkout_session(session_id) if session_id else None
+    paid = is_dev or (stripe_info and stripe_info.get("payment_status") == "paid")
+    if not paid and not is_dev and not session_id:
+        return redirect(url_for("main.pdp_redesign_landing"))
+
+    email = (stripe_info or {}).get("email") or ""
+    name = (stripe_info or {}).get("name") or ""
+    return render_template(
+        "landing_pages/pdp_redesign_thanks.html",
+        calendly_url=get_calendly_url(),
+        meta_pixel_id=get_meta_pixel_id(),
+        customer_email=email,
+        customer_name=name,
+        session_id=session_id,
+        is_dev=is_dev,
+        paid=bool(paid or is_dev),
+    )
+
+
+@main_bp.route("/pdp-redesign/intake", methods=["POST"])
+def pdp_redesign_intake():
+    """Save post-purchase intake (product URL, platform, off-limits)."""
+    data = request.get_json(silent=True) or request.form or {}
+    email = (data.get("email") or "").strip()
+    fname = (data.get("name") or data.get("fname") or "").strip() or "Buyer"
+    product_url = (data.get("product_url") or data.get("website_url") or "").strip()
+    platform = (data.get("platform") or "").strip()
+    off_limits = (data.get("off_limits") or "").strip()
+    session_id = (data.get("session_id") or "").strip()
+
+    if not email or not re.match(r"^[^\s@]+@[^\s@]+\.[^\s@]+$", email):
+        return jsonify({"success": False, "error": "Please enter a valid email."}), 400
+    if not product_url:
+        return jsonify({"success": False, "error": "Please enter your best-selling product page URL."}), 400
+    if not platform:
+        return jsonify({"success": False, "error": "Please tell us your platform."}), 400
+
+    stage_bits = [f"platform={platform[:80]}"]
+    if off_limits:
+        stage_bits.append(f"off_limits={off_limits[:200]}")
+    if session_id:
+        stage_bits.append(f"stripe={session_id[:66]}")
+    business_stage = " | ".join(stage_bits)[:120]
+
+    form_page_url = _ingest_form_page_url(data) or request.referrer
+    _save_lead(
+        fname,
+        email,
+        "pdp_intake",
+        resource_slug=None,
+        business_stage=business_stage,
+        website_url=product_url[:500],
+        form_page_url=form_page_url,
+        skip_background_cro_scan=True,
+        enroll_nurture_override=False,
+    )
+    _notify_slack_lead(
+        fname,
+        email,
+        "pdp_intake",
+        business_stage=business_stage,
+        website_url=product_url[:500],
+        slack_headline="*$500 PDP Redesign — intake submitted*",
+        event="intake_submitted",
+    )
+    return jsonify({"success": True})
+
+
 def _ingest_form_page_url(data: dict | None) -> str | None:
     """Resolve Spark `form_page_url` from JSON body or Referer. See docs/SPARK_SITE_LEAD_API.md."""
     d = data if isinstance(data, dict) else {}
@@ -1679,6 +1839,7 @@ _SLACK_FORM_IDS: dict[str, str] = {
     "cro_scan": "cro-scan-form",
     "cro_cost_roi": "ccr-lead-form",
     "strategy_session": "mss-funnel",
+    "pdp_intake": "pdp-redesign-intake",
 }
 
 
@@ -1691,6 +1852,8 @@ def _derive_lead_type(submission_type: str, resource_slug: str | None = None) ->
         return "cro_cost_roi"
     if submission_type == "strategy_session":
         return "strategy_session"
+    if submission_type == "pdp_intake":
+        return "pdp_intake"
     if resource_slug == "vsl-free-cro-video":
         return "vsl"
     if submission_type == "resource":
@@ -1716,6 +1879,8 @@ def _derive_form_name(
         return "CRO Cost / ROI Calculator"
     if lead_type == "strategy_session":
         return "30 Minute Strategy Session"
+    if lead_type == "pdp_intake":
+        return "PDP Redesign Intake"
     if lead_type == "vsl":
         return "Free CRO Video (VSL Gate)"
     if lead_type == "ebook":
