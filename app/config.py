@@ -198,6 +198,15 @@ class Config:
     # SPARK_BACKGROUND_CRO_SCAN — default 1: after successful Spark ingest with a URL, run silent CRO scan → attach full_report (no report email)
     SPARK_NURTURE_ENROLLMENT_TYPES = get_spark_nurture_enrollment_types()
 
+    # PDP redesign offer ($500 Stripe Checkout). See /pdp-redesign.
+    STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", "").strip()
+    STRIPE_PDP_PRICE_ID = os.environ.get("STRIPE_PDP_PRICE_ID", "").strip()
+    META_PIXEL_ID = os.environ.get("META_PIXEL_ID", "").strip()
+    PDP_REDESIGN_CALENDLY_URL = (
+        os.environ.get("PDP_REDESIGN_CALENDLY_URL")
+        or "https://calendly.com/stijn-wollerich/conversion-rate-optimization?hide_gdpr_banner=1"
+    ).strip()
+
 
 class ProductionConfig(Config):
     """Production configuration."""

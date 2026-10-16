@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 import time
+from datetime import date
 from typing import Any
 from urllib.parse import urlencode
 
@@ -86,6 +87,17 @@ def _enrich_experiment(raw: dict[str, Any]) -> dict[str, Any]:
         for p in (exp.get("result_image_paths") or [])
         if (u := _experiment_image_url(p, w=900, h=600))
     ]
+    rev = exp.get("rev_added")
+    start_s, end_s = exp.get("start_date"), exp.get("end_date")
+    rev_added_3m = None
+    if isinstance(rev, (int, float)) and rev > 0 and start_s and end_s:
+        try:
+            days = (date.fromisoformat(end_s[:10]) - date.fromisoformat(start_s[:10])).days
+            if days >= 7:
+                rev_added_3m = round(rev * 90 / days)
+        except Exception:
+            pass
+    exp["rev_added_3m"] = rev_added_3m
     return exp
 
 

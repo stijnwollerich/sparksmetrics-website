@@ -6,12 +6,18 @@
     "https://calendly.com/stijn-wollerich/conversion-rate-optimization?hide_gdpr_banner=1";
   var TOTAL = 6;
   var EMBED = funnel.getAttribute("data-embed") === "1";
+  var CALENDLY_FIRST = funnel.getAttribute("data-calendly-first") === "1";
   var START_STEP = parseInt(funnel.getAttribute("data-start-step") || "1", 10) || 1;
   var DISABLE_EXIT = funnel.getAttribute("data-disable-exit") === "1";
   var FORM_NAME =
     funnel.getAttribute("data-form-name") || "30 Minute Strategy Session";
-  var PAGE_TYPE = EMBED ? "strategy_session_embed" : "strategy_session_funnel";
+  var PAGE_TYPE = EMBED
+    ? "strategy_session_embed"
+    : CALENDLY_FIRST
+      ? "strategy_session_calendly"
+      : "strategy_session_funnel";
   var CALENDLY_HEIGHT_EMBED = 640;
+  var CALENDLY_HEIGHT_FIRST = 700;
 
   var current = START_STEP;
   var annualRevenue = "";
@@ -266,6 +272,12 @@
       calendlyInline.style.minHeight = CALENDLY_HEIGHT_EMBED + "px";
       return;
     }
+    if (CALENDLY_FIRST) {
+      calendlyInline.style.height = CALENDLY_HEIGHT_FIRST + "px";
+      calendlyInline.style.minHeight = CALENDLY_HEIGHT_FIRST + "px";
+      calendlyInline.style.minWidth = "100%";
+      return;
+    }
     var copy = funnel.querySelector(".mss-step-calendly-copy");
     var copyHeight = copy ? copy.offsetHeight : 0;
     var height = Math.max(320, window.innerHeight - copyHeight);
@@ -342,7 +354,7 @@
       el.classList.toggle("is-active", s === n);
     });
     funnel.classList.toggle("is-calendly-step", n === 6);
-    if (!EMBED) {
+    if (!EMBED && !CALENDLY_FIRST) {
       document.body.classList.toggle("mss-calendly-active", n === 6);
     }
     if (n === 6) {
@@ -350,7 +362,7 @@
     }
     var focusId =
       n === 3 ? "mss-fname" : n === 4 ? "mss-email" : n === 5 ? "mss-website" : null;
-    scrollToFunnelStep();
+    if (!CALENDLY_FIRST) scrollToFunnelStep();
     if (focusId) {
       window.setTimeout(function () {
         var el = funnel.querySelector("#" + focusId);
@@ -413,6 +425,9 @@
   resolveVisitorCountry();
   pushStrategySessionGtm("page_load", START_STEP);
   setProgress(START_STEP);
+  if (CALENDLY_FIRST || START_STEP === 6) {
+    mountCalendly();
+  }
   window.addEventListener("resize", sizeCalendlyViewport);
 
   funnel.querySelectorAll("[data-mss-next]").forEach(function (btn) {

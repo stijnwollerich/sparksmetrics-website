@@ -219,89 +219,7 @@ block head_extras %}
       </div>
     </div>
   </section> -->
-  <section class="py-24 bg-white border-y border-gray-100">
-    <div class="content-narrow px-6">
-      <h2 class="text-4xl md:text-6xl mb-16 text-center text-deep-charcoal">
-        Does This <span class="text-primary">Sound Familiar?</span>
-      </h2>
-      <div class="space-y-12 text-gray-700">
-        <div class="border-b border-gray-100 pb-12">
-          <h3 class="text-2xl text-primary mb-4">
-            01. Guessing instead of knowing
-          </h3>
-          <p>You change pages, funnels, or flows because they feel right.</p>
-          <p>A headline here.</p>
-          <p>A layout there.</p>
-          <p>Someone said it's a best practice.</p>
-          <p>
-            You ship it and watch results, but you don't really know why
-            anything works or doesn't.
-          </p>
-          <p>
-            Decisions are based on instinct, not a clear understanding of how
-            visitors actually turn into customers.
-          </p>
-        </div>
-        <div class="border-b border-gray-100 pb-12">
-          <h3 class="text-2xl text-primary mb-4">02. Ads won't scale</h3>
-          <p>You try to push ad spend, but the numbers fight back.</p>
-          <p>Conversion rate is too low.</p>
-          <p>AOV won't budge.</p>
-          <p>LTV doesn't justify the risk.</p>
-          <p>Every increase in budget makes margins thinner.</p>
-          <p>You want to scale, but the core KPIs can't carry more volume.</p>
-        </div>
-        <div class="border-b border-gray-100 pb-12">
-          <h3 class="text-2xl text-primary mb-4">03. Data you don't use</h3>
-          <p>You have dashboards.</p>
-          <p>Reports.</p>
-          <p>Tools.</p>
-          <p>But they don't give answers.</p>
-          <p>They show what happened, not why.</p>
-          <p>
-            You know insights are hiding in the data, but you're not pulling
-            them out in a way that changes decisions.
-          </p>
-          <p>So the same questions keep coming back every month.</p>
-        </div>
-        <div class="pb-12">
-          <h3 class="text-2xl text-primary mb-4">
-            04. Ads keep getting more expensive
-          </h3>
-          <p>Clicks cost more than they used to.</p>
-          <p>Competition keeps rising.</p>
-          <p>Every channel feels noisier.</p>
-          <p>You're paying more just to stay visible.</p>
-          <p>
-            And when conversion doesn't improve, higher ad costs hit profit
-            immediately.
-          </p>
-          <p>
-            Growth starts to feel like buying risk instead of building leverage.
-          </p>
-        </div>
-      </div>
-      <div class="mt-16 text-center">
-        <p
-          class="text-2xl font-black text-deep-charcoal italic mb-10 uppercase tracking-tight"
-        >
-          "If you're facing even one of these, you haven't hit a market
-          cap—you've hit a conversion failure."
-        </p>
-        <a
-          class="w-full inline-flex items-center justify-center px-8 py-8 bg-primary text-white font-display text-2xl md:text-3xl font-black rounded-xl shadow-[0_20px_50px_rgba(255,77,0,0.3)] hover:scale-[1.02] transition-all group"
-          href="{{ url_for('main.schedule_a_call') }}"
-        >
-          I'M READY FOR DATA-DRIVEN CRO
-        </a>
-        <p
-          class="mt-4 text-gray-500 text-sm font-bold uppercase tracking-widest text-center"
-        >
-          2 new partners per month—secure your spot
-        </p>
-      </div>
-    </div>
-  </section>
+  {% include '_experiment_gallery.html' %}
   <section class="py-24 bg-light-base" id="system">
     <div class="content-narrow px-6">
       <h2
@@ -410,8 +328,7 @@ block head_extras %}
             Brands Optimized
           </p>
           <p class="text-gray-600 text-sm md:text-base leading-relaxed mb-0">
-            From DTC to SaaS, we've audited and optimized funnels across every
-            stage. Real data, real tests, real lifts—no guesswork.
+            D2C ecommerce brands, audited and optimized across every funnel stage. Real data, real tests, real lifts—no guesswork.
           </p>
         </div>
         <div
@@ -419,7 +336,7 @@ block head_extras %}
         >
           <span
             class="block text-5xl md:text-6xl font-black text-deep-charcoal mb-1 leading-none"
-            >2,400+</span
+            >352</span
           >
           <p
             class="text-xs font-bold uppercase tracking-widest text-primary mb-3"
@@ -434,7 +351,6 @@ block head_extras %}
       </div>
     </div>
   </section>
-  {% include '_experiment_gallery.html' %}
   <section
     class="py-20 md:py-24 bg-light-base {{ 'sm-temporarily-hidden' if 'results_section' in temporarily_hidden else '' }}"
     id="results"

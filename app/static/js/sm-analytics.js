@@ -160,10 +160,20 @@
     return "lead";
   }
 
+  var GADS_ACCOUNT_ID = "AW-16585600657";
+  var GADS_ALL_LEADS_LABEL = "YAozCI7npZ8dEJHd0OQ9";
+  var META_PIXEL_ID = "829320988492915";
+
   var GADS_LABEL_BY_LEAD_TYPE = {
     ebook: "4yqYCKvn0ocaEJHd0OQ9",
     vsl: "4yqYCKvn0ocaEJHd0OQ9",
     cro_scan: "ecdbCNLgroIcEJHd0OQ9",
+    audit: "ESsYCKSYr4IcEJHd0OQ9",
+    audit_qualified: "ESsYCKSYr4IcEJHd0OQ9",
+    qualify_quiz: "ESsYCKSYr4IcEJHd0OQ9",
+    cro_cost_roi: "ESsYCKSYr4IcEJHd0OQ9",
+    cro_cost_roi_qualified: "ESsYCKSYr4IcEJHd0OQ9",
+    strategy_session: "ESsYCKSYr4IcEJHd0OQ9",
   };
 
   var GADS_SCHEDULE_LABEL = "KO_0CPODpskZEJHd0OQ9";
@@ -171,6 +181,60 @@
   function resolveGadsLabel(leadType, eventName) {
     if (eventName === "schedule_booked") return GADS_SCHEDULE_LABEL;
     return GADS_LABEL_BY_LEAD_TYPE[leadType] || null;
+  }
+
+  var GA4_EVENT_NAMES = {
+    form_success: "generate_lead",
+    schedule_booked: "schedule",
+    schedule_open: "schedule_step",
+  };
+
+  var GA4_PAYLOAD_FIELDS = [
+    "form_id", "form_name", "lead_type", "conversion_type", "is_qualified",
+    "page_type", "page_path", "event_id", "funnel_session_id",
+    "form_step", "form_step_total", "form_step_name", "resource_slug",
+    "schedule_action", "calendly_event", "scroll_percent",
+    "click_label", "click_text", "click_url", "trigger_location",
+    "video_id", "video_title", "video_percent", "video_current_time",
+  ];
+
+  function dispatchGtag(payload) {
+    if (typeof gtag !== "function") return;
+    var params = {};
+    GA4_PAYLOAD_FIELDS.forEach(function(k) {
+      if (payload[k] != null) params[k] = payload[k];
+    });
+    gtag("event", GA4_EVENT_NAMES[payload.event] || payload.event, params);
+    if (payload.gads_conversion_label) {
+      gtag("event", "conversion", {
+        send_to: GADS_ACCOUNT_ID + "/" + payload.gads_conversion_label,
+        event_id: payload.event_id || undefined,
+      });
+    }
+    if (payload.event === "form_success" && payload.gads_conversion_label) {
+      gtag("event", "conversion", {
+        send_to: GADS_ACCOUNT_ID + "/" + GADS_ALL_LEADS_LABEL,
+        event_id: payload.event_id || undefined,
+      });
+    }
+  }
+
+  function dispatchMeta(payload) {
+    if (typeof fbq !== "function") return;
+    var ev = payload.event;
+    var ud = payload.user_data || {};
+    var fbParams = { eventID: payload.event_id };
+    if (ud.email) fbParams.em = ud.email;
+    if (ud.fname) fbParams.fn = ud.fname;
+    if (payload.lead_type) fbParams.content_category = payload.lead_type;
+    if (ev === "form_success") {
+      fbq("track", "Lead", fbParams);
+      if (payload.is_qualified === "true") {
+        fbq("trackCustom", "QualifiedLead", fbParams);
+      }
+    } else if (ev === "schedule_booked") {
+      fbq("track", "Schedule", { eventID: payload.event_id });
+    }
   }
 
   function buildPayload(eventName, data) {
@@ -245,8 +309,8 @@
 
   function pushPayload(payload) {
     try {
-      global.dataLayer = global.dataLayer || [];
-      global.dataLayer.push(payload);
+      dispatchGtag(payload);
+      dispatchMeta(payload);
     } catch (err) {}
   }
 
@@ -438,10 +502,48 @@
     );
   }
 
+  function initAutoLinkTracking() {
+    document.addEventListener("click", function(e) {
+      try {
+        var a = e.target && e.target.closest && e.target.closest("a[href]");
+        if (!a) return;
+        var href = a.getAttribute("href") || "";
+        var text = (a.textContent || "").trim().slice(0, 120);
+        if (/^tel:/i.test(href)) {
+          push("phone_link_click", { click_url: href, click_text: text });
+        } else if (/^mailto:/i.test(href)) {
+          push("email_link_click", { click_url: href, click_text: text });
+        } else if (/\.pdf(\?|$)/i.test(href)) {
+          var label = href.split("/").pop().split("?")[0];
+          push("pdf_link_click", { click_url: href, click_label: label, click_text: text });
+        } else if (/(facebook|instagram|linkedin|youtube|pinterest)\.com/i.test(href)) {
+          var m = href.match(/(facebook|instagram|linkedin|youtube|pinterest)/i);
+          push("social_media_link", { click_url: href, click_text: text, click_label: m ? m[1].toLowerCase() : null });
+        }
+      } catch(err) {}
+    }, true);
+
+    document.addEventListener("click", function(e) {
+      try {
+        var btn = e.target && e.target.closest && e.target.closest(
+          "[data-audit-modal], [data-checklist-modal], [data-download-modal]"
+        );
+        if (!btn) return;
+        push("button_click", {
+          click_text: (btn.textContent || "").trim().slice(0, 120),
+          click_label: btn.getAttribute("data-track") || btn.getAttribute("data-modal-type") || null,
+          click_url: btn.getAttribute("href") || null,
+          trigger_location: btn.getAttribute("data-trigger-location") || null,
+        });
+      } catch(err) {}
+    });
+  }
+
   function init() {
     initCalendlyListener();
     initFormStart();
     initDataTrackClicks();
+    initAutoLinkTracking();
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", initScrollDepth);
     } else {

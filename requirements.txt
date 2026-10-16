@@ -27,3 +27,6 @@ weasyprint>=62.0
 
 # Scripts: GIF compression for CRO scan hero
 Pillow>=10.0.0
+
+# PDP redesign offer — Stripe Checkout
+stripe>=10.0.0

@@ -1,11 +1,14 @@
 {% set mss_funnel_embed = mss_funnel_embed|default(false, true) %}
+{# Standalone page: show intro + Calendly immediately (form temporarily hidden). #}
+{% set mss_calendly_first = not mss_funnel_embed %}
 <div
   id="mss-funnel"
-  class="{% if mss_funnel_embed %}mss-funnel--embed flex flex-col items-center w-full{% else %}min-h-screen flex flex-col items-center px-5 sm:px-8 py-10 md:py-14{% endif %}"
+  class="{% if mss_funnel_embed %}mss-funnel--embed flex flex-col items-center w-full{% else %}mss-funnel--calendly-first min-h-screen flex flex-col items-center px-5 sm:px-8 py-10 md:py-14{% endif %}"
   data-total-steps="6"
   data-embed="{{ '1' if mss_funnel_embed else '0' }}"
-  data-start-step="{{ 2 if mss_funnel_embed else 1 }}"
-  data-disable-exit="{{ '1' if mss_funnel_embed else '0' }}"
+  data-calendly-first="{{ '1' if mss_calendly_first else '0' }}"
+  data-start-step="{{ 6 if mss_calendly_first else (2 if mss_funnel_embed else 1) }}"
+  data-disable-exit="1"
   data-form-name="{{ 'Free CRO Audit' if mss_funnel_embed else '30 Minute Strategy Session' }}"
   data-visitor-country="{{ visitor_country|default('', true) }}"
   data-geo-lookup-needed="{{ '1' if visitor_geo_lookup_needed else '0' }}"
@@ -19,8 +22,22 @@
     </h2>
     {% endif %}
 
+    {% if not mss_calendly_first %}
     <div class="mss-funnel-chrome">
-      {% if not mss_funnel_embed %}
+      <div
+        class="flex items-start gap-0 w-full mb-8"
+        id="mss-progress"
+        aria-hidden="true"
+      ></div>
+      <p
+        class="text-center text-[10px] font-bold uppercase tracking-[0.35em] text-gray-400 -mt-5 mb-10"
+        id="mss-progress-label"
+      >
+        Step {{ 2 if mss_funnel_embed else 1 }} of 6
+      </p>
+    </div>
+    {% else %}
+    <div class="mss-funnel-chrome">
       <a
         href="{{ url_for('main.index') }}"
         class="flex items-center justify-center gap-2 mb-10 group"
@@ -36,20 +53,52 @@
           >Sparksmetrics</span
         >
       </a>
-      {% endif %}
-
-      <div
-        class="flex items-start gap-0 w-full mb-8"
-        id="mss-progress"
-        aria-hidden="true"
-      ></div>
-      <p
-        class="text-center text-[10px] font-bold uppercase tracking-[0.35em] text-gray-400 -mt-5 mb-10"
-        id="mss-progress-label"
-      >
-        Step {{ 2 if mss_funnel_embed else 1 }} of 6
-      </p>
     </div>
+    {% endif %}
+
+    {% if mss_calendly_first %}
+    {# Intro + Calendly on first load #}
+    <section
+      class="mss-step is-active mss-step-calendly text-center"
+      data-step="6"
+      aria-labelledby="mss-step1-title"
+    >
+      <div class="mss-step-calendly-copy mss-calendly-first-intro">
+        <p
+          id="mss-geo-line"
+          class="text-xs sm:text-sm font-bold uppercase tracking-[0.15em] text-gray-500 mb-6"
+        >
+          {{ visitor_geo_line|default('Working with ecommerce brands worldwide') }}
+        </p>
+        <h1
+          id="mss-step1-title"
+          class="text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] font-display font-black text-deep-charcoal uppercase tracking-tight leading-[1.05] mb-5"
+        >
+          Free 30-minute
+          <span class="text-primary">CRO strategy session</span>
+        </h1>
+        <p
+          class="text-gray-600 text-base sm:text-lg md:text-xl leading-relaxed mb-8 max-w-3xl mx-auto"
+        >
+          A free, no-obligation call. We review your store funnel live and show you
+          where you're leaking revenue—without spending more on ads.
+        </p>
+      </div>
+      <!-- Calendly inline widget begin -->
+      <div
+        id="mss-calendly-inline"
+        class="calendly-inline-widget"
+        data-url="https://calendly.com/stijn-wollerich/conversion-rate-optimization?hide_gdpr_banner=1"
+        data-auto-load="false"
+        style="min-width: 320px; height: 700px"
+      ></div>
+      <!-- Calendly inline widget end -->
+      <p class="sr-only">
+        Trouble booking?
+        <a href="mailto:connect@sparksmetrics.com">connect@sparksmetrics.com</a>
+      </p>
+    </section>
+    {% else %}
 
     {% if not mss_funnel_embed %}
     {# 1 — Intro #}
@@ -258,10 +307,11 @@
         <a href="mailto:connect@sparksmetrics.com">connect@sparksmetrics.com</a>
       </p>
     </section>
+    {% endif %}
   </div>
 </div>
 
-{% if not mss_funnel_embed %}
+{% if not mss_funnel_embed and not mss_calendly_first %}
 <div
   id="mss-exit-modal"
   class="fixed inset-0 z-[300] items-center justify-center p-4"
@@ -325,4 +375,4 @@
   src="https://assets.calendly.com/assets/external/widget.js"
   async
 ></script>
-<script src="{{ url_for('static', filename='js/strategy-session-funnel.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/strategy-session-funnel.js') }}?v=2" defer></script>

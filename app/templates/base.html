@@ -1,23 +1,50 @@
 <!doctype html>
 <html class="scroll-smooth" lang="en">
   <head>
-    {% if ENABLE_GTM %}
-    <!-- Google Tag Manager -->
+    <!-- GA4 + Google Ads — queue defined before sm-analytics.js so dispatch calls never miss -->
     <script>
-      (function (w, d, s, l, i) {
-        w[l] = w[l] || [];
-        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
-        var f = d.getElementsByTagName(s)[0],
-          j = d.createElement(s),
-          dl = l != "dataLayer" ? "&l=" + l : "";
-        j.async = true;
-        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
-        f.parentNode.insertBefore(j, f);
-      })(window, document, "script", "dataLayer", "GTM-ML2ZDNH2");
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-LHY1QG6J5T');
+      gtag('config', 'AW-16585600657');
     </script>
-    <!-- End Google Tag Manager -->
-    {% endif %}
-    <script src="{{ url_for('static', filename='js/sm-analytics.js') }}?v=3"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LHY1QG6J5T"></script>
+    <!-- Meta Pixel -->
+    <script>
+      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+      (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init','829320988492915');
+      fbq('track','PageView');
+    </script>
+    <!-- Hotjar -->
+    <script>
+      (function(h,o,t,j,a,r){h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+      h._hjSettings={hjid:5011926,hjsv:6};a=o.getElementsByTagName('head')[0];
+      r=o.createElement('script');r.async=1;r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+      a.appendChild(r)})(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+    </script>
+    <!-- Microsoft Clarity -->
+    <script>
+      (function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src='https://www.clarity.ms/tag/'+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y)})
+      (window,document,'clarity','script','puc1r91pyp');
+    </script>
+    <!-- Sparksmetrics tracking -->
+    <script async src="https://app.sparksmetrics.com/static/js/tracking-script.js"></script>
+    <script>
+      window.yourDataLayer = window.yourDataLayer || [];
+      function yourTracking(){yourDataLayer.push(arguments);}
+      yourTracking('init','SM-99617');
+      window.addEventListener('load', function(){
+        yourTracking('send',{event_type:'pageview',event_value:'Page loaded'});
+      });
+    </script>
+    <script src="{{ url_for('static', filename='js/sm-analytics.js') }}?v=6"></script>
     <!-- PostMessage wrapper removed to avoid interfering with third-party embeds -->
     <!-- Global error suppression removed to avoid hiding root causes -->
     <meta charset="utf-8" />
@@ -412,18 +439,8 @@
   <body
     class="antialiased selection:bg-primary selection:text-white {% block body_class %}bg-light-base text-gray-800 font-sans leading-relaxed{% endblock %}"
   >
-    {% if ENABLE_GTM %}
-    <!-- Google Tag Manager (noscript) -->
-    <noscript
-      ><iframe
-        src="https://www.googletagmanager.com/ns.html?id=GTM-ML2ZDNH2"
-        height="0"
-        width="0"
-        style="display: none; visibility: hidden"
-      ></iframe
-    ></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-    {% endif %} {# HIDDEN_ELEMENTS: primary_bar, audit_bar, homepage_video,
+    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=829320988492915&ev=PageView&noscript=1"/></noscript>
+    {# HIDDEN_ELEMENTS: primary_bar, audit_bar, homepage_video,
     video_testimonials, cro_checklist, results_section, cro_video_testimonials,
     analytics_video_testimonials. To show/hide: add or remove from
     temporarily_hidden. #} {% set temporarily_hidden = ['video_testimonials',
@@ -669,6 +686,12 @@
       </div>
     </footer>
     {% endblock %}
+    {% set _pdp_funnel = request.endpoint in (
+      'main.pdp_redesign_landing',
+      'main.pdp_redesign_thanks',
+      'main.pdp_redesign_checkout',
+    ) %}
+    {% if not _pdp_funnel %}
     {% include 'includes/_lead_modal.html' %}
     {# Schedule-a-call modal: Calendly only, no form. Opened by links to
     schedule-a-call. #}
@@ -821,6 +844,7 @@
         </div>
       </div>
     </div>
+    {% endif %}
     {% block audit_bar %}
     <div
       id="audit-bar"
@@ -982,6 +1006,7 @@
         document.addEventListener("DOMContentLoaded", adjustModalSidebars);
       })();
     </script>
+    {% if not _pdp_funnel %}
     <script
       src="{{ url_for('static', filename='js/audit-bar.js') }}"
       defer
@@ -990,8 +1015,9 @@
       src="{{ url_for('static', filename='js/checklist-modal.js') }}?v=13"
       defer
     ></script>
+    {% endif %}
     {% if request.endpoint != 'main.cro_scan_landing' and request.endpoint !=
-    'main.cro_cost_roi_landing' %}
+    'main.cro_cost_roi_landing' and not _pdp_funnel %}
     <script src="{{ url_for('static', filename='js/vsl-video-analytics.js') }}"></script>
     <script
       src="{{ url_for('static', filename='js/video-cta.js') }}"

@@ -16,12 +16,6 @@ BREVO_CONTACTS_URL = "https://api.brevo.com/v3/contacts"
 main_bp = Blueprint("main", __name__)
 
 
-@main_bp.context_processor
-def inject_enable_gtm():
-    """Expose ENABLE_GTM config to templates as ENABLE_GTM."""
-    # Default to True so GTM is enabled unless explicitly turned off in config
-    return {"ENABLE_GTM": current_app.config.get("ENABLE_GTM", True)}
-
 # Central redirects: (from_paths, target_view_name, status_code). Add new redirects here.
 REDIRECTS = [
     (["/cro"], "main.cro", 301),
@@ -2883,7 +2877,8 @@ def spark_experiment_image():
 @main_bp.route("/results")
 def results():
     """Results & case studies — combined page."""
-    return render_template("results.html")
+    from app.services.spark_experiments import get_website_experiments
+    return render_template("results.html", spark_experiments=get_website_experiments())
 
 
 @main_bp.route("/results/<slug>")

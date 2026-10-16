@@ -165,4 +165,42 @@
   #mss-funnel.mss-funnel--embed.is-calendly-step { height: auto; max-height: none; min-height: 0; overflow: visible; }
   #mss-funnel.mss-funnel--embed.is-calendly-step .mss-shell { max-width: 56rem; height: auto; }
   #mss-funnel.mss-funnel--embed #mss-calendly-inline { height: 640px; min-height: 640px; border-radius: 0.75rem; border: 1px solid #e5e7eb; }
+
+  /* Calendly-first: keep intro + logo visible, widget below */
+  #mss-funnel.mss-funnel--calendly-first.is-calendly-step {
+    height: auto;
+    max-height: none;
+    min-height: 100vh;
+    overflow: visible;
+    padding: 2.5rem 1.25rem 3rem;
+  }
+  #mss-funnel.mss-funnel--calendly-first.is-calendly-step .mss-shell {
+    max-width: 56rem;
+    height: auto;
+  }
+  #mss-funnel.mss-funnel--calendly-first.is-calendly-step .mss-funnel-chrome {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #mss-funnel.mss-funnel--calendly-first .mss-calendly-first-intro {
+    padding: 0 0 0.5rem;
+    text-align: center;
+    color: inherit;
+    font-size: inherit;
+    line-height: inherit;
+  }
+  #mss-funnel.mss-funnel--calendly-first #mss-calendly-inline {
+    height: 700px;
+    min-height: 700px;
+    border-radius: 0.75rem;
+    border: 1px solid #e5e7eb;
+    flex: none;
+  }
+  @media (min-width: 640px) {
+    #mss-funnel.mss-funnel--calendly-first.is-calendly-step {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
 </style>

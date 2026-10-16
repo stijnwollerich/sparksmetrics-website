@@ -795,62 +795,7 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
     </div>
   </section>
 
-  {# Social proof: immediately below logos #}
-  {% if spark_experiments or spark_experiments_configured %}
-  <section class="py-10 md:py-14 bg-light-base border-t border-gray-100" id="ab-tests">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6">
-      <div class="text-center mb-6 md:mb-8 max-w-2xl mx-auto">
-        <h2
-          class="text-2xl md:text-3xl font-display font-black text-deep-charcoal uppercase tracking-tighter"
-        >
-          The recommendations aren't <span class="text-primary">theory.</span>
-        </h2>
-        <p class="text-gray-600 text-sm md:text-base mt-3 leading-relaxed">
-          Your audit roadmap is built from the same testing playbook we use on client stores. Here are real before/after results.
-        </p>
-      </div>
-      {% if spark_experiments %}
-      {% set spark_exp_count = spark_experiments|length %}
-      <div
-        class="relative spark-exp-strip {% if spark_exp_count > 1 %}sm:px-12{% endif %}"
-      >
-        {% if spark_exp_count > 1 %}
-        <button
-          type="button"
-          class="spark-exp-strip-prev hidden sm:flex absolute left-0 top-[calc(50%+0.5rem)] -translate-y-1/2 z-20 w-10 h-10 items-center justify-center rounded-full bg-white border border-gray-200 shadow-md text-deep-charcoal hover:bg-light-base"
-          aria-label="Scroll experiments left"
-        >
-          <span class="material-symbols-outlined">chevron_left</span>
-        </button>
-        <button
-          type="button"
-          class="spark-exp-strip-next hidden sm:flex absolute right-0 top-[calc(50%+0.5rem)] -translate-y-1/2 z-20 w-10 h-10 items-center justify-center rounded-full bg-white border border-gray-200 shadow-md text-deep-charcoal hover:bg-light-base"
-          aria-label="Scroll experiments right"
-        >
-          <span class="material-symbols-outlined">chevron_right</span>
-        </button>
-        {% endif %}
-        <div
-          class="spark-exp-strip-track flex gap-4 pb-2 {% if spark_exp_count == 1 %}justify-center{% else %}overflow-x-auto scroll-smooth snap-x snap-mandatory{% endif %}"
-          {% if spark_exp_count > 1 %}tabindex="0"{% endif %}
-        >
-          {% for exp in spark_experiments %}
-          <div
-            class="shrink-0 w-[21rem] sm:w-[23rem] h-[27rem] sm:h-[29rem] flex {% if spark_exp_count > 1 %}snap-center{% endif %}"
-          >
-            {% include '_experiment_showcase_card.html' %}
-          </div>
-          {% endfor %}
-        </div>
-      </div>
-      {% else %}
-      <p class="text-center text-gray-500 text-sm max-w-lg mx-auto">
-        Published test examples coming soon.
-      </p>
-      {% endif %}
-    </div>
-  </section>
-  {% endif %}
+  {% include '_experiment_gallery.html' %}
 
   {% set heading = "Ready to see what we'd find on your store?" %}
   {% set subtext = "This is where other million-dollar brands started." %}

@@ -100,9 +100,7 @@
 {% block audit_bar %}{% endblock %}
 {% block body_class %}bg-white text-gray-800 font-sans{% endblock %}
 {% block content %}
-{% if ENABLE_GTM %}
 <script>window.smPageType = "cro_scan_thank_you";</script>
-{% endif %}
 <div class="min-h-screen flex flex-col">
   {# Progress bar — 0→100% in 15s with fake “what we’re doing” steps #}
   <section class="border-b border-gray-100 bg-gray-50/60">

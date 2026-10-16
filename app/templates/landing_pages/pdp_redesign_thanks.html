@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% block title %}You're in — next steps | Sparksmetrics{% endblock %}
+{% block meta_description %}Payment received. Answer 3 quick questions so we can start your PDP redesign.{% endblock %}
+{% block primary_bar %}{% endblock %}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block audit_bar %}{% endblock %}
+{% block body_class %}bg-[#FAFAF8] text-deep-charcoal font-sans{% endblock %}
+{% block head_extras %}
+<meta name="robots" content="noindex, nofollow" />
+{% if meta_pixel_id %}
+<script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init','{{ meta_pixel_id }}');
+  fbq('track','PageView');
+  fbq('track','Purchase',{value:500,currency:'USD'});
+</script>
+{% endif %}
+<style>
+  .pdp-thanks-input {
+    width: 100%;
+    min-height: 48px;
+    border: 1px solid #e5e2db;
+    border-radius: 0.75rem;
+    padding: 0.75rem 0.9rem;
+    font-size: 1rem;
+    background: #fff;
+  }
+  .pdp-thanks-input:focus {
+    outline: 2px solid rgba(255, 77, 0, 0.35);
+    border-color: #ff4d00;
+  }
+  .pdp-thanks-label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    color: #141414;
+  }
+  .pdp-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 52px;
+    padding: 0.875rem 1.25rem;
+    border-radius: 0.75rem;
+    background: #ff4d00;
+    color: #fff;
+    font-family: Lexend, sans-serif;
+    font-weight: 900;
+    font-size: 0.9375rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    box-shadow: 0 12px 32px rgba(255, 77, 0, 0.28);
+  }
+  .pdp-cta:disabled { opacity: 0.65; cursor: wait; }
+</style>
+{% endblock %}
+{% block content %}
+<script>window.smPageType = "pdp_redesign_thanks";</script>
+
+<div class="min-h-screen px-4 py-8 md:py-12">
+  <div class="max-w-md mx-auto">
+    <div class="flex items-center gap-2.5 mb-6">
+      <span class="w-8 h-8 bg-primary rounded rotate-3 inline-flex items-center justify-center text-white font-display font-black text-sm" aria-hidden="true">S</span>
+      <span class="text-sm font-semibold tracking-tight">Sparksmetrics</span>
+    </div>
+
+    <p class="text-xs font-bold uppercase tracking-wider text-primary mb-2">Payment received</p>
+    <h1 class="font-display font-black text-2xl tracking-tight leading-tight mb-3">
+      You’re in. Three questions and we start.
+    </h1>
+    <p class="text-sm text-gray-600 leading-relaxed mb-6">
+      Delivery in 5 business days from when this form lands. No call required.
+      {% if is_dev %}<span class="block mt-2 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-2 py-1.5">Dev mode: Stripe skipped (DEBUG).</span>{% endif %}
+    </p>
+
+    <form id="pdp-intake-form" class="space-y-4 bg-white border border-[#e8e6e1] rounded-2xl p-4 sm:p-5 shadow-sm" novalidate>
+      <input type="hidden" name="session_id" value="{{ session_id or '' }}" />
+      <div>
+        <label class="pdp-thanks-label" for="pdp-name">Your name</label>
+        <input class="pdp-thanks-input" id="pdp-name" name="name" type="text" autocomplete="name" value="{{ customer_name or '' }}" required />
+      </div>
+      <div>
+        <label class="pdp-thanks-label" for="pdp-email">Email</label>
+        <input class="pdp-thanks-input" id="pdp-email" name="email" type="email" autocomplete="email" value="{{ customer_email or '' }}" required />
+      </div>
+      <div>
+        <label class="pdp-thanks-label" for="pdp-product">Best-selling product page URL</label>
+        <input class="pdp-thanks-input" id="pdp-product" name="product_url" type="url" inputmode="url" placeholder="https://yourstore.com/products/..." required />
+      </div>
+      <div>
+        <label class="pdp-thanks-label" for="pdp-platform">Platform</label>
+        <select class="pdp-thanks-input" id="pdp-platform" name="platform" required>
+          <option value="">Select…</option>
+          <option value="Shopify">Shopify</option>
+          <option value="Shopify Plus">Shopify Plus</option>
+          <option value="BigCommerce">BigCommerce</option>
+          <option value="WooCommerce">WooCommerce</option>
+          <option value="Custom / other">Custom / other</option>
+        </select>
+      </div>
+      <div>
+        <label class="pdp-thanks-label" for="pdp-offlimits">Anything off-limits? <span class="font-normal text-gray-500">(optional)</span></label>
+        <textarea class="pdp-thanks-input" id="pdp-offlimits" name="off_limits" rows="3" placeholder="Brand rules, colors, claims we shouldn’t touch…"></textarea>
+      </div>
+      <p id="pdp-intake-error" class="hidden text-sm text-red-600" role="alert"></p>
+      <button type="submit" class="pdp-cta" id="pdp-intake-submit">Submit &amp; start my redesign</button>
+    </form>
+
+    <div id="pdp-intake-done" class="hidden mt-4 rounded-2xl border border-green-200 bg-green-50 p-4">
+      <p class="font-bold text-deep-charcoal mb-1">Got it — we’re on it.</p>
+      <p class="text-sm text-gray-600 leading-relaxed">
+        You’ll get the Figma + walkthrough within 5 business days. Want a quick sync first?
+      </p>
+      <p class="mt-3">
+        <a href="{{ calendly_url }}" class="text-sm text-primary font-semibold underline underline-offset-2" target="_blank" rel="noopener noreferrer">Book a 15-min chat (optional)</a>
+      </p>
+    </div>
+
+    <div class="mt-8 text-sm text-gray-600 leading-relaxed">
+      <p class="font-bold text-deep-charcoal mb-2">What happens next</p>
+      <ol class="list-decimal pl-5 space-y-1.5">
+        <li>We review your product page and constraints.</li>
+        <li>We redesign mobile + desktop in Figma.</li>
+        <li>You receive the file + a 10–15 min video of every change.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ event: "purchase", value: 500, currency: "USD", offer: "pdp_redesign" });
+
+  var form = document.getElementById("pdp-intake-form");
+  var done = document.getElementById("pdp-intake-done");
+  var err = document.getElementById("pdp-intake-error");
+  var btn = document.getElementById("pdp-intake-submit");
+  if (!form) return;
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (err) { err.classList.add("hidden"); err.textContent = ""; }
+    var fd = new FormData(form);
+    var payload = {
+      name: (fd.get("name") || "").toString().trim(),
+      email: (fd.get("email") || "").toString().trim(),
+      product_url: (fd.get("product_url") || "").toString().trim(),
+      platform: (fd.get("platform") || "").toString().trim(),
+      off_limits: (fd.get("off_limits") || "").toString().trim(),
+      session_id: (fd.get("session_id") || "").toString().trim(),
+      form_page_url: window.location.href,
+    };
+    btn.disabled = true;
+    fetch("/pdp-redesign/intake", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(payload),
+    })
+      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+      .then(function (res) {
+        if (!res.ok || !res.j.success) {
+          throw new Error((res.j && res.j.error) || "Something went wrong. Try again.");
+        }
+        window.dataLayer.push({ event: "intake_submitted", offer: "pdp_redesign" });
+        form.classList.add("hidden");
+        if (done) done.classList.remove("hidden");
+      })
+      .catch(function (ex) {
+        if (err) {
+          err.textContent = ex.message || "Something went wrong.";
+          err.classList.remove("hidden");
+        }
+        btn.disabled = false;
+      });
+  });
+})();
+</script>
+{% endblock %}
