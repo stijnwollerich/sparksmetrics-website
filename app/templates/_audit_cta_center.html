@@ -9,6 +9,11 @@
     <a
       {% if audit_cta_id %}id="{{ audit_cta_id }}"{% endif %}
       href="{{ audit_cta_url }}"
+      data-audit-modal
+      data-modal-type="audit"
+      data-title="Get your free CRO audit"
+      data-description="Enter your details and we'll send a personalised audit of your store straight to your email."
+      data-button-text="Send me my audit"
       class="inline-flex w-full items-center justify-center min-h-[52px] px-8 py-3.5 bg-primary text-white font-display text-base md:text-lg font-black uppercase rounded-xl shadow-lg shadow-primary/25 hover:brightness-110 transition-all"
     >
       {{ audit_cta_label }}

@@ -81,16 +81,16 @@
         <div class="shrink-0 border-t border-gray-100 flex min-w-0" style="padding: 10px 12px 4px">
           <div class="flex-1 min-w-0 text-center">
             {% if exp.conv_improvement is not none and exp.conv_improvement > 0 %}
-            <p class="text-2xl font-display font-black tabular-nums text-primary" style="line-height:1;display:block">+{{ '%.1f'|format(exp.conv_improvement) }}%</p>
+            <p class="text-lg md:text-2xl font-display font-black tabular-nums text-primary" style="line-height:1;display:block">+{{ '%.1f'|format(exp.conv_improvement) }}%</p>
             <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400" style="line-height:1;display:block;margin-top:-15px">Conv. rate</p>
             {% elif exp.aov_improvement is not none and exp.aov_improvement > 0 %}
-            <p class="text-2xl font-display font-black tabular-nums text-deep-charcoal" style="line-height:1;display:block">+{{ '%.1f'|format(exp.aov_improvement) }}%</p>
+            <p class="text-lg md:text-2xl font-display font-black tabular-nums text-deep-charcoal" style="line-height:1;display:block">+{{ '%.1f'|format(exp.aov_improvement) }}%</p>
             <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400" style="line-height:1;display:block;margin-top:-15px">AOV</p>
             {% endif %}
           </div>
           {% if exp.rev_added_3m is not none %}
           <div class="flex-1 min-w-0 border-l border-gray-200 pl-3 text-center">
-            <p class="text-2xl font-display font-black tabular-nums text-deep-charcoal" style="line-height:1;display:block">
+            <p class="text-lg md:text-2xl font-display font-black tabular-nums text-deep-charcoal" style="line-height:1;display:block">
               {%- if exp.rev_added_3m >= 1000000 %}+${{ '%.1f'|format(exp.rev_added_3m / 1000000) }}M
               {%- elif exp.rev_added_3m >= 1000 %}+${{ '%d'|format((exp.rev_added_3m / 1000)|round|int) }}k
               {%- else %}+${{ '%d'|format(exp.rev_added_3m|round|int) }}

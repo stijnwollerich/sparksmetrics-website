@@ -334,7 +334,7 @@
     if (thankYouMessage) {
       thankYouMessage.textContent = hasDownload
         ? "Your ebook is downloading. Pick a time on the left for a free 30-minute strategy session—we can walk through the strategies and your next steps."
-        : "We’ll follow up by email with next steps for your audit request. Or pick a time on the left if you’d rather talk now.";
+        : "Your audit is on its way to your inbox. Book a call below and we’ll walk through it together — we’ll show you exactly where you’re leaking and what to fix first.";
     }
     if (calendlyIframe) {
       calendlyIframe.src = CALENDLY_URL;
@@ -423,6 +423,13 @@
         }
       }
       openModal(el);
+      // Ping Slack when audit modal opens on /free-cro-audit/
+      var modalType = el.getAttribute("data-modal-type") || "";
+      if (modalType === "audit" && window.location.pathname.indexOf("/free-cro-audit") !== -1) {
+        navigator.sendBeacon
+          ? navigator.sendBeacon("/client-event", new Blob([JSON.stringify({ event_type: "audit_modal_open", page_url: window.location.href })], { type: "application/json" }))
+          : fetch("/client-event", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ event_type: "audit_modal_open", page_url: window.location.href }), keepalive: true });
+      }
     });
   }
   document.querySelectorAll("[data-download-modal]").forEach(bindTrigger);

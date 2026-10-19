@@ -1917,6 +1917,20 @@ def _build_slack_lead_lines(
     return lines
 
 
+def _notify_slack_simple(text: str) -> None:
+    """Fire a plain-text Slack message. Logs errors, does not raise."""
+    webhook_url = (current_app.config.get("SLACK_WEBHOOK_URL") or "").strip()
+    if not webhook_url:
+        return
+    try:
+        import requests as _requests
+        r = _requests.post(webhook_url, json={"text": text}, headers={"Content-Type": "application/json"}, timeout=5)
+        if r.status_code != 200:
+            current_app.logger.warning("Slack simple notify failed: %s", r.status_code)
+    except Exception as e:
+        current_app.logger.warning("Slack simple notify error: %s", e)
+
+
 def _notify_slack_lead(
     fname: str,
     email: str,
@@ -1977,9 +1991,7 @@ def client_event():
     """Receive lightweight client-side diagnostic events (beacon/POST)."""
     try:
         data = request.get_json(silent=True) or {}
-        # Log to application logger
         current_app.logger.info("Client event received: %s", json.dumps(data or {}, ensure_ascii=False))
-        # Persist to a JSONL file for later inspection (append only)
         try:
             from pathlib import Path
 
@@ -1990,9 +2002,14 @@ def client_event():
                 fh.write(json.dumps({"ts": datetime.now(timezone.utc).isoformat(), "data": data}, ensure_ascii=False) + "\n")
         except Exception as e:
             current_app.logger.warning("Failed to persist client event to file: %s", e)
+
+        # Slack ping for audit modal open on /free-cro-audit/
+        if data.get("event_type") == "audit_modal_open":
+            _notify_slack_simple(
+                f"👁 *CRO Audit page* — someone opened the audit form\n> {data.get('page_url', '').strip() or '(no URL)'}"
+            )
     except Exception as e:
         current_app.logger.warning("Failed to record client event: %s", e)
-    # always return 204 for beacons
     return ("", 204)
 
 

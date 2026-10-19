@@ -1,12 +1,11 @@
-{% extends "base.html" %} {% block title %}More Revenue From Your Existing Shopify Traffic in 14 Days — Guaranteed or Your Money Back | Sparksmetrics{% endblock %} {% block meta_description %}You have a
+{% extends "base.html" %} {% block title %}You're Bleeding Revenue on Every Page. We'll Show You Where — Free CRO Audit in 48 Hours | Sparksmetrics{% endblock %} {% block meta_description %}You have a
 free CRO audit finds where your ecommerce funnel leaks revenue and hands you a
-prioritized roadmap to fix it. No retainer required.{% endblock %} {% block og_title %}More Revenue From Your Existing Shopify Traffic in 14 Days — Guaranteed or Your Money Back | Sparksmetrics{% endblock %} {% block og_description %}You have a
+prioritized roadmap to fix it. No retainer required.{% endblock %} {% block og_title %}You're Bleeding Revenue on Every Page. We'll Show You Where — Free CRO Audit in 48 Hours | Sparksmetrics{% endblock %} {% block og_description %}You have a
 free CRO audit finds where your funnel leaks and gives you a prioritized fix list
 backed by data.{% endblock %} {% block
-twitter_title %}More Revenue From Your Existing Shopify Traffic in 14 Days — Guaranteed or Your Money Back | Sparksmetrics{% endblock %} {% block twitter_description %}You have a
+twitter_title %}You're Bleeding Revenue on Every Page. We'll Show You Where — Free CRO Audit in 48 Hours | Sparksmetrics{% endblock %} {% block twitter_description %}You have a
 free CRO audit finds where your funnel leaks and gives you a prioritized fix list
-backed by data.{% endblock %} {% block primary_bar %}{% endblock %} {% block header %}{%
-endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
+backed by data.{% endblock %} {% block primary_bar %}{% endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
 {% block head_extras %}
 <meta name="robots" content="noindex, follow" />
 <link rel="preconnect" href="https://www.youtube.com" />
@@ -184,6 +183,27 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
     font-size: clamp(1.375rem, 5vw, 2rem);
     margin: 0.15rem 0;
   }
+  .vsl-play-circle {
+    width: 3.5rem;
+    height: 3.5rem;
+    flex-shrink: 0;
+    border-radius: 9999px;
+    background-color: #ff4d00;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s ease;
+  }
+  @media (min-width: 768px) {
+    .vsl-play-circle {
+      width: 5rem;
+      height: 5rem;
+      box-shadow: 0 0 40px rgba(255, 77, 0, 0.5);
+    }
+  }
+  .vsl-youtube-play:hover .vsl-play-circle {
+    transform: scale(1.1);
+  }
   @media (max-width: 767px) {
     .vsl-chapter-markers {
       display: flex;
@@ -277,7 +297,7 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
         For Shopify brands doing $100k–$1M/month
       </p>
       <h1 class="vsl-hero-title text-deep-charcoal mb-3 md:mb-4 mx-auto">
-        <span>More Revenue From Your Existing Shopify Traffic in 14 Days — Guaranteed or Your Money Back</span>
+        <span>You're Bleeding Revenue on Every Page. We'll Show You Where — Free CRO Audit in 48 Hours.</span>
       </h1>
       <p
         class="text-gray-600 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto mb-4 md:mb-5"
@@ -316,11 +336,9 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
             class="vsl-youtube-play absolute inset-0 z-10 flex items-center justify-center bg-black/25 hover:bg-black/35 transition-colors"
             aria-label="Play 4-minute CRO audit video"
           >
-            <span
-              class="w-20 h-20 md:w-24 md:h-24 rounded-full bg-primary flex items-center justify-center shadow-[0_0_40px_rgba(255,77,0,0.5)] hover:scale-110 transition-transform"
-            >
+            <span class="vsl-play-circle">
               <span
-                class="material-symbols-outlined text-white text-4xl md:text-5xl ml-1"
+                class="material-symbols-outlined text-white text-3xl md:text-4xl ml-1"
                 >play_arrow</span
               >
             </span>
@@ -346,6 +364,11 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
         <a
           id="button-below-vsl"
           href="{{ strategy_session_url }}"
+          data-audit-modal
+          data-modal-type="audit"
+          data-title="Get your free CRO audit"
+          data-description="Enter your details and we'll send a personalised audit of your store straight to your email."
+          data-button-text="Send me my audit"
           class="inline-flex w-full items-center justify-center min-h-[56px] px-8 py-4 bg-primary text-white font-display text-lg md:text-xl font-black uppercase rounded-xl shadow-lg shadow-primary/25 hover:brightness-110 transition-all"
         >
           {{ vsl_cta_label }}
@@ -1712,6 +1735,11 @@ endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
     <a
       id="floating-bar-bottom"
       href="{{ strategy_session_url }}"
+      data-audit-modal
+      data-modal-type="audit"
+      data-title="Get your free CRO audit"
+      data-description="Enter your details and we'll send a personalised audit of your store straight to your email."
+      data-button-text="Send me my audit"
       class="inline-flex items-center shrink-0 pl-4 sm:pl-6 pr-1.5 py-1.5 min-h-[44px] sm:min-h-[48px] bg-deep-charcoal text-white font-display text-[11px] sm:text-sm font-black uppercase rounded-full hover:brightness-110 transition-all"
     >
       <span class="whitespace-nowrap">Book yours now</span>

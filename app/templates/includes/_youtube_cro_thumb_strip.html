@@ -93,6 +93,11 @@
             <a
               {% if strip_link_id_prefix %}id="{{ strip_link_id_prefix }}-{{ '%02d'|format(loop.index) }}"{% endif %}
               href="{{ strategy_session_href }}"
+              data-audit-modal
+              data-modal-type="audit"
+              data-title="Get your free CRO audit"
+              data-description="Enter your details and we'll send a personalised audit of your store straight to your email."
+              data-button-text="Send me my audit"
               class="absolute inset-0 z-10 flex items-center justify-center"
             >
               <div
