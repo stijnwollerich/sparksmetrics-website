@@ -416,7 +416,8 @@ def favicon():
 @main_bp.route("/conversion-rate-optimization")
 def cro():
     """CRO (Conversion Rate Optimization) service landing."""
-    return render_template("cro.html")
+    from app.services.spark_experiments import get_website_experiments
+    return render_template("cro.html", spark_experiments=get_website_experiments())
 
 
 @main_bp.route("/13-actionable-conversion-rate-optimization-strategies-ebook/")

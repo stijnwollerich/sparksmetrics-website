@@ -1,0 +1,101 @@
+{# A/B test gallery — 2-row 4-col grid, full width. Requires spark_experiments context var. #}
+{% if spark_experiments and spark_experiments|length > 0 %}
+<section class="py-16 md:py-20 bg-light-base border-t border-gray-100">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex items-end justify-between flex-wrap gap-4 mb-10">
+      <div>
+        <p class="text-primary font-bold text-xs uppercase tracking-[0.3em] mb-2">A/B Test Archive</p>
+        <h2 class="text-3xl md:text-5xl font-display font-black text-deep-charcoal uppercase tracking-tighter leading-tight">
+          Real Tests.<br class="hidden md:block" /> Real Results.
+        </h2>
+      </div>
+      <p class="text-gray-500 text-sm font-bold max-w-xs leading-relaxed md:text-right hidden md:block">
+        Tests from live client programs — every card is a real before&hairsp;/&hairsp;after.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
+    {% for exp in spark_experiments %}
+    <article class="flex flex-col rounded-2xl overflow-hidden bg-white border border-gray-200/80 shadow-sm hover:shadow-md hover:border-gray-300/90 transition-all duration-200">
+
+      {# page type pill #}
+      {% if exp.page %}
+      <div class="shrink-0 px-3 pt-2 pb-0">
+        <span class="inline-block px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[9px] font-black uppercase tracking-widest">{{ exp.page }}</span>
+      </div>
+      {% endif %}
+
+      {# before / after — pill overlays, chevron, rounded frames #}
+      <div class="relative grid grid-cols-2 gap-1.5 p-1.5 bg-gray-50/60">
+        <span
+          class="pointer-events-none absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center rounded-full bg-white border border-gray-200 shadow-sm text-gray-500 text-sm font-black leading-none"
+          aria-hidden="true"
+        >›</span>
+
+        <div class="relative h-44 overflow-hidden rounded-xl">
+          <span class="absolute top-1.5 left-1.5 z-10 px-1.5 py-0.5 rounded-md bg-deep-charcoal/75 text-white text-[8px] font-black uppercase tracking-widest backdrop-blur-sm">Before</span>
+          {% if exp.control and exp.control.image_url %}
+          <img
+            src="{{ exp.control.image_url }}"
+            alt="Before: {{ exp.test_name }}"
+            class="absolute inset-0 h-full w-full object-cover object-top"
+            loading="lazy"
+            width="160"
+            height="200"
+          />
+          {% else %}
+          <div class="absolute inset-0 flex items-center justify-center bg-gray-100">
+            <span class="text-[9px] text-gray-300 font-bold uppercase">—</span>
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="relative h-44 overflow-hidden rounded-xl ring-2 ring-primary/25">
+          <span class="absolute top-1.5 left-1.5 z-10 px-1.5 py-0.5 rounded-md bg-primary text-white text-[8px] font-black uppercase tracking-widest">After</span>
+          {% if exp.challenger and exp.challenger.image_url %}
+          <img
+            src="{{ exp.challenger.image_url }}"
+            alt="After: {{ exp.test_name }}"
+            class="absolute inset-0 h-full w-full object-cover object-top"
+            loading="lazy"
+            width="160"
+            height="200"
+          />
+          {% else %}
+          <div class="absolute inset-0 flex items-center justify-center bg-primary/10">
+            <span class="text-[9px] text-primary/40 font-bold uppercase">—</span>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      {# performance stats — left: best metric, right: revenue if available #}
+      <div class="shrink-0 border-t border-gray-100 flex min-w-0" style="padding: 10px 12px 4px">
+        <div class="flex-1 min-w-0 text-center">
+          {% if exp.conv_improvement is not none and exp.conv_improvement > 0 %}
+          <p class="text-lg md:text-2xl font-display font-black tabular-nums text-primary" style="line-height:1;display:block">+{{ '%.1f'|format(exp.conv_improvement) }}%</p>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400" style="line-height:1;display:block;margin-top:-15px">Conv. rate</p>
+          {% elif exp.aov_improvement is not none and exp.aov_improvement > 0 %}
+          <p class="text-lg md:text-2xl font-display font-black tabular-nums text-deep-charcoal" style="line-height:1;display:block">+{{ '%.1f'|format(exp.aov_improvement) }}%</p>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400" style="line-height:1;display:block;margin-top:-15px">AOV</p>
+          {% endif %}
+        </div>
+        {% if exp.rev_added_3m is not none %}
+        <div class="flex-1 min-w-0 border-l border-gray-200 pl-3 text-center">
+          <p class="text-lg md:text-2xl font-display font-black tabular-nums text-deep-charcoal" style="line-height:1;display:block">
+            {%- if exp.rev_added_3m >= 1000000 %}+${{ '%.1f'|format(exp.rev_added_3m / 1000000) }}M
+            {%- elif exp.rev_added_3m >= 1000 %}+${{ '%d'|format((exp.rev_added_3m / 1000)|round|int) }}k
+            {%- else %}+${{ '%d'|format(exp.rev_added_3m|round|int) }}
+            {%- endif %}
+          </p>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400" style="line-height:1;display:block;margin-top:-15px">Revenue</p>
+        </div>
+        {% endif %}
+      </div>
+
+    </article>
+    {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
