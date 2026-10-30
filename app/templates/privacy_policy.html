@@ -1,67 +1,100 @@
 {% extends "base.html" %}
 {% block title %}Privacy Policy | Sparksmetrics{% endblock %}
-{% block meta_description %}How Sparksmetrics collects, uses, and protects your personal data when you use our website, interact with our ads, or download our ebook.{% endblock %}
+{% block meta_description %}How Sparksmetrics collects, uses and protects personal data: our website, lead forms, client CRO and analytics work, and our use of YouTube API Services.{% endblock %}
 {% block content %}
+{% set h2 = "text-xl font-display font-black text-charcoal uppercase tracking-tight mt-12 mb-4" %}
+{% set p = "text-slate-700 leading-relaxed mb-4" %}
+{% set ul = "list-disc pl-6 text-slate-700 space-y-2 mb-8" %}
+{% set a = "text-primary font-semibold hover:underline" %}
 <section class="py-16 md:py-24 bg-white">
     <div class="max-w-3xl mx-auto px-6">
         <h1 class="text-4xl md:text-5xl font-display font-black text-charcoal uppercase tracking-tighter mb-2">Privacy Policy</h1>
-        <p class="text-slate-500 font-bold uppercase tracking-widest text-sm mb-12">Effective Date: Jan 17, 2025</p>
+        <p class="text-slate-500 font-bold uppercase tracking-widest text-sm mb-12">Last updated: October 30, 2026</p>
         <div class="prose prose-slate max-w-none">
-            <p class="text-slate-700 leading-relaxed mb-8">Sparksmetrics (“we,” “our,” or “us”) respects your privacy and is committed to protecting your personal data. This Privacy Policy explains how we collect, use, and safeguard your information when you visit our website, interact with our Facebook ads, or download our free ebook.</p>
+            <p class="{{ p }} mb-8">Sparksmetrics (“we”, “our” or “us”) is a conversion rate optimization (CRO) and analytics agency for ecommerce brands. This Privacy Policy explains what personal data we collect, why, how long we keep it, who we share it with and what rights you have. It applies to our website <a href="https://sparksmetrics.com" class="{{ a }}">sparksmetrics.com</a>, our lead forms and tools, our services to clients, our YouTube channel and our use of YouTube API Services.</p>
 
-            <h2 class="text-xl font-display font-black text-charcoal uppercase tracking-tight mt-12 mb-4">1. Information We Collect</h2>
-            <p class="text-slate-700 leading-relaxed mb-4">We may collect the following types of information:</p>
-            <ul class="list-disc pl-6 text-slate-700 space-y-2 mb-8">
-                <li><strong>Cookies and Tracking Technologies:</strong> To improve your experience, we may use cookies and other tracking tools to analyze website traffic and ad performance.</li>
-                <li><strong>Usage Data:</strong> Information about how you interact with our website, such as IP address, browser type, time spent on pages, and referral URLs.</li>
-                <li><strong>Personal Information:</strong> Name, email address, or any details you provide when filling out our lead form to download the ebook.</li>
+            <h2 class="{{ h2 }}">1. Who we are</h2>
+            <p class="{{ p }}">The controller of your personal data is Stijn – Wherever, trading as Sparksmetrics, Heuvel 23, 5492 AC Sint-Oedenrode, the Netherlands (VAT NL003475368B90). For any privacy question or request, email <a href="mailto:stijn@sparksmetrics.com" class="{{ a }}">stijn@sparksmetrics.com</a>.</p>
+            <p class="{{ p }} mb-8">When we work on a client’s store or analytics (see section 5), the client is the controller of the data in their systems and we act as their processor.</p>
+
+            <h2 class="{{ h2 }}">2. What we collect</h2>
+            <ul class="{{ ul }}">
+                <li><strong>Information you give us:</strong> your name, email address, company, website/store URL, phone number and anything else you enter in our forms (free CRO audit or scan, ebook download, qualification quiz, strategy session or call booking), or send us by email or chat.</li>
+                <li><strong>Usage and device data:</strong> pages you visit, clicks, scrolling, referring site, campaign parameters, approximate location from your IP address, browser and device type, collected through cookies and similar technologies (see section 6).</li>
+                <li><strong>Session recordings and heatmaps:</strong> we use Microsoft Clarity and Hotjar to understand how visitors use our website. These tools record interactions such as clicks, mouse movement and scrolling. Form fields are masked.</li>
+                <li><strong>Client and billing data:</strong> contact details of the people we work with at client companies, contracts, invoices and payment details (payments are processed by Stripe; we do not store full card numbers).</li>
+                <li><strong>Data in client systems:</strong> when a client gives us access to their store, analytics, testing or advertising tools, we may see data about their visitors and customers (see section 5).</li>
             </ul>
 
-            <h2 class="text-xl font-display font-black text-charcoal uppercase tracking-tight mt-12 mb-4">2. How We Use Your Information</h2>
-            <p class="text-slate-700 leading-relaxed mb-4">We use the information we collect for the following purposes:</p>
-            <ul class="list-disc pl-6 text-slate-700 space-y-2 mb-8">
-                <li>To analyze and improve the performance of our Facebook ads and marketing campaigns.</li>
-                <li>To send you updates, promotional content, or offers related to marketing analytics (you can opt out at any time).</li>
-                <li>To personalize and enhance your experience with Sparksmetrics.</li>
-                <li>To deliver the free ebook you requested.</li>
+            <h2 class="{{ h2 }}">3. Why we use it, and on what legal basis</h2>
+            <ul class="{{ ul }}">
+                <li><strong>To deliver what you asked for</strong> (the ebook, a CRO audit or scan, a booked call, a proposal) and to perform our contract with clients. <em>Legal basis: contract or steps before a contract.</em></li>
+                <li><strong>To follow up on your request</strong> and send relevant information about our services by email. You can unsubscribe at any time with one click. <em>Legal basis: legitimate interest, or consent where the law requires it.</em></li>
+                <li><strong>To measure and improve our website and advertising</strong> (Google Analytics, Google Ads, Meta Pixel, Hotjar, Microsoft Clarity and our own analytics). <em>Legal basis: legitimate interest in understanding and improving our marketing.</em></li>
+                <li><strong>To run our business:</strong> invoicing, bookkeeping, security, fraud prevention and meeting legal obligations such as tax record keeping. <em>Legal basis: legal obligation and legitimate interest.</em></li>
+            </ul>
+            <p class="{{ p }} mb-8">We do not sell your personal data, and we do not use it for automated decisions that have legal or similarly significant effects on you.</p>
+
+            <h2 class="{{ h2 }}">4. Who we share it with</h2>
+            <p class="{{ p }}">We only share personal data with service providers that help us run our business, under contracts that require them to protect it:</p>
+            <ul class="{{ ul }}">
+                <li><strong>Hosting and infrastructure:</strong> DigitalOcean (servers), Google Workspace (email and files).</li>
+                <li><strong>Analytics and advertising:</strong> Google (Analytics, Ads, YouTube), Meta (Facebook and Instagram ads), Microsoft (Clarity), Hotjar.</li>
+                <li><strong>Communication and scheduling:</strong> Brevo (email), Calendly (call booking), Slack (internal notifications about new requests).</li>
+                <li><strong>Payments:</strong> Stripe.</li>
+                <li><strong>Tools behind our free CRO scan:</strong> Browserless (loading and screenshotting the public pages of the store URL you submit) and OpenAI (analyzing those pages to write the report). We only send these providers the public pages of the URL you submit, not your contact details.</li>
+                <li><strong>Authorities and advisers:</strong> when required by law, or to our accountant and legal advisers under confidentiality.</li>
+            </ul>
+            <p class="{{ p }} mb-8">Some of these providers are based outside the European Economic Area, mainly in the United States. Where that is the case, the transfer is covered by the EU–US Data Privacy Framework or by the European Commission’s Standard Contractual Clauses.</p>
+
+            <h2 class="{{ h2 }}">5. Data we handle for our clients</h2>
+            <p class="{{ p }}">For CRO and analytics work, clients give us access to tools such as Shopify, Google Analytics, Google Tag Manager, Microsoft Clarity, A/B testing tools and advertising accounts. Those tools can contain personal data about the client’s visitors and customers. For that data:</p>
+            <ul class="{{ ul }}">
+                <li>The client is the controller and we act as their processor. We only use the data to deliver the agreed services, on the client’s instructions.</li>
+                <li>We work with aggregated and pseudonymized data wherever possible, and we do not export customer lists unless the work requires it and the client agrees.</li>
+                <li>Access is limited to the team members working on the account and is removed when the engagement ends.</li>
+                <li>We never publish client data. Case studies and examples are anonymized unless the client has given written permission to be named.</li>
+                <li>A data processing agreement (DPA) is available on request.</li>
             </ul>
 
-            <h2 class="text-xl font-display font-black text-charcoal uppercase tracking-tight mt-12 mb-4">3. How We Share Your Information</h2>
-            <p class="text-slate-700 leading-relaxed mb-4">We do not sell, trade, or rent your personal information to third parties. We may share your data with:</p>
-            <ul class="list-disc pl-6 text-slate-700 space-y-2 mb-8">
-                <li><strong>Legal Authorities:</strong> When required by law to comply with legal obligations.</li>
-                <li><strong>Advertising Partners:</strong> To show you relevant ads on Facebook and other platforms.</li>
-                <li><strong>Service Providers:</strong> For hosting, email delivery, or ad optimization.</li>
+            <h2 class="{{ h2 }}">6. Cookies and similar technologies</h2>
+            <p class="{{ p }}">Our website uses cookies and similar technologies to work properly, and to measure visits and ad performance: Google Analytics, Google Ads, Meta Pixel, Microsoft Clarity, Hotjar and our own analytics. Embedded YouTube videos may set cookies from Google when you play them.</p>
+            <p class="{{ p }} mb-8">You can block or delete cookies in your browser settings, and opt out of personalized ads through <a href="https://adssettings.google.com" class="{{ a }}" target="_blank" rel="noopener">Google Ad Settings</a> and <a href="https://www.facebook.com/adpreferences" class="{{ a }}" target="_blank" rel="noopener">Meta Ad Preferences</a>. Blocking cookies may affect how parts of the website work.</p>
+
+            <h2 class="{{ h2 }}">7. YouTube and YouTube API Services</h2>
+            <p class="{{ p }}">We publish videos on our YouTube channel and embed YouTube videos on this website. We also use <strong>YouTube API Services</strong> through an internal tool, for one purpose only: uploading and scheduling videos on our own YouTube channel. This tool is used only by our team. It does not access, collect, store or share data about other YouTube users or channels.</p>
+            <ul class="{{ ul }}">
+                <li>By watching our videos, or using any feature that relies on YouTube, you also agree to the <a href="https://www.youtube.com/t/terms" class="{{ a }}" target="_blank" rel="noopener">YouTube Terms of Service</a>.</li>
+                <li>Google’s handling of data is described in the <a href="https://policies.google.com/privacy" class="{{ a }}" target="_blank" rel="noopener">Google Privacy Policy</a>.</li>
+                <li>If you ever authorize one of our tools to access a YouTube or Google account, you can revoke that access at any time on the <a href="https://security.google.com/settings/security/permissions" class="{{ a }}" target="_blank" rel="noopener">Google security settings page</a>. We then delete any stored access tokens.</li>
             </ul>
 
-            <h2 class="text-xl font-display font-black text-charcoal uppercase tracking-tight mt-12 mb-4">4. Your Rights</h2>
-            <p class="text-slate-700 leading-relaxed mb-4">Depending on your location, you may have rights regarding your personal data, such as:</p>
-            <ul class="list-disc pl-6 text-slate-700 space-y-2 mb-4">
-                <li>Limiting the processing of your data.</li>
-                <li>Opting out of targeted advertising or email communications.</li>
-                <li>Accessing, correcting, or deleting your personal information.</li>
+            <h2 class="{{ h2 }}">8. How long we keep data</h2>
+            <ul class="{{ ul }}">
+                <li><strong>Leads and enquiries:</strong> up to 24 months after our last contact, unless you become a client or ask us to delete it sooner.</li>
+                <li><strong>Client and contract data:</strong> for the duration of the engagement and up to 24 months after, except where the law requires longer.</li>
+                <li><strong>Invoices and bookkeeping:</strong> 7 years, as required by Dutch tax law.</li>
+                <li><strong>Data in client systems:</strong> we do not keep copies after the engagement ends. Our access is removed and any exports are deleted.</li>
+                <li><strong>Analytics data:</strong> according to the retention settings of each tool (for Google Analytics, a maximum of 14 months).</li>
             </ul>
-            <p class="text-slate-700 leading-relaxed mb-8">To exercise these rights, contact us at <a href="mailto:stijn@sparksmetrics.com" class="text-primary font-semibold hover:underline">stijn@sparksmetrics.com</a>.</p>
 
-            <h2 class="text-xl font-display font-black text-charcoal uppercase tracking-tight mt-12 mb-4">5. Cookies and Tracking</h2>
-            <p class="text-slate-700 leading-relaxed mb-4">We use cookies and similar technologies to:</p>
-            <ul class="list-disc pl-6 text-slate-700 space-y-2 mb-8">
-                <li>Improve user experience on our website.</li>
-                <li>Measure ad performance and effectiveness.</li>
-            </ul>
-            <p class="text-slate-700 leading-relaxed mb-8">You can control or disable cookies through your browser settings. However, this may affect certain functionalities of the website.</p>
+            <h2 class="{{ h2 }}">9. Your rights</h2>
+            <p class="{{ p }}">Under the GDPR you have the right to access your data, have it corrected or deleted, restrict or object to its processing (including for direct marketing), receive it in a portable format, and withdraw consent at any time without affecting earlier processing.</p>
+            <p class="{{ p }} mb-8">To use any of these rights, email <a href="mailto:stijn@sparksmetrics.com" class="{{ a }}">stijn@sparksmetrics.com</a>. We respond within one month. If you are not satisfied with how we handle your data, you can file a complaint with the Dutch Data Protection Authority (<a href="https://autoriteitpersoonsgegevens.nl" class="{{ a }}" target="_blank" rel="noopener">Autoriteit Persoonsgegevens</a>) or the authority in your own country.</p>
 
-            <h2 class="text-xl font-display font-black text-charcoal uppercase tracking-tight mt-12 mb-4">6. Data Security</h2>
-            <p class="text-slate-700 leading-relaxed mb-8">We implement reasonable security measures to protect your information from unauthorized access, disclosure, or misuse. However, no method of online transmission or storage is completely secure.</p>
+            <h2 class="{{ h2 }}">10. Security</h2>
+            <p class="{{ p }} mb-8">We protect personal data with appropriate technical and organizational measures, including encrypted connections, access limited to the people who need it, and removing access to client systems when an engagement ends. No method of transmission or storage is completely secure, but we work to keep the risk low and will notify you and the authorities of a breach where the law requires it.</p>
 
-            <h2 class="text-xl font-display font-black text-charcoal uppercase tracking-tight mt-12 mb-4">7. Changes to This Policy</h2>
-            <p class="text-slate-700 leading-relaxed mb-8">We may update this Privacy Policy periodically. Any changes will be posted on this page with an updated “Effective Date.”</p>
+            <h2 class="{{ h2 }}">11. Children</h2>
+            <p class="{{ p }} mb-8">Our website and services are meant for businesses and are not directed at anyone under 16. We do not knowingly collect personal data from children.</p>
 
-            <h2 class="text-xl font-display font-black text-charcoal uppercase tracking-tight mt-12 mb-4">8. Contact Us</h2>
-            <p class="text-slate-700 leading-relaxed mb-8">If you have any questions or concerns about this Privacy Policy, please contact us at:</p>
-            <p class="text-slate-700 leading-relaxed mb-8">Sparksmetrics · Netherlands · <a href="mailto:stijn@sparksmetrics.com" class="text-primary font-semibold hover:underline">stijn@sparksmetrics.com</a></p>
+            <h2 class="{{ h2 }}">12. Changes to this policy</h2>
+            <p class="{{ p }} mb-8">We may update this Privacy Policy when our services or the law change. The “Last updated” date at the top shows the latest version. If a change is significant, we will let clients know directly.</p>
 
-            <p class="text-slate-600 text-sm border-t border-slate-200 pt-8 mt-12">This Privacy Policy applies to all users of our website and Facebook ads. By using our website or interacting with our ads, you agree to the terms of this Privacy Policy.</p>
+            <h2 class="{{ h2 }}">13. Contact</h2>
+            <p class="{{ p }} mb-8">Sparksmetrics (Stijn – Wherever) · Heuvel 23, 5492 AC Sint-Oedenrode, the Netherlands · <a href="mailto:stijn@sparksmetrics.com" class="{{ a }}">stijn@sparksmetrics.com</a></p>
+
+            <p class="text-slate-600 text-sm border-t border-slate-200 pt-8 mt-12">See also our <a href="{{ url_for('main.terms_of_service') }}" class="{{ a }}">Terms of Service</a>.</p>
         </div>
         <p class="mt-12">
             <a href="{{ url_for('main.index') }}" class="text-primary font-bold uppercase tracking-widest text-sm hover:underline">← Back to home</a>

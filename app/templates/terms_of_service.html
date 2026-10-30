@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}Terms of Service | Sparksmetrics{% endblock %}
+{% block meta_description %}Terms of Service for the Sparksmetrics website, our CRO and analytics services, free tools and YouTube content.{% endblock %}
+{% block content %}
+{% set h2 = "text-xl font-display font-black text-charcoal uppercase tracking-tight mt-12 mb-4" %}
+{% set p = "text-slate-700 leading-relaxed mb-4" %}
+{% set ul = "list-disc pl-6 text-slate-700 space-y-2 mb-8" %}
+{% set a = "text-primary font-semibold hover:underline" %}
+<section class="py-16 md:py-24 bg-white">
+    <div class="max-w-3xl mx-auto px-6">
+        <h1 class="text-4xl md:text-5xl font-display font-black text-charcoal uppercase tracking-tighter mb-2">Terms of Service</h1>
+        <p class="text-slate-500 font-bold uppercase tracking-widest text-sm mb-12">Last updated: October 30, 2026</p>
+        <div class="prose prose-slate max-w-none">
+            <p class="{{ p }} mb-8">These Terms of Service (“Terms”) apply to your use of <a href="https://sparksmetrics.com" class="{{ a }}">sparksmetrics.com</a>, our free tools and content, and the conversion rate optimization (CRO) and analytics services we provide to clients. By using the website or our services, you agree to these Terms.</p>
+
+            <h2 class="{{ h2 }}">1. Who we are</h2>
+            <p class="{{ p }} mb-8">Sparksmetrics is a trade name of Stijn – Wherever, Heuvel 23, 5492 AC Sint-Oedenrode, the Netherlands (VAT NL003475368B90) (“Sparksmetrics”, “we”, “us”). Contact: <a href="mailto:stijn@sparksmetrics.com" class="{{ a }}">stijn@sparksmetrics.com</a>.</p>
+
+            <h2 class="{{ h2 }}">2. Our services and how they are agreed</h2>
+            <p class="{{ p }}">We provide CRO, A/B testing, analytics, tracking and related consulting services to ecommerce businesses. The scope, fees, term and any guarantees for a client engagement are set out in a written proposal, statement of work or agreement (the “Agreement”).</p>
+            <ul class="{{ ul }}">
+                <li>If the Agreement and these Terms conflict, the Agreement takes priority.</li>
+                <li>Our services are offered to businesses, not consumers.</li>
+                <li>Work outside the agreed scope is only carried out after written approval and may be billed separately.</li>
+            </ul>
+
+            <h2 class="{{ h2 }}">3. Fees and payment</h2>
+            <ul class="{{ ul }}">
+                <li>Fees, currency and billing schedule are stated in the Agreement or on the invoice. Unless agreed otherwise, invoices are payable within 14 days.</li>
+                <li>Prices exclude VAT and other applicable taxes.</li>
+                <li>Payments may be processed by Stripe or by bank transfer.</li>
+                <li>If an invoice is overdue, we may pause the work until it is paid, after notifying you.</li>
+            </ul>
+
+            <h2 class="{{ h2 }}">4. Your responsibilities as a client</h2>
+            <ul class="{{ ul }}">
+                <li>Give us timely access to the systems we need (for example your store, analytics, tag management, testing and advertising tools) and the information and approvals needed to do the work.</li>
+                <li>Make sure you have the right to share that access and data with us, and that your own website has a valid privacy notice and cookie set-up.</li>
+                <li>Review and approve tests, designs and code before they go live, unless the Agreement says otherwise. You remain responsible for your store, products, pricing and legal compliance.</li>
+            </ul>
+
+            <h2 class="{{ h2 }}">5. Results</h2>
+            <p class="{{ p }} mb-8">CRO is experimental by nature: many tests do not produce a winner, and results depend on traffic, seasonality, your offer and other factors outside our control. We commit to doing the work with skill and care, but we do not guarantee a specific uplift in conversion rate, revenue or any other metric, unless a guarantee is explicitly included in the Agreement. In that case, the conditions in the Agreement apply.</p>
+
+            <h2 class="{{ h2 }}">6. Intellectual property</h2>
+            <ul class="{{ ul }}">
+                <li>Once paid for, the deliverables created specifically for you (such as test designs, code, reports and dashboards) are yours to use.</li>
+                <li>We keep ownership of our own methods, frameworks, templates, tools and know-how, including improvements we make while working with you. We may reuse general learnings, but never your confidential information.</li>
+                <li>Everything on our website, our videos and our free resources is owned by us or our licensors. You may use it for your own business, but you may not copy, resell or republish it without our written permission.</li>
+            </ul>
+
+            <h2 class="{{ h2 }}">7. Confidentiality and data protection</h2>
+            <p class="{{ p }}">We keep your business information, data and results confidential and only use them to deliver our services. We only mention you as a client, or publish a case study about your results, with your written permission. Otherwise, any examples we share are anonymized.</p>
+            <p class="{{ p }} mb-8">Where we process personal data on your behalf, we act as your processor and follow your instructions. A data processing agreement is available on request. Our <a href="{{ url_for('main.privacy_policy') }}" class="{{ a }}">Privacy Policy</a> explains how we handle personal data as a controller.</p>
+
+            <h2 class="{{ h2 }}">8. Free tools, audits and content</h2>
+            <p class="{{ p }} mb-8">Our free resources (such as the CRO scan, audits, ebook, blog posts and videos) are general information, not tailored professional advice. They are provided “as is”. By submitting a store URL to a free tool, you confirm you are allowed to have that website analyzed. You decide what to implement on your own store, and you are responsible for the result.</p>
+
+            <h2 class="{{ h2 }}">9. YouTube</h2>
+            <p class="{{ p }}">We publish videos on YouTube and embed them on this website, and we use YouTube API Services to upload and schedule videos on our own channel.</p>
+            <ul class="{{ ul }}">
+                <li>By watching our videos or using any feature that relies on YouTube, you also agree to the <a href="https://www.youtube.com/t/terms" class="{{ a }}" target="_blank" rel="noopener">YouTube Terms of Service</a>.</li>
+                <li>Google’s handling of data is described in the <a href="https://policies.google.com/privacy" class="{{ a }}" target="_blank" rel="noopener">Google Privacy Policy</a>. Our own handling is described in our <a href="{{ url_for('main.privacy_policy') }}" class="{{ a }}">Privacy Policy</a>.</li>
+                <li>Our videos are for educational purposes. Examples of brands and websites shown are public examples, not necessarily clients, unless we say so.</li>
+            </ul>
+
+            <h2 class="{{ h2 }}">10. Third-party platforms</h2>
+            <p class="{{ p }} mb-8">Our work often relies on third-party platforms such as Shopify, Google, Meta, Microsoft Clarity and A/B testing tools. These platforms are governed by their own terms. We are not responsible for their availability, changes, pricing or data handling.</p>
+
+            <h2 class="{{ h2 }}">11. Term and termination</h2>
+            <p class="{{ p }} mb-8">The duration and notice period of an engagement are set out in the Agreement. Either party may end the Agreement immediately if the other seriously breaches it and does not fix the breach within 14 days of written notice. When an engagement ends, you pay for work performed up to that date, we remove our access to your systems, and we hand over the deliverables you have paid for.</p>
+
+            <h2 class="{{ h2 }}">12. Liability</h2>
+            <p class="{{ p }}">To the extent permitted by law:</p>
+            <ul class="{{ ul }}">
+                <li>Our total liability under an Agreement is limited to the fees you paid us for the services in the three months before the event that caused the damage.</li>
+                <li>We are not liable for indirect or consequential damage, including lost profit, lost revenue, lost data or reputational damage.</li>
+                <li>These limits do not apply to damage caused by our intent or gross negligence.</li>
+                <li>The website and free resources are provided without any warranty, and we are not liable for damage resulting from their use.</li>
+            </ul>
+
+            <h2 class="{{ h2 }}">13. Acceptable use of the website</h2>
+            <p class="{{ p }} mb-8">Do not misuse the website or our tools. For example, do not try to gain unauthorized access, overload or disrupt the site, scrape it at scale, submit false information or use it for anything unlawful. We may block access if you do.</p>
+
+            <h2 class="{{ h2 }}">14. Changes to these Terms</h2>
+            <p class="{{ p }} mb-8">We may update these Terms from time to time. The “Last updated” date shows the current version. Changes do not affect an existing Agreement unless both parties agree in writing.</p>
+
+            <h2 class="{{ h2 }}">15. Governing law and disputes</h2>
+            <p class="{{ p }} mb-8">These Terms and every Agreement are governed by Dutch law. Disputes go to the competent court in ’s-Hertogenbosch, the Netherlands, unless mandatory law says otherwise. We always try to solve a disagreement together first, so please contact us before starting any proceedings.</p>
+
+            <h2 class="{{ h2 }}">16. Contact</h2>
+            <p class="{{ p }} mb-8">Sparksmetrics (Stijn – Wherever) · Heuvel 23, 5492 AC Sint-Oedenrode, the Netherlands · <a href="mailto:stijn@sparksmetrics.com" class="{{ a }}">stijn@sparksmetrics.com</a></p>
+        </div>
+        <p class="mt-12">
+            <a href="{{ url_for('main.index') }}" class="text-primary font-bold uppercase tracking-widest text-sm hover:underline">← Back to home</a>
+        </p>
+    </div>
+</section>
+{% endblock %}

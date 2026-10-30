@@ -28,6 +28,7 @@ REDIRECTS = [
     (["/quiz/", "/quiz"], "main.do_i_qualify", 301),
     (["/quiz/book/", "/quiz/book"], "main.do_i_qualify", 301),
     (["/do-i-qualify/book/", "/do-i-qualify/book"], "main.do_i_qualify", 301),
+    (["/terms", "/terms-and-conditions"], "main.terms_of_service", 301),
 ]
 
 
@@ -2943,16 +2944,10 @@ def privacy_policy():
     return render_template("privacy_policy.html")
 
 
-@main_bp.route("/terms")
-def terms():
-    """Terms and conditions."""
-    return render_template("terms.html")
-
-
-@main_bp.route("/terms-and-conditions")
-def terms_and_conditions():
-    """Terms and conditions (alternate URL)."""
-    return render_template("terms.html")
+@main_bp.route("/terms-of-service")
+def terms_of_service():
+    """Terms of service (website, agency services, YouTube). /terms and /terms-and-conditions redirect here."""
+    return render_template("terms_of_service.html")
 
 
 @main_bp.route("/sitemap.xml")
@@ -2967,7 +2962,7 @@ def sitemap():
         ("main.schedule_a_call", {}),
         ("main.cro_ebook", {}),
         ("main.privacy_policy", {}),
-        ("main.terms", {}),
+        ("main.terms_of_service", {}),
     ]
     urls = []
     for endpoint, kwargs in pages:
