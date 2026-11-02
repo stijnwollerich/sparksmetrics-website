@@ -1,11 +1,21 @@
-{% extends "base.html" %} {% block title %}You're Bleeding Revenue on Every Page. We'll Show You Where — Free CRO Audit in 48 Hours | Sparksmetrics{% endblock %} {% block meta_description %}You have a
-free CRO audit finds where your ecommerce funnel leaks revenue and hands you a
-prioritized roadmap to fix it. No retainer required.{% endblock %} {% block og_title %}You're Bleeding Revenue on Every Page. We'll Show You Where — Free CRO Audit in 48 Hours | Sparksmetrics{% endblock %} {% block og_description %}You have a
+{% extends "base.html" %} {% block title %}Free CRO Audit in 48 Hours | Ecommerce CRO Agency for Shopify | Sparksmetrics{% endblock %} {% block meta_description %}Sparksmetrics is an ecommerce conversion rate optimization (CRO) agency for Shopify brands. Our
+free CRO audit finds where your funnel leaks revenue and hands you a
+prioritized roadmap to fix it. No retainer required.{% endblock %} {% block og_title %}We Found $312,000 Hiding in One Shopify Store. Let's Find Yours. | Free CRO Audit | Sparksmetrics{% endblock %} {% block og_description %}You have a
 free CRO audit finds where your funnel leaks and gives you a prioritized fix list
 backed by data.{% endblock %} {% block
-twitter_title %}You're Bleeding Revenue on Every Page. We'll Show You Where — Free CRO Audit in 48 Hours | Sparksmetrics{% endblock %} {% block twitter_description %}You have a
+twitter_title %}We Found $312,000 Hiding in One Shopify Store. Let's Find Yours. | Free CRO Audit | Sparksmetrics{% endblock %} {% block twitter_description %}You have a
 free CRO audit finds where your funnel leaks and gives you a prioritized fix list
-backed by data.{% endblock %} {% block primary_bar %}{% endblock %} {% block footer %}{% endblock %} {% block audit_bar %}{% endblock %}
+backed by data.{% endblock %} {% block primary_bar %}{% endblock %} {% block footer %}
+<footer class="bg-white border-t border-gray-100">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-gray-500 text-center md:text-left">
+    <p>&copy; {{ now().year }} Sparksmetrics, ecommerce CRO agency &middot; Heuvel 23, 5492 AC Sint-Oedenrode, the Netherlands &middot; <a href="mailto:stijn@sparksmetrics.com" class="hover:text-primary">stijn@sparksmetrics.com</a></p>
+    <p class="flex gap-4">
+      <a href="{{ url_for('main.privacy_policy') }}" class="hover:text-primary">Privacy Policy</a>
+      <a href="{{ url_for('main.terms_of_service') }}" class="hover:text-primary">Terms of Service</a>
+    </p>
+  </div>
+</footer>
+{% endblock %} {% block audit_bar %}{% endblock %}
 {% block head_extras %}
 <meta name="robots" content="noindex, follow" />
 <link rel="preconnect" href="https://www.youtube.com" />
@@ -294,15 +304,15 @@ backed by data.{% endblock %} {% block primary_bar %}{% endblock %} {% block foo
       <p
         class="text-primary font-semibold text-sm sm:text-base mb-2 max-w-3xl mx-auto leading-snug"
       >
-        For Shopify brands doing $100k–$1M/month
+        Ecommerce CRO agency for Shopify brands doing $100k–$1M/month
       </p>
       <h1 class="vsl-hero-title text-deep-charcoal mb-3 md:mb-4 mx-auto">
-        <span>You're Bleeding Revenue on Every Page. We'll Show You Where — Free CRO Audit in 48 Hours.</span>
+        <span>We Found $312,000 Hiding in One Shopify Store. Let's Find Yours.</span>
       </h1>
       <p
         class="text-gray-600 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto mb-4 md:mb-5"
       >
-        And if we don't perform, you don't pay. Watch the video to see how.
+        Free CRO audit in 48 hours. If we don't perform, you don't pay. Watch the video to see how.
       </p>
       </div>
 
