@@ -1,0 +1,267 @@
+{% extends "base.html" %}
+{% block title %}We'll Set Up Your First A/B Test for Free | Sparksmetrics{% endblock %}
+{% block meta_description %}For Shopify brands doing €500k or more a year. We find the highest-leverage test, build it, and launch it. You keep 100% of the upside.{% endblock %}
+{% block og_title %}We'll Set Up Your First A/B Test for Free{% endblock %}
+{% block og_description %}For Shopify brands doing €500k or more. We find what's costing you sales, build the test, and launch it. Apply to see if your store qualifies.{% endblock %}
+{% block twitter_title %}We'll Set Up Your First A/B Test for Free{% endblock %}
+{% block twitter_description %}For Shopify brands doing €500k or more. We find what's costing you sales, build the test, and launch it.{% endblock %}
+{% block primary_bar %}{% endblock %}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block audit_bar %}{% endblock %}
+{% block body_class %}bg-[#F4F2EE] text-gray-900 font-sans{% endblock %}
+{% block head_extras %}
+<meta name="robots" content="noindex, nofollow" />
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  body { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
+  .hero-label {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #ff4d00;
+  }
+  input, select, textarea {
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  .form-input {
+    width: 100%;
+    border: 1.5px solid #d1d5db;
+    border-radius: 0.375rem;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.9375rem;
+    color: #111827;
+    background: #fff;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .form-input:focus { border-color: #ff4d00; box-shadow: 0 0 0 3px rgba(255,77,0,0.08); }
+  .form-label {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.375rem;
+  }
+  .submit-btn {
+    width: 100%;
+    background: #ff4d00;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.875rem 1.5rem;
+    border-radius: 0.375rem;
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    letter-spacing: 0.01em;
+  }
+  .submit-btn:hover { background: #e04400; }
+  .submit-btn:active { transform: scale(0.99); }
+  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .proof-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 999px;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #374151;
+    white-space: nowrap;
+  }
+  .proof-dot { width: 6px; height: 6px; border-radius: 50%; background: #ff4d00; flex-shrink: 0; }
+  #success-state { display: none; }
+  .fade-in { animation: fadeIn 0.4s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+{% endblock %}
+{% block content %}
+<div class="min-h-screen flex flex-col">
+
+  <!-- Minimal nav -->
+  <nav class="bg-[#F4F2EE] border-b border-gray-200 px-4 py-4">
+    <div class="max-w-5xl mx-auto flex items-center justify-between">
+      <a href="{{ url_for('main.index') }}" class="font-black text-deep-charcoal text-lg tracking-tight uppercase">Sparksmetrics</a>
+      <span class="text-xs text-gray-400">Free A/B Test</span>
+    </div>
+  </nav>
+
+  <main class="flex-1 py-10 px-4">
+    <div class="max-w-5xl mx-auto">
+
+      <!-- Two-column layout -->
+      <div class="grid md:grid-cols-2 gap-10 md:gap-16 items-start">
+
+        <!-- Left: value prop -->
+        <div class="pt-2">
+          <p class="hero-label mb-3">Limited spots each month</p>
+          <h1 class="text-3xl sm:text-4xl font-black text-deep-charcoal leading-tight tracking-tight uppercase mb-4">
+            We'll Set Up Your First A/B Test for Free
+          </h1>
+          <p class="text-gray-600 text-base leading-relaxed mb-6">
+            For Shopify stores doing €500k or more a year. We come in, look at your actual data, find the one thing most worth testing, build it, and launch it. You keep 100% of the upside.
+          </p>
+
+          <!-- Proof pills -->
+          <div class="flex flex-wrap gap-2 mb-8">
+            <span class="proof-pill"><span class="proof-dot"></span>+31% CVR — single page change</span>
+            <span class="proof-pill"><span class="proof-dot"></span>€312k found — mobile layout fix</span>
+            <span class="proof-pill"><span class="proof-dot"></span>23 days to result</span>
+          </div>
+
+          <!-- What they get -->
+          <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6">
+            <p class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">What you get</p>
+            <ul class="space-y-3">
+              <li class="flex gap-3 items-start">
+                <span class="material-symbols-outlined text-primary text-base mt-0.5 shrink-0">check_circle</span>
+                <span class="text-sm text-gray-700"><strong class="text-deep-charcoal">Funnel audit</strong> — we review your store data and session recordings to find where visitors drop off.</span>
+              </li>
+              <li class="flex gap-3 items-start">
+                <span class="material-symbols-outlined text-primary text-base mt-0.5 shrink-0">check_circle</span>
+                <span class="text-sm text-gray-700"><strong class="text-deep-charcoal">One test, built and launched</strong> — we write the hypothesis, build the variant, and get it live.</span>
+              </li>
+              <li class="flex gap-3 items-start">
+                <span class="material-symbols-outlined text-primary text-base mt-0.5 shrink-0">check_circle</span>
+                <span class="text-sm text-gray-700"><strong class="text-deep-charcoal">The revenue lift is yours</strong> — if it wins, you keep it. If it loses, you have better data than before.</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Testimonial -->
+          <blockquote class="border-l-2 border-primary pl-4">
+            <p class="text-sm text-gray-600 italic leading-snug">"Stijn is a great go-to resource for CRO and analytics. He shows you exactly where conversions break down and what to do about it."</p>
+            <footer class="text-xs text-gray-400 font-bold uppercase tracking-widest mt-2">Verified partner · 200+ Shopify brands</footer>
+          </blockquote>
+        </div>
+
+        <!-- Right: application form -->
+        <div>
+          <div id="form-state" class="bg-white rounded-xl border border-gray-200 p-6 md:p-8 shadow-sm">
+            <h2 class="text-xl font-black text-deep-charcoal uppercase tracking-tight mb-1">Apply for a free test</h2>
+            <p class="text-xs text-gray-400 mb-6">We review every application and reply within 24 hours.</p>
+
+            <form id="ab-test-form" novalidate>
+              <div class="space-y-4">
+
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label for="fname" class="form-label">First name</label>
+                    <input type="text" id="fname" name="fname" autocomplete="given-name" placeholder="Alex" class="form-input" required />
+                  </div>
+                  <div>
+                    <label for="email" class="form-label">Work email</label>
+                    <input type="email" id="email" name="email" autocomplete="email" placeholder="you@brand.com" class="form-input" required />
+                  </div>
+                </div>
+
+                <div>
+                  <label for="website_url" class="form-label">Shopify store URL</label>
+                  <input type="text" id="website_url" name="website_url" placeholder="yourbrand.com" class="form-input" required />
+                </div>
+
+                <div>
+                  <label for="annual_revenue" class="form-label">Annual Shopify revenue</label>
+                  <select id="annual_revenue" name="annual_revenue" class="form-input" required>
+                    <option value="" disabled selected>Select range</option>
+                    <option value="€500k–€1M">€500k – €1M</option>
+                    <option value="€1M–€3M">€1M – €3M</option>
+                    <option value="€3M–€10M">€3M – €10M</option>
+                    <option value="€10M+">€10M+</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label for="challenge" class="form-label">What's your biggest conversion challenge right now?</label>
+                  <textarea id="challenge" name="challenge" rows="3" placeholder="e.g. traffic is good but conversion rate is flat, mobile CVR is half desktop..." class="form-input resize-none"></textarea>
+                </div>
+
+                <div id="form-error" class="text-red-500 text-sm hidden"></div>
+
+                <button type="submit" id="submit-btn" class="submit-btn mt-2">
+                  Apply for a free test
+                </button>
+
+                <p class="text-center text-xs text-gray-400 mt-2">No credit card. No retainer. We'll look at your store before we respond.</p>
+              </div>
+            </form>
+          </div>
+
+          <!-- Success state -->
+          <div id="success-state" class="bg-white rounded-xl border border-gray-200 p-6 md:p-8 shadow-sm fade-in">
+            <div class="flex flex-col items-center text-center py-4">
+              <span class="material-symbols-outlined text-primary text-5xl mb-4">check_circle</span>
+              <h2 class="text-xl font-black text-deep-charcoal uppercase tracking-tight mb-2">Application received</h2>
+              <p class="text-sm text-gray-500 mb-6 max-w-xs">We'll look at your store and get back to you within 24 hours. While you're here, pick a time that works for a quick call.</p>
+              <a href="{{ url_for('main.schedule_a_call') }}" class="submit-btn inline-block text-center" style="max-width: 280px; text-decoration: none;">Book a 30-minute call</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-[#F4F2EE] border-t border-gray-200 px-4 py-6">
+    <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2 text-xs text-gray-400">
+      <p>&copy; {{ now().year }} Sparksmetrics &middot; Heuvel 23, 5492 AC Sint-Oedenrode, the Netherlands</p>
+      <p class="flex gap-4">
+        <a href="{{ url_for('main.privacy_policy') }}" class="hover:text-gray-600">Privacy Policy</a>
+        <a href="{{ url_for('main.terms_of_service') }}" class="hover:text-gray-600">Terms of Service</a>
+      </p>
+    </div>
+  </footer>
+</div>
+
+<script>
+  document.getElementById('ab-test-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submit-btn');
+    const errEl = document.getElementById('form-error');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    errEl.classList.add('hidden');
+
+    const payload = {
+      fname: document.getElementById('fname').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      website_url: document.getElementById('website_url').value.trim(),
+      annual_revenue: document.getElementById('annual_revenue').value,
+      challenge: document.getElementById('challenge').value.trim(),
+      form_page_url: window.location.href,
+    };
+
+    try {
+      const res = await fetch('/apply-ab-test', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const json = await res.json();
+      if (json.success) {
+        document.getElementById('form-state').style.display = 'none';
+        const success = document.getElementById('success-state');
+        success.style.display = 'block';
+        // Also open schedule modal if available
+        if (typeof openScheduleModal === 'function') openScheduleModal();
+      } else {
+        errEl.textContent = json.error || 'Something went wrong. Please try again.';
+        errEl.classList.remove('hidden');
+        btn.disabled = false;
+        btn.textContent = 'Apply for a free test';
+      }
+    } catch {
+      errEl.textContent = 'Network error. Please try again.';
+      errEl.classList.remove('hidden');
+      btn.disabled = false;
+      btn.textContent = 'Apply for a free test';
+    }
+  });
+</script>
+{% endblock %}

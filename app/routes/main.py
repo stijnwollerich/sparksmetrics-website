@@ -2995,6 +2995,68 @@ def sitemap():
     return Response("\n".join(xml_lines), mimetype="application/xml")
 
 
+@main_bp.route("/free-ab-test/")
+@main_bp.route("/free-ab-test")
+def free_ab_test_landing():
+    """Free A/B test offer — Meta cold traffic, application form."""
+    return render_template("landing_pages/free_ab_test.html")
+
+
+@main_bp.route("/apply-ab-test", methods=["POST"])
+def apply_ab_test():
+    """Accept free A/B test application: name, email, store URL, revenue, challenge."""
+    data = request.get_json(silent=True) or {}
+    fname = (data.get("fname") or "").strip()
+    email = (data.get("email") or "").strip()
+    website_url = (data.get("website_url") or "").strip() or None
+    annual_revenue = (data.get("annual_revenue") or "").strip()
+    challenge = (data.get("challenge") or "").strip()
+    form_page_url = _ingest_form_page_url(data)
+
+    if not fname:
+        return jsonify({"success": False, "error": "First name required"}), 400
+    if not email or not re.match(r"^[^\s@]+@[^\s@]+\.[^\s@]+$", email):
+        return jsonify({"success": False, "error": "Invalid email"}), 400
+    if not website_url:
+        return jsonify({"success": False, "error": "Store URL required"}), 400
+
+    website_url = _normalize_shopify_url(website_url) or website_url
+    business_stage_parts = []
+    if annual_revenue:
+        business_stage_parts.append(f"revenue: {annual_revenue}")
+    if challenge:
+        business_stage_parts.append(f"challenge: {challenge}")
+    business_stage = " | ".join(business_stage_parts) or None
+
+    _save_lead(
+        fname,
+        email,
+        "free_ab_test",
+        resource_slug=None,
+        website_url=website_url,
+        form_page_url=form_page_url,
+        business_stage=business_stage,
+    )
+    _sync_lead_to_brevo(
+        fname,
+        email,
+        "free_ab_test",
+        resource_slug=None,
+        business_stage=business_stage,
+        website_url=website_url,
+    )
+    _notify_slack_lead(
+        fname,
+        email,
+        "free_ab_test",
+        resource_slug=None,
+        business_stage=business_stage,
+        website_url=website_url,
+        slack_headline="*Free A/B test application* submitted.",
+    )
+    return jsonify({"success": True})
+
+
 @main_bp.route("/robots.txt")
 def robots():
     """Serve robots.txt allowing crawlers and pointing to sitemap."""
