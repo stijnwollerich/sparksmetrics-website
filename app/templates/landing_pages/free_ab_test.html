@@ -205,15 +205,10 @@
                   </select>
                 </div>
 
-                <div>
-                  <label for="challenge" class="form-label">What's your biggest conversion challenge right now?</label>
-                  <textarea id="challenge" name="challenge" rows="3" placeholder="e.g. traffic is good but conversion rate is flat, mobile CVR is half desktop..." class="form-input resize-none"></textarea>
-                </div>
-
                 <div id="form-error" class="text-red-500 text-sm hidden"></div>
 
                 <button type="submit" id="submit-btn" class="submit-btn mt-2">
-                  Apply for a free test
+                  Get My Free A/B Test
                 </button>
 
                 <p class="text-center text-xs text-gray-400 mt-2">No credit card. No retainer. I'll look at your store before I respond.</p>
@@ -349,7 +344,7 @@
           </div>
         </div>
         <div class="text-center mt-6">
-          <a href="#apply" class="submit-btn inline-block" style="max-width: 280px; text-decoration: none;">Apply for a free test</a>
+          <a href="#apply" class="submit-btn inline-block" style="max-width: 280px; text-decoration: none;">Get My Free A/B Test</a>
         </div>
       </div>
 
@@ -398,7 +393,6 @@
       email: document.getElementById('email').value.trim(),
       website_url: document.getElementById('website_url').value.trim(),
       annual_revenue: document.getElementById('annual_revenue').value,
-      challenge: document.getElementById('challenge').value.trim(),
       form_page_url: window.location.href,
     };
 
@@ -413,18 +407,18 @@
         document.getElementById('form-state').style.display = 'none';
         const success = document.getElementById('success-state');
         success.style.display = 'block';
-        if (typeof openScheduleModal === 'function') openScheduleModal();
+        if (typeof fbq === 'function') fbq('track', 'Lead');
       } else {
         errEl.textContent = json.error || 'Something went wrong. Please try again.';
         errEl.classList.remove('hidden');
         btn.disabled = false;
-        btn.textContent = 'Apply for a free test';
+        btn.textContent = 'Get My Free A/B Test';
       }
     } catch {
       errEl.textContent = 'Network error. Please try again.';
       errEl.classList.remove('hidden');
       btn.disabled = false;
-      btn.textContent = 'Apply for a free test';
+      btn.textContent = 'Get My Free A/B Test';
     }
   });
 </script>
