@@ -1,5 +1,5 @@
 {# Centered primary CTA block #}
-{% set audit_cta_url = strategy_session_url|default(url_for('main.thirty_minute_strategy_session')) %}
+{% set audit_cta_url = strategy_session_url|default(url_for('main.schedule_a_call')) %}
 {% set audit_cta_label = vsl_cta_label|default('Book your free CRO audit') %}
 <section class="py-8 md:py-10 {{ section_class|default('bg-white border-b border-gray-100') }}">
   <div class="max-w-xl mx-auto px-4 sm:px-6 text-center">

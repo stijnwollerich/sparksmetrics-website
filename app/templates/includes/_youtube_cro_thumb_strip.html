@@ -1,6 +1,6 @@
 {# Horizontal thumbnail strip. Context: cro_video_thumb_strip. Before include set strip_cta: audit | ebook | strategy_session | youtube_channel (calendly → strategy_session). Optional: strip_heading, show_youtube_channel_link (bool). #}
 {% set cta = strip_cta|default('strategy_session') %}
-{% set strategy_session_href = url_for('main.thirty_minute_strategy_session') %}
+{% set strategy_session_href = url_for('main.schedule_a_call') %}
 <section
   class="py-16 md:py-20 bg-white border-t border-gray-100 yt-cro-thumb-strip"
   data-strip-cta="{{ cta }}"
