@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block title %}We'll Set Up Your First A/B Test for Free | Sparksmetrics{% endblock %}
-{% block meta_description %}For Shopify brands doing €500k or more a year. We find the highest-leverage test, build it, and launch it. You keep 100% of the upside.{% endblock %}
+{% block meta_description %}For Shopify brands doing €500k or more a year. I find the highest-leverage test, build it, and launch it. You keep 100% of the upside. — Stijn Wollerich, Sparksmetrics{% endblock %}
 {% block og_title %}We'll Set Up Your First A/B Test for Free{% endblock %}
-{% block og_description %}For Shopify brands doing €500k or more. We find what's costing you sales, build the test, and launch it. Apply to see if your store qualifies.{% endblock %}
+{% block og_description %}For Shopify brands doing €500k or more. I find what's costing you sales, build the test, and launch it. Apply to see if your store qualifies.{% endblock %}
 {% block twitter_title %}We'll Set Up Your First A/B Test for Free{% endblock %}
-{% block twitter_description %}For Shopify brands doing €500k or more. We find what's costing you sales, build the test, and launch it.{% endblock %}
+{% block twitter_description %}For Shopify brands doing €500k or more. I find what's costing you sales, build the test, and launch it.{% endblock %}
 {% block primary_bar %}{% endblock %}
 {% block header %}{% endblock %}
 {% block footer %}{% endblock %}
@@ -12,20 +12,21 @@
 {% block body_class %}bg-[#F4F2EE] text-gray-900 font-sans{% endblock %}
 {% block head_extras %}
 <meta name="robots" content="noindex, nofollow" />
+<link rel="preconnect" href="https://www.youtube.com" />
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-  body { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
+  :root {
+    --primary: #ff4d00;
+    --ink: #1a1a1a;
+    --paper: #F4F2EE;
+  }
   .hero-label {
     font-size: 0.6875rem;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: #ff4d00;
+    color: var(--primary);
   }
-  input, select, textarea {
-    appearance: none;
-    -webkit-appearance: none;
-  }
+  input, select, textarea { appearance: none; -webkit-appearance: none; }
   .form-input {
     width: 100%;
     border: 1.5px solid #d1d5db;
@@ -37,17 +38,11 @@
     outline: none;
     transition: border-color 0.15s;
   }
-  .form-input:focus { border-color: #ff4d00; box-shadow: 0 0 0 3px rgba(255,77,0,0.08); }
-  .form-label {
-    display: block;
-    font-size: 0.8125rem;
-    font-weight: 600;
-    color: #374151;
-    margin-bottom: 0.375rem;
-  }
+  .form-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(255,77,0,0.08); }
+  .form-label { display: block; font-size: 0.8125rem; font-weight: 600; color: #374151; margin-bottom: 0.375rem; }
   .submit-btn {
     width: 100%;
-    background: #ff4d00;
+    background: var(--primary);
     color: #fff;
     font-weight: 700;
     font-size: 1rem;
@@ -61,23 +56,64 @@
   .submit-btn:hover { background: #e04400; }
   .submit-btn:active { transform: scale(0.99); }
   .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-  .proof-pill {
-    display: inline-flex;
+
+  /* Video embed */
+  .yt-wrap { position: relative; aspect-ratio: 16/9; background: #000; border-radius: 0.75rem; overflow: hidden; cursor: pointer; }
+  .yt-wrap img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.2s; }
+  .yt-wrap:hover img { opacity: 0.85; }
+  .yt-play-btn {
+    position: absolute;
+    inset: 0;
+    display: flex;
     align-items: center;
-    gap: 0.375rem;
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 999px;
-    padding: 0.3rem 0.75rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #374151;
-    white-space: nowrap;
+    justify-content: center;
+    background: rgba(0,0,0,0.25);
+    transition: background 0.2s;
   }
-  .proof-dot { width: 6px; height: 6px; border-radius: 50%; background: #ff4d00; flex-shrink: 0; }
+  .yt-wrap:hover .yt-play-btn { background: rgba(0,0,0,0.35); }
+  .yt-play-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(255,77,0,0.4);
+    transition: transform 0.2s;
+  }
+  .yt-wrap:hover .yt-play-circle { transform: scale(1.1); }
+  .yt-iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+  .yt-hidden { display: none; }
+
+  /* Stat cards */
+  .stat-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1.25rem 1.5rem; }
+  .stat-number { font-size: 2rem; font-weight: 900; color: var(--ink); line-height: 1; }
+  .stat-label { font-size: 0.8125rem; color: #6b7280; margin-top: 0.25rem; }
+  .stat-source { font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--primary); margin-top: 0.5rem; }
+
+  /* Stijn bio */
+  .bio-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1.5rem; display: flex; gap: 1.25rem; align-items: flex-start; }
+  .bio-avatar { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+
+  /* Success */
   #success-state { display: none; }
   .fade-in { animation: fadeIn 0.4s ease; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Logo strip */
+  .logo-strip { display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+  .logo-strip img { height: 22px; width: auto; opacity: 0.45; filter: grayscale(100%); transition: opacity 0.2s; }
+  .logo-strip img:hover { opacity: 0.7; }
+
+  /* Qualifier badges */
+  .qualifier { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.875rem 1rem; background: #fff; border: 1px solid #e5e7eb; border-radius: 0.5rem; }
+  .qualifier-icon { color: var(--primary); flex-shrink: 0; }
+
+  @media (max-width: 640px) {
+    .stat-number { font-size: 1.5rem; }
+    .bio-card { flex-direction: column; align-items: center; text-align: center; }
+  }
 </style>
 {% endblock %}
 {% block content %}
@@ -87,14 +123,14 @@
   <nav class="bg-[#F4F2EE] border-b border-gray-200 px-4 py-4">
     <div class="max-w-5xl mx-auto flex items-center justify-between">
       <a href="{{ url_for('main.index') }}" class="font-black text-deep-charcoal text-lg tracking-tight uppercase">Sparksmetrics</a>
-      <span class="text-xs text-gray-400">Free A/B Test</span>
+      <a href="#apply" class="text-xs font-bold text-primary hover:underline">Apply now</a>
     </div>
   </nav>
 
   <main class="flex-1 py-10 px-4">
-    <div class="max-w-5xl mx-auto">
+    <div class="max-w-5xl mx-auto space-y-14">
 
-      <!-- Two-column layout -->
+      <!-- Hero -->
       <div class="grid md:grid-cols-2 gap-10 md:gap-16 items-start">
 
         <!-- Left: value prop -->
@@ -104,47 +140,40 @@
             We'll Set Up Your First A/B Test for Free
           </h1>
           <p class="text-gray-600 text-base leading-relaxed mb-6">
-            For Shopify stores doing €500k or more a year. We come in, look at your actual data, find the one thing most worth testing, build it, and launch it. You keep 100% of the upside.
+            For Shopify stores doing €500k or more a year. I look at your data, find the one test most worth running, build it, and launch it. You keep 100% of the upside.
           </p>
 
-          <!-- Proof pills -->
-          <div class="flex flex-wrap gap-2 mb-8">
-            <span class="proof-pill"><span class="proof-dot"></span>+31% CVR — single page change</span>
-            <span class="proof-pill"><span class="proof-dot"></span>€312k found — mobile layout fix</span>
-            <span class="proof-pill"><span class="proof-dot"></span>23 days to result</span>
+          <!-- Stijn bio -->
+          <div class="bio-card mb-6">
+            <img
+              src="{{ url_for('static', filename='images/stijn-avatar.png') }}"
+              alt="Stijn Wollerich"
+              class="bio-avatar"
+            />
+            <div>
+              <p class="font-bold text-deep-charcoal text-sm">Stijn Wollerich</p>
+              <p class="text-xs text-gray-500 mt-0.5">Founder, Sparksmetrics</p>
+              <p class="text-sm text-gray-600 mt-1.5 leading-snug">I've audited 300+ Shopify stores and run A/B tests for brands from $500k to $10M/year. I know exactly where the revenue hides.</p>
+            </div>
           </div>
 
-          <!-- What they get -->
-          <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-            <p class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">What you get</p>
-            <ul class="space-y-3">
-              <li class="flex gap-3 items-start">
-                <span class="material-symbols-outlined text-primary text-base mt-0.5 shrink-0">check_circle</span>
-                <span class="text-sm text-gray-700"><strong class="text-deep-charcoal">Funnel audit</strong> — we review your store data and session recordings to find where visitors drop off.</span>
-              </li>
-              <li class="flex gap-3 items-start">
-                <span class="material-symbols-outlined text-primary text-base mt-0.5 shrink-0">check_circle</span>
-                <span class="text-sm text-gray-700"><strong class="text-deep-charcoal">One test, built and launched</strong> — we write the hypothesis, build the variant, and get it live.</span>
-              </li>
-              <li class="flex gap-3 items-start">
-                <span class="material-symbols-outlined text-primary text-base mt-0.5 shrink-0">check_circle</span>
-                <span class="text-sm text-gray-700"><strong class="text-deep-charcoal">The revenue lift is yours</strong> — if it wins, you keep it. If it loses, you have better data than before.</span>
-              </li>
-            </ul>
+          <!-- Logos -->
+          <div class="mb-6">
+            <p class="text-xs text-gray-400 font-semibold uppercase tracking-widest mb-3">Brands we've worked with</p>
+            <div class="logo-strip">
+              <img src="{{ url_for('static', filename='images/logos/outdoor-research.png') }}" alt="Outdoor Research" />
+              <img src="{{ url_for('static', filename='images/logos/edikted.png') }}" alt="Edikted" />
+              <img src="{{ url_for('static', filename='images/logos/alle.png') }}" alt="Alle" />
+              <img src="{{ url_for('static', filename='images/logos/canopy.png') }}" alt="Canopy" />
+            </div>
           </div>
-
-          <!-- Testimonial -->
-          <blockquote class="border-l-2 border-primary pl-4">
-            <p class="text-sm text-gray-600 italic leading-snug">"Stijn is a great go-to resource for CRO and analytics. He shows you exactly where conversions break down and what to do about it."</p>
-            <footer class="text-xs text-gray-400 font-bold uppercase tracking-widest mt-2">Verified partner · 200+ Shopify brands</footer>
-          </blockquote>
         </div>
 
-        <!-- Right: application form -->
-        <div>
+        <!-- Right: form -->
+        <div id="apply">
           <div id="form-state" class="bg-white rounded-xl border border-gray-200 p-6 md:p-8 shadow-sm">
             <h2 class="text-xl font-black text-deep-charcoal uppercase tracking-tight mb-1">Apply for a free test</h2>
-            <p class="text-xs text-gray-400 mb-6">We review every application and reply within 24 hours.</p>
+            <p class="text-xs text-gray-400 mb-6">I review every application and reply within 24 hours.</p>
 
             <form id="ab-test-form" novalidate>
               <div class="space-y-4">
@@ -187,7 +216,7 @@
                   Apply for a free test
                 </button>
 
-                <p class="text-center text-xs text-gray-400 mt-2">No credit card. No retainer. We'll look at your store before we respond.</p>
+                <p class="text-center text-xs text-gray-400 mt-2">No credit card. No retainer. I'll look at your store before I respond.</p>
               </div>
             </form>
           </div>
@@ -197,18 +226,138 @@
             <div class="flex flex-col items-center text-center py-4">
               <span class="material-symbols-outlined text-primary text-5xl mb-4">check_circle</span>
               <h2 class="text-xl font-black text-deep-charcoal uppercase tracking-tight mb-2">Application received</h2>
-              <p class="text-sm text-gray-500 mb-6 max-w-xs">We'll look at your store and get back to you within 24 hours. While you're here, pick a time that works for a quick call.</p>
+              <p class="text-sm text-gray-500 mb-6 max-w-xs">I'll look at your store and get back to you within 24 hours. While you're here, pick a time that works for a quick call.</p>
               <a href="{{ url_for('main.schedule_a_call') }}" class="submit-btn inline-block text-center" style="max-width: 280px; text-decoration: none;">Book a 30-minute call</a>
             </div>
           </div>
         </div>
 
       </div>
+
+      <!-- Video section -->
+      <div class="bg-white rounded-2xl border border-gray-200 p-6 md:p-10">
+        <div class="max-w-2xl mx-auto text-center mb-6">
+          <p class="hero-label mb-2">Real example</p>
+          <h2 class="text-2xl font-black text-deep-charcoal uppercase tracking-tight">How one test added $26k in 25 days</h2>
+          <p class="text-sm text-gray-500 mt-2">Watch me walk through the exact change — and why it works on almost every store.</p>
+        </div>
+        <div
+          class="yt-wrap max-w-3xl mx-auto"
+          id="yt-26k"
+          data-yt-id="AiVioookfEY"
+        >
+          <img
+            src="https://i.ytimg.com/vi/AiVioookfEY/hqdefault.jpg"
+            alt="How I Made $26k With a 10-Minute Shopify Change"
+            loading="lazy"
+          />
+          <div class="yt-play-btn">
+            <div class="yt-play-circle">
+              <span class="material-symbols-outlined text-white text-3xl ml-0.5">play_arrow</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div>
+        <p class="text-center hero-label mb-6">Test results from client stores</p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="stat-card">
+            <div class="stat-number">+31%</div>
+            <div class="stat-label">Conversion rate lift from a single product page change</div>
+            <div class="stat-source">Supplement brand, 23-day test</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">€312k</div>
+            <div class="stat-label">Annual revenue found by fixing a mobile layout issue</div>
+            <div class="stat-source">Fashion brand, 1 test</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">+26k</div>
+            <div class="stat-label">Additional revenue in 25 days from one above-fold change</div>
+            <div class="stat-source">Multiple store types</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Who is this for -->
+      <div class="bg-white rounded-2xl border border-gray-200 p-6 md:p-10">
+        <h2 class="text-xl font-black text-deep-charcoal uppercase tracking-tight mb-6">Who this is for</h2>
+        <div class="grid sm:grid-cols-2 gap-3 mb-6">
+          <div class="qualifier">
+            <span class="material-symbols-outlined qualifier-icon text-xl">check_circle</span>
+            <div>
+              <p class="text-sm font-semibold text-deep-charcoal">Shopify store doing €500k/year or more</p>
+              <p class="text-xs text-gray-500 mt-0.5">You need enough traffic to reach significance within a month.</p>
+            </div>
+          </div>
+          <div class="qualifier">
+            <span class="material-symbols-outlined qualifier-icon text-xl">check_circle</span>
+            <div>
+              <p class="text-sm font-semibold text-deep-charcoal">Conversion rate that hasn't moved in months</p>
+              <p class="text-xs text-gray-500 mt-0.5">Traffic is coming in, but the sales aren't where they should be.</p>
+            </div>
+          </div>
+          <div class="qualifier">
+            <span class="material-symbols-outlined qualifier-icon text-xl">check_circle</span>
+            <div>
+              <p class="text-sm font-semibold text-deep-charcoal">Open to data, not gut feel</p>
+              <p class="text-xs text-gray-500 mt-0.5">You want to know what actually works, not guess.</p>
+            </div>
+          </div>
+          <div class="qualifier">
+            <span class="material-symbols-outlined qualifier-icon text-xl">check_circle</span>
+            <div>
+              <p class="text-sm font-semibold text-deep-charcoal">Haven't been running structured A/B tests</p>
+              <p class="text-xs text-gray-500 mt-0.5">If you are, we can still help — but this offer is especially for stores starting out.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-100 pt-5 flex flex-col sm:flex-row items-center gap-4">
+          <img
+            src="{{ url_for('static', filename='images/stijn-avatar.png') }}"
+            alt="Stijn Wollerich"
+            class="w-12 h-12 rounded-full object-cover flex-shrink-0"
+          />
+          <blockquote class="text-sm text-gray-600 italic leading-snug">
+            "Stijn is a great go-to resource for CRO and analytics. He shows you exactly where conversions break down and what to do about it."
+            <footer class="text-xs text-gray-400 font-bold uppercase tracking-widest mt-1 not-italic">Verified partner · 200+ Shopify brands</footer>
+          </blockquote>
+        </div>
+      </div>
+
+      <!-- How it works -->
+      <div>
+        <p class="text-center hero-label mb-6">How the free test works</p>
+        <div class="grid sm:grid-cols-3 gap-4">
+          <div class="text-center p-5">
+            <div class="text-3xl font-black text-primary mb-2">1</div>
+            <p class="font-bold text-deep-charcoal text-sm mb-1">Apply</p>
+            <p class="text-xs text-gray-500">Fill out the form. I'll look at your store before I respond — no wasted calls.</p>
+          </div>
+          <div class="text-center p-5">
+            <div class="text-3xl font-black text-primary mb-2">2</div>
+            <p class="font-bold text-deep-charcoal text-sm mb-1">30-minute call</p>
+            <p class="text-xs text-gray-500">We look at your data together and I show you exactly where to start.</p>
+          </div>
+          <div class="text-center p-5">
+            <div class="text-3xl font-black text-primary mb-2">3</div>
+            <p class="font-bold text-deep-charcoal text-sm mb-1">Test built and launched</p>
+            <p class="text-xs text-gray-500">I build the variant and get it live. You read the results. Revenue lift is yours.</p>
+          </div>
+        </div>
+        <div class="text-center mt-6">
+          <a href="#apply" class="submit-btn inline-block" style="max-width: 280px; text-decoration: none;">Apply for a free test</a>
+        </div>
+      </div>
+
     </div>
   </main>
 
   <!-- Footer -->
-  <footer class="bg-[#F4F2EE] border-t border-gray-200 px-4 py-6">
+  <footer class="bg-[#F4F2EE] border-t border-gray-200 px-4 py-6 mt-10">
     <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2 text-xs text-gray-400">
       <p>&copy; {{ now().year }} Sparksmetrics &middot; Heuvel 23, 5492 AC Sint-Oedenrode, the Netherlands</p>
       <p class="flex gap-4">
@@ -220,6 +369,22 @@
 </div>
 
 <script>
+  // YouTube click-to-play
+  document.querySelectorAll('.yt-wrap').forEach(wrap => {
+    wrap.addEventListener('click', function() {
+      const id = this.dataset.ytId;
+      if (!id) return;
+      const iframe = document.createElement('iframe');
+      iframe.className = 'yt-iframe';
+      iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
+      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+      iframe.allowFullscreen = true;
+      this.innerHTML = '';
+      this.appendChild(iframe);
+    });
+  });
+
+  // Form submit
   document.getElementById('ab-test-form').addEventListener('submit', async function(e) {
     e.preventDefault();
     const btn = document.getElementById('submit-btn');
@@ -248,7 +413,6 @@
         document.getElementById('form-state').style.display = 'none';
         const success = document.getElementById('success-state');
         success.style.display = 'block';
-        // Also open schedule modal if available
         if (typeof openScheduleModal === 'function') openScheduleModal();
       } else {
         errEl.textContent = json.error || 'Something went wrong. Please try again.';
