@@ -689,13 +689,9 @@ backed by data.{% endblock %} {% block primary_bar %}{% endblock %} {% block foo
                       clearInterval(wrap._progressIntervalId);
                       wrap._progressIntervalId = null;
                     }
-                    var sent = {};
-                    (window.VslVideoAnalytics
-                      ? window.VslVideoAnalytics.milestones
-                      : [10, 25, 50, 75, 90, 100]
-                    ).forEach(function (m) {
-                      sent[m] = false;
-                    });
+                    // Milestones sent are kept per video, so pause/seek/buffer never re-sends them.
+                    if (!wrap._vslMilestonesSent) wrap._vslMilestonesSent = {};
+                    var sent = wrap._vslMilestonesSent;
                     wrap._progressIntervalId = setInterval(function () {
                       try {
                         if (!player.getCurrentTime) return;

@@ -44,7 +44,7 @@
         yourTracking('send',{event_type:'pageview',event_value:'Page loaded'});
       });
     </script>
-    <script src="{{ url_for('static', filename='js/sm-analytics.js') }}?v=6"></script>
+    <script src="{{ url_for('static', filename='js/sm-analytics.js') }}?v=9"></script>
     <!-- PostMessage wrapper removed to avoid interfering with third-party embeds -->
     <!-- Global error suppression removed to avoid hiding root causes -->
     <meta charset="utf-8" />
@@ -1052,7 +1052,7 @@
           function (e) {
             try {
               var form = e.target;
-              if (!form || form.id === "lead-form" || !window.SmAnalytics) return;
+              if (!form || form.id === "lead-form" || form.hasAttribute("data-sm-manual") || !window.SmAnalytics) return;
               window.SmAnalytics.formSubmit({
                 form_id: form.id || null,
                 form_name: form.getAttribute("data-form-name") || null,

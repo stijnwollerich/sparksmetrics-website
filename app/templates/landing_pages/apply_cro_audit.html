@@ -1,0 +1,1258 @@
+{% extends "base.html" %} {% block title %}Apply for a Free CRO Audit | Ecommerce CRO Agency for Shopify | Sparksmetrics{% endblock %} {% block meta_description %}Sparksmetrics is an ecommerce conversion rate optimization (CRO) agency for Shopify brands. Our
+free CRO audit finds where your funnel leaks revenue and hands you a
+prioritized roadmap to fix it. No retainer required.{% endblock %} {% block og_title %}We Found $312,000 Hiding in One Shopify Store. Let's Find Yours. | Free CRO Audit | Sparksmetrics{% endblock %} {% block og_description %}You have a
+free CRO audit finds where your funnel leaks and gives you a prioritized fix list
+backed by data.{% endblock %} {% block
+twitter_title %}We Found $312,000 Hiding in One Shopify Store. Let's Find Yours. | Free CRO Audit | Sparksmetrics{% endblock %} {% block twitter_description %}You have a
+free CRO audit finds where your funnel leaks and gives you a prioritized fix list
+backed by data.{% endblock %} {% block primary_bar %}{% endblock %} {% block footer %}
+<footer class="bg-white border-t border-gray-100">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 pt-8 pb-24 md:pb-8 md:pr-56 flex flex-col md:flex-row items-center justify-between gap-3 text-center md:text-left">
+    <p class="m-0 text-xs leading-relaxed text-gray-500">&copy; {{ now().year }} Sparksmetrics, ecommerce CRO agency &middot; Heuvel 23, 5492&nbsp;AC Sint&#8209;Oedenrode, the Netherlands &middot; <a href="mailto:stijn@sparksmetrics.com" class="text-gray-500 hover:text-primary">stijn@sparksmetrics.com</a></p>
+    <p class="m-0 flex gap-4 text-xs text-gray-500 whitespace-nowrap">
+      <a href="{{ url_for('main.privacy_policy') }}" class="text-gray-500 hover:text-primary">Privacy Policy</a>
+      <a href="{{ url_for('main.terms_of_service') }}" class="text-gray-500 hover:text-primary">Terms of Service</a>
+    </p>
+  </div>
+</footer>
+{% endblock %} {% block audit_bar %}{% endblock %}
+{% block head_extras %}
+<meta name="robots" content="noindex, nofollow" />
+<meta name="robots" content="noindex, follow" />
+<link rel="preconnect" href="https://www.youtube.com" />
+<script src="https://www.youtube.com/iframe_api" async></script>
+<script src="{{ url_for('static', filename='js/vsl-video-analytics.js') }}?v=2" defer></script>
+<style>
+  #vsl-sticky-cta {
+    transform: translateY(calc(110% + 1rem));
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      transform 0.28s ease,
+      opacity 0.28s ease;
+  }
+  #vsl-sticky-cta.is-visible {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .vsl-chapter-timeline {
+    position: relative;
+    padding: 0;
+  }
+  .vsl-chapter-track {
+    position: relative;
+    height: 3px;
+    border-radius: 9999px;
+    background: #e5e7eb;
+    margin-bottom: 0.625rem;
+  }
+  .vsl-chapter-progress {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 0;
+    border-radius: inherit;
+    background: #ff4d00;
+    transition: width 0.35s ease;
+  }
+  .vsl-chapter-markers {
+    display: grid;
+    grid-template-columns: repeat(var(--vsl-chapter-count, 9), minmax(0, 1fr));
+    gap: 0.25rem 0.125rem;
+    pointer-events: auto;
+  }
+  .vsl-chapter-marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.375rem;
+    min-width: 0;
+    pointer-events: auto;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-align: center;
+  }
+  .vsl-chapter-dot {
+    display: block;
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 9999px;
+    border: 2px solid #fff;
+    background: #d1d5db;
+    box-shadow: 0 0 0 1px #e5e7eb;
+    transition:
+      transform 0.2s ease,
+      background 0.2s ease,
+      box-shadow 0.2s ease;
+    flex-shrink: 0;
+  }
+  .vsl-chapter-marker:hover .vsl-chapter-dot,
+  .vsl-chapter-marker:focus-visible .vsl-chapter-dot {
+    transform: scale(1.15);
+    background: #ff4d00;
+    box-shadow: 0 0 0 2px rgba(255, 77, 0, 0.25);
+  }
+  .vsl-chapter-marker.is-active .vsl-chapter-dot {
+    transform: scale(1.2);
+    background: #ff4d00;
+    box-shadow: 0 0 0 3px rgba(255, 77, 0, 0.22);
+  }
+  .vsl-chapter-label {
+    display: block;
+    width: 100%;
+    font-size: 0.5625rem;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: #6b7280;
+    transition: color 0.2s ease;
+    overflow-wrap: anywhere;
+    hyphens: auto;
+  }
+  .vsl-chapter-time {
+    display: none;
+  }
+  @media (min-width: 768px) {
+    .vsl-chapter-label {
+      font-size: 0.625rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .vsl-chapter-label {
+      font-size: 0.6875rem;
+    }
+  }
+  .vsl-chapter-marker:hover .vsl-chapter-label,
+  .vsl-chapter-marker:focus-visible .vsl-chapter-label,
+  .vsl-chapter-marker.is-active .vsl-chapter-label {
+    color: #ff4d00;
+  }
+  .vsl-chapter-marker:focus-visible {
+    outline: none;
+  }
+  .vsl-chapter-marker:focus-visible .vsl-chapter-dot {
+    outline: 2px solid #ff4d00;
+    outline-offset: 2px;
+  }
+  .vsl-chapter-marker.is-active .vsl-chapter-time {
+    color: #ff4d00;
+  }
+  h1.vsl-hero-title {
+    font-family: Inter, ui-sans-serif, system-ui, sans-serif !important;
+    font-size: clamp(1.5rem, 0.85rem + 2.4vw, 2.625rem) !important;
+    line-height: 1.15 !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.02em !important;
+    text-transform: none !important;
+    max-width: 56rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  #vsl-above-fold .vsl-fold-video {
+    width: 100%;
+    max-width: 48rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .vsl-youtube-wrap .vsl-youtube-poster-wrap {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    transition: opacity 0.2s ease;
+  }
+  .vsl-youtube-wrap.is-playing .vsl-youtube-poster-wrap {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .vsl-youtube-wrap .vsl-youtube-poster-copy {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    padding: 1rem 1.1rem 1.25rem;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.72) 100%);
+    pointer-events: none;
+  }
+  .vsl-poster-headline {
+    margin: 0;
+    color: #fff;
+    font-family: var(--font-display, inherit);
+    font-size: clamp(1.125rem, 4.5vw, 1.625rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    text-align: left;
+    max-width: 14rem;
+  }
+  .vsl-poster-amount {
+    display: block;
+    color: #ff4d00;
+    font-size: clamp(1.375rem, 5vw, 2rem);
+    margin: 0.15rem 0;
+  }
+  .vsl-play-circle {
+    width: 3.5rem;
+    height: 3.5rem;
+    flex-shrink: 0;
+    border-radius: 9999px;
+    background-color: #ff4d00;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s ease;
+  }
+  @media (min-width: 768px) {
+    .vsl-play-circle {
+      width: 5rem;
+      height: 5rem;
+      box-shadow: 0 0 40px rgba(255, 77, 0, 0.5);
+    }
+  }
+  .vsl-youtube-play:hover .vsl-play-circle {
+    transform: scale(1.1);
+  }
+  @media (max-width: 767px) {
+    .vsl-chapter-markers {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x proximity;
+      gap: 0.5rem;
+      padding: 0.125rem 0.125rem 0.25rem;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .vsl-chapter-markers::-webkit-scrollbar {
+      display: none;
+    }
+    .vsl-chapter-marker {
+      flex: 0 0 auto;
+      scroll-snap-align: start;
+      flex-direction: row;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.4375rem 0.75rem;
+      border-radius: 9999px;
+      border: 1px solid #e5e7eb;
+      background: #fff;
+      text-align: left;
+    }
+    .vsl-chapter-marker.is-active {
+      border-color: rgba(255, 77, 0, 0.45);
+      background: rgba(255, 77, 0, 0.06);
+    }
+    .vsl-chapter-marker.is-active .vsl-chapter-dot {
+      transform: none;
+    }
+    .vsl-chapter-label {
+      white-space: nowrap;
+      overflow-wrap: normal;
+      hyphens: manual;
+      width: auto;
+      font-size: 0.6875rem;
+    }
+    .vsl-chapter-time {
+      display: inline;
+      font-size: 0.625rem;
+      font-weight: 700;
+      color: #9ca3af;
+      white-space: nowrap;
+    }
+    .vsl-chapter-marker.is-active .vsl-chapter-time {
+      color: #ff4d00;
+    }
+  }
+</style>
+{% endblock %} {% block body_class %}bg-white text-gray-800 font-sans{% endblock
+%} {% block content %}
+{% set calendly_url = "https://calendly.com/stijn-wollerich/free-30-minute-strategy-session?hide_gdpr_banner=1" %}
+<style>
+  .apply-card { background:#fbfbfd; border:1px solid #e9e9f0; border-radius:1.25rem; overflow:hidden; box-shadow:0 20px 50px rgba(26,26,27,.06); text-align:left; }
+  .apply-q { font-size:clamp(1.05rem,2.2vw,1.3rem); font-weight:700; color:#1A1A1B; line-height:1.45; margin-bottom:1rem; }
+  .apply-opt { display:flex; align-items:center; gap:.9rem; width:100%; min-height:56px; padding:.75rem 1.1rem; background:#fff; border:1px solid #e5e7eb; border-radius:.85rem; font-size:1.02rem; font-weight:600; color:#1A1A1B; cursor:pointer; text-align:left; transition:border-color .15s, background .15s; }
+  .apply-opt + .apply-opt { margin-top:.55rem; }
+  .apply-opt:hover { border-color:#ffb38f; }
+  .apply-opt .dot { flex-shrink:0; width:22px; height:22px; border-radius:50%; border:2px solid #cbd5e1; display:flex; align-items:center; justify-content:center; }
+  .apply-opt.is-on { border-color:#FF4D00; background:#fff3ed; }
+  .apply-opt.is-on .dot { border-color:#FF4D00; }
+  .apply-opt.is-on .dot::after { content:""; width:10px; height:10px; border-radius:50%; background:#FF4D00; }
+  .apply-input { width:100%; min-height:56px; border:1px solid #e5e7eb; border-radius:.85rem; padding:.8rem 1.1rem; font-size:1.02rem; background:#fff; color:#1A1A1B; }
+  .apply-input:focus { outline:none; border-color:#FF4D00; box-shadow:0 0 0 3px rgba(255,77,0,.15); }
+  .apply-bar { background:#FF4D00; display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.55rem .55rem .55rem 1.4rem; }
+  .apply-next { min-height:46px; padding:0 1.6rem; border:1px solid rgba(255,255,255,.55); border-radius:.6rem; background:rgba(0,0,0,.08); color:#fff; font-weight:900; text-transform:uppercase; font-size:1.05rem; }
+  .apply-next:hover { background:rgba(0,0,0,.16); }
+  .apply-next:disabled { opacity:.6; }
+  .apply-back { color:rgba(255,255,255,.85); font-size:.9rem; font-weight:600; }
+  .apply-progress { height:4px; background:#eee; }
+  .apply-progress span { display:block; height:100%; background:#FF4D00; transition:width .25s; }
+  #apply-calendly iframe { width:100%; height:680px; border:0; }
+  .team-ph { background:repeating-linear-gradient(45deg,#f3f4f6,#f3f4f6 8px,#e5e7eb 8px,#e5e7eb 16px); }
+  /* Chat widget */
+  #sm-chat-btn { transition:opacity .2s, transform .2s; position:fixed; right:20px; bottom:20px; z-index:95; display:flex; align-items:center; gap:.6rem; background:#1A1A1B; color:#fff; border-radius:999px; padding:.45rem 1.1rem .45rem .45rem; box-shadow:0 12px 30px rgba(0,0,0,.2); font-weight:700; font-size:14px; }
+  @media (max-width:639px){ #sm-chat-btn.is-hidden { opacity:0; transform:translateY(12px); pointer-events:none; } #sm-chat-btn { right:12px; bottom:12px; } #sm-chat { right:12px; bottom:76px; } }
+  #sm-chat-btn img { width:38px; height:38px; border-radius:50%; object-fit:cover; border:2px solid #fff; }
+  #sm-chat-btn .live { position:absolute; left:34px; bottom:8px; width:11px; height:11px; border-radius:50%; background:#22c55e; border:2px solid #1A1A1B; }
+  #sm-chat { position:fixed; right:20px; bottom:84px; z-index:96; width:min(360px, calc(100vw - 32px)); background:#fff; border-radius:1.1rem; box-shadow:0 24px 60px rgba(0,0,0,.22); overflow:hidden; display:none; }
+  #sm-chat.open { display:block; }
+  #sm-chat .head { background:#1A1A1B; color:#fff; padding:1rem 1.1rem; display:flex; align-items:center; gap:.75rem; }
+  #sm-chat .head img { width:42px; height:42px; border-radius:50%; object-fit:cover; }
+  #sm-chat .bubble { margin:0; background:#f3f4f6; border-radius:1rem 1rem 1rem .25rem; padding:.7rem .9rem; font-size:14px; color:#1f2937; line-height:1.45; max-width:85%; }
+  #sm-chat .bubble.me { background:#FF4D00; color:#fff; border-radius:1rem 1rem .25rem 1rem; margin-left:auto; }
+  #sm-chat input, #sm-chat textarea { width:100%; border:1px solid #e5e7eb; border-radius:.6rem; padding:.6rem .75rem; font-size:14px; }
+  #sm-chat textarea { resize:none; }
+  #sm-chat input:focus, #sm-chat textarea:focus { outline:none; border-color:#FF4D00; }
+</style>
+
+<div class="min-h-screen flex flex-col">
+
+  {# 1. Above the fold: promise, who you'll deal with, form #}
+  <section id="apply-hero" data-section="hero" class="pt-6 pb-10 md:pt-8 md:pb-14">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center">
+      <a href="#reviews" class="inline-flex flex-wrap items-center justify-center gap-2 mb-3 no-underline">
+        <span class="flex text-primary">{% for _ in range(5) %}<span class="material-symbols-outlined star-filled text-lg md:text-xl">star</span>{% endfor %}</span>
+        <span class="text-gray-500 text-sm font-bold uppercase tracking-widest">4.8 by 318 brands</span>
+      </a>
+      <p class="text-primary font-semibold text-sm sm:text-base mb-2 max-w-3xl mx-auto leading-snug">
+        {% if industry_key %}Ecommerce CRO for {{ industries[industry_key]|lower }} brands doing $100k–$1M/month{% else %}Ecommerce CRO agency for Shopify brands doing $100k–$1M/month{% endif %}
+      </p>
+      <h1 class="vsl-hero-title text-deep-charcoal mb-3 md:mb-4 mx-auto">
+        <span>We Found $312,000 Hiding in One Shopify Store. Let's Find Yours.</span>
+      </h1>
+      <p class="text-gray-600 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto mb-5">
+        Free CRO audit in 48 hours, recorded personally by me. Takes 30 seconds to apply.
+      </p>
+
+      <div class="max-w-xl mx-auto scroll-mt-6" id="apply">
+        <div class="apply-card">
+          <div class="apply-progress" aria-hidden="true"><span id="apply-progress" style="width:33%"></span></div>
+          <form id="apply-form" data-form-name="CRO Audit Application" data-sm-manual novalidate>
+            <input type="hidden" id="industry" value="{{ industry_key }}" />
+            <div class="p-6 sm:p-8">
+              <div data-step="1">
+                <p class="apply-q">What's your store's monthly revenue?</p>
+                <div data-choice="monthly_revenue">
+                  {% for key, label, _ok in revenue_options %}<button type="button" class="apply-opt" data-value="{{ key }}"><span class="dot"></span>{{ label }}</button>{% endfor %}
+                </div>
+              </div>
+              <div data-step="2" class="hidden">
+                <p class="apply-q">What's your store URL?</p>
+                <input class="apply-input" id="website_url" type="text" inputmode="url" autocomplete="url" placeholder="yourstore.com" />
+              </div>
+              <div data-step="3" class="hidden">
+                <p class="apply-q">Where should I send your audit?</p>
+                <div class="space-y-3">
+                  <input class="apply-input" id="fname" type="text" autocomplete="given-name" placeholder="First name" />
+                  <input class="apply-input" id="email" type="email" autocomplete="email" placeholder="Work email" />
+                </div>
+              </div>
+              <p id="apply-error" class="hidden mt-4 text-sm text-red-600"></p>
+            </div>
+            <div class="apply-bar">
+              <button type="button" id="apply-back" class="apply-back invisible">&larr; Back</button>
+              <button type="submit" id="apply-next" class="apply-next">Next &rarr;</button>
+            </div>
+          </form>
+
+          <div id="apply-qualified" class="hidden p-6 sm:p-8">
+            <p class="apply-q mb-1">You qualify. Pick a time for your audit review.</p>
+            <p class="text-sm text-gray-500 mb-4">I'll record your store video before we meet, so the 30 minutes are all about your numbers.</p>
+            <div id="apply-calendly"></div>
+          </div>
+
+          <div id="apply-not-qualified" class="hidden text-center p-8">
+            <span class="material-symbols-outlined text-primary text-5xl mb-3">mark_email_read</span>
+            <p class="apply-q mb-2">Thanks, got it</p>
+            <p class="text-sm text-gray-500 leading-relaxed mb-6 max-w-md mx-auto">Our audits are built for stores doing $100k+/month, so a call wouldn't be the best use of your time yet. The case study video below shows exactly how we found $312k for one store, step by step.</p>
+            <a href="#full-case-study" class="inline-flex items-center justify-center min-h-[50px] px-7 bg-deep-charcoal text-white font-display font-black uppercase rounded-xl hover:brightness-110">Watch the case study</a>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-center gap-3 mt-5">
+          <img src="{{ url_for('static', filename='images/pdp_redesign/stijn.jpg') }}" alt="Stijn Wollerich" class="w-10 h-10 rounded-full object-cover flex-shrink-0 m-0" />
+          <p class="m-0 text-sm text-gray-500 text-left leading-snug"><span class="font-bold text-deep-charcoal">Stijn Wollerich, founder.</span> I review every store myself.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# 2. Client logos: prominent, white on dark, with a tag per brand #}
+  <section data-section="logos" class="py-10 md:py-14 bg-deep-charcoal">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <p class="text-center text-white/50 text-xs font-bold uppercase tracking-[0.3em] mb-6 md:mb-8">Brands we've worked with</p>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-x-4 md:gap-x-6 gap-y-6 md:gap-y-10">
+        {% for file, name, tag, size in [
+          ('outdoor-research.png', 'Outdoor Research', 'Outdoor apparel · $30M+/yr', 'h-14 md:h-16 max-w-[190px]'),
+          ('client-2.png', 'TUSHY', 'DTC bidets · $40M+/yr', 'max-h-10 md:max-h-12 max-w-[150px]'),
+          ('edikted.png', 'Edikted', 'Fashion · $100M+/yr', 'max-h-10 md:max-h-12 max-w-[150px]'),
+          ('canopy.png', 'Canopy', 'Wellness DTC · $10M+/yr', 'max-h-10 md:max-h-12 max-w-[150px]'),
+          ('lpc.png', 'Le Petit Chef', 'Dining · 100+ locations', 'max-h-10 md:max-h-12 max-w-[150px]'),
+          ('vacation-renter.png', 'VacationRenter', 'Travel · $600M bookings', 'h-14 md:h-16 max-w-[190px]'),
+          ('argenx.png', 'Argenx', 'Biotech · $4B+/yr', 'max-h-10 md:max-h-12 max-w-[150px]'),
+          ('alle.png', 'Neil Patel', 'Agency · $100M+/yr', 'max-h-10 md:max-h-12 max-w-[150px]'),
+        ] %}
+        <div class="flex flex-col items-center text-center">
+          <div class="h-14 md:h-16 flex items-center justify-center">
+            <img src="{{ url_for('static', filename='images/logos/' ~ file) }}" alt="{{ name }}" class="{{ size }} w-auto object-contain brightness-0 invert opacity-90" loading="lazy" />
+          </div>
+          <span class="mt-2 md:mt-3 inline-block text-[10px] md:text-xs font-semibold text-white/70 bg-white/10 rounded-full px-3 py-1">{{ tag }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+
+  {# 3. Real tests #}
+  <div data-section="test_results">
+  {% include '_experiment_gallery.html' %}
+  </div>
+
+  {# 3b. What the audit looks like (one real example) #}
+  {% set deck = 'images/cro-deck-v2/' %}
+  <section class="py-12 md:py-16 bg-white border-b border-gray-100" id="audit-examples" data-section="audit_example">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-10 md:mb-12 max-w-3xl mx-auto">
+        <p class="text-primary font-bold text-[10px] uppercase tracking-[0.35em] mb-2">Audit example</p>
+        <h2 class="text-2xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tighter">What your audit looks like</h2>
+      </div>
+      {% set brand = none %}
+      {% set title = 'Every page, every leak' %}
+      {% set description = 'FigJam map from homepage through product, cart, and checkout. Severity scores show what blocks revenue today vs. what can wait.' %}
+      {% set src = 'steps/step-03-ux-review-nooktales.png' %}
+      {% set alt = 'Full-funnel CRO audit example for Nook Tales' %}
+      {% set width = 2080 %}
+      {% set height = 1166 %}
+      {% include '_audit_example_full.html' %}
+    </div>
+  </section>
+
+  {# 3c. Case study video (click to play, tracked) #}
+  <section id="full-case-study" data-section="case_study_video" class="py-12 md:py-16 bg-light-base border-b border-gray-100 scroll-mt-20">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+      <p class="text-primary font-bold text-[10px] uppercase tracking-[0.35em] mb-2">Case study</p>
+      <h2 class="text-2xl md:text-4xl font-display font-black text-deep-charcoal uppercase tracking-tighter mb-3">How we found $312,000 in one Shopify store</h2>
+      <p class="text-gray-600 text-sm md:text-base mt-0 mb-6">The full audit, step by step: research, data, UX, prioritization and the test results.</p>
+      <div class="vsl-fold-video text-left">
+        <div
+          class="vsl-youtube-wrap w-full aspect-video bg-black rounded-lg overflow-hidden relative group"
+          data-youtube-id="wwWZImpQ4cc"
+          data-video-id="vsl-free-cro-audit"
+          data-vsl-chapters='[{"label":"Intro","seconds":0},{"label":"Audit deliverable","seconds":73},{"label":"Market research","seconds":107},{"label":"Data analysis","seconds":133},{"label":"UI/UX and Figma","seconds":190},{"label":"Prioritization","seconds":293},{"label":"Revenue impact","seconds":378},{"label":"Test results","seconds":420},{"label":"Book your audit","seconds":566}]'
+        >
+          <div class="vsl-youtube-poster-wrap absolute inset-0 z-[1]">
+            <img
+              src="{{ url_for('static', filename='images/youtube_thumbnails/vsl-free-cro-audit-poster.png') }}"
+              alt="How we found $312,000 for a Shopify store"
+              class="vsl-youtube-poster w-full h-full object-cover object-center"
+              loading="eager"
+              fetchpriority="high"
+              width="800"
+              height="500"
+            />
+            <div class="vsl-youtube-poster-copy">
+              <p class="vsl-poster-headline">
+                How We Found
+                <span class="vsl-poster-amount">$312,000</span>
+                For a Shopify Store
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            class="vsl-youtube-play absolute inset-0 z-10 flex items-center justify-center bg-black/25 hover:bg-black/35 transition-colors"
+            aria-label="Play 4-minute CRO audit video"
+          >
+            <span class="vsl-play-circle">
+              <span
+                class="material-symbols-outlined text-white text-3xl md:text-4xl ml-1"
+                >play_arrow</span
+              >
+            </span>
+          </button>
+          <div
+            class="vsl-youtube-iframe absolute inset-0 hidden w-full h-full"
+            aria-hidden="true"
+          ></div>
+        </div>
+      </div>
+      <a href="#apply" data-scroll-apply class="inline-flex items-center justify-center min-h-[54px] px-6 sm:px-10 mt-6 bg-primary text-white font-display text-base sm:text-lg font-black uppercase whitespace-nowrap rounded-xl shadow-lg shadow-primary/25 hover:brightness-110 transition-all">Apply for your free audit</a>
+    </div>
+  </section>
+  <script>
+    (function () {
+      var origin =
+        window.location.origin ||
+        window.location.protocol + "//" + window.location.host;
+      var vslPlayerVars = {
+        autoplay: 1,
+        controls: 1,
+        modestbranding: 1,
+        rel: 0,
+        iv_load_policy: 3,
+        cc_load_policy: 0,
+        playsinline: 1,
+        enablejsapi: 1,
+        origin: origin,
+      };
+
+      function freezeAtEnd(player) {
+        if (!player || !player.getDuration || !player.seekTo) return;
+        try {
+          var duration = player.getDuration();
+          if (duration > 0) {
+            player.seekTo(Math.max(0, duration - 0.3), true);
+          }
+          if (player.pauseVideo) player.pauseVideo();
+        } catch (freezeErr) {}
+      }
+
+      function parseChapters(wrap) {
+        try {
+          var raw = wrap.getAttribute("data-vsl-chapters") || "[]";
+          var list = JSON.parse(raw);
+          if (!Array.isArray(list)) return [];
+          return list.filter(function (c) {
+            return (
+              c &&
+              typeof c.label === "string" &&
+              c.label.trim() &&
+              typeof c.seconds === "number" &&
+              c.seconds >= 0
+            );
+          });
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function chapterDuration(wrap, chapters) {
+        var fromAttr = parseInt(wrap.getAttribute("data-vsl-duration") || "", 10);
+        if (fromAttr > 0) return fromAttr;
+        var maxSeconds = chapters.reduce(function (max, chapter) {
+          return Math.max(max, chapter.seconds);
+        }, 0);
+        return Math.max(maxSeconds + 12, 576);
+      }
+
+      function formatChapterTime(seconds) {
+        var mins = Math.floor(seconds / 60);
+        var secs = Math.floor(seconds % 60);
+        return mins + ":" + (secs < 10 ? "0" : "") + secs;
+      }
+
+      function renderChapterTimeline(wrap, chapters, onChapterClick) {
+        var host = wrap.parentElement
+          ? wrap.parentElement.querySelector(".vsl-youtube-chapters")
+          : null;
+        if (!host || !chapters.length) return;
+
+        var totalDuration = chapterDuration(wrap, chapters);
+        wrap._vslChapterDuration = totalDuration;
+
+        host.innerHTML =
+          '<p class="text-[11px] sm:text-xs font-bold uppercase tracking-[0.14em] text-gray-400 text-center mb-1">Jump to section</p>' +
+          '<p class="vsl-chapter-mobile-hint text-[10px] text-gray-400 text-center mb-2 md:hidden">Swipe for all sections</p>' +
+          '<div class="vsl-chapter-timeline">' +
+          '<div class="vsl-chapter-track" aria-hidden="true">' +
+          '<div class="vsl-chapter-progress"></div>' +
+          "</div>" +
+          '<div class="vsl-chapter-markers"></div>' +
+          "</div>";
+
+        var markersHost = host.querySelector(".vsl-chapter-markers");
+        if (!markersHost) return;
+        markersHost.style.setProperty("--vsl-chapter-count", String(chapters.length));
+
+        chapters.forEach(function (chapter, index) {
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "vsl-chapter-marker" + (index === 0 ? " is-active" : "");
+          btn.setAttribute(
+            "aria-label",
+            "Jump to " +
+              chapter.label.trim() +
+              " at " +
+              formatChapterTime(chapter.seconds),
+          );
+          btn.title =
+            chapter.label.trim() + " · " + formatChapterTime(chapter.seconds);
+          btn.innerHTML =
+            '<span class="vsl-chapter-dot" aria-hidden="true"></span>' +
+            '<span class="vsl-chapter-label">' +
+            chapter.label.trim() +
+            "</span>" +
+            '<span class="vsl-chapter-time">' +
+            formatChapterTime(chapter.seconds) +
+            "</span>";
+          btn.addEventListener("click", function () {
+            onChapterClick(chapter, index);
+          });
+          markersHost.appendChild(btn);
+        });
+      }
+
+      function scrollActiveChapterIntoView(wrap, activeIndex) {
+        var host = wrap.parentElement
+          ? wrap.parentElement.querySelector(".vsl-youtube-chapters")
+          : null;
+        if (!host || window.matchMedia("(min-width: 768px)").matches) return;
+        var markers = host.querySelectorAll(".vsl-chapter-marker");
+        var active = markers[activeIndex];
+        if (!active || !active.scrollIntoView) return;
+        active.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+          inline: "center",
+        });
+      }
+
+      function setActiveChapter(wrap, activeIndex) {
+        var host = wrap.parentElement
+          ? wrap.parentElement.querySelector(".vsl-youtube-chapters")
+          : null;
+        if (!host) return;
+        host.querySelectorAll(".vsl-chapter-marker").forEach(function (btn, i) {
+          btn.classList.toggle("is-active", i === activeIndex);
+        });
+        scrollActiveChapterIntoView(wrap, activeIndex);
+      }
+
+      function updateChapterProgress(wrap, currentSeconds, totalDuration) {
+        var host = wrap.parentElement
+          ? wrap.parentElement.querySelector(".vsl-youtube-chapters")
+          : null;
+        if (!host) return;
+        var progress = host.querySelector(".vsl-chapter-progress");
+        if (!progress || !totalDuration) return;
+        var pct = Math.min(
+          100,
+          Math.max(0, (currentSeconds / totalDuration) * 100),
+        );
+        progress.style.width = pct + "%";
+      }
+
+      function chapterIndexAtTime(chapters, currentSeconds) {
+        var activeIndex = 0;
+        for (var i = chapters.length - 1; i >= 0; i--) {
+          if (currentSeconds >= chapters[i].seconds) {
+            activeIndex = i;
+            break;
+          }
+        }
+        return activeIndex;
+      }
+
+      function pushVslVideoEvent(eventName, wrap, player, videoId, extra) {
+        // Meta: video milestones for retargeting audiences (e.g. watched 50%+ but didn't apply)
+        try {
+          var pct = extra && extra.video_percent;
+          if (typeof fbq === "function" && (eventName === "video_start" || eventName === "video_complete" || (eventName === "video_progress" && pct === 50))) {
+            fbq("trackCustom", "CaseStudyVideo", { milestone: eventName === "video_progress" ? "50" : eventName.replace("video_", ""), video_id: videoId });
+          }
+        } catch (e) {}
+        if (!window.VslVideoAnalytics) return;
+        window.VslVideoAnalytics.push(
+          eventName,
+          window.VslVideoAnalytics.buildYoutubeMeta(wrap, player, videoId),
+          extra,
+        );
+      }
+
+      function loadYouTubeAPI(callback) {
+        if (window.YT && window.YT.Player) {
+          callback();
+          return;
+        }
+        if (window.vslYoutubeAPILoading) {
+          var check = setInterval(function () {
+            if (window.YT && window.YT.Player) {
+              clearInterval(check);
+              callback();
+            }
+          }, 100);
+          return;
+        }
+        window.vslYoutubeAPILoading = true;
+        var tag = document.createElement("script");
+        tag.src = "https://www.youtube.com/iframe_api";
+        document
+          .getElementsByTagName("script")[0]
+          .parentNode.insertBefore(
+            tag,
+            document.getElementsByTagName("script")[0],
+          );
+        window.onYouTubeIframeAPIReady = function () {
+          window.onYouTubeIframeAPIReady = null;
+          callback();
+        };
+      }
+
+      document.querySelectorAll(".vsl-youtube-wrap").forEach(function (wrap) {
+        var id = wrap.getAttribute("data-youtube-id");
+        var poster = wrap.querySelector(".vsl-youtube-poster");
+        var posterWrap = wrap.querySelector(".vsl-youtube-poster-wrap");
+        var playBtn = wrap.querySelector(".vsl-youtube-play");
+        var iframeContainer = wrap.querySelector(".vsl-youtube-iframe");
+        var chapters = parseChapters(wrap);
+        if (!id || !playBtn || !iframeContainer) return;
+
+        function seekToChapter(chapter, index) {
+          var seconds = chapter.seconds;
+          function startPlayback(player) {
+            if (!player || !player.seekTo) return;
+            player.seekTo(seconds, true);
+            if (player.playVideo) player.playVideo();
+            setActiveChapter(wrap, index);
+            updateChapterProgress(
+              wrap,
+              seconds,
+              wrap._vslChapterDuration || chapterDuration(wrap, chapters),
+            );
+            var totalDuration =
+              wrap._vslChapterDuration || chapterDuration(wrap, chapters);
+            pushVslVideoEvent("video_chapter_click", wrap, player, id, {
+              video_current_time: seconds,
+              video_percent:
+                totalDuration > 0
+                  ? Math.min(100, Math.floor((seconds / totalDuration) * 100))
+                  : 0,
+              chapter_index: index,
+              chapter_seconds: seconds,
+              chapter_label: chapter.label.trim(),
+              chapter_time: formatChapterTime(seconds),
+            });
+          }
+          if (wrap._ytPlayer && wrap._ytPlayerReady) {
+            startPlayback(wrap._ytPlayer);
+            return;
+          }
+          playBtn.click();
+          var attempts = 0;
+          var wait = setInterval(function () {
+            attempts += 1;
+            if (wrap._ytPlayer && wrap._ytPlayerReady) {
+              clearInterval(wait);
+              startPlayback(wrap._ytPlayer);
+            } else if (attempts > 40) {
+              clearInterval(wait);
+            }
+          }, 100);
+        }
+
+        /* Jump to section — disabled
+        if (chapters.length) {
+          renderChapterTimeline(wrap, chapters, seekToChapter);
+        }
+        */
+
+        playBtn.addEventListener("click", function () {
+          if (wrap._vslStarted) return;
+          wrap._vslStarted = true;
+
+          var iframeId = "vsl-yt-iframe-" + id;
+          iframeContainer.innerHTML =
+            '<div id="' + iframeId + '" class="w-full h-full"></div>';
+          iframeContainer.classList.remove("hidden");
+          wrap.classList.add("is-playing");
+          if (poster) poster.classList.add("hidden");
+          if (posterWrap) posterWrap.classList.add("hidden");
+          playBtn.classList.add("hidden");
+
+          loadYouTubeAPI(function () {
+            new window.YT.Player(iframeId, {
+              videoId: id,
+              playerVars: vslPlayerVars,
+              events: {
+                onReady: function (event) {
+                  wrap._ytPlayer = event.target;
+                  wrap._ytPlayerReady = true;
+                  try {
+                    var playerDuration =
+                      event.target.getDuration && event.target.getDuration();
+                    if (playerDuration > 0) {
+                      wrap._vslChapterDuration = playerDuration;
+                    }
+                  } catch (readyErr) {}
+                },
+                onStateChange: function (event) {
+                  var player = event.target;
+                  if (event.data === window.YT.PlayerState.PLAYING) {
+                    if (!wrap._vslVideoStarted) {
+                      wrap._vslVideoStarted = true;
+                      pushVslVideoEvent("video_start", wrap, player, id);
+                    }
+                    if (wrap._progressIntervalId) {
+                      clearInterval(wrap._progressIntervalId);
+                      wrap._progressIntervalId = null;
+                    }
+                    // Milestones sent are kept per video, so pause/seek/buffer never re-sends them.
+                    if (!wrap._vslMilestonesSent) wrap._vslMilestonesSent = {};
+                    var sent = wrap._vslMilestonesSent;
+                    wrap._progressIntervalId = setInterval(function () {
+                      try {
+                        if (!player.getCurrentTime) return;
+                        var current = player.getCurrentTime();
+                        var duration =
+                          wrap._vslChapterDuration ||
+                          player.getDuration() ||
+                          0;
+                        if (duration <= 0) return;
+                        if (chapters.length) {
+                          setActiveChapter(
+                            wrap,
+                            chapterIndexAtTime(chapters, current),
+                          );
+                          updateChapterProgress(wrap, current, duration);
+                        }
+                        var pct = Math.floor((current / duration) * 100);
+                        var milestones = window.VslVideoAnalytics
+                          ? window.VslVideoAnalytics.milestones
+                          : [10, 25, 50, 75, 90, 100];
+                        var toSend = null;
+                        for (var i = 0; i < milestones.length; i++) {
+                          var m = milestones[i];
+                          var next = milestones[i + 1];
+                          var inRange =
+                            next !== undefined
+                              ? pct >= m && pct < next
+                              : pct >= m;
+                          if (inRange && !sent[m]) {
+                            toSend = m;
+                            break;
+                          }
+                        }
+                        if (toSend !== null) {
+                          sent[toSend] = true;
+                          pushVslVideoEvent("video_progress", wrap, player, id, {
+                            video_percent: toSend,
+                          });
+                          if (toSend === 100) {
+                            if (!wrap._vslVideoCompleteSent) {
+                              wrap._vslVideoCompleteSent = true;
+                              pushVslVideoEvent("video_complete", wrap, player, id, {
+                                video_percent: 100,
+                              });
+                            }
+                            clearInterval(wrap._progressIntervalId);
+                            wrap._progressIntervalId = null;
+                          }
+                        }
+                      } catch (err) {
+                        clearInterval(wrap._progressIntervalId);
+                        wrap._progressIntervalId = null;
+                      }
+                    }, 500);
+                  }
+                  if (event.data === window.YT.PlayerState.PAUSED) {
+                    pushVslVideoEvent("video_pause", wrap, player, id);
+                  }
+                  if (event.data === window.YT.PlayerState.ENDED) {
+                    freezeAtEnd(player);
+                    if (!wrap._vslVideoCompleteSent) {
+                      wrap._vslVideoCompleteSent = true;
+                      pushVslVideoEvent("video_complete", wrap, player, id, {
+                        video_percent: 100,
+                      });
+                    }
+                  }
+                },
+              },
+            });
+          });
+        });
+      });
+    })();
+  </script>
+
+  {# 4. The people behind it #}
+  <section id="about" data-section="about" class="py-12 md:py-14 bg-white border-b border-gray-100">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+      <div class="grid md:grid-cols-[200px_1fr] gap-6 md:gap-10 items-center mb-8">
+        <img src="{{ url_for('static', filename='images/pdp_redesign/stijn.jpg') }}" alt="Stijn Wollerich" class="hidden md:block md:w-full md:h-auto rounded-2xl object-cover shadow-lg" loading="lazy" />
+        <div>
+          <p class="text-primary font-bold text-xs uppercase tracking-widest mb-3">Who's behind Sparksmetrics</p>
+          <div class="flex items-center gap-3 mb-3">
+            <img src="{{ url_for('static', filename='images/pdp_redesign/stijn.jpg') }}" alt="" class="md:hidden w-14 h-14 rounded-full object-cover flex-shrink-0" loading="lazy" />
+            <h2 class="font-display font-black text-deep-charcoal uppercase tracking-tighter text-2xl md:text-3xl m-0">Hi, I'm Stijn.</h2>
+          </div>
+          <p class="text-gray-600 text-base leading-relaxed mt-0 mb-4">I run Sparksmetrics: a small team that finds where Shopify stores lose money, and proves every fix with an A/B test.</p>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 mb-4">
+            {% for big, small in [
+              ('381+', 'A/B tests run'),
+              ('277+', 'brands worked with'),
+              ('$312k', 'found in one Shopify store'),
+              ('Top 1%', 'rated on Upwork'),
+            ] %}
+            <div class="bg-light-base border border-gray-200 rounded-xl px-3 py-2.5">
+              <p class="m-0 font-display font-black text-primary text-xl md:text-2xl tracking-tight leading-none">{{ big }}</p>
+              <p class="m-0 mt-1 text-xs text-gray-500 leading-snug">{{ small }}</p>
+            </div>
+            {% endfor %}
+          </div>
+          <p class="text-gray-500 text-sm leading-relaxed m-0">Worked with brands from $1M to $100M+ a year, including Outdoor Research, TUSHY and Edikted.</p>
+        </div>
+      </div>
+
+      {# Team #}
+      <div class="grid grid-cols-2 lg:grid-cols-[repeat(4,minmax(0,1fr))_auto] gap-3 md:gap-4">
+        <div class="flex flex-col sm:flex-row items-center text-center sm:text-left gap-2 sm:gap-3 bg-light-base rounded-xl border border-gray-200 px-3 py-3">
+          <img src="{{ url_for('static', filename='images/pdp_redesign/stijn.jpg') }}" alt="Stijn" class="w-11 h-11 rounded-full object-cover flex-shrink-0" loading="lazy" />
+          <div><p class="font-bold text-deep-charcoal m-0">Stijn</p><p class="text-xs text-gray-500 m-0 mt-0.5">Founder &amp; strategy</p></div>
+        </div>
+        <div class="flex flex-col sm:flex-row items-center text-center sm:text-left gap-2 sm:gap-3 bg-light-base rounded-xl border border-gray-200 px-3 py-3">
+          <img src="{{ url_for('static', filename='images/team/eze.jpg') }}" alt="Eze" class="w-11 h-11 rounded-full object-cover flex-shrink-0" loading="lazy" />
+          <div><p class="font-bold text-deep-charcoal m-0">Eze</p><p class="text-xs text-gray-500 m-0 mt-0.5">CRO lead</p></div>
+        </div>
+        <div class="flex flex-col sm:flex-row items-center text-center sm:text-left gap-2 sm:gap-3 bg-light-base rounded-xl border border-gray-200 px-3 py-3">
+          <img src="{{ url_for('static', filename='images/team/isaac.jpg') }}" alt="Isaac" class="w-11 h-11 rounded-full object-cover flex-shrink-0" loading="lazy" />
+          <div><p class="font-bold text-deep-charcoal m-0">Isaac</p><p class="text-xs text-gray-500 m-0 mt-0.5">Tracking &amp; analytics</p></div>
+        </div>
+        <div class="flex flex-col sm:flex-row items-center text-center sm:text-left gap-2 sm:gap-3 bg-light-base rounded-xl border border-gray-200 px-3 py-3">
+          <img src="{{ url_for('static', filename='images/team/mariana.jpg') }}" alt="Mariana" class="w-11 h-11 rounded-full object-cover flex-shrink-0" loading="lazy" />
+          <div><p class="font-bold text-deep-charcoal m-0">Mariana</p><p class="text-xs text-gray-500 m-0 mt-0.5">Designer</p></div>
+        </div>
+        <div class="flex lg:flex-col items-center justify-center gap-3 lg:gap-1 bg-light-base rounded-xl border border-dashed border-gray-300 px-3 py-3 lg:px-4 col-span-2 lg:col-span-1">
+          <span class="w-11 h-11 rounded-full flex-shrink-0 bg-deep-charcoal text-white font-display font-black text-base flex items-center justify-center">+4</span>
+          <p class="text-sm text-gray-500 m-0 lg:text-center leading-snug">developers &amp;<br class="hidden lg:block"> specialists</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  {# 6. Reviews #}
+  <section id="reviews" data-section="reviews" class="py-16 md:py-20 bg-white border-b border-gray-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="flex items-center justify-center gap-2 mb-3">
+        <span class="flex text-primary">{% for _ in range(5) %}<span class="material-symbols-outlined star-filled text-xl">star</span>{% endfor %}</span>
+        <span class="text-gray-500 text-sm font-bold uppercase tracking-widest">4.8 by 318 brands</span>
+      </div>
+      <h2 class="font-display font-black text-deep-charcoal uppercase tracking-tighter text-2xl md:text-4xl text-center mb-10">What people say</h2>
+      <div class="grid md:grid-cols-3 gap-4 md:gap-5">
+        {% for r in [
+          "Stijn was super professional, efficient and knowledgeable. He surpassed my expectations and allowed us to achieve more from the project than we had first aimed for.",
+          "Stijn is a great go-to resource when it comes to CRO and analytics. You only need to explain the purpose and he will outline a great strategy. This is awesome!",
+          "We were impressed with his speed of delivery, and his presentation of the work he had completed via Loom so that our team could watch the updates and make sure everything was fully understood.",
+          "Stijn was a star with helping us with a serious tracking issue and saved us hundreds of dollars!",
+          "Stijn is super responsive. Very easy to work with. Knows what he is doing. Followed instructions and also provided guidance to complete the project in the best possible way, possibly even better than the original direction.",
+          "Brilliant experience. Really easy and fast communication, knowledgeable, and completed on time. Impressed with how this project was executed and would use again.",
+        ] %}
+        <div class="bg-light-base p-5 md:p-6 rounded-2xl border border-gray-200 {% if loop.index > 3 %}hidden md:block{% endif %}">
+          <p class="text-gray-700 text-[15px] leading-relaxed mt-0 mb-3 italic">"{{ r }}"</p>
+          <p class="text-xs font-bold text-gray-400 uppercase tracking-widest m-0">Verified Upwork review</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  {# 7. FAQ #}
+  <section data-section="faq" class="py-14 md:py-16 bg-light-base border-b border-gray-100">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+      <h2 class="font-display font-black text-deep-charcoal uppercase tracking-tighter text-2xl md:text-3xl text-center mb-8">Questions</h2>
+      <div class="space-y-3 text-sm md:text-base">
+        {% for q, a in [
+          ('Is it really free?', 'Yes. You get the walkthrough video and findings at no cost. We only talk about paid work if you ask how we would run the roadmap.'),
+          ('Who does the audit?', 'I do, personally. My team helps with data pulls, but the review and the video are mine.'),
+          ('What do I need to prepare?', 'Nothing. Your store URL is enough to start. If you share GA4 access, the audit gets more precise.'),
+          ('What if my store does less than $100k a month?', "Then a full audit usually isn't worth your time yet. You'll get our free case study instead, so you can start on the biggest wins yourself."),
+        ] %}
+        <details class="group rounded-xl border border-gray-200 bg-white px-5 py-4">
+          <summary class="font-bold text-deep-charcoal text-sm md:text-base cursor-pointer list-none flex justify-between items-center gap-4">{{ q }}<span class="material-symbols-outlined text-gray-400 group-open:rotate-180 transition-transform shrink-0">expand_more</span></summary>
+          <p class="text-gray-600 text-sm md:text-base mt-3 mb-0 leading-relaxed">{{ a }}</p>
+        </details>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  {# 8. Final CTA #}
+  <section data-section="final_cta" class="py-14 md:py-16 bg-white text-center">
+    <div class="max-w-2xl mx-auto px-4">
+      <h2 class="font-display font-black text-deep-charcoal uppercase tracking-tighter text-2xl md:text-4xl mb-3">Let's find your $312k.</h2>
+      <p class="text-gray-600 mb-7">Apply in 30 seconds. If your store qualifies, you pick a time straight away.</p>
+      <a href="#apply" data-scroll-apply class="inline-flex items-center justify-center min-h-[56px] px-6 sm:px-10 bg-primary text-white font-display text-base sm:text-lg font-black uppercase whitespace-nowrap rounded-xl shadow-lg shadow-primary/25 hover:brightness-110 transition-all">Apply for your free audit</a>
+    </div>
+  </section>
+</div>
+
+{# Chat widget: messages go to Stijn's inbox + Slack, reply by email #}
+<button type="button" id="sm-chat-btn" aria-controls="sm-chat" aria-expanded="false">
+  <img src="{{ url_for('static', filename='images/pdp_redesign/stijn.jpg') }}" alt="" /><span class="live"></span>
+  <span>Questions? Ask Stijn</span>
+</button>
+<div id="sm-chat" role="dialog" aria-label="Chat with Stijn">
+  <div class="head">
+    <img src="{{ url_for('static', filename='images/pdp_redesign/stijn.jpg') }}" alt="" />
+    <div class="flex-1">
+      <p class="font-bold leading-tight m-0">Stijn Wollerich</p>
+      <p class="text-xs text-white/60 m-0 mt-0.5">Founder · usually replies within a few hours</p>
+    </div>
+    <button type="button" id="sm-chat-close" class="text-white/70 hover:text-white" aria-label="Close"><span class="material-symbols-outlined">close</span></button>
+  </div>
+  <div class="p-4 space-y-3" id="sm-chat-log">
+    <div class="bubble">Hi! Got a question about the audit or your store? Send it here and I'll get back to you personally by email.</div>
+  </div>
+  <form id="sm-chat-form" data-sm-manual class="p-4 pt-0 space-y-2" novalidate>
+    <textarea id="sm-chat-msg" rows="3" placeholder="Type your question…"></textarea>
+    <div class="flex gap-2">
+      <input id="sm-chat-name" type="text" placeholder="Name" autocomplete="given-name" />
+      <input id="sm-chat-email" type="email" placeholder="Email (for my reply)" autocomplete="email" />
+    </div>
+    <p id="sm-chat-err" class="hidden text-xs text-red-600"></p>
+    <button type="submit" class="w-full min-h-[44px] bg-primary text-white font-bold rounded-lg hover:brightness-110">Send</button>
+  </form>
+</div>
+
+
+<script>
+  (function () {
+    var CALENDLY = {{ calendly_url|tojson }};
+    var FORM_ID = "apply-form";
+    var FORM_NAME = "CRO Audit Application";
+    var STEP_NAMES = { 1: "monthly_revenue", 2: "store_url", 3: "contact" };
+    var form = document.getElementById("apply-form");
+    var err = document.getElementById("apply-error");
+    var nextBtn = document.getElementById("apply-next");
+    var backBtn = document.getElementById("apply-back");
+    var progress = document.getElementById("apply-progress");
+    var TOTAL = 3;
+    var step = 1;
+    var answers = { monthly_revenue: "" };
+    var revenueLabel = "";
+    var params = new URLSearchParams(window.location.search);
+    var industry = (document.getElementById("industry") || {}).value || "";
+
+    // Calendly bookings inside this page are attributed to this form (sm-analytics listens to Calendly).
+    window.smScheduleFormId = FORM_ID;
+    window.smScheduleFormName = FORM_NAME;
+    window.smScheduleLeadType = "apply_qualified";
+    window.smScheduleCalendlyUrl = CALENDLY;
+
+    function val(id) { var el = document.getElementById(id); return el ? el.value.trim() : ""; }
+    function uuid() { return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2); }
+
+    // GA4 (+ Meta for form_success / schedule) through the site-wide helper.
+    function ga(eventName, data) {
+      try {
+        if (window.SmAnalytics) {
+          window.SmAnalytics.push(eventName, Object.assign({ form_id: FORM_ID, form_name: FORM_NAME, lead_type: "apply", industry: industry || null }, data || {}));
+        }
+      } catch (e) {}
+    }
+    // Meta custom events, for audiences like "started the form but didn't finish".
+    function meta(eventName, data, standard) {
+      try { if (typeof fbq === "function") fbq(standard ? "track" : "trackCustom", eventName, data || {}); } catch (e) {}
+    }
+
+    function showError(msg) {
+      err.textContent = msg; err.classList.remove("hidden");
+      ga("form_error", { form_step: step, form_step_total: TOTAL, form_step_name: STEP_NAMES[step], click_text: msg });
+    }
+    function clearError() { err.classList.add("hidden"); }
+
+    var started = false;
+    function markStarted() {
+      if (started) return;
+      started = true;
+      ga("apply_form_start", { form_step: 1, form_step_total: TOTAL, form_step_name: STEP_NAMES[1] });
+      meta("ApplyFormStart");
+    }
+
+    function goTo(n) {
+      step = n;
+      form.querySelectorAll("[data-step]").forEach(function (el) {
+        el.classList.toggle("hidden", Number(el.getAttribute("data-step")) !== n);
+      });
+      progress.style.width = (n / TOTAL) * 100 + "%";
+      backBtn.classList.toggle("invisible", n === 1);
+      nextBtn.innerHTML = n === TOTAL ? "Send &rarr;" : "Next &rarr;";
+      clearError();
+      ga("apply_step_view", { form_step: n, form_step_total: TOTAL, form_step_name: STEP_NAMES[n] });
+      var focusEl = form.querySelector('[data-step="' + n + '"] input');
+      if (focusEl) focusEl.focus();
+    }
+
+    function completeStep(n, extra) {
+      ga("form_step", Object.assign({ form_step: n, form_step_total: TOTAL, form_step_name: STEP_NAMES[n] }, extra || {}));
+      meta("ApplyStep", Object.assign({ step: n, step_name: STEP_NAMES[n] }, extra && extra.revenue_band ? { revenue_band: extra.revenue_band } : {}));
+    }
+
+    function validate(n) {
+      if (n === 1 && !answers.monthly_revenue) return "Please pick your monthly revenue.";
+      if (n === 2 && !val("website_url")) return "Please enter your store URL.";
+      if (n === 3) {
+        if (!val("fname")) return "Please enter your first name.";
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val("email"))) return "Please enter a valid email.";
+      }
+      return "";
+    }
+
+    form.addEventListener("focusin", markStarted);
+    form.querySelectorAll("[data-choice]").forEach(function (group) {
+      var key = group.getAttribute("data-choice");
+      group.querySelectorAll(".apply-opt").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          markStarted();
+          group.querySelectorAll(".apply-opt").forEach(function (b) { b.classList.remove("is-on"); });
+          btn.classList.add("is-on");
+          answers[key] = btn.getAttribute("data-value");
+          if (key === "monthly_revenue") {
+            revenueLabel = btn.textContent.trim();
+            completeStep(1, { question_id: "monthly_revenue", answer: answers[key], answer_label: revenueLabel, revenue_band: answers[key] });
+          }
+          setTimeout(function () { if (step < TOTAL) goTo(step + 1); }, 220);
+        });
+      });
+    });
+
+    backBtn.addEventListener("click", function () {
+      if (step > 1) { ga("apply_step_back", { form_step: step, form_step_name: STEP_NAMES[step] }); goTo(step - 1); }
+    });
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      var problem = validate(step);
+      if (problem) return showError(problem);
+      if (step === 2) completeStep(2, { revenue_band: answers.monthly_revenue });
+      if (step < TOTAL) return goTo(step + 1);
+      completeStep(3, { revenue_band: answers.monthly_revenue });
+
+      nextBtn.disabled = true; nextBtn.textContent = "Sending…";
+      var eventId = uuid();
+      var payload = {
+        website_url: val("website_url"),
+        monthly_revenue: answers.monthly_revenue,
+        fname: val("fname"),
+        email: val("email"),
+        industry: industry,
+        event_id: eventId,
+        form_page_url: window.location.href,
+        utm_source: params.get("utm_source") || "",
+        utm_campaign: params.get("utm_campaign") || "",
+        utm_content: params.get("utm_content") || "",
+      };
+      ga("form_submit", { revenue_band: payload.monthly_revenue, answer_label: revenueLabel });
+      try {
+        var res = await fetch("/apply-cro-audit", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+        var json = await res.json();
+        if (!json.success) throw new Error(json.error || "Something went wrong. Please try again.");
+        form.classList.add("hidden");
+        progress.style.width = "100%";
+        if (json.qualified) {
+          // Advanced matching: Meta hashes these in the browser. Then the Lead (qualified only),
+          // with the same event_id the server sends to the Conversions API, so Meta counts it once.
+          try { if (typeof fbq === "function") fbq("init", "829320988492915", { em: payload.email.toLowerCase(), fn: payload.fname.toLowerCase() }); } catch (e2) {}
+          if (window.SmAnalytics && window.SmAnalytics.formSuccess) {
+            window.SmAnalytics.formSuccess({ form_id: FORM_ID, form_name: FORM_NAME, lead_type: "apply_qualified", event_id: eventId, revenue_band: payload.monthly_revenue, answer_label: revenueLabel, industry: industry || null });
+          } else if (typeof fbq === "function") {
+            fbq("track", "Lead", { content_name: "cro_audit_application" }, { eventID: eventId });
+          }
+          var url = CALENDLY + "&embed_type=Inline&embed_domain=" + encodeURIComponent(window.location.hostname) + "&name=" + encodeURIComponent(payload.fname) + "&email=" + encodeURIComponent(payload.email) + "&a1=" + encodeURIComponent(payload.website_url);
+          var iframe = document.createElement("iframe");
+          iframe.src = url; iframe.title = "Book your audit call";
+          document.getElementById("apply-calendly").appendChild(iframe);
+          document.getElementById("apply-qualified").classList.remove("hidden");
+        } else {
+          ga("apply_not_qualified", { revenue_band: payload.monthly_revenue, answer_label: revenueLabel });
+          meta("ApplicationNotQualified", { revenue_band: payload.monthly_revenue });
+          document.getElementById("apply-not-qualified").classList.remove("hidden");
+        }
+        document.getElementById("apply").scrollIntoView({ behavior: "smooth", block: "start" });
+      } catch (ex) {
+        showError(ex.message || "Network error. Please try again.");
+        nextBtn.disabled = false; nextBtn.innerHTML = "Send &rarr;";
+      }
+    });
+
+    // Not-qualified: click on the case study link
+    var ncs = document.querySelector("#apply-not-qualified a");
+    if (ncs) ncs.addEventListener("click", function () { ga("click", { click_label: "not_qualified_case_study", click_url: ncs.href }); });
+
+    // FAQ opens
+    document.querySelectorAll("details").forEach(function (d) {
+      d.addEventListener("toggle", function () {
+        if (d.open) ga("faq_open", { question: null, click_text: ((d.querySelector("summary") || d).firstChild.textContent || "").trim().slice(0, 120) });
+      });
+    });
+
+    // Which sections people actually see (once each, when 40% visible)
+    if ("IntersectionObserver" in window) {
+      var seen = {};
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          var id = en.target.getAttribute("data-section");
+          if (en.isIntersecting && !seen[id]) { seen[id] = true; ga("section_view", { section_id: id }); }
+        });
+      }, { threshold: 0.4 });
+      document.querySelectorAll("[data-section]").forEach(function (el) { io.observe(el); });
+    }
+
+    // Chat widget (on mobile it stays hidden while the form is on screen, so it never covers Next)
+    (function () {
+      var b = document.getElementById("sm-chat-btn"), f = document.getElementById("apply");
+      if (!("IntersectionObserver" in window) || !b || !f) return;
+      b.classList.add("is-hidden");
+      new IntersectionObserver(function (es) { b.classList.toggle("is-hidden", es[0].isIntersecting); }, { threshold: 0.15 }).observe(f);
+    })();
+    var chat = document.getElementById("sm-chat");
+    var chatBtn = document.getElementById("sm-chat-btn");
+    function setChat(open) { chat.classList.toggle("open", open); chatBtn.setAttribute("aria-expanded", open ? "true" : "false"); if (open) document.getElementById("sm-chat-msg").focus(); }
+    chatBtn.addEventListener("click", function () {
+      setChat(!chat.classList.contains("open"));
+      if (chat.classList.contains("open")) ga("chat_open");
+    });
+    document.getElementById("sm-chat-close").addEventListener("click", function () { setChat(false); ga("chat_close"); });
+    document.getElementById("sm-chat-form").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      var msg = val("sm-chat-msg"), name = val("sm-chat-name"), email = val("sm-chat-email");
+      var cErr = document.getElementById("sm-chat-err");
+      cErr.classList.add("hidden");
+      if (!msg) { cErr.textContent = "Type a message first."; return cErr.classList.remove("hidden"); }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { cErr.textContent = "Add your email so I can reply."; return cErr.classList.remove("hidden"); }
+      var btn = this.querySelector('button[type="submit"]');
+      btn.disabled = true; btn.textContent = "Sending…";
+      try {
+        var res = await fetch("/chat-message", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: name, email: email, message: msg, page: window.location.href }) });
+        var json = await res.json();
+        if (!json.success) throw new Error(json.error || "Couldn't send. Please try again.");
+        var log = document.getElementById("sm-chat-log");
+        var mine = document.createElement("div"); mine.className = "bubble me"; mine.textContent = msg; log.appendChild(mine);
+        var reply = document.createElement("div"); reply.className = "bubble";
+        reply.textContent = "Thanks" + (name ? " " + name : "") + "! Got your message. I'll reply to " + email + " personally, usually within a few hours.";
+        log.appendChild(reply);
+        this.style.display = "none";
+        ga("chat_message_sent", { form_id: "sm-chat", form_name: "Chat widget" });
+        meta("Contact", {}, true);
+      } catch (ex) {
+        cErr.textContent = ex.message; cErr.classList.remove("hidden");
+        btn.disabled = false; btn.textContent = "Send";
+      }
+    });
+
+    // Every CTA on this page goes to the application form.
+    document.addEventListener("click", function (e) {
+      var a = e.target.closest("[data-audit-modal], [data-scroll-apply]");
+      if (!a) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      var sec = a.closest("[data-section]");
+      ga("cta_click", { click_text: (a.textContent || "").trim().slice(0, 80), trigger_location: sec ? sec.getAttribute("data-section") : null });
+      document.getElementById("apply").scrollIntoView({ behavior: "smooth", block: "start" });
+    }, true);
+
+    document.querySelectorAll(".spark-exp-strip").forEach(function (sec) {
+      var track_ = sec.querySelector(".spark-exp-strip-track");
+      var prev = sec.querySelector(".spark-exp-strip-prev");
+      var next = sec.querySelector(".spark-exp-strip-next");
+      if (!track_) return;
+      function scrollByDir(dir) { track_.scrollBy({ left: dir * Math.max(track_.clientWidth * 0.85, 300), behavior: "smooth" }); }
+      if (prev) prev.addEventListener("click", function () { scrollByDir(-1); });
+      if (next) next.addEventListener("click", function () { scrollByDir(1); });
+    });
+  })();
+</script>
+{% endblock %}

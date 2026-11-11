@@ -123,6 +123,7 @@
     if (formId === "schedule-modal") return "Schedule a Call (Header Modal)";
     if (formId === "calendly-inline") return "Calendly Inline";
     if (leadType === "audit" || leadType === "audit_qualified") return "Free CRO Audit";
+    if (leadType === "apply_qualified" || formId === "apply-form") return "CRO Audit Application";
     if (resourceSlug && RESOURCE_LABELS[resourceSlug]) return RESOURCE_LABELS[resourceSlug];
     if (leadType === "vsl") return "Free CRO Video (VSL Gate)";
     if (leadType === "ebook") return "Resource Download";
@@ -137,7 +138,9 @@
 
   function isQualifiedLeadType(leadType) {
     return (
-      leadType === "audit_qualified" || leadType === "cro_cost_roi_qualified"
+      leadType === "audit_qualified" ||
+      leadType === "cro_cost_roi_qualified" ||
+      leadType === "apply_qualified"
     );
   }
 
@@ -196,6 +199,7 @@
     "schedule_action", "calendly_event", "scroll_percent",
     "click_label", "click_text", "click_url", "trigger_location",
     "video_id", "video_title", "video_percent", "video_current_time",
+    "question_id", "answer", "answer_label", "section_id", "revenue_band", "industry",
   ];
 
   function dispatchGtag(payload) {
@@ -222,18 +226,20 @@
   function dispatchMeta(payload) {
     if (typeof fbq !== "function") return;
     var ev = payload.event;
-    var ud = payload.user_data || {};
-    var fbParams = { eventID: payload.event_id };
-    if (ud.email) fbParams.em = ud.email;
-    if (ud.fname) fbParams.fn = ud.fname;
+    // eventID goes in the 4th argument (options), not in custom data, so Meta can
+    // deduplicate against the Conversions API. No raw email/name in custom data:
+    // Meta treats that as personal data; use advanced matching (fbq init) instead.
+    var fbParams = {};
     if (payload.lead_type) fbParams.content_category = payload.lead_type;
+    if (payload.revenue_band) fbParams.revenue_band = payload.revenue_band;
+    var fbOpts = payload.event_id ? { eventID: payload.event_id } : undefined;
     if (ev === "form_success") {
-      fbq("track", "Lead", fbParams);
+      fbq("track", "Lead", fbParams, fbOpts);
       if (payload.is_qualified === "true") {
-        fbq("trackCustom", "QualifiedLead", fbParams);
+        fbq("trackCustom", "QualifiedLead", fbParams, payload.event_id ? { eventID: "q-" + payload.event_id } : undefined);
       }
     } else if (ev === "schedule_booked") {
-      fbq("track", "Schedule", { eventID: payload.event_id });
+      fbq("track", "Schedule", fbParams, fbOpts);
     }
   }
 
@@ -288,6 +294,9 @@
       question: data.question || null,
       answer: data.answer != null ? String(data.answer) : null,
       answer_label: data.answer_label || null,
+      section_id: data.section_id || null,
+      revenue_band: data.revenue_band || null,
+      industry: data.industry || null,
       timestamp: new Date().toISOString(),
     };
 
@@ -369,7 +378,7 @@
       function (e) {
         try {
           var form = e.target && e.target.closest && e.target.closest("form");
-          if (!form || form.getAttribute(FORM_START_SENT) === "1") return;
+          if (!form || form.getAttribute(FORM_START_SENT) === "1" || form.hasAttribute("data-sm-manual")) return;
           if (form.id === "lead-form" && window.LeadModal) return;
           form.setAttribute(FORM_START_SENT, "1");
           var ud = collectUserDataFromForm(form);
@@ -491,6 +500,7 @@
             scheduleOpen({
               form_id: global.smScheduleFormId || "calendly-inline",
               form_name: global.smScheduleFormName || "Calendly",
+              lead_type: global.smScheduleLeadType || null,
               schedule_action: scheduleAction,
               calendly_event: calEvent,
               calendly_url: global.smScheduleCalendlyUrl || null,

@@ -2,6 +2,7 @@
 import html
 import json
 import math
+import os
 import re
 from typing import Any
 from pathlib import Path
@@ -3054,6 +3055,265 @@ def apply_ab_test():
         website_url=website_url,
         slack_headline="*Free A/B test application* submitted.",
     )
+    return jsonify({"success": True})
+
+
+META_PIXEL_ID = "829320988492915"
+
+
+def _send_meta_capi_event(
+    event_name: str,
+    *,
+    event_id: str | None,
+    email: str | None = None,
+    first_name: str | None = None,
+    source_url: str | None = None,
+    custom_data: dict | None = None,
+) -> None:
+    """Send one event to the Meta Conversions API. No-op without META_CAPI_ACCESS_TOKEN.
+
+    Uses the same event_id as the browser pixel so Meta deduplicates the two.
+    """
+    import hashlib
+    import time
+
+    token = (current_app.config.get("META_CAPI_ACCESS_TOKEN") or os.environ.get("META_CAPI_ACCESS_TOKEN") or "").strip()
+    if not token:
+        return
+
+    def h(v: str | None) -> list[str] | None:
+        v = (v or "").strip().lower()
+        return [hashlib.sha256(v.encode()).hexdigest()] if v else None
+
+    forwarded = (request.headers.get("X-Forwarded-For") or "").split(",")[0].strip()
+    user_data = {
+        "em": h(email),
+        "fn": h(first_name),
+        "client_ip_address": forwarded or request.remote_addr,
+        "client_user_agent": request.headers.get("User-Agent"),
+        "fbp": request.cookies.get("_fbp"),
+        "fbc": request.cookies.get("_fbc"),
+    }
+    event = {
+        "event_name": event_name,
+        "event_time": int(time.time()),
+        "action_source": "website",
+        "event_source_url": source_url,
+        "user_data": {k: v for k, v in user_data.items() if v},
+        "custom_data": custom_data or {},
+    }
+    if event_id:
+        event["event_id"] = event_id
+    payload = {"data": [event]}
+    test_code = (os.environ.get("META_CAPI_TEST_EVENT_CODE") or "").strip()
+    if test_code:
+        payload["test_event_code"] = test_code
+    try:
+        import requests
+
+        r = requests.post(
+            f"https://graph.facebook.com/v21.0/{META_PIXEL_ID}/events",
+            params={"access_token": token},
+            json=payload,
+            timeout=5,
+        )
+        if r.status_code != 200:
+            current_app.logger.warning("Meta CAPI %s failed: HTTP %s %s", event_name, r.status_code, (r.text or "")[:300])
+    except Exception as e:
+        current_app.logger.warning("Meta CAPI %s error: %s", event_name, e)
+
+
+# Application LP for Meta cold traffic (/apply). Revenue + ad spend gate the booking step.
+APPLY_REVENUE_OPTIONS = [
+    ("under_50k", "Under $50k/month", False),
+    ("50k_100k", "$50k to $100k/month", False),
+    ("100k_250k", "$100k to $250k/month", True),
+    ("250k_1m", "$250k to $1M/month", True),
+    ("1m_plus", "$1M+/month", True),
+]
+APPLY_AD_SPEND_OPTIONS = [
+    ("under_5k", "Under $5k/month"),
+    ("5k_20k", "$5k to $20k/month"),
+    ("20k_50k", "$20k to $50k/month"),
+    ("50k_plus", "$50k+/month"),
+]
+APPLY_INDUSTRIES = {
+    "food": "Food & beverage",
+    "beauty": "Beauty & skincare",
+    "fashion": "Fashion & apparel",
+    "home": "Home & living",
+    "health": "Health & supplements",
+    "outdoor": "Outdoor & sports",
+}
+
+
+@main_bp.route("/apply/")
+@main_bp.route("/apply")
+def apply_cro_audit_landing():
+    """Meta cold-traffic application page: form above the fold, proof below."""
+    from app.services.spark_experiments import get_website_experiments
+
+    industry_key = (request.args.get("industry") or "").strip().lower()
+    if industry_key not in APPLY_INDUSTRIES:
+        industry_key = ""
+    return render_template(
+        "landing_pages/apply_cro_audit.html",
+        spark_experiments=get_website_experiments(),
+        spark_experiments_configured=spark_backend.enabled(),
+        revenue_options=APPLY_REVENUE_OPTIONS,
+        ad_spend_options=APPLY_AD_SPEND_OPTIONS,
+        industries=APPLY_INDUSTRIES,
+        industry_key=industry_key,
+    )
+
+
+@main_bp.route("/apply-cro-audit", methods=["POST"])
+def apply_cro_audit():
+    """Application from /apply. Returns qualified=True when own brand + $100k+/month."""
+    data = request.get_json(silent=True) or {}
+    fname = (data.get("fname") or "").strip()
+    email = (data.get("email") or "").strip()
+    website_url = (data.get("website_url") or "").strip()
+    own_brand = (data.get("own_brand") or "").strip()
+    revenue = (data.get("monthly_revenue") or "").strip()
+    ad_spend = (data.get("ad_spend") or "").strip()
+    industry = (data.get("industry") or "").strip().lower()
+    form_page_url = _ingest_form_page_url(data)
+
+    revenue_map = {k: (label, ok) for k, label, ok in APPLY_REVENUE_OPTIONS}
+    ad_spend_map = dict(APPLY_AD_SPEND_OPTIONS)
+
+    # own_brand and ad_spend are optional (the current form only asks revenue, URL, name, email).
+    if own_brand not in ("", "yes", "no"):
+        own_brand = ""
+    if not website_url:
+        return jsonify({"success": False, "error": "Store URL required"}), 400
+    if revenue not in revenue_map:
+        return jsonify({"success": False, "error": "Please pick your monthly revenue"}), 400
+    if not fname:
+        return jsonify({"success": False, "error": "First name required"}), 400
+    if not email or not re.match(r"^[^\s@]+@[^\s@]+\.[^\s@]+$", email):
+        return jsonify({"success": False, "error": "Invalid email"}), 400
+
+    qualified = own_brand != "no" and revenue_map[revenue][1]
+    website_url = _normalize_shopify_url(website_url) or website_url
+    parts = [
+        f"qualified: {'yes' if qualified else 'no'}",
+        f"revenue: {revenue_map[revenue][0]}",
+    ]
+    if own_brand:
+        parts.append(f"own brand: {own_brand}")
+    if ad_spend in ad_spend_map:
+        parts.append(f"ad spend: {ad_spend_map[ad_spend]}")
+    if industry in APPLY_INDUSTRIES:
+        parts.append(f"industry: {APPLY_INDUSTRIES[industry]}")
+    business_stage = " | ".join(parts)
+
+    event_id = (data.get("event_id") or "").strip()[:100] or None
+
+    # Local preview: never write test applications to Spark, Brevo, Slack or Meta.
+    host = (request.host or "").split(":")[0]
+    if host in ("localhost", "127.0.0.1"):
+        current_app.logger.info("apply-cro-audit dry run (localhost): %s %s %s", fname, email, business_stage)
+        return jsonify({"success": True, "qualified": qualified, "dry_run": True})
+
+    if qualified:
+        _send_meta_capi_event(
+            "Lead",
+            event_id=event_id,
+            email=email,
+            first_name=fname,
+            source_url=form_page_url or request.referrer,
+            custom_data={"content_name": "cro_audit_application", "revenue_band": revenue},
+        )
+
+    _save_lead(
+        fname,
+        email,
+        "cro_audit_application",
+        resource_slug=None,
+        website_url=website_url,
+        form_page_url=form_page_url,
+        business_stage=business_stage,
+    )
+    _sync_lead_to_brevo(
+        fname,
+        email,
+        "cro_audit_application",
+        resource_slug=None,
+        business_stage=business_stage,
+        website_url=website_url,
+    )
+    _notify_slack_lead(
+        fname,
+        email,
+        "cro_audit_application",
+        resource_slug=None,
+        business_stage=business_stage,
+        website_url=website_url,
+        slack_headline=(
+            "*CRO audit application: QUALIFIED*" if qualified else "*CRO audit application: not qualified*"
+        ),
+    )
+    return jsonify({"success": True, "qualified": qualified})
+
+
+CHAT_INBOX = "stijn@sparksmetrics.com"
+
+
+@main_bp.route("/chat-message", methods=["POST"])
+def chat_message():
+    """Chat widget on /apply: emails the message to Stijn (reply-to = visitor) and pings Slack."""
+    from html import escape
+
+    data = request.get_json(silent=True) or {}
+    name = (data.get("name") or "").strip()[:80]
+    email = (data.get("email") or "").strip()[:200]
+    message = (data.get("message") or "").strip()[:4000]
+    page = (data.get("page") or "").strip()[:500]
+    if not message:
+        return jsonify({"success": False, "error": "Please type a message"}), 400
+    if not email or not re.match(r"^[^\s@]+@[^\s@]+\.[^\s@]+$", email):
+        return jsonify({"success": False, "error": "Please add your email so I can reply"}), 400
+
+    host = (request.host or "").split(":")[0]
+    if host in ("localhost", "127.0.0.1"):
+        current_app.logger.info("chat-message dry run (localhost): %s <%s>: %s", name, email, message)
+        return jsonify({"success": True, "dry_run": True})
+
+    who = f"{name} <{email}>" if name else email
+    try:
+        from app.cro_nurture.services.brevo_send import send_transactional_html
+
+        send_transactional_html(
+            to_email=CHAT_INBOX,
+            subject=f"Website chat: {name or email}",
+            html_content=(
+                f"<p><b>From:</b> {escape(who)}<br><b>Page:</b> {escape(page)}</p>"
+                f"<p style='white-space:pre-wrap'>{escape(message)}</p>"
+                "<p style='color:#888'>Reply to this email to answer them directly.</p>"
+            ),
+            text_content=f"From: {who}\nPage: {page}\n\n{message}",
+            sender_name=current_app.config.get("BREVO_SENDER_NAME") or "Sparksmetrics",
+            sender_email=current_app.config.get("BREVO_SENDER_EMAIL") or CHAT_INBOX,
+            reply_to=email,
+            tags=["website-chat"],
+        )
+    except Exception as e:
+        current_app.logger.warning("chat-message email failed: %s", e)
+
+    webhook_url = (current_app.config.get("SLACK_WEBHOOK_URL") or "").strip()
+    if webhook_url:
+        try:
+            import requests
+
+            requests.post(
+                webhook_url,
+                json={"text": f"*Website chat* from {who}\n{message}\n_{page}_"},
+                timeout=5,
+            )
+        except Exception as e:
+            current_app.logger.warning("chat-message slack failed: %s", e)
     return jsonify({"success": True})
 
 
