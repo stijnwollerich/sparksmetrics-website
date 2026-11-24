@@ -6,7 +6,7 @@ from pathlib import Path
 
 import click
 from dotenv import load_dotenv
-from flask import Flask, render_template, request
+from flask import Flask, redirect, render_template, request
 
 from app.cro_video_thumb_strip import CRO_VIDEO_THUMB_STRIP
 from app.models import db
@@ -104,6 +104,14 @@ def create_app(config_object="app.config.Config") -> Flask:
 
     @app.errorhandler(404)
     def page_not_found(e):
+        # Old or slightly different addresses (trailing slash, hyphen vs underscore blog slugs) get a 301 to the real page
+        # instead of a 404, so links and old sitemap entries keep their value.
+        if request.method in ("GET", "HEAD"):
+            from app.routes.main import redirect_target_for_404
+            target = redirect_target_for_404(request.path)
+            if target:
+                qs = request.query_string.decode("utf-8", "ignore")
+                return redirect(target + (f"?{qs}" if qs else ""), code=301)
         return render_template("404.html"), 404
 
     @app.after_request

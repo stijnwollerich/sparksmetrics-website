@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}{{ post.title }} | Sparksmetrics{% endblock %}
+{% block title %}{{ post.title }}{% if post.title|length < 46 %} | Sparksmetrics{% endif %}{% endblock %}
 {% block meta_description %}{{ post.description }}{% endblock %}
 {% block og_title %}{{ post.title }}{% endblock %}
 {% block twitter_title %}{{ post.title }}{% endblock %}

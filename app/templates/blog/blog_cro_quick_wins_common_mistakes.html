@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% block title %}{{ post.title }} | Sparksmetrics{%
+{% extends "base.html" %} {% block title %}{{ post.title }}{% if post.title|length < 46 %} | Sparksmetrics{% endif %}{%
 endblock %} {% block meta_description %}{{ post.description or "Ten red flags to
 watch for when hiring a CRO agency — what to avoid, what to insist on, and the
 exact tests and contracts that protect your growth." }}{% endblock %} {% block

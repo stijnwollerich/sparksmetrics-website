@@ -265,7 +265,7 @@
                   <div class="rounded-lg border border-gray-200 overflow-hidden bg-gray-50 text-left">
                     {% if case.main_image %}
                     <div class="aspect-[5/3] overflow-hidden bg-gray-200">
-                      <img src="{{ url_for('static', filename=case.main_image) }}" alt="" class="w-full h-full object-cover" loading="lazy" width="200" height="120" />
+                      <img src="{{ url_for('static', filename=case.main_image) }}" alt="{{ case.card_title or case.result_headline }}" class="w-full h-full object-cover" loading="lazy" width="200" height="120" />
                     </div>
                     {% endif %}
                     <p class="text-[9px] sm:text-[10px] font-bold text-deep-charcoal leading-tight p-1.5 line-clamp-2">{{ case.card_title|default(case.result_headline) }}</p>

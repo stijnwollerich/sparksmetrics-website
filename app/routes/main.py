@@ -99,7 +99,7 @@ CASE_STUDIES = {
         ],
     },
     "shopify-premium-home-wellness-brand": {
-        "meta_title": "22% Lift in Conversion Rate for a Shopify Premium Home-Wellness Brand | Sparksmetrics",
+        "meta_title": "+22% Conversion Rate: Shopify Wellness Brand Case Study",
         "result_headline": "22% Lift in Conversion Rate for a Shopify Premium Home-Wellness Brand",
         "subtitle": "Data-backed PDP experiments improved revenue per visitor.",
         "updated_date": "13 October 2025",
@@ -146,7 +146,7 @@ CASE_STUDIES = {
         ],
     },
     "ai-brand-redesign": {
-        "meta_title": "Redesigning an AI Brand for Higher Credibility and Lead Growth | Sparksmetrics",
+        "meta_title": "AI Brand Redesign for Credibility and Leads: Case Study",
         "result_headline": "Redesigning an AI Brand for Higher Credibility and Lead Growth",
         "subtitle": "Elevated trust, clarity, and conversions.",
         "updated_date": "13 October 2025",
@@ -184,7 +184,7 @@ CASE_STUDIES = {
         ],
     },
     "shopify-bidet-brand": {
-        "meta_title": "20% Increase in Conversion Rate for a Shopify Home-Essentials Brand | Sparksmetrics",
+        "meta_title": "+20% Conversion Rate: Shopify Home Brand Case Study",
         "result_headline": "20% Increase in Conversion Rate for a Shopify Home-Essentials Brand",
         "subtitle": "Redesigning the product page and homepage to improve engagement.",
         "updated_date": "13 October 2025",
@@ -219,7 +219,7 @@ CASE_STUDIES = {
         ],
     },
     "global-tour-brand": {
-        "meta_title": "Improving Booking Experience for a Global Tour Brand | Sparksmetrics",
+        "meta_title": "Booking UX Redesign for a Global Tour Brand | Sparksmetrics",
         "result_headline": "Improving Booking Experience for a Global Tour Brand",
         "subtitle": "A custom-built redesign focused on clarity, simplicity, and user confidence.",
         "updated_date": "13 October 2025",
@@ -253,7 +253,7 @@ CASE_STUDIES = {
         ],
     },
     "national-fitness-franchise": {
-        "meta_title": "High-Conversion Product Pages for a National Kids Fitness Franchise | Sparksmetrics",
+        "meta_title": "Kids Fitness Franchise Product Pages: Case Study",
         "result_headline": "Designing High-Conversion Product Pages for a National Kids Fitness Franchise",
         "subtitle": "A custom-built solution to showcase safety, trust, and fun.",
         "updated_date": "13 October 2025",
@@ -2954,6 +2954,25 @@ def terms_of_service():
     return render_template("terms_of_service.html")
 
 
+def redirect_target_for_404(path: str):
+    """Where a 404 address should 301 to, or None. Covers blog slugs written with hyphens instead of underscores (or the
+    other way round; the old sitemap listed the hyphen versions) and a missing or extra trailing slash."""
+    if path.startswith("/blog/"):
+        slug = path[len("/blog/"):].strip("/")
+        norm = slug.replace("_", "-").lower()
+        for post in _scan_blog_templates() or _load_blog_posts():
+            served = post.get("slug") or ""
+            if served.replace("_", "-").lower() == norm:
+                return url_for("main.blog_post", slug=served)
+        return None
+    alt = path.rstrip("/") if (path != "/" and path.endswith("/")) else path + "/"
+    try:
+        endpoint, _ = current_app.url_map.bind("localhost").match(alt, method="GET")
+    except Exception:
+        return None
+    return alt if endpoint != "static" else None
+
+
 @main_bp.route("/sitemap.xml")
 def sitemap():
     """Generate sitemap XML with all public pages and case study URLs. Excludes /thank-you/ (noindex, post-lead redirect)."""
@@ -2963,7 +2982,6 @@ def sitemap():
         ("main.analytics", {}),
         ("main.results", {}),
         ("main.blog_index", {}),
-        ("main.schedule_a_call", {}),
         ("main.cro_ebook", {}),
         ("main.cro_cost_roi_landing", {}),
         ("main.privacy_policy", {}),
