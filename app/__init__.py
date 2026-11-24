@@ -97,6 +97,15 @@ def create_app(config_object="app.config.Config") -> Flask:
 
     app.register_blueprint(main_bp)
 
+    # Cache-busting version for the prebuilt Tailwind stylesheet (static files are cached for a year)
+    import hashlib
+    _css = os.path.join(app.static_folder, "css", "tailwind.css")
+    try:
+        with open(_css, "rb") as fh:
+            app.jinja_env.globals["tailwind_css_v"] = hashlib.md5(fh.read()).hexdigest()[:10]
+    except OSError:
+        app.jinja_env.globals["tailwind_css_v"] = "0"
+
     if app.config.get("CRO_NURTURE_ENABLED") and not _sparksmetrics_uses_spark_backend():
         from app.cro_nurture.routes import cro_nurture_bp
 
