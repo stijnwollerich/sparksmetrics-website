@@ -3377,7 +3377,6 @@ def llms_txt():
         f"- [Apply for a free CRO audit]({apply}): answer three questions (revenue, store URL, email). Qualifying stores get a recorded "
         "audit of where the funnel leaks within 48 hours and a 30-minute call to walk through it. No retainer required.",
         f"- [Book a call]({base}{url_for('main.schedule_a_call')})",
-        "- Email: stijn@sparksmetrics.com",
         "",
         "## Common questions",
         "",
@@ -3415,7 +3414,6 @@ def llms_txt():
         "- [YouTube channel: Stijn Wollerich on CRO](https://www.youtube.com/@stijnwollerich)",
         f"- [Terms of service]({base}{url_for('main.terms_of_service')})",
         f"- [Privacy policy]({base}{url_for('main.privacy_policy')})",
-        "- Contact: stijn@sparksmetrics.com",
         "",
     ]
     return Response("\n".join(lines), content_type="text/plain; charset=utf-8")
