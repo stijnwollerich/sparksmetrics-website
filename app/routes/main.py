@@ -327,6 +327,7 @@ def _scan_blog_templates() -> list[dict]:
                 metadata_by_slug[p["slug"]] = p
     except Exception:
         metadata_by_slug = {}
+    metadata_by_template = {Path(p.get("template") or "").name: p for p in metadata_by_slug.values() if p.get("template")}
     # Build a reverse map from known video_id -> slug so templates can be renamed
     video_id_to_slug = {
         p.get("video_id"): slug for slug, p in metadata_by_slug.items() if p.get("video_id")
@@ -348,6 +349,8 @@ def _scan_blog_templates() -> list[dict]:
             if mapped:
                 # Use the canonical slug from blog_posts.json so URLs remain stable
                 slug = mapped
+        # Metadata from blog_posts.json: by slug, else by template file (slugs in the JSON use hyphens, some files underscores)
+        meta = metadata_by_slug.get(slug) or metadata_by_template.get(name) or {}
         # Try to extract a sensible title: first <h1> or <h2>, else filename
         m = re.search(r"<h1[^>]*>(.*?)</h1>", text, flags=re.I | re.S)
         if not m:
@@ -357,7 +360,7 @@ def _scan_blog_templates() -> list[dict]:
         extracted_title = None if (not raw_title or re.search(r"\{\{\s*post\.|\{\{|\{%\s", raw_title)) else raw_title
         # Prefer explicit metadata from blog_posts.json when available, otherwise use extracted title or filename
         title = (
-            metadata_by_slug.get(slug, {}).get("title")
+            meta.get("title")
             or extracted_title
             or slug.replace("-", " ").replace("_", " ").title()
         )
@@ -365,7 +368,7 @@ def _scan_blog_templates() -> list[dict]:
         m2 = re.search(r"<p[^>]*>(.*?)</p>", text, flags=re.I | re.S)
         description_raw = re.sub(r"<[^>]+>", " ", (m2.group(1) or "")).strip() if m2 else ""
         extracted_description = None if (not description_raw or re.search(r"\{\{|\{%\s", description_raw)) else description_raw
-        description = metadata_by_slug.get(slug, {}).get("description") or extracted_description or (title + " — insights and examples.")
+        description = meta.get("description") or extracted_description or (title + " — insights and examples.")
         # published date from file mtime
         try:
             mtime = f.stat().st_mtime
@@ -387,9 +390,9 @@ def _scan_blog_templates() -> list[dict]:
             "category": "CRO",
             "template": f"blog/{name}",
             # include any explicit video_id or youtube_url from metadata so templates can use them
-            **({"video_id": metadata_by_slug[slug].get("video_id")} if slug in metadata_by_slug and metadata_by_slug[slug].get("video_id") else {}),
-            **({"youtube_url": metadata_by_slug[slug].get("youtube_url")} if slug in metadata_by_slug and metadata_by_slug[slug].get("youtube_url") else {}),
-            **({"thumbnail": metadata_by_slug[slug]["thumbnail"]} if slug in metadata_by_slug and metadata_by_slug[slug].get("thumbnail") else {}),
+            **({"video_id": meta["video_id"]} if meta.get("video_id") else {}),
+            **({"youtube_url": meta["youtube_url"]} if meta.get("youtube_url") else {}),
+            **({"thumbnail": meta["thumbnail"]} if meta.get("thumbnail") else {}),
         }
         posts.append(post)
     return posts
@@ -2962,6 +2965,7 @@ def sitemap():
         ("main.blog_index", {}),
         ("main.schedule_a_call", {}),
         ("main.cro_ebook", {}),
+        ("main.cro_cost_roi_landing", {}),
         ("main.privacy_policy", {}),
         ("main.terms_of_service", {}),
     ]
@@ -2976,7 +2980,7 @@ def sitemap():
             urls.append(url_for("main.case_study", slug=slug, _external=True))
         except Exception:
             pass
-    for post in _load_blog_posts():
+    for post in _scan_blog_templates() or _load_blog_posts():
         try:
             urls.append(url_for("main.blog_post", slug=post["slug"], _external=True))
         except Exception:
@@ -3327,5 +3331,91 @@ Disallow: /download/
 Disallow: /cro-scan/
 
 Sitemap: {base}/sitemap.xml
+# Summary for AI assistants (llmstxt.org): {base}/llms.txt
 """
     return Response(body, mimetype="text/plain")
+
+
+@main_bp.route("/llms.txt")
+def llms_txt():
+    """llms.txt (llmstxt.org): a plain Markdown summary of who we are and the pages worth reading, for AI assistants.
+    Case studies and blog posts come from the same data as the site, so new ones show up here by themselves."""
+    base = request.url_root.rstrip("/")
+    apply = f"{base}{url_for('main.apply_cro_audit_landing')}?utm_source=llms_txt&utm_medium=referral"
+    lines = [
+        "# Sparksmetrics",
+        "",
+        "> Sparksmetrics is a conversion rate optimization (CRO) agency for Shopify and D2C ecommerce brands doing "
+        "$100k+ a month. We find where a store loses revenue, then design, build and A/B test the fixes, so the same "
+        "traffic and ad spend bring in more revenue. Positive ROI within 150 days or your money back.",
+        "",
+        "Founded and run by Stijn Wollerich, who reviews every store himself. 217+ brands optimized, rated 4.8 by 318 brands, "
+        "100% success rate on Upwork. Brands we've worked with include TUSHY, Edikted, Canopy, Outdoor Research and Le Petit Chef. "
+        "Based in the Netherlands, working with brands in the US, UK, Europe and Australia.",
+        "",
+        "## Who we're a good fit for",
+        "",
+        "- Shopify and other D2C ecommerce stores doing roughly $100k to $1M+ in monthly revenue.",
+        "- Brands spending heavily on paid traffic (Meta, Google, TikTok) whose conversion rate has flattened, so every extra ad dollar converts worse.",
+        "- Teams that want one partner for the whole loop: research, design, development, testing and analysis, instead of juggling a designer, a developer and an analyst.",
+        "- Not a fit yet: stores under about $100k a month. They rarely have the traffic for A/B tests to reach statistical significance in a reasonable time.",
+        "",
+        "## What a client gets",
+        "",
+        f"- [CRO program]({base}{url_for('main.cro')}): a data and UX audit of the store, a test roadmap ranked by expected revenue impact, "
+        "then a steady cadence of A/B tests that we design, build, QA, launch and analyse. Winners are judged on revenue per visitor, "
+        "not only conversion rate, and every result (win or loss) comes with a write-up of what it means for the next test.",
+        f"- [Analytics and tracking]({base}{url_for('main.analytics')}): GA4 and GTM, ecommerce events, Conversion APIs (Meta, Google Ads, TikTok), "
+        "server-side tracking, Consent Mode v2, BigQuery and dashboards. Tests are only as good as the data, so we fix tracking first when needed. "
+        "If tracking isn't verifiably correct after implementation, we fix it until it is.",
+        "- Testing tools: Visually, Convert, VWO, Mida, or tests built straight into the theme code. Platforms: Shopify (most clients), WordPress/WooCommerce and custom builds.",
+        "- Working rhythm: a shared Slack channel, weekly summaries and regular review calls. We work alongside the brand's own team.",
+        "- Guarantee: positive ROI within 150 days or your money back.",
+        "",
+        "## Get started",
+        "",
+        f"- [Apply for a free CRO audit]({apply}): answer three questions (revenue, store URL, email). Qualifying stores get a recorded "
+        "audit of where the funnel leaks within 48 hours and a 30-minute call to walk through it. No retainer required.",
+        f"- [Book a call]({base}{url_for('main.schedule_a_call')})",
+        "- Email: stijn@sparksmetrics.com",
+        "",
+        "## Common questions",
+        "",
+        "- How is Sparksmetrics different from other CRO agencies? We don't ship \"best practices\" on opinion. Every change is an A/B test "
+        "with a clear primary goal, run until it reaches statistical confidence, and one team owns tracking, design, development and analysis end to end.",
+        "- How soon are results visible? The first tests usually go live within a few weeks. Most clients see meaningful conversion movement within the first 90 days; "
+        "speed depends on traffic and how many tests the site can run at once.",
+        f"- What does CRO cost? It depends on traffic, order volume and how many tests a month make sense. The [CRO cost and ROI calculator]({base}{url_for('main.cro_cost_roi_landing')}) "
+        "gives a personal estimate in three questions, and the money-back guarantee covers the downside.",
+        "- Do you work on Shopify? Yes, most of our clients run on Shopify.",
+        "- What does the free audit include? A review of the store's data and UX showing where visitors drop off and which tests to run first, with no obligation.",
+        "",
+        "## Case studies",
+        "",
+    ]
+    # ecommerce (Shopify) work first: that's who this page is for
+    shopify_first = sorted(CASE_STUDIES.items(), key=lambda kv: "shopify" not in str(kv[1].get("project_items")).lower())
+    for slug, cs in shopify_first:
+        name = cs.get("card_title") or cs.get("result_headline") or slug
+        what = cs.get("result_metric") or cs.get("subtitle") or ""
+        lines.append(f"- [{name}]({base}{url_for('main.case_study', slug=slug)}): {what}")
+    lines.append(f"- [All results]({base}{url_for('main.results')})")
+    # skip video posts that never got a real title (title is just the YouTube id)
+    posts = [p for p in (_scan_blog_templates() or _load_blog_posts()) if p.get("slug") and p.get("title") and p["title"] != p.get("video_id")]
+    if posts:
+        lines += ["", "## Articles", ""]
+        for p in posts:
+            desc = (p.get("description") or "").strip()
+            lines.append(f"- [{p['title']}]({base}{url_for('main.blog_post', slug=p['slug'])})" + (f": {desc}" if desc else ""))
+    lines += [
+        "",
+        "## Optional",
+        "",
+        f"- [Free ebook: 13 actionable CRO strategies]({base}{url_for('main.cro_ebook')})",
+        "- [YouTube channel: Stijn Wollerich on CRO](https://www.youtube.com/@stijnwollerich)",
+        f"- [Terms of service]({base}{url_for('main.terms_of_service')})",
+        f"- [Privacy policy]({base}{url_for('main.privacy_policy')})",
+        "- Contact: stijn@sparksmetrics.com",
+        "",
+    ]
+    return Response("\n".join(lines), content_type="text/plain; charset=utf-8")

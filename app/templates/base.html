@@ -57,7 +57,7 @@
       name="description"
       content="{% block meta_description %}Results-driven CRO and analytics for brands that scale. Free conversion audit and data-driven optimization.{% endblock %}"
     />
-    <link rel="canonical" href="{{ request.url }}" />
+    <link rel="canonical" href="{{ request.base_url }}" />
     <meta property="og:type" content="website" />
     <meta
       property="og:title"
@@ -67,7 +67,7 @@
       property="og:description"
       content="{% block og_description %}Results-driven CRO and analytics for brands that scale. Free conversion audit and data-driven optimization.{% endblock %}"
     />
-    <meta property="og:url" content="{{ request.url }}" />
+    <meta property="og:url" content="{{ request.base_url }}" />
     {% block og_image_meta %}
     <meta
       property="og:image"
@@ -434,6 +434,42 @@
         }
       }
     </style>
+    <link rel="alternate" type="text/plain" title="LLM summary" href="{{ url_for('main.llms_txt', _external=True) }}" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "ProfessionalService",
+            "@id": "https://sparksmetrics.com/#org",
+            "name": "Sparksmetrics",
+            "url": "https://sparksmetrics.com/",
+            "logo": "https://sparksmetrics.com/static/images/signature-logo-name.png",
+            "email": "stijn@sparksmetrics.com",
+            "description": "Conversion rate optimization (CRO) agency for Shopify and D2C ecommerce brands doing $100k+ a month: research, design, development, A/B testing, analytics and tracking in one team. Positive ROI within 150 days or your money back.",
+            "slogan": "Turn more traffic into revenue. Guaranteed.",
+            "audience": { "@type": "BusinessAudience", "audienceType": "Shopify and D2C ecommerce brands" },
+            "founder": { "@type": "Person", "name": "Stijn Wollerich" },
+            "address": { "@type": "PostalAddress", "streetAddress": "Heuvel 23", "postalCode": "5492 AC", "addressLocality": "Sint-Oedenrode", "addressCountry": "NL" },
+            "areaServed": "Worldwide",
+            "knowsAbout": ["Conversion rate optimization", "Ecommerce CRO", "Shopify CRO", "D2C ecommerce", "A/B testing", "Product page optimization", "Revenue per visitor", "Google Analytics 4", "Server-side tracking", "Conversion API"],
+            "makesOffer": [
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "CRO program for Shopify and D2C brands", "url": "https://sparksmetrics.com/conversion-rate-optimization" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Analytics and tracking (GA4, server-side, Conversion API)", "url": "https://sparksmetrics.com/analytics" } },
+              { "@type": "Offer", "price": "0", "priceCurrency": "USD", "itemOffered": { "@type": "Service", "name": "Free CRO audit", "url": "https://sparksmetrics.com/apply" } }
+            ],
+            "sameAs": ["https://www.youtube.com/@stijnwollerich"]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://sparksmetrics.com/#website",
+            "name": "Sparksmetrics",
+            "url": "https://sparksmetrics.com/",
+            "publisher": { "@id": "https://sparksmetrics.com/#org" }
+          }
+        ]
+      }
+    </script>
     {% block head_extras %}{% endblock %}
   </head>
   <body
@@ -673,6 +709,13 @@
                   >Terms of Service</a
                 >
               </li>
+              <li>
+                <a
+                  class="text-sm text-slate-400 hover:text-white transition-colors"
+                  href="{{ url_for('main.llms_txt') }}"
+                  >llms.txt</a
+                >
+              </li>
             </ul>
           </div>
         </div>
@@ -772,7 +815,7 @@
                 <p class="text-gray-500 text-xs italic leading-snug">
                   "Stijn is a great go-to resource for CRO and analytics. He shows you exactly where conversions break down."
                 </p>
-                <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mt-2">Verified partner · 200+ brands</p>
+                <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mt-2">Verified partner · 217+ brands</p>
               </div>
             </div>
           </div>

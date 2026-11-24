@@ -1,0 +1,10 @@
+{# Real client reviews (same source as /results). Pass `quotes` (list of strings) when including. #}
+<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+  {% for q in quotes %}
+  <figure class="bg-white p-6 md:p-7 rounded-2xl border border-gray-200 shadow-sm flex flex-col">
+    <span class="material-symbols-outlined text-primary text-3xl mb-3" aria-hidden="true">format_quote</span>
+    <blockquote class="text-gray-700 text-sm md:text-base leading-relaxed italic flex-1">"{{ q }}"</blockquote>
+    <figcaption class="mt-5 text-xs font-black uppercase tracking-widest text-gray-400">Client review</figcaption>
+  </figure>
+  {% endfor %}
+</div>

@@ -94,6 +94,20 @@
       "template": "blog_lead-generation-landing-page-formula.html",
       "video_id": "4tw5DNi7ORc",
       "youtube_url": "https://youtu.be/4tw5DNi7ORc"
+    },
+    {
+      "slug": "cro_quick_wins_common_mistakes",
+      "title": "10 Red Flags When Hiring a CRO Agency",
+      "description": "Ten red flags to watch for when hiring a CRO agency: what to avoid, what to insist on, and the checks that protect your growth.",
+      "category": "CRO",
+      "template": "blog_cro_quick_wins_common_mistakes.html"
+    },
+    {
+      "slug": "5_cro_mistakes_ecommerce_brands_make",
+      "title": "5 CRO Mistakes Ecommerce Brands Make (and How to Fix Them)",
+      "description": "We audited 90+ ecommerce stores and keep finding the same five mistakes. Why each one matters and the testable steps to fix it.",
+      "category": "CRO",
+      "template": "blog_5_cro_mistakes_ecommerce_brands_make.html"
     }
   ]
 }

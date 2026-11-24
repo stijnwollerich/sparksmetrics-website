@@ -5,7 +5,21 @@
 {% block twitter_description %}{{ case.subtitle }} Case study by Sparksmetrics. {{ case.result_metric or case.result_headline }}.{% endblock %}
 {% block og_title %}{{ case.result_headline }} | Sparksmetrics{% endblock %}
 {% block twitter_title %}{{ case.result_headline }} | Sparksmetrics{% endblock %}
-{% block head_extras %}{% endblock %}
+{% block head_extras %}
+<script type="application/ld+json">
+{{ {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": case.result_headline,
+  "description": (case.subtitle ~ " " ~ (case.result_metric or "")) | trim,
+  "articleSection": "Case study",
+  "about": (case.project_items | map("join", ": ") | list),
+  "author": {"@id": "https://sparksmetrics.com/#org"},
+  "publisher": {"@id": "https://sparksmetrics.com/#org"},
+  "mainEntityOfPage": request.base_url
+} | tojson }}
+</script>
+{% endblock %}
 {% block content %}
 <section
   class="bg-black relative pt-8 pb-12 overflow-hidden border-b border-white/5"
