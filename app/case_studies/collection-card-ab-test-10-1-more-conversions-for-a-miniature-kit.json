@@ -1,0 +1,85 @@
+{
+ "slug": "collection-card-ab-test-10-1-more-conversions-for-a-miniature-kit",
+ "experiment_id": 13,
+ "fingerprint": "c85a66485e9f48f7",
+ "generated_at": "2026-11-25T12:11:09+00:00",
+ "start_date": "2026-05-08",
+ "end_date": "2026-06-26",
+ "results": {
+  "conv_improvement": 10.1,
+  "psv_improvement": 10.5,
+  "aov_improvement": 0.3,
+  "rev_added": 3962,
+  "rev_added_3m": 7277,
+  "visitors": 37990,
+  "days": 49
+ },
+ "images": {
+  "control": "collection-card-ab-test-10-1-more-conversions-for-a-miniature-kit-before.webp",
+  "winner": "collection-card-ab-test-10-1-more-conversions-for-a-miniature-kit-after.webp"
+ },
+ "change_seen": "The winner switched the collection grid from 4 to 3 larger product cards with image carousels (arrows and dots), removed the SAVE % badges, enlarged and bolded product titles, added category and 'Beginner Friendly' tag pills under the ratings, and restyled 'Add to cart' as a light outlined button with dark text.",
+ "title": "Collection Card A/B Test: 10.1% More Conversions for a Miniature Kit Brand",
+ "card_title": "Collection decision cards",
+ "meta_title": "Collection Page Product Card A/B Test: +10.1% Conversions",
+ "meta_description": "We turned collection product cards for a miniature kit brand into a decision tool: bigger image sliders and difficulty tags. Conversions rose 10.1%.",
+ "teaser": "Bigger product cards with swipeable images, difficulty tags and no discount badges lifted conversion rate by 10.1% on a miniature kit brand's collection page.",
+ "industry": "diy miniature kits",
+ "page_type": "Collection page",
+ "summary": "We redesigned the collection page product cards for a DIY miniature kit brand. The cards became larger, got swipeable image sliders, lost their discount badges and gained category and difficulty tags. The variant lifted conversion rate by 10.1% and revenue per visitor by 10.5%, most likely because shoppers could judge each kit's look and complexity before clicking into a product page.",
+ "problem": [
+  "The original collection page showed products in a four-column grid of small cards. Each image carried a large discount badge, and the strongest visual elements on the card were the sale percentage and a solid pink add to cart button. The product itself, a detailed miniature scene, had relatively little room.",
+  "For this category that is a real issue. People buy these kits on visual desire, perceived difficulty and whether they would make a good gift. A single small photo with a promo badge on top gave shoppers little to compare, so the collection page worked as a list of discounts rather than a place to choose between kits.",
+  "We treated the collection page as a product evaluation interface instead of a browsing page, and looked at which information a shopper needs to pick one kit over another without opening every product page."
+ ],
+ "hypothesis": "If we turn the collection product card into a decision tool with bigger images, extra photos you can swipe through, less dominant promo badges, difficulty and category tags and a clearer price hierarchy, then shoppers will evaluate kits faster and click through with stronger intent, because they can see what they are buying and how hard it is to build right from the grid.",
+ "control_label": "Four-column grid with small single-image cards, prominent discount percentage badges and solid pink add to cart buttons.",
+ "winner_label": "Three-column grid with larger cards, swipeable image sliders, category and difficulty tag pills, bolder titles and a lighter outlined add to cart button.",
+ "changes": [
+  "Switched the collection grid from four columns to three, so each product image is noticeably larger.",
+  "Added an image slider to every card, with arrows and dots, so shoppers can see more photos without leaving the collection page.",
+  "Removed the discount percentage badges from the product images while keeping the crossed-out and final price below.",
+  "Added tag pills under the star rating showing the kit's theme and a difficulty label such as Beginner Friendly.",
+  "Made product titles larger and bolder for easier scanning.",
+  "Restyled the add to cart button as a light outlined button with dark text, so it no longer competes with the product image."
+ ],
+ "why_it_worked": [
+  "Miniature kits are judged visually. A bigger image plus extra photos on the card answers the first question a shopper has, which is what the finished piece looks like from different angles. Showing that on the collection page likely saved clicks and moved people to product pages with a clear favourite in mind.",
+  "The difficulty tag addresses the second big question: can I actually build this? For a hobby product that is often bought by beginners or as a gift, seeing a simple label at the grid level likely removed a source of hesitation that the original cards left unanswered.",
+  "We also ran a variant with only the image slider. It lifted results less than the full redesign, which suggests the image slider alone is not the whole story. The combination of larger visuals, decision metadata and a calmer card without loud sale badges is what gave the 10.1% conversion lift, with average order value staying flat at 0.3%."
+ ],
+ "takeaways": [
+  "If your products are bought on looks, test fewer columns on the collection page so each image is large enough to sell the product.",
+  "Add a swipeable image slider to collection cards so shoppers can see more than one angle before deciding which product page to open.",
+  "Put the one or two attributes that drive the decision, such as difficulty, size or use case, directly on the card as short tags.",
+  "Test removing large discount badges from product images; keep the crossed-out price below so the deal is still visible without dominating the card.",
+  "Run a stripped-down variant alongside the full redesign so you learn which parts of the card change actually carry the lift."
+ ],
+ "faq": [
+  {
+   "q": "Do bigger product images on collection pages increase conversion?",
+   "a": "In this test, moving from four to three columns with larger images, combined with image sliders and tags, lifted conversion rate by 10.1%. Larger images tend to help most in visual categories where the look of the product is the main reason to buy. For commodity products, density and filters may matter more."
+  },
+  {
+   "q": "Should I add an image slider to collection page product cards?",
+   "a": "It is worth testing when shoppers need more than one photo to judge a product. In our test a slider-only variant helped less than the version that also added difficulty and category tags and removed discount badges, so we would test the slider as part of a broader card redesign."
+  },
+  {
+   "q": "Does removing sale badges from product cards hurt sales?",
+   "a": "Not in this case. We removed the large discount percentage badges but kept the crossed-out price next to the final price, and the variant still lifted revenue per visitor by 10.5%. The deal remained visible while the product image got more attention."
+  },
+  {
+   "q": "What information should a collection page product card show?",
+   "a": "Show what a shopper needs to shortlist a product: a strong image, the title, rating, price and one or two decision attributes. For hobby kits that meant theme and difficulty. Pick attributes based on the questions customers ask most before buying."
+  },
+  {
+   "q": "How long should a collection page A/B test run?",
+   "a": "This test ran for 49 days with 37,990 visitors across the variants. Run long enough to cover full weekly cycles and reach a sample size where the difference between variants is stable, rather than stopping as soon as one version pulls ahead."
+  }
+ ],
+ "tags": [
+  "Collection page",
+  "Product media",
+  "Layout"
+ ]
+}

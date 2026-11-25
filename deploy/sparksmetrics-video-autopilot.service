@@ -1,0 +1,13 @@
+[Unit]
+Description=Sparksmetrics: new long YouTube video -> /videos/<slug> page
+After=network-online.target
+
+[Service]
+Type=oneshot
+# Same user as the site, so it can read .env (www-data, 600) and write instance/video_pages/
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/sparksmetrics
+EnvironmentFile=/var/www/sparksmetrics/.env
+ExecStart=/var/www/sparksmetrics/.venv/bin/python tasks/video_autopilot.py
+TimeoutStartSec=1800

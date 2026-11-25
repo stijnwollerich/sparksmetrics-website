@@ -1,0 +1,85 @@
+{
+ "slug": "benefit-led-pdp-ab-test-22-5-more-conversions-for-a-home-wellness",
+ "experiment_id": 17,
+ "fingerprint": "6329912224009e0a",
+ "generated_at": "2026-11-25T12:16:56+00:00",
+ "start_date": "2025-04-01",
+ "end_date": "2026-04-30",
+ "results": {
+  "conv_improvement": 22.5,
+  "psv_improvement": 28.2,
+  "aov_improvement": 4.6,
+  "rev_added": 10687,
+  "rev_added_3m": 2441,
+  "visitors": 18280,
+  "days": 394
+ },
+ "images": {
+  "control": "benefit-led-pdp-ab-test-22-5-more-conversions-for-a-home-wellness-before.webp",
+  "winner": "benefit-led-pdp-ab-test-22-5-more-conversions-for-a-home-wellness-after.webp"
+ },
+ "change_seen": "The real winner is a cropped view of the same top sections (hard-water stats, the 'Healthy, soft hair' before/after block with the guarantee bar and 91%/87% stats, and three benefit tiles), with no visible copy or layout change from the control in the captured area.",
+ "title": "Benefit-Led PDP A/B Test: 22.5% More Conversions for a Home Wellness Brand",
+ "card_title": "Benefit-led product page",
+ "meta_title": "Benefit-Led PDP A/B Test: +22.5% Conversion Rate",
+ "meta_description": "We rebuilt a shower filter product page around the problem it solves and proof it works. Conversion rate rose 22.5% and revenue per visitor 28.2%.",
+ "teaser": "Explaining why a shower filter matters, before explaining how it works, lifted conversion rate by 22.5%.",
+ "industry": "home wellness",
+ "page_type": "Product page",
+ "summary": "We reworked the below-the-fold content of a shower filter product page so it explains the problem first (hard water and chlorine damage hair and skin), then the results and proof, then the benefits. The variant lifted conversion rate by 22.5% and revenue per visitor by 28.2%. The likely reason is that shoppers first needed to understand why they should care before features and installation details could do any work.",
+ "problem": [
+  "The product page below the fold leaned on how the product works: filter media, feature lists, installation steps and FAQs. All useful, but it assumed the shopper already believed they had a problem worth solving.",
+  "A shower filter is not an obvious purchase. Most people don't know what hard water or chlorine does to their hair and skin, so a feature-led page asks them to evaluate a solution before they have accepted the problem. This was one of several product page tests in a wider program, built around the bet that benefit-driven content would outperform feature-led content."
+ ],
+ "hypothesis": "If we clearly communicate the problem, the solution and then the features below the fold, then more visitors will buy, because shoppers who understand why the product matters to their hair and skin are more ready to act on the details.",
+ "control_label": "Original product page with below-the-fold content led by features, filter media, installation steps and FAQs.",
+ "winner_label": "Product page with below-the-fold content structured as problem, proof and benefits, opening with hard water and chlorine damage.",
+ "changes": [
+  "Opened the below-the-fold section with the problem: hard water and chlorine stripping hair and skin, supported by short statistics.",
+  "Added a before and after hair visual next to customer-reported results on dryness and smoothness.",
+  "Placed the money-back satisfaction guarantee directly beside those results.",
+  "Followed with benefit tiles framed around outcomes (skin, hair and scalp, salon-like results) rather than product specs.",
+  "Kept features, filter details and how-to content secondary to the problem and benefit story.",
+  "Ran the variant on desktop."
+ ],
+ "why_it_worked": [
+  "Most shoppers arriving on this page had not decided they had a water problem. Leading with what hard water and chlorine do to hair and skin gives them a reason to keep reading. Once the problem feels personal, the product stops being a nice-to-have.",
+  "Proof sits right where doubt shows up. Customer-reported results and a before and after image answer \"does it actually work\", and the guarantee next to them answers \"what if it doesn't work for me\". Pairing the claim with the risk reversal likely reduced hesitation at the moment of decision.",
+  "Benefits translate into the outcome people want, while features describe the mechanism. The 4.6% rise in average order value alongside the conversion lift suggests the clearer story did not only convince more people but also made buyers comfortable spending a bit more."
+ ],
+ "takeaways": [
+  "If your product solves a problem people don't know they have, open the content below the fold with that problem before you describe the product.",
+  "Put customer-reported results and visual proof next to your main benefit claim, not further down the page.",
+  "Place your guarantee beside your proof points so the risk reversal appears exactly when shoppers are weighing the claim.",
+  "Frame benefit tiles around outcomes the shopper feels (softer hair, calmer skin) and move technical specs lower.",
+  "Audit your product page order: problem, proof, benefits, then features and FAQs is a solid default for considered purchases."
+ ],
+ "faq": [
+  {
+   "q": "Does benefit-led copy convert better than feature-led copy on a product page?",
+   "a": "In this test it did: restructuring the content around the problem and benefits lifted conversion rate by 22.5% and revenue per visitor by 28.2%. Features still matter, but they work best after the shopper understands why they should care. This is especially true for products that solve a problem people don't actively notice."
+  },
+  {
+   "q": "Where should social proof go on a product page?",
+   "a": "Place it next to the claim it supports. Here, customer-reported results and a before and after image sat right beside the main benefit headline. Proof that is separated from the claim by several sections tends to do less work."
+  },
+  {
+   "q": "Should the guarantee be near the top of the product page?",
+   "a": "Putting the guarantee next to your proof points is a good default. In this variant the money-back guarantee appeared alongside the results, which likely reduced the perceived risk of trying the product. A guarantee hidden in the footer or FAQ rarely reaches the shoppers who need it."
+  },
+  {
+   "q": "Did the change only increase conversion rate or also order value?",
+   "a": "Both moved. Average order value rose 4.6%, which together with the conversion lift produced the 28.2% increase in revenue per visitor. That suggests the clearer story did not attract lower-value buyers."
+  },
+  {
+   "q": "How big was this product page test?",
+   "a": "The test ran on 18,280 visitors split between the original page and the variant. The variant was declared a clear winner with high confidence at the final review."
+  }
+ ],
+ "tags": [
+  "Product page",
+  "Copy",
+  "Social proof",
+  "Trust"
+ ]
+}

@@ -1,0 +1,11 @@
+<a class="vp-vcard{% if feature %} vp-feature{% endif %}" href="{{ url_for('main.video_page', slug=r.slug) }}" data-tags="{{ (r.tags or [])|join('|') }}">
+  <div class="vp-thumb">
+    <img src="{{ r.thumbnail or ('https://i.ytimg.com/vi/' ~ r.youtube_id ~ '/hqdefault.jpg') }}" alt="" loading="lazy" width="640" height="360">
+    <span class="vp-dur">{{ ts(r.duration_seconds) }}</span>
+  </div>
+  <div class="vp-vcard-body">
+    <small>{{ (r.tags or ['CRO'])[0] }}</small>
+    <h3>{{ r.title }}</h3>
+    <p>{{ r.teaser }}</p>
+  </div>
+</a>

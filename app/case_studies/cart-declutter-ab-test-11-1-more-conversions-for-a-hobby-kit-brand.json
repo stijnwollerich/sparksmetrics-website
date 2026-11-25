@@ -1,0 +1,86 @@
+{
+ "slug": "cart-declutter-ab-test-11-1-more-conversions-for-a-hobby-kit-brand",
+ "experiment_id": 19,
+ "fingerprint": "5cf27df14a0600ba",
+ "generated_at": "2026-11-25T12:08:33+00:00",
+ "start_date": "2026-05-21",
+ "end_date": "2026-06-10",
+ "results": {
+  "conv_improvement": 11.1,
+  "psv_improvement": 10.9,
+  "aov_improvement": -0.2,
+  "rev_added": 4648,
+  "rev_added_3m": 20915,
+  "visitors": 2961,
+  "days": 20
+ },
+ "images": {
+  "control": "cart-declutter-ab-test-11-1-more-conversions-for-a-hobby-kit-brand-before.webp",
+  "winner": "cart-declutter-ab-test-11-1-more-conversions-for-a-hobby-kit-brand-after.webp"
+ },
+ "change_seen": "The winner decluttered the cart drawer: a simpler 'Your cart' header, prices moved under the product names with an inline delete icon, the add-on placed in an outlined card with a short description, the savings line, discount-code field and 'Continue Shopping' link removed, the CTA shortened to 'Checkout', and a delivery-time line added under it.",
+ "title": "Cart Declutter A/B Test: 11.1% More Conversions for a Hobby Kit Brand",
+ "card_title": "Cart declutter",
+ "meta_title": "Cart Drawer Declutter A/B Test: +11.1% Conversion Rate",
+ "meta_description": "We removed the savings line, discount field and extra links from a cart drawer. Conversion rate rose 11.1% and revenue per visitor 10.9%. Here's how.",
+ "teaser": "Stripping a busy cart drawer back to item, total and checkout lifted conversion rate by 11.1% for a hobby kit brand.",
+ "industry": "hobby kits",
+ "page_type": "Cart",
+ "summary": "We decluttered the cart drawer of a hobby kit brand by removing the savings line, the discount-code field and the 'Continue Shopping' link, simplifying the price layout and shortening the CTA to 'Checkout'. Conversion rate went up 11.1% and revenue per visitor 10.9%, with average order value essentially flat at -0.2%. The likely reason is that a cart focused on confirming the items, showing the total and moving to checkout leaves fewer things to distract or slow people down.",
+ "problem": [
+  "The original cart drawer was trying to do a lot at once. Each line item carried a struck-through price, a sale price and a separate 'You save' line, and below the items there was a highlighted savings total, a subtotal, a long checkout button, payment icons, a discount-code field with its own button, a 'Continue Shopping' link and a package protection toggle.",
+  "When we reviewed the drawer, the parts that matter most at this stage (which items are in the cart, what the total is, and how to check out) were competing with several secondary elements. The discount-code field in particular sat directly under the main button and had a button styled almost the same as the checkout CTA.",
+  "None of these elements were broken on their own. Together they made the cart feel busy at the exact moment the shopper only needs to confirm and continue."
+ ],
+ "hypothesis": "If we redesign the cart around its main job of confirming the items, showing the total and getting people to checkout, then more shoppers will start checkout, because they will face less distraction and feel more confident about what they are buying.",
+ "control_label": "Busy cart drawer with per-item savings lines, a savings total, a discount-code field, a 'Continue Shopping' link and a long 'Proceed to Secure Checkout' button.",
+ "winner_label": "Decluttered cart drawer with prices under product names, an outlined add-on card, no savings line, discount field or extra link, a short 'Checkout' button and a delivery-time line.",
+ "changes": [
+  "Simplified the header from an item count to a plain 'Your cart' title.",
+  "Moved prices under each product name next to the quantity selector and a circular delete icon, and dropped the per-item 'You save' line.",
+  "Placed the add-on in an outlined card with a short one-line description of what it does.",
+  "Removed the highlighted savings total, the discount-code field and the 'Continue Shopping' link.",
+  "Shortened the main button from 'Proceed to Secure Checkout' to 'Checkout'.",
+  "Added a delivery-time line with a checkmark directly under the checkout button."
+ ],
+ "why_it_worked": [
+  "The most likely driver is focus. The control had two pink buttons stacked close together, one for checkout and one for applying a discount code. Removing the discount field leaves one clear next step and probably stops some shoppers from leaving the cart to look for a code they do not have.",
+  "The price layout also got easier to read. In the control each item showed three price-related lines, followed by a separate savings total. In the variant the old and new price sit together under the product name, so the shopper confirms the item and its price in one glance and moves on to a single subtotal.",
+  "The delivery-time line under the button likely helped too. It answers a common question right where the decision happens. Revenue per visitor rose 10.9% while average order value barely moved at -0.2%, which suggests the gain came from more people completing their order rather than from larger baskets, and that redesigning the add-on did not cost basket size."
+ ],
+ "takeaways": [
+  "Audit your cart drawer and list every element below the line items; remove anything that does not help the shopper confirm items, see the total or start checkout.",
+  "If your discount-code field sits next to the checkout button, test moving it to checkout or removing it from the cart, and make sure no secondary button looks like the main CTA.",
+  "Show each item's price once, directly under its name, instead of repeating savings on every line and again as a total.",
+  "Keep the checkout button label short and add one reassuring fact under it, such as expected delivery time.",
+  "When you keep an upsell in a decluttered cart, give it a visually separate card and a one-line reason to add it, then check average order value to confirm it still pulls its weight."
+ ],
+ "faq": [
+  {
+   "q": "Does decluttering the cart drawer increase conversion rate?",
+   "a": "In this test it did. Removing the savings line, discount-code field and 'Continue Shopping' link and simplifying the layout raised conversion rate by 11.1% across 2961 visitors over 20 days. Results depend on how cluttered your cart is to begin with, so it is worth testing rather than assuming."
+  },
+  {
+   "q": "Should I remove the discount code field from my Shopify cart?",
+   "a": "It is one of the more common clutter items worth testing. A visible code field can prompt shoppers without a code to leave and search for one. In this test it was removed as part of a wider declutter that won, so we cannot isolate its individual effect, but many stores move it to the checkout page where Shopify already provides one."
+  },
+  {
+   "q": "Will a simpler cart lower average order value?",
+   "a": "Not in this case. Average order value changed by just -0.2% while revenue per visitor rose 10.9%. The add-on stayed in the cart, now in its own outlined card with a short description, so the upsell was kept while the rest of the drawer was simplified."
+  },
+  {
+   "q": "What should a cart drawer show at minimum?",
+   "a": "The items with image, name, quantity and price, a clear subtotal, and one prominent checkout button. Useful extras are a free shipping progress bar, payment icons and a short reassurance line such as delivery time. Anything beyond that should earn its place through testing."
+  },
+  {
+   "q": "Is a shorter checkout button label better?",
+   "a": "In this winning variant the button changed from 'Proceed to Secure Checkout' to 'Checkout' as part of the declutter. A short, familiar label is easy to scan and does not need extra words to be understood. Security reassurance can be carried by payment icons nearby instead."
+  }
+ ],
+ "tags": [
+  "Cart",
+  "Layout",
+  "Upsells",
+  "Copy"
+ ]
+}

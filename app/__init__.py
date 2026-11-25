@@ -105,6 +105,11 @@ def create_app(config_object="app.config.Config") -> Flask:
             app.jinja_env.globals["tailwind_css_v"] = hashlib.md5(fh.read()).hexdigest()[:10]
     except OSError:
         app.jinja_env.globals["tailwind_css_v"] = "0"
+    try:
+        with open(os.path.join(app.static_folder, "css", "video-page.css"), "rb") as fh:
+            app.jinja_env.globals["video_css_v"] = hashlib.md5(fh.read()).hexdigest()[:10]
+    except OSError:
+        app.jinja_env.globals["video_css_v"] = "0"
 
     if app.config.get("CRO_NURTURE_ENABLED") and not _sparksmetrics_uses_spark_backend():
         from app.cro_nurture.routes import cro_nurture_bp

@@ -102,6 +102,27 @@ def _enrich_experiment(raw: dict[str, Any]) -> dict[str, Any]:
 
 
 def get_website_experiments(*, force_refresh: bool = False) -> list[dict[str, Any]]:
+    """Cards for the experiment galleries (/results, /conversion-rate-optimization, ...).
+
+    Built from the published case studies (app/case_studies.py) so cards only ever show anonymised replica
+    images and link to the full write-up. The live Spark feed below can fall back to real client screenshots,
+    so it is no longer used for public cards.
+    """
+    from app.case_studies import as_gallery_card, load_case_studies
+
+    def image_url(name: str) -> str:
+        return url_for("main.ab_test_image", name=name)
+
+    cards = []
+    for item in load_case_studies(fresh=force_refresh):
+        card = as_gallery_card(item, image_url)
+        card["url"] = url_for("main.ab_test_page", slug=item["slug"])
+        cards.append(card)
+    return cards
+
+
+def get_live_spark_experiments(*, force_refresh: bool = False) -> list[dict[str, Any]]:
+    """Old feed straight from Spark (may contain real screenshots): internal use only."""
     global _cache
     if not spark_backend.enabled():
         return []

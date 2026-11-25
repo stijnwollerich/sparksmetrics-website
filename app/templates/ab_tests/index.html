@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Winning A/B Tests on Shopify: Real Results | Sparksmetrics{% endblock %}
+{% block meta_description %}Winning A/B tests from real Shopify stores: what we changed, before and after, the lift in conversion rate and revenue per visitor, and why it worked.{% endblock %}
+{% block og_title %}Winning A/B tests on Shopify stores{% endblock %}
+{% block twitter_title %}Winning A/B tests on Shopify stores{% endblock %}
+{% block og_description %}What we changed, before and after, the lift and why it worked.{% endblock %}
+{% block twitter_description %}What we changed, before and after, the lift and why it worked.{% endblock %}
+{% block head_extras %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/video-page.css') }}?v={{ video_css_v }}" />
+<script type="application/ld+json">{{ schema | tojson }}</script>
+{% endblock %}
+
+{% block content %}
+<div class="vp">
+  <section class="vp-hero vp-index-hero">
+    <div class="vp-wrap">
+      <p class="vp-eyebrow">A/B test results</p>
+      <h1>Winning tests from real Shopify stores</h1>
+      <p class="vp-lead">Every test here won against the original in a proper A/B test. See what we changed, the before and after, the lift and why it worked. Brands are anonymised.</p>
+    </div>
+  </section>
+  <section class="vp-main">
+    <div class="vp-wrap">
+      {% if page_types|length > 1 %}
+      <div class="vp-filters" role="group" aria-label="Filter by page">
+        <button type="button" class="vp-filter" data-filter="" aria-pressed="true">All</button>
+        {% for t in page_types %}<button type="button" class="vp-filter" data-filter="{{ t }}" id="{{ t|lower|replace(' ', '-') }}" aria-pressed="false">{{ t }}</button>{% endfor %}
+      </div>
+      {% endif %}
+      {% if items %}
+      <div class="vp-cards">{% for c in items %}{% include "ab_tests/_card.html" %}{% endfor %}</div>
+      {% else %}
+      <p style="text-align:center;color:#5b5b63">New case studies are on their way.</p>
+      {% endif %}
+    </div>
+  </section>
+</div>
+{% endblock %}
+
+{% block body_end %}
+<script>
+(function () {
+  var btns = document.querySelectorAll('.vp-filter');
+  function apply(tag) {
+    btns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-filter') === tag)); });
+    document.querySelectorAll('.vp-vcard').forEach(function (c) {
+      c.style.display = !tag || (c.getAttribute('data-tags') || '').split('|').indexOf(tag) > -1 ? '' : 'none';
+    });
+  }
+  btns.forEach(function (b) { b.addEventListener('click', function () { apply(b.getAttribute('data-filter')); }); });
+  var hash = decodeURIComponent(location.hash.slice(1));
+  btns.forEach(function (b) { if (hash && b.id === hash) apply(b.getAttribute('data-filter')); });
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% set thumb = page.thumbnail or ('https://i.ytimg.com/vi/' ~ page.youtube_id ~ '/hqdefault.jpg') %}
+{% block title %}{{ page.meta_title or page.title }}{% if (page.meta_title or page.title)|length < 46 %} | Sparksmetrics{% endif %}{% endblock %}
+{% block meta_description %}{{ page.meta_description }}{% endblock %}
+{% block og_title %}{{ page.title }}{% endblock %}
+{% block twitter_title %}{{ page.title }}{% endblock %}
+{% block og_description %}{{ page.meta_description }}{% endblock %}
+{% block twitter_description %}{{ page.meta_description }}{% endblock %}
+{% block og_image_meta %}
+<meta property="og:image" content="{{ thumb }}" />
+<meta property="og:image:alt" content="{{ page.title }}" />
+<meta name="twitter:image" content="{{ thumb }}" />
+<meta property="og:video" content="https://www.youtube.com/embed/{{ page.youtube_id }}" />
+{% endblock %}
+
+{% block head_extras %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/video-page.css') }}?v={{ video_css_v }}" />
+<script type="application/ld+json">{{ schema | tojson }}</script>
+{% endblock %}
+
+{% block content %}
+<div class="vp">
+  <section class="vp-hero">
+    <div class="vp-wrap">
+      <nav class="vp-crumbs" aria-label="Breadcrumb">
+        <a href="{{ url_for('main.index') }}">Home</a><span aria-hidden="true">/</span>
+        <a href="{{ url_for('main.videos_index') }}">Videos</a><span aria-hidden="true">/</span>
+        <span>{{ page.tags[0] if page.tags else 'CRO' }}</span>
+      </nav>
+      <h1>{{ page.title }}</h1>
+      <p class="vp-lead">{{ page.teaser }}</p>
+      <div class="vp-chips">
+        {% for tag in page.tags %}<a class="vp-chip vp-chip--tag" href="{{ url_for('main.videos_index') }}#{{ tag|lower|replace(' ', '-')|replace('/', '') }}">{{ tag }}</a>{% endfor %}
+        <span class="vp-chip"><span class="material-symbols-outlined" aria-hidden="true">calendar_today</span>{{ published_label }}</span>
+        <span class="vp-chip"><span class="material-symbols-outlined" aria-hidden="true">schedule</span>{{ ts(page.duration_seconds) }} video</span>
+        <a class="vp-chip" href="https://www.youtube.com/watch?v={{ page.youtube_id }}" target="_blank" rel="noopener"><span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>Watch on YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="vp-main">
+    <div class="vp-wrap vp-grid">
+      <div>
+        <div class="vp-player" id="vp-player" data-id="{{ page.youtube_id }}">
+          <img src="{{ thumb }}" alt="{{ page.youtube_title }}" width="1280" height="720" fetchpriority="high"
+               onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/{{ page.youtube_id }}/hqdefault.jpg'">
+          <button type="button" class="vp-play" data-seek="0" aria-label="Play video: {{ page.youtube_title }}">
+            <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>
+          </button>
+        </div>
+
+        {% if page.chapters %}
+        <details class="vp-card vp-mobile-only vp-mchapters">
+          <summary>Chapters · {{ page.chapters|length }}</summary>
+          <ol class="vp-chapters">
+            {% for c in page.chapters %}<li><button type="button" data-seek="{{ c.t }}"><span class="vp-time">{{ ts(c.t) }}</span>{{ c.title }}</button></li>{% endfor %}
+          </ol>
+        </details>
+        {% endif %}
+        <div class="vp-card vp-answer">
+          <h2>The short answer</h2>
+          <p>{{ rich(page.summary) }}</p>
+        </div>
+
+        <div class="vp-card vp-takeaways">
+          <h2>Key takeaways</h2>
+          <ol>{% for item in page.key_takeaways %}<li>{{ rich(item) }}</li>{% endfor %}</ol>
+        </div>
+
+        {% if page.stats %}
+        <div class="vp-stats">
+          {% for s in page.stats %}<div class="vp-stat"><b>{{ s.value }}</b><span>{{ s.label }}</span></div>{% endfor %}
+        </div>
+        {% endif %}
+
+        <article class="vp-article">
+          {% for s in page.sections %}
+          <section id="part-{{ loop.index }}">
+            <h2>{{ s.heading }}</h2>
+            <button type="button" class="vp-jump" data-seek="{{ s.t }}"><span class="material-symbols-outlined" aria-hidden="true" style="font-size:16px">play_circle</span>Watch this part · {{ ts(s.t) }}</button>
+            {% for b in s.blocks %}
+              {% if b.type == 'p' %}<p>{{ rich(b.text) }}</p>
+              {% elif b.type == 'ul' %}{% if b.text %}<p>{{ rich(b.text) }}</p>{% endif %}<ul>{% for i in b['items'] %}<li>{{ rich(i) }}</li>{% endfor %}</ul>
+              {% elif b.type == 'ol' %}{% if b.text %}<p>{{ rich(b.text) }}</p>{% endif %}<ol>{% for i in b['items'] %}<li>{{ rich(i) }}</li>{% endfor %}</ol>
+              {% elif b.type == 'quote' %}<blockquote class="vp-quote">{{ plain(b.text) }}<cite>Stijn Wollerich</cite></blockquote>
+              {% endif %}
+            {% endfor %}
+          </section>
+          {% endfor %}
+        </article>
+
+        {% if page.faq %}
+        <h2 class="vp-block-title">Frequently asked questions</h2>
+        <div class="vp-faq">
+          {% for f in page.faq %}
+          <details{% if loop.first %} open{% endif %}><summary>{{ f.q }}</summary><p>{{ rich(f.a) }}</p></details>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <h2 class="vp-block-title">Full transcript</h2>
+        <details class="vp-transcript">
+          <summary>Read the full video transcript <small>{{ page.transcript|length }} parts · click a time to jump</small></summary>
+          <div class="vp-transcript-body">
+            {% for line in page.transcript %}
+            <div class="vp-tline"><button type="button" class="vp-time" data-seek="{{ line.t }}">{{ ts(line.t) }}</button><p>{{ line.text }}</p></div>
+            {% endfor %}
+          </div>
+        </details>
+
+        <div class="vp-author">
+          <div class="vp-avatar" aria-hidden="true">S</div>
+          <p><strong>Stijn Wollerich</strong><br>Founder of Sparksmetrics. I've worked on CRO and A/B testing for 200+ D2C Shopify brands. New videos every week on <a href="https://www.youtube.com/@stijnwollerich" target="_blank" rel="noopener" style="color:#FF4D00;font-weight:600">YouTube</a>.</p>
+        </div>
+      </div>
+
+      <aside class="vp-aside">
+        {% if page.chapters %}
+        <div class="vp-card vp-desktop-only">
+          <h3>Chapters</h3>
+          <ol class="vp-chapters">
+            {% for c in page.chapters %}<li><button type="button" data-seek="{{ c.t }}"><span class="vp-time">{{ ts(c.t) }}</span>{{ c.title }}</button></li>{% endfor %}
+          </ol>
+        </div>
+        {% endif %}
+        <div class="vp-card vp-cta">
+          <h3>Want this for your store?</h3>
+          <p>Apply for a free CRO audit. If you qualify, I record a walkthrough of your store with the tests I'd run first.</p>
+          <a class="vp-btn" href="{{ url_for('main.apply_cro_audit_landing') }}?utm_source=video_page&amp;utm_medium=referral&amp;utm_campaign={{ page.slug }}">Get my free audit</a>
+          <a class="vp-btn vp-btn--ghost" href="https://www.youtube.com/@stijnwollerich?sub_confirmation=1" target="_blank" rel="noopener">Subscribe on YouTube</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  {% if related %}
+  <section class="vp-related">
+    <div class="vp-wrap">
+      <p class="vp-eyebrow">Keep watching</p>
+      <h2 class="vp-display" style="font-size:clamp(24px,3vw,34px);margin:0 0 24px;color:#1A1A1B">More videos like this</h2>
+      <div class="vp-cards">
+        {% for r in related %}{% include "videos/_card.html" %}{% endfor %}
+      </div>
+    </div>
+  </section>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block body_end %}
+<script>
+(function () {
+  var box = document.getElementById('vp-player');
+  if (!box) return;
+  var id = box.getAttribute('data-id');
+  function play(t) {
+    var src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&start=' + (parseInt(t, 10) || 0);
+    var f = box.querySelector('iframe');
+    if (!f) {
+      f = document.createElement('iframe');
+      f.title = document.querySelector('.vp-hero h1').textContent;
+      f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      f.allowFullscreen = true;
+      box.innerHTML = '';
+      box.appendChild(f);
+    }
+    f.src = src;
+    if (t > 0 || window.scrollY > box.offsetTop) box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (window.gtag) gtag('event', 'video_page_play', { video_id: id, start: parseInt(t, 10) || 0 });
+  }
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest('[data-seek]');
+    if (el) { e.preventDefault(); play(el.getAttribute('data-seek')); }
+  });
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,384 @@
+{
+ "thumbnail": "https://i.ytimg.com/vi/bCLXyCTQ-DY/maxresdefault.jpg",
+ "slug": "what-a-cro-agency-really-costs-real-prices-quotes-and-roi-math",
+ "youtube_id": "bCLXyCTQ-DY",
+ "youtube_title": "What a CRO Agency Really Costs (Real Numbers)",
+ "published": "2026-10-29",
+ "generated_at": "2026-11-25T11:49:20+00:00",
+ "duration_seconds": 779,
+ "title": "What a CRO Agency Really Costs: Real Prices, Quotes and ROI Math",
+ "meta_title": "CRO Agency Cost: Real Prices and What You Get",
+ "meta_description": "What a CRO agency really costs: real prices for DIY, freelancers, in-house and agencies, how to compare quotes per test, and the 1,000-order traffic line.",
+ "teaser": "Real CRO pricing from $0 to $35,000 a month, a formula to compare agency quotes, and the traffic you need before hiring anyone.",
+ "summary": "A CRO agency costs anywhere from about $2,000 to $35,000 a month, but the extra money mostly buys testing velocity (how many tests ship each month), and how many tests you can actually run depends on your traffic. Compare quotes by price per test (monthly fee divided by tests shipped), and only hire a testing agency once your store does around 1,000 orders a month. Below that, get a CRO audit and fix the basics first.",
+ "key_takeaways": [
+  "There are five ways to pay for CRO: do it yourself with a testing tool, hire a freelancer ($80 to $170 an hour), build an in-house team (about $300,000 a year in wages), hire an agency (mostly $2,000 to $15,000 a month), or sign a performance deal.",
+  "Divide each agency's monthly fee by the number of tests it actually ships to get a price per test, then compare quotes on that number.",
+  "Price per test is not price per learning: ask who analyzes the results, because spinning up variants is easy (especially with AI) but learning from them takes capacity.",
+  "Below roughly 1,000 orders a month, hold off on A/B testing. Get a CRO audit, apply the findings and fix the fundamentals first.",
+  "If you want performance pricing, ask for a fixed fee plus a smaller performance bonus instead of 20% of extra revenue, which gets expensive fast when a test wins big.",
+  "Before signing, ask when the first test will be live, make sure the senior person who will run your account is on the sales or onboarding call, and get any guarantee's calculation written into the agreement.",
+  "Run the ROI math on your own numbers: a 10% conversion lift on $300,000 a month is $30,000 extra per month, while on $50,000 a month an agency barely pays for itself."
+ ],
+ "stats": [
+  {
+   "value": "$3k-$35k",
+   "label": "What a CRO program can cost per month at an agency"
+  },
+  {
+   "value": "1,000",
+   "label": "Orders per month before A/B testing makes sense"
+  },
+  {
+   "value": "$300,000",
+   "label": "Yearly wage cost for an in-house CRO manager, designer and developer"
+  },
+  {
+   "value": "$150,000",
+   "label": "Extra revenue from two winning tests out of six for one client"
+  }
+ ],
+ "chapters": [
+  {
+   "t": 0,
+   "title": "What does the extra $32,000 buy you?"
+  },
+  {
+   "t": 54,
+   "title": "Why CRO pricing articles are useless"
+  },
+  {
+   "t": 94,
+   "title": "5 ways to buy CRO"
+  },
+  {
+   "t": 234,
+   "title": "What really sets an agency's price"
+  },
+  {
+   "t": 270,
+   "title": "Price per test: compare any two quotes"
+  },
+  {
+   "t": 338,
+   "title": "The 1,000-order line"
+  },
+  {
+   "t": 428,
+   "title": "Performance pricing: the deal that sounds perfect"
+  },
+  {
+   "t": 486,
+   "title": "4 things CRO agencies won't tell you"
+  },
+  {
+   "t": 590,
+   "title": "The ROI math"
+  },
+  {
+   "t": 635,
+   "title": "What we charge and recap"
+  }
+ ],
+ "sections": [
+  {
+   "heading": "How much does a CRO agency cost per month?",
+   "t": 0,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Our CRO program at Sparksmetrics starts at $2,800 a month. Other agencies easily charge $35,000 every single month. So what does that extra $32,000 actually buy you? Smarter people or better ideas? Not really.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "What it buys is **higher testing velocity**: more tests shipped per month. That matters a lot when you optimize a store. But here is the catch: the agency you pick and how much you pay do not decide how many tests you can run. **Your traffic does.**",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "If you Google CRO agency pricing you get ranges like $5,000 to $15,000 or $3,000 to $7,000. They are all true and all useless, because they give you no indication of what you should pay. Often they are written by agencies that do not share their own prices. I run a CRO agency, so I will share real prices, including options that are much cheaper and much more expensive than us.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "What are the 5 ways to pay for CRO?",
+   "t": 94,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "There are five different ways to price a CRO effort. Here is the menu with real numbers.",
+     "items": []
+    },
+    {
+     "type": "ol",
+     "text": "",
+     "items": [
+      "**Do it yourself.** Shopify has a free built-in A/B testing tool called Rollouts. It is not as advanced as paid tools. Intelligems costs about $80 a month, and Convert or VWO easily go above $200 a month. Shopify's own tool is a very good way to start for free.",
+      "**Hire a freelancer.** A senior or mid-level CRO expert charges roughly $80 to $170 an hour. Great for a simple audit, not enough for a full CRO program, because there is rarely one person who is really good at strategy, design, development and analysis.",
+      "**Build it in-house.** A mid-level CRO expert working full-time in the US costs about $80,000 to $130,000 a year. One person cannot do it all, so you also need a designer and a developer. That is easily about **$300,000 a year in wage costs**.",
+      "**Hire an agency.** Most agencies charge about $2,000 to $15,000 a month, and some go beyond that.",
+      "**Performance deal.** You pay after you get results. It sounds good, but it often ends up way more expensive than any of the other options."
+     ]
+    },
+    {
+     "type": "p",
+     "text": "With the DIY route, remember that the tool is the cheap part. Deciding what to test, designing it, building it and reading the results without fooling yourself is the actual job, and it costs your time.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "What sets a CRO agency's price, and how do you compare two quotes?",
+   "t": 234,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Most of you are comparing agencies. Why does one charge $2,000 while another charges $15,000 or $20,000? It comes down to **the number of tests per month**. Every test needs strategy, design, development, QA and, once it is live, analysis. That work repeats for every single test.",
+     "items": []
+    },
+    {
+     "type": "ul",
+     "text": "",
+     "items": [
+      "A $2,000 to $5,000 retainer roughly gets you three to four tests a month.",
+      "Above that, you can expect six to eight tests a month."
+     ]
+    },
+    {
+     "type": "p",
+     "text": "That number is your testing velocity, and the higher it is, the better your results. To compare two quotes, calculate the **price per test**: the monthly fee divided by the tests actually shipped. An agency running 10 tests for $10,000 costs $1,000 per test. One running two tests for $4,000 costs $2,000 per test.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "There is an important caveat. You are comparing price per test, not **price per learning**. Input is not the same as output. Especially now with AI, you can spin up five versions of a whole site in an afternoon. You will have plenty of tests, but you will not learn much if nobody has the capacity to properly analyze the results that come in.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "How much traffic do you need before hiring a CRO agency?",
+   "t": 329,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Testing only makes sense if your store has enough traffic to run tests and learn from them. An A/B test needs enough orders to tell you which variant actually won.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Take an imaginary store converting at 2%. To detect a 10% lift in conversion rate, you need about **160,000 sessions in the test**. That can take ages to accumulate, and if every test takes that long you cannot test many things.",
+     "items": []
+    },
+    {
+     "type": "ul",
+     "text": "",
+     "items": [
+      "10 orders a day (about 500 sessions a day): one test takes about 11 months.",
+      "100 orders a day: one test takes about a month.",
+      "1,000 orders a month (about 30 a day): with a 20% uplift from your changes, you see statistically significant results in about 4 weeks."
+     ]
+    },
+    {
+     "type": "p",
+     "text": "So the line is **about 1,000 orders a month**. Below that, do not forget about conversion rate. Instead of testing, get a CRO audit done and improve your site with the findings. Hold off on testing and get the basics and fundamentals right first.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "Is performance-based CRO pricing a good deal?",
+   "t": 421,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Say you have the traffic and a few quotes in. One option you will see is performance pricing. Generally the agency wants **20% of the additional revenue** created on your store. If one simple test makes $30,000, you pay them $6,000 for that one test.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "It sounds fair, but there are three problems:",
+     "items": []
+    },
+    {
+     "type": "ul",
+     "text": "",
+     "items": [
+      "**It gets expensive when tests do well.** A big winner means a big bill.",
+      "**Incentives drift.** The agency may run simple, safe tests instead of the bigger swings that teach you what would lift performance much further.",
+      "**Attribution.** Agreeing on what revenue a test actually created can become an issue."
+     ]
+    },
+    {
+     "type": "p",
+     "text": "If you like this structure, I always suggest a **fixed fee plus a smaller performance bonus** on top. You stay aligned, and the agency still has enough incentive to push to the limits.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "What do CRO agencies not tell you before you sign?",
+   "t": 486,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "There are four things CRO agencies would probably rather not tell you.",
+     "items": []
+    },
+    {
+     "type": "ol",
+     "text": "",
+     "items": [
+      "**The first test can take three or four weeks.** The first month often goes to tracking, tools and research. In the interview, ask when the first test is expected to be live, and push that forward as much as you can.",
+      "**The person on the sales call may not run your account.** Make sure the senior CRO person you will work with daily is on the sales or onboarding call, so you know you are not handed to a junior.",
+      "**Most tests lose.** You pay to learn fast, not for winning tests. When we ran six tests for one client, four failed miserably and we killed them early. The two winners together made an additional $150,000 for that single client.",
+      "**Guarantees live in the fine print.** Read them, and get written into the agreement exactly how the benefit to your store is calculated. If an agency makes guarantees or promises, it should back them up during the engagement."
+     ]
+    }
+   ]
+  },
+  {
+   "heading": "How do you calculate the ROI of a CRO agency?",
+   "t": 591,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "The most important metric is plain ROI math: what does it cost and what do you get back?",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Say your store does $300,000 a month at a 1.5% conversion rate. A 10% lift takes you to 1.65%, which is about **$30,000 in extra revenue every month**. Paying an agency $3,000 a month, that is a 10x return on your investment.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "If your store does $50,000 a month, the same agency barely pays for itself. So honestly, the agency does not set whether the price is worth it. Your store does.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "What does Sparksmetrics charge for CRO?",
+   "t": 636,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "We have three packages: **$2,800, $4,800 and $6,800 a month**. The price depends on the size of your store. Bigger stores can run more tests, which brings more results. Every plan includes strategy, design, development, QA and analysis. The plan only changes the velocity, and on smaller stores we are simply capped by the traffic limit.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "We are cheaper than American agencies because we work remotely from Europe, so our costs are much lower and we do not need $10,000+ monthly fees. Even our smallest plan runs at least four tests a month, about **$700 per test**.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "We offer an ROI guarantee, meaning we always make more money for our clients than we charge, so we have skin in the game. If you have fewer than 1,000 orders a month, or you would be better off with someone else, that is fine. We are not for everybody.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "To recap: CRO costs anywhere from free to $35,000 a month. Work with someone experienced, and make sure you deal directly with a senior person, not a junior. Then work out the possible ROI for your own Shopify store before you hire anyone.",
+     "items": []
+    }
+   ]
+  }
+ ],
+ "faq": [
+  {
+   "q": "How much does a CRO agency cost per month?",
+   "a": "Most CRO agencies charge about $2,000 to $15,000 a month, and some charge up to $35,000. A $2,000 to $5,000 retainer typically gets you three to four tests a month, while higher fees get you six to eight. The extra money mostly buys testing velocity."
+  },
+  {
+   "q": "How many orders do I need before running A/B tests on my Shopify store?",
+   "a": "The line is about 1,000 orders a month, roughly 30 a day. At that level, a change with a 20% uplift reaches statistical significance in about 4 weeks. Below it, tests take too long, so get a CRO audit and fix the fundamentals first."
+  },
+  {
+   "q": "How do I compare two CRO agency quotes?",
+   "a": "Divide each monthly fee by the number of tests the agency actually ships to get a price per test. For example, 10 tests for $10,000 is $1,000 per test, while two tests for $4,000 is $2,000 per test. Also check who analyzes the results, because you want learnings, not just tests."
+  },
+  {
+   "q": "Is performance-based CRO pricing worth it?",
+   "a": "Performance deals usually ask for 20% of the additional revenue, so a test that makes $30,000 costs you $6,000. That gets expensive when tests win big, can push the agency toward safe tests, and creates attribution issues. A fixed fee plus a smaller performance bonus keeps both sides aligned."
+  },
+  {
+   "q": "Can I A/B test on Shopify for free?",
+   "a": "Yes. Shopify has a free built-in A/B testing tool called Rollouts. It is less advanced than paid tools like Intelligems (about $80 a month) or Convert and VWO (easily above $200 a month), but it is a good way to start. The hard part is deciding what to test, building it and reading the results correctly."
+  },
+  {
+   "q": "How much does a CRO freelancer or in-house CRO team cost?",
+   "a": "A senior or mid-level CRO freelancer charges roughly $80 to $170 an hour, which works for an audit but rarely for a full program. A full-time mid-level CRO expert in the US costs about $80,000 to $130,000 a year. Add a designer and developer and you are at about $300,000 a year in wages."
+  }
+ ],
+ "tags": [
+  "Shopify CRO",
+  "A/B testing",
+  "Agency",
+  "Ecommerce strategy"
+ ],
+ "transcript": [
+  {
+   "t": 0,
+   "text": "Our conversion rate optimization program starts at $2,800 per month, but there are other agencies easily charging you $35,000 every single month. So, what does the additional $32,000 actually get you? Smarter people? Better ideas? Not really. What it does get you is higher testing velocity, and this is very important when it comes to optimizing your store. But actually, the agency you pay to or how much you pay is not how many tests you can run. It all depends on your traffic. So, what I'm going to show you today is different pricing models applied by these agencies. I'm going to help you compare two different quotes you might get with a very simple formula, and I'm going to show you an exact number that you need to have on your store to actually have a benefit of hiring a CRO agency. And if you don't, you can better not do it yet."
+  },
+  {
+   "t": 53,
+   "text": "First things first, if you Google how much does a CRO agency actually charge, you do get tons of numbers. From 5,000 to 15,000, from 3,000 to 7,000. These numbers are all useless. They're all true, but they don't give you any indication of what you should pay. And often, these articles are actually written by agencies who don't share their own pricing. So, here's the deal. I run a CRO agency myself, and at the end of this video, I'll show you our prices, but I will also share the prices of other agencies that are much cheaper and that are much more expensive. I'll give you real examples so you know what is a real range you can be looking at when you're hiring a CRO agency. Now, let's look at the menu. There are five different ways to price a CRO effort."
+  },
+  {
+   "t": 99,
+   "text": "The first one is just doing it yourself. You don't have to pay any agency, and you run all the tests yourself through a free tool from Shopify called Rollouts. This is their built-in A/B testing tool. It's not as advanced as paid tools. So, if you want to use other tools like Intelligems, you pay about $80. If you want to use Convert or VWO, you easily go above $200 every single month. These A/B testing tools are pricey. So, Shopify's own tool would be a very good alternative if you want to start out for free. So, the tool is cheap, sometimes even free, but the tool isn't the hard part. Deciding what to test is. Designing it, building it, and reading the results without fooling yourself. That is the actual job, and it's your time that you invest in getting these tests running."
+  },
+  {
+   "t": 149,
+   "text": "And option two is hiring a freelancer. A senior or a mid-level CRO expert would probably charge between $80 and $170 per hour. This is great if you're just looking for a simple audit, but it's not enough to run a full-on CRO program, because there's rarely one person that's really good at the strategy, at the design, at the development, and at the analysis. Option three is to do it in-house. Now, here a mid-level CRO expert, full-time in the US, would probably charge between $80,000 and $130,000 per year. But here also, one person cannot do it all. So, you will still have to hire a designer and a developer. And then you're easily looking at about $300,000 every single year in wage costs. Option four, hiring an agency. Most agencies charge about $2,000 to $15,000. There are some agencies that go beyond that, but we'll dive into those details in a second."
+  },
+  {
+   "t": 209,
+   "text": "And the last one is a performance deal. This is basically where you pay after you get the results. This is a good option, but eventually often it turns out to be way more expensive than any of the other options. I'll get into that in a second, as well. Option four, hiring an agency, is the one that most of you are comparing right now. So, why does someone charge $2,000, while someone else charges 15 or 20,000 dollars? Let's break it down. Here's what really sets an agency's price. The amount of tests per month. For every test, you need to do strategy work, design, development, QA, and once it's launched, you need to do the analysis as well. And you got to do this for every single test you run. Roughly $2,000 to $5,000 retainers gets you three to four tests every single month. If you go beyond that, you could expect six to eight tests per month. And that is your testing velocity. The higher the velocity, the better the results you will get."
+  },
+  {
+   "t": 270,
+   "text": "How do you compare two quotes? And there's a very simple number you can look at, and that is basically the price per test. So, if you have one agency that would run 10 tests for $10,000, you would pay $1,000 per test. If someone else would run two tests for $4,000, then you would pay $2,000 per test. So, that way you can compare which of the two would actually be cheaper to work with per test. But, there's a very important caveat to be made here. Now, you're paying or comparing how you pay per test, but not per learning. And that is a very unique difference because basically the input is not necessarily the same as the output. You can, especially now with AI, you can spin up five different versions of the whole site in an afternoon. You will have a lot of input. You will have some tests, but you will probably not learn enough if you don't have the capacity to actually analyze the results that came in. So, this is very important. That is the catch."
+  },
+  {
+   "t": 329,
+   "text": "Because most tests only make sense if you have a store that has enough distribution to actually run these tests and learn from them. An A/B test needs enough orders to tell you which of the variants is actually the winner. So, if you have an imaginary store that converts at 2%, if you want to see a 10% lift in your conversion rate, you will need a test with 160,000 sessions in the test, which might take ages for you to accumulate. If it takes very long, of course, then you cannot test a ton of things. So, therefore, having the amount of traffic and orders is crucial to defining if you should run A/B tests."
+  },
+  {
+   "t": 370,
+   "text": "Now, look at what that means. If you get 10 orders a day, that's about 500 sessions a day. One test would take 11 months. If you get 100 orders a day, one test takes about a month. Where is the line? If you get 1,000 orders per month, which is equal to about 30 per day, if you see a plus 20% uplift from your changes, you will see statistically significant results within about 4 weeks. And this is what you'll be looking for. So, if you're below 1,000, it doesn't mean that you should forget about your site's performance and your conversion rate. But instead of being very statistical, you should get a CRO audit done and improve your site with the findings. Testing would be something that you would hold off on. First, get the basics and the fundamentals right on your store."
+  },
+  {
+   "t": 421,
+   "text": "Okay, let's assume you do have the traffic. You got a few quotes in and you're comparing them. Which one should you take? Now, one option is the performance pricing. But this is how it works. Generally, an agency would want 20% of the additional revenue created on your store. So, if they build one simple test that made $30,000 for your store, you got to pay them $6,000 for just that one test. Sounds fair, but it really sucks if the test does really well, because then it becomes very expensive. The other issue, too, is that you might not be aligned. They might run tests that are very simple and safe, but they're not learning enough to actually understand what would be a much bigger swing that would uplift your performance even further. And then the last one is the attribution. That might be an issue, too. So, if you're interested in a payment structure like this, I would always suggest to have a fixed fee and then a smaller performance bonus on top of that. That way, you stay aligned and there's still enough incentive for the agency to go to the limits."
+  },
+  {
+   "t": 486,
+   "text": "Now, when it comes to the actual agreement, there are four things CRO agencies probably rather don't tell you. I will. So, the first one is often that the first month is used to set up the tracking, the tools, doing some research, but the first test might go live after three or four weeks. So, in your interview, you should always ask, \"When is the first test expected to be live?\" And you want to push that forward as much as you can. The second one is the person you're on the call with for the interview might not be the CRO senior person that you will work with on a daily basis. So, I would always ensure that that person is invited to the call, whether it's the onboarding or the sales call, so you know beforehand that you're not working with a junior person and instead with someone that's very capable to manage your account."
+  },
+  {
+   "t": 538,
+   "text": "The third one is that many of the tests will actually lose. You're not paying for winning tests, you're paying to learn fast. So, most of them fail. So, if we run six tests for our clients, four of them failed miserably. We killed them early, but we do have two winners that together made an additional $150,000 for one single client. And then the fourth one, often CRO agencies offer guarantees, but these might be in the fine print. Definitely go through these and have it written in the agreement how the actual benefit that they generate to your store is calculated. You want to make sure you understand this and that you are in agreement on how this works. Because often they do offer guarantees or promises, and they should back that up during your engagement."
+  },
+  {
+   "t": 591,
+   "text": "Now, the most important metric to look at is basically just the ROI math. How much does it cost you? What do you get for it in return? So, let's say your store does $300,000 in revenue every single month. Your conversion rate is 1.5%. If you hire someone to get it up 10%, your new conversion rate is basically 1.65%. This would generate for you an additional revenue of $30,000 every single month. Now, if you paid the agency $3,000 per month, you basically have a 10x improvement in your investment. That is great. But if you currently only do $50,000 in revenue, the agency barely pays for itself. So, it's honestly not even the agency that sets the price, it's you."
+  },
+  {
+   "t": 636,
+   "text": "All right, I promised you our numbers. So, we basically have three packages. The first one is $2,800. Then we have $4,800, and then we have $6,800. Basically, it all depends on the size of your store. The bigger the store, the more tests we can run, and the more results we can bring to your business. But for each of these plans, we do strategy, design, development, QA, and we do the analysis. It doesn't change what we do, it changes at what velocity we can do it. It's in both of our interests. The more we can test, the more we learn, the more revenue we'll generate. On smaller stores, we're just capped at the traffic limit. Now, why we are much cheaper than an American agency is because we are remote in Europe, which means our costs are much lower, and therefore we don't need to charge crazy amounts of dollars with 10,000 plus in monthly fees."
+  },
+  {
+   "t": 692,
+   "text": "The other thing, too, is that even on our smallest plan, we run at least four tests every single month. And this would come down to about $700 per test. Now, we internally don't really care about how many tests we run. If you ask me, it could be one a month. But we are invested in the program because we offer an ROI guarantee, meaning we always make more money for our clients than we would ever charge. And we do this even with a 1x, 2x, and a 3x ROI. So, we have skin in the game. If you got less than 1,000 orders a month, or you believe you would be better off with someone else, we're okay with that. We are not for everybody."
+  },
+  {
+   "t": 735,
+   "text": "Okay, to wrap things up here, CRO can cost anywhere from free to $35,000 every single month. You want to go with someone that's experienced, knowledgeable, and where you work directly with someone that's a senior-level person and not a junior, right? So, what you can do right now with the guidance I've given in this video is go to your Shopify store, figure out what the possible ROI would be. If you want me to help you with that, I'll leave the link down below. You can get in touch with us, and I'll actually show you what the expected ROI would be if you work with us. I'll be honest because, like I said, we got skin in the game, and we are happy to run an audit for you for free. I hope you got value from this video. I'll leave the links down below, and see you in the next one."
+  }
+ ]
+}

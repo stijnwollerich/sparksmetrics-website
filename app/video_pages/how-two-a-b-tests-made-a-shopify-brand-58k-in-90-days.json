@@ -1,0 +1,407 @@
+{
+ "thumbnail": "https://i.ytimg.com/vi/j5TapeYJ9d0/maxresdefault.jpg",
+ "slug": "how-two-a-b-tests-made-a-shopify-brand-58k-in-90-days",
+ "youtube_id": "j5TapeYJ9d0",
+ "youtube_title": "How I Made a Shopify Brand $58k in 90 Days (Without More Traffic)",
+ "published": "2026-11-12",
+ "generated_at": "2026-11-25T11:49:01+00:00",
+ "duration_seconds": 570,
+ "title": "How Two A/B Tests Made a Shopify Brand $58k in 90 Days",
+ "meta_title": "Shopify A/B Tests: $58k in 90 Days Without More Traffic",
+ "meta_description": "Two Shopify A/B tests, a real product video in the gallery and a simpler cart drawer, added $58k in 90 days. See the results and how to copy them.",
+ "teaser": "A real product video and a simpler cart drawer added $58k in 90 days for a Shopify brand, with the same traffic.",
+ "summary": "We added $58,000 in revenue to a Shopify store in 90 days without extra traffic by running two A/B tests: a real, unpolished product video in slide two or three of the product page gallery, and a stripped-back cart drawer with the delivery time written under the checkout button. The video lifted revenue per visitor by just over 6%, and the simpler cart moved the share of cart viewers reaching checkout from 33% to 38%, lifting revenue per visitor by 11%.",
+ "key_takeaways": [
+  "Start with a conversion autopsy: ask why the visitors you already have drop off, then find the leaking funnel steps (here: product page to add to cart, and cart to checkout).",
+  "Add a real video of real hands using the product as slide two or three of your product gallery, and make sure it opens full screen when tapped on mobile.",
+  "Open your cart drawer on your phone and count the elements. If there are more than five, you have something to test.",
+  "Remove the discount code box from the cart. Shopify's checkout already has one, so nobody loses the option, and you stop sending people to Google looking for codes.",
+  "Show each price once (old and new price on the line item) and rewrite upsells to say why customers buy them instead of calling them a no-brainer.",
+  "Put your delivery time in one line directly under the checkout button to remove the last doubt before checkout.",
+  "A/B test every change until it reaches statistical significance, because what works for one brand does not always work for another."
+ ],
+ "stats": [
+  {
+   "value": "$58k",
+   "label": "Extra revenue in 90 days, same traffic"
+  },
+  {
+   "value": "33% → 38%",
+   "label": "Cart viewers reaching checkout"
+  },
+  {
+   "value": "+11%",
+   "label": "Revenue per visitor from the simpler cart"
+  },
+  {
+   "value": "$3",
+   "label": "More revenue per visitor who opens the cart"
+  }
+ ],
+ "chapters": [
+  {
+   "t": 0,
+   "title": "$58k in 90 days, same traffic"
+  },
+  {
+   "t": 48,
+   "title": "The conversion autopsy: two leaks"
+  },
+  {
+   "t": 93,
+   "title": "Product page photos weren't selling"
+  },
+  {
+   "t": 192,
+   "title": "Product page result: +6% revenue per visitor"
+  },
+  {
+   "t": 244,
+   "title": "The cart was talking too much"
+  },
+  {
+   "t": 296,
+   "title": "What we removed, kept and added"
+  },
+  {
+   "t": 368,
+   "title": "Cart result: 33% to 38% reach checkout"
+  },
+  {
+   "t": 418,
+   "title": "The total: almost $60,000"
+  },
+  {
+   "t": 427,
+   "title": "How to do this on your own store"
+  },
+  {
+   "t": 504,
+   "title": "Why fixing the site beats buying traffic"
+  }
+ ],
+ "sections": [
+  {
+   "heading": "How did two A/B tests add $58k to a Shopify store without more traffic?",
+   "t": 0,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "We made one of our clients **$58,000 in 90 days** by changing two simple things on their Shopify store. No extra traffic, no new ads. One change was on the product page, the other in the cart drawer.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "A quick note on how we get to that number. We run every test until it reaches **statistical significance**: the point where the data is so sure that if you ran the exact same test again, you would see the same result. So there's no noise in it.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "We measure the uplift in revenue, not only conversion rate. Then we extrapolate that uplift to three months to get a ballpark of how much extra revenue the changes actually generated for the client.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "Where should you start: more traffic or a conversion autopsy?",
+   "t": 48,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "The store already had thousands of visitors. So we started where we always start, with a **conversion autopsy**. Instead of asking how to get more people to the site, we ask why the people who already come there drop off. There are always elements of frustration, or things that are simply not clear.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "After looking at the data we found two leaks in the funnel:",
+     "items": []
+    },
+    {
+     "type": "ul",
+     "text": "",
+     "items": [
+      "Lots of people reached the product page but didn't add to cart.",
+      "People who did add to cart didn't reach checkout."
+     ]
+    },
+    {
+     "type": "p",
+     "text": "So we made one change on each of those two steps.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "Why weren't the polished product photos selling?",
+   "t": 93,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "This brand sells puzzles. Customers aren't buying a finished object. They're buying an experience through a physical product: two nights of entertainment, away from screens, focused on themselves and a puzzle in front of them. That is the experience the shopper needs to feel.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "When we came in, the product page looked perfect: high quality images, perfect lighting, everything clean. But it was **clean and cold**. That creates a gap. When people buy, they want to know what's in it for them and to experience the product before they buy it. Whatever you sell, they need to be able to imagine what they're like with that product.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "If your page doesn't give them that, they go looking for it elsewhere, on YouTube for example, or they leave the site and never come back.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "What happens when you add a real video to the product gallery?",
+   "t": 143,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "We added **a real video to the image gallery**: real hands, a real user playing around with the product. That shows people what the product is actually like far better than polished pictures do.",
+     "items": []
+    },
+    {
+     "type": "ul",
+     "text": "",
+     "items": [
+      "It sits right in the gallery, as image two or three.",
+      "On mobile the gallery is even smaller, so once someone taps it, it must play full screen.",
+      "Everything else stayed the same: same price, same product. Only the way it's conveyed changed."
+     ]
+    },
+    {
+     "type": "p",
+     "text": "We ran it as an A/B test: half the traffic saw the old version, half saw the new one, for a set amount of time, until we knew which performed best. The result: **conversion rate up almost 6% and revenue per visitor up slightly more than 6%**.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "That sounds small, but with thousands of visitors and orders it makes a huge impact. And because it's on the product page, which everybody who makes a purchase sees, it's fair to say the site's revenue went up by about 6% without spending more on ads.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "Why does a cart drawer with too many elements lose sales?",
+   "t": 244,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "The product page test was the smaller one. The cart test had **double the impact**, and it came from doing less.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "At first glance the old cart drawer looked fine. It had a free shipping bar, upsells, savings, payment icons: everything a good cart is supposed to have. And every cart app you install will happily sell you one more thing to add.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "But count what it asks a shopper to read: **eight things in a drawer people see for about 10 seconds**. The person in the cart has already decided they want it. The cart's only job is to get them to checkout without giving them a reason to stop. This cart gave them a few:",
+     "items": []
+    },
+    {
+     "type": "ul",
+     "text": "",
+     "items": [
+      "A discount box sends people to Google looking for a code. Some never come back.",
+      "Savings shown twice starts to feel like a sales pitch.",
+      "\"No-brainer\" add-ons read like pressure."
+     ]
+    }
+   ]
+  },
+  {
+   "heading": "What should you remove, keep and add in your Shopify cart?",
+   "t": 296,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "We removed every element that wasn't used or relevant on this store, kept what earns its place, and added one line.",
+     "items": []
+    },
+    {
+     "type": "ol",
+     "text": "",
+     "items": [
+      "**Removed the discount box.** People are still asked for discount codes at checkout.",
+      "**Removed the savings summary.** The saving now appears only on the product line item, as the old price next to the new price.",
+      "**Kept the upsell, but rewrote it.** Instead of calling it a no-brainer, it now says customers use X, which adds a bit of social proof, plus a line explaining what the add-on is actually for.",
+      "**Added delivery details under the checkout button.** One line: the product arrives in 6 to 8 days, or whatever your dates are."
+     ]
+    },
+    {
+     "type": "p",
+     "text": "That delivery line repeats something already communicated earlier on the site. But it's exactly what the customer is wondering about in the cart, and removing that doubt is the cart's job.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "How much did the simpler cart improve conversion?",
+   "t": 368,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Before the change, **33% of shoppers who saw the cart reached checkout. After, it was 38%.** That higher conversion pushed revenue per visitor up by 11%.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Average order value didn't change. That's fine: as long as revenue per visitor goes up, we're good. In this case it worked out to **$3 more for every visitor who opens the cart**, which over thousands of users is very significant revenue.",
+     "items": []
+    },
+    {
+     "type": "quote",
+     "text": "Most people say you need to add more, more, more, but we did the opposite. We made it simpler.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Add the product page win and the cart win together and you get almost $60,000 in additional revenue from very simple changes.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "How can you copy these two changes on your own Shopify store?",
+   "t": 427,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Start with the cart, because it's simpler. Open your cart on your phone right now and count the elements. If there are more than five, you have something to test.",
+     "items": []
+    },
+    {
+     "type": "ol",
+     "text": "",
+     "items": [
+      "Move the discount code box to checkout. Shopify's checkout already has one, so nobody loses it.",
+      "Show each price once.",
+      "Rewrite your upsell so it says why people buy it.",
+      "Put your delivery time right under the checkout button."
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Then the product page. Ask yourself what moment people are really buying. For a kit, it's the build and the reveal. For a jacket, it's how it moves. For skincare, it's the texture on the skin. Film that moment.",
+     "items": []
+    },
+    {
+     "type": "ul",
+     "text": "",
+     "items": [
+      "Filming on a phone is perfectly fine. Real beats polished here.",
+      "Put it in slide two or three of your gallery, where people already swipe.",
+      "On mobile, make sure tapping it opens full screen. A video nobody can see doesn't sell anything."
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Finally, **test it instead of just shipping it**. Things that work for one brand don't always work for another. If you have enough traffic, run it as an A/B test until it reaches statistical significance, so you can prove it actually makes you more money.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "Why fix your site before buying more traffic?",
+   "t": 504,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Buying traffic is expensive. Improving your site is like reconstructing your house: you need the fundamentals right before you go out and win traffic. When your store converts better, you can afford to buy traffic, and even afford to outbid the competition and steal their lunch.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "What these two tests show: communicate a real value proposition and real product information, not something polished and perfect. Once you've said something, let it sit and get out of the way. Don't repeat things, don't clutter, don't make it complicated. Make it simple and seamless for the customer.",
+     "items": []
+    }
+   ]
+  }
+ ],
+ "faq": [
+  {
+   "q": "How can I increase Shopify revenue without more traffic?",
+   "a": "Run a conversion autopsy to find where your existing visitors drop off, then test fixes on those steps. In the video, one product page test and one cart test added $58,000 in 90 days for a Shopify brand with the same traffic. The gains came from a real product video and a simpler cart drawer."
+  },
+  {
+   "q": "Should I add a video to my Shopify product page gallery?",
+   "a": "In our test, a real video of real hands using the product, placed as slide two or three of the gallery, lifted conversion rate by almost 6% and revenue per visitor by just over 6%. Film the moment people are actually buying, a phone is fine, and make sure it plays full screen when tapped on mobile."
+  },
+  {
+   "q": "Should I remove the discount code box from my Shopify cart?",
+   "a": "A discount box in the cart sends people to Google looking for a code, and some never come back. Shopify's checkout already has a discount field, so removing it from the cart doesn't take the option away. It was one of the changes in a cart test that moved checkout reach from 33% to 38%."
+  },
+  {
+   "q": "How many elements should a cart drawer have?",
+   "a": "Open your cart on your phone and count. If it has more than five different elements, you have something to test. The original cart in the video asked shoppers to read eight things in a drawer they see for about 10 seconds."
+  },
+  {
+   "q": "What should I put under the checkout button in my cart?",
+   "a": "Add one line with the delivery time, for example that the product arrives in 6 to 8 days. Even if you mention it elsewhere on the site, it's exactly what shoppers wonder about in the cart, and it removes doubt right before checkout."
+  },
+  {
+   "q": "Do I need to A/B test these changes or can I just ship them?",
+   "a": "Test them. Changes that work for one brand don't always work for another. If you have enough traffic, run an A/B test until it reaches statistical significance so you can prove the change makes you more money."
+  }
+ ],
+ "tags": [
+  "Shopify CRO",
+  "A/B testing",
+  "Product pages",
+  "Checkout",
+  "Case study"
+ ],
+ "transcript": [
+  {
+   "t": 0,
+   "text": "We made one of our clients $58,000 in just 90 days by improving the performance of their store. We didn't generate more traffic. We didn't do any magic. We changed two important but simple things on their Shopify store. I'm going to show you the before and after of these changes, the real numbers, and most importantly, how you can implement this into your own exact store. Now, a quick note on the number. We run these until we reach statistical significance. This is where the data is so sure that if you would run the exact same test again, the same results will appear. So there's no noise. And then the result is an uplift in revenue, not only conversion rate, but we extrapolate that to three months to get a bit of a ballpark of how much revenue we actually generated for our client."
+  },
+  {
+   "t": 49,
+   "text": "They are on Shopify and they got thousands of visitors coming to their site. The way we always start these projects is by doing a conversion autopsy. Instead of asking ourselves, how can we get more people to come here, we ask, why are the people who already come here drop off? And there are always elements of frustration or things that are just not clear. So we figure out what these biggest problems are. So after looking at the data, we saw there were two leaks in the funnel. Lots of people coming to the product page, but not adding to cart. And people who do add to cart don't reach checkout. So two leaking steps in the funnel. So this is where we started with one change on each of these elements on the site."
+  },
+  {
+   "t": 89,
+   "text": "The first one is the product page. You're not buying a finished object. Instead, you're buying an experience through physical products. You're buying two nights of entertainment, of being distracted from all the screens and just focusing on you and a puzzle in front of you. And that is the experience the users need to feel. So when we came in, the product page was very perfect, very high quality images, perfect lighting used, and everything was very clean, but cold. And that creates a gap, because when users buy, they want to know what's in it for them, and they want to experience the product before they even buy it. And it's important that they can feel, they can taste, they can imagine what they're like with that product, whatever you sell. But people will look for the information maybe elsewhere, on YouTube, or they just leave the site and never come back."
+  },
+  {
+   "t": 143,
+   "text": "So this is what we did. On the image gallery, we put a real video, real hands, a real user playing around with the product, because this allows people to better understand what the product is like than when they see your polished pictures. And it sits right in the image gallery on image two or three. And on mobile, of course, the images are even smaller, but once you engage with it, it must be shown full screen. And that's it. Everything else is the same, the same price, the same product, but just the way you convey it is very different. And we ran this as an A/B test. What that means is that we showed half the traffic the old version and the other half the new version. We ran it for a certain amount of time, and then we figure out which one is actually performing best."
+  },
+  {
+   "t": 188,
+   "text": "So this is all backed up by actual statistics with real data. So what we saw is that it improved the conversion rate with almost 6% and the revenue per visitor with slightly more than 6%. And that sounds like a small percentage, but if you get thousands of orders and visitors to your site, it makes a huge impact. And especially if it's a test that's on the product page, because everybody sees a product page that makes a purchase. So that would be fair to say that the revenue of the site basically just went up with 6% without spending more on ads. If you get value from these videos, feel free to subscribe and watch the other videos I make about how to improve your conversion rate on your Shopify store. But let's move on. That test was actually a small one. The next one on the cart had double the impact on the site's performance. And it's not about doing crazy things, it's actually about doing less. Let's go through it."
+  },
+  {
+   "t": 245,
+   "text": "Here is the old cart drawer. At first glance, it looks fine. It has a free shipping bar, upsells, savings, payment icons, everything a good cart is supposed to have. And every cart app you install will happily sell you one more thing to add. But count what it's asking a user to read. Eight things in a drawer you see for about 10 seconds. The person in this cart has already decided. They want it. The cart's only job is to get them to checkout without giving them a reason to stop. And this cart gave them a few. A discount box sends people to Google looking for a code. Some never come back. The savings shown twice starts to feel like a sales pitch, and \"no-brainer\" add-ons reads like pressure."
+  },
+  {
+   "t": 293,
+   "text": "Now let's have a look at what we changed. We actually did less. So on the cart, we removed all the elements that were not used or relevant on this store. The first one, we removed the discount box. People are still being asked for discount codes on the checkout. The other one is we removed the savings summary. We only shared it on the actual product line item. We showed the old price and we showed the new price. Two, we actually kept the upsell. It's still very important, but we changed how we communicated. Instead of saying that it's a no-brainer, instead we changed it to say customers use X. In this way, you add a slight social proof to the messaging, and we added a line to communicate what it's actually for."
+  },
+  {
+   "t": 341,
+   "text": "And the last one, as I promised you at the beginning, a very simple one line of text below the checkout button: we added the delivery details. The product will arrive between 6 to 8 days, or whatever the dates might be for you. But it's a very simple way of removing doubt from the customer, and that is the job of the cart. So we just repeated something that was already communicated before, but it is exactly what the customer is wondering about on the cart. So, did it work? Yes, it definitely did. For all the users that read the cart, there were 33% of the users that reached checkout. Now with these changes, we improved it to 38%. So there's a higher conversion rate, and that actually helped the revenue per visitor to go up by 11%."
+  },
+  {
+   "t": 387,
+   "text": "That is also huge, very important. Most people say you need to add more, more, more, but we did the opposite. We made it simpler and we reduced the risk of the customer to actually come through and to make that purchase eventually. We did see that AOV didn't change, but as long as the revenue per visitor goes up, we are good. In this case, it was $3 more for every customer or visitor that opens the cart, and this is huge. Over thousands of users, this is very significant revenue. If you sum these two wins from the product page and the cart page together, we have almost $60,000 in additional revenue with very simple changes."
+  },
+  {
+   "t": 427,
+   "text": "So, here is how you can do this for yourself. Let's start on the cart just because it's way simpler. Open your cart on your phone right now and count. If it's more than five different elements, you have something to test. Move the discount code box to checkout. Shopify's checkout already has one, so nobody loses it. Show each price once. Rewrite your upsell so it says why people buy it, and put your delivery time right under your button. Now the product page. Ask yourself, what is the moment that people are really buying? For a kit, it's the build and the reveal. For a jacket, it's how it moves. For skincare, it's the texture on the skin. Film that. On a phone is perfectly fine. Real is better than polished here. Put it in slide two or three on your gallery where people already swipe. And on mobile, make sure tapping it goes full screen. A video nobody can see doesn't sell anything."
+  },
+  {
+   "t": 488,
+   "text": "And one last thing: test it. Don't just ship it, because sometimes things work for one brand but do not work for the other brand. So if you have enough traffic, make sure you test it and reach statistical significance, where you can prove that this actually makes you more money. So two simple changes that don't need more traffic to make more money. It's very interesting, because buying traffic is expensive, but improving your site is almost like reconstructing your house. It's just so important to get the fundamentals right before you go out and win traffic. You want to make sure that when you buy traffic, you can actually afford it. You can even afford to beat the competition and steal their lunch. But what definitely works is show and communicate real value proposition and real product information, not something that's polished or perfect. And then once you've communicated something, let it sit and get out of the way. So don't repeat things, don't make it cluttered, don't make it complicated for a customer. Make it simple and seamless."
+  },
+  {
+   "t": 550,
+   "text": "Now, if you run an ecommerce brand and you want us to look at how we can improve the performance of your store, feel free to reach out. Click on the link in the description and you can see how we can run a free audit for your store. So reach out, reap the benefits, and we work on a guarantee so you basically never lose. See you in the next one."
+  }
+ ]
+}

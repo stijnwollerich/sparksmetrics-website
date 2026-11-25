@@ -2942,6 +2942,231 @@ def blog_post(slug: str):
     return render_template(post["template"], post=post)
 
 
+@main_bp.route("/videos/")
+@main_bp.route("/videos")
+def videos_index():
+    """All long YouTube videos as readable pages (written by tasks/video_autopilot.py)."""
+    from app.video_pages import load_video_pages, timestamp
+
+    pages = load_video_pages()
+    tags = []
+    for p in pages:
+        for t in p.get("tags") or []:
+            if t not in tags:
+                tags.append(t)
+    base = request.url_root.rstrip("/")
+    schema = {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "Shopify CRO videos by Stijn Wollerich",
+        "url": f"{base}{url_for('main.videos_index')}",
+        "publisher": {"@id": "https://sparksmetrics.com/#org"},
+        "mainEntity": {
+            "@type": "ItemList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": i + 1, "url": f"{base}{url_for('main.video_page', slug=p['slug'])}", "name": p["title"]}
+                for i, p in enumerate(pages)
+            ],
+        },
+    }
+    return render_template("videos/index.html", pages=pages, tags=tags, schema=schema, ts=timestamp)
+
+
+@main_bp.route("/videos/<slug>/")
+@main_bp.route("/videos/<slug>")
+def video_page(slug: str):
+    """Companion page for one long YouTube video: summary, takeaways, chapters, article, FAQ, transcript."""
+    from app.video_pages import get_video_page, iso_duration, plain, related_pages, rich, timestamp
+
+    page = get_video_page(slug)
+    if not page:
+        abort(404)
+    if request.path.endswith("/"):
+        return redirect(url_for("main.video_page", slug=slug), code=301)
+    base = request.url_root.rstrip("/")
+    url = f"{base}{url_for('main.video_page', slug=slug)}"
+    vid = page["youtube_id"]
+    thumb = page.get("thumbnail") or f"https://i.ytimg.com/vi/{vid}/hqdefault.jpg"
+    published = page.get("published") or ""
+    try:
+        published_label = datetime.strptime(published, "%Y-%m-%d").strftime("%-d %b %Y")
+    except ValueError:
+        published_label = published
+    stijn = {"@type": "Person", "name": "Stijn Wollerich", "url": "https://www.youtube.com/@stijnwollerich", "worksFor": {"@id": "https://sparksmetrics.com/#org"}}
+    chapters = page.get("chapters") or []
+    duration = page.get("duration_seconds") or 0
+    video = {
+        "@type": "VideoObject",
+        "@id": f"{url}#video",
+        "name": page.get("youtube_title") or page["title"],
+        "description": plain(page.get("summary") or page.get("meta_description") or ""),
+        "thumbnailUrl": [thumb],
+        "uploadDate": published,
+        "duration": iso_duration(duration),
+        "embedUrl": f"https://www.youtube.com/embed/{vid}",
+        "contentUrl": f"https://www.youtube.com/watch?v={vid}",
+        "author": stijn,
+        "publisher": {"@id": "https://sparksmetrics.com/#org"},
+        "transcript": " ".join(t["text"] for t in page.get("transcript") or [])[:20000],
+        "hasPart": [
+            {
+                "@type": "Clip",
+                "name": c["title"],
+                "startOffset": c["t"],
+                "endOffset": chapters[i + 1]["t"] if i + 1 < len(chapters) else duration,
+                "url": f"https://www.youtube.com/watch?v={vid}&t={c['t']}s",
+            }
+            for i, c in enumerate(chapters)
+        ],
+    }
+    schema = {
+        "@context": "https://schema.org",
+        "@graph": [
+            video,
+            {
+                "@type": "Article",
+                "@id": f"{url}#article",
+                "headline": page["title"],
+                "description": page.get("meta_description") or "",
+                "image": thumb,
+                "datePublished": published,
+                "dateModified": (page.get("updated") or page.get("generated_at") or published)[:10],
+                "author": stijn,
+                "publisher": {"@id": "https://sparksmetrics.com/#org"},
+                "mainEntityOfPage": url,
+                "video": {"@id": f"{url}#video"},
+                "keywords": ", ".join(page.get("tags") or []),
+                "abstract": plain(page.get("summary") or ""),
+            },
+            {
+                "@type": "FAQPage",
+                "@id": f"{url}#faq",
+                "mainEntity": [
+                    {"@type": "Question", "name": f["q"], "acceptedAnswer": {"@type": "Answer", "text": plain(f["a"])}}
+                    for f in page.get("faq") or []
+                ],
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {"@type": "ListItem", "position": 1, "name": "Home", "item": f"{base}/"},
+                    {"@type": "ListItem", "position": 2, "name": "Videos", "item": f"{base}{url_for('main.videos_index')}"},
+                    {"@type": "ListItem", "position": 3, "name": page["title"], "item": url},
+                ],
+            },
+        ],
+    }
+    return render_template(
+        "videos/video_page.html",
+        page=page,
+        related=related_pages(page),
+        schema=schema,
+        published_label=published_label,
+        ts=timestamp,
+        rich=rich,
+        plain=plain,
+    )
+
+
+@main_bp.route("/ab-tests/")
+@main_bp.route("/ab-tests")
+def ab_tests_index():
+    """Winning A/B tests as anonymised case studies (written by tasks/case_study_autopilot.py)."""
+    from app.case_studies import load_case_studies
+
+    items = load_case_studies()
+    page_types = []
+    for c in items:
+        if c.get("page_type") and c["page_type"] not in page_types:
+            page_types.append(c["page_type"])
+    base = request.url_root.rstrip("/")
+    schema = {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "Winning A/B tests on Shopify stores",
+        "url": f"{base}{url_for('main.ab_tests_index')}",
+        "publisher": {"@id": "https://sparksmetrics.com/#org"},
+        "mainEntity": {
+            "@type": "ItemList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": i + 1, "url": f"{base}{url_for('main.ab_test_page', slug=c['slug'])}", "name": c["title"]}
+                for i, c in enumerate(items)
+            ],
+        },
+    }
+    return render_template("ab_tests/index.html", items=items, page_types=page_types, schema=schema)
+
+
+@main_bp.route("/ab-tests/img/<name>")
+def ab_test_image(name: str):
+    """Anonymised case study images (replicas only, written by the autopilot)."""
+    from app.case_studies import image_file
+
+    path = image_file(name)
+    if not path:
+        abort(404)
+    resp = send_file(path, mimetype="image/webp", max_age=60 * 60 * 24 * 7)
+    return resp
+
+
+@main_bp.route("/ab-tests/<slug>/")
+@main_bp.route("/ab-tests/<slug>")
+def ab_test_page(slug: str):
+    """One winning A/B test: before/after (anonymised), results, hypothesis, why it worked, FAQ."""
+    from app.case_studies import get_case_study, related_case_studies
+
+    cs = get_case_study(slug)
+    if not cs:
+        abort(404)
+    if request.path.endswith("/"):
+        return redirect(url_for("main.ab_test_page", slug=slug), code=301)
+    base = request.url_root.rstrip("/")
+    url = f"{base}{url_for('main.ab_test_page', slug=slug)}"
+    end_label = ""
+    try:
+        end_label = datetime.strptime((cs.get("end_date") or "")[:10], "%Y-%m-%d").strftime("%b %Y")
+    except ValueError:
+        pass
+    img = lambda n: f"{base}{url_for('main.ab_test_image', name=n)}"
+    schema = {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Article",
+                "@id": f"{url}#article",
+                "headline": cs["title"],
+                "description": cs.get("meta_description") or "",
+                "abstract": cs.get("summary") or "",
+                "image": [img(cs["images"]["winner"]), img(cs["images"]["control"])],
+                "datePublished": (cs.get("generated_at") or "")[:10],
+                "dateModified": (cs.get("generated_at") or "")[:10],
+                "author": {"@type": "Person", "name": "Stijn Wollerich", "worksFor": {"@id": "https://sparksmetrics.com/#org"}},
+                "publisher": {"@id": "https://sparksmetrics.com/#org"},
+                "mainEntityOfPage": url,
+                "about": ["A/B testing", "Conversion rate optimization", cs.get("page_type") or ""],
+                "keywords": ", ".join(cs.get("tags") or []),
+            },
+            {
+                "@type": "FAQPage",
+                "@id": f"{url}#faq",
+                "mainEntity": [
+                    {"@type": "Question", "name": f["q"], "acceptedAnswer": {"@type": "Answer", "text": f["a"]}}
+                    for f in cs.get("faq") or []
+                ],
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {"@type": "ListItem", "position": 1, "name": "Home", "item": f"{base}/"},
+                    {"@type": "ListItem", "position": 2, "name": "A/B tests", "item": f"{base}{url_for('main.ab_tests_index')}"},
+                    {"@type": "ListItem", "position": 3, "name": cs["title"], "item": url},
+                ],
+            },
+        ],
+    }
+    return render_template("ab_tests/case_study.html", cs=cs, related=related_case_studies(cs), schema=schema, end_label=end_label)
+
+
 @main_bp.route("/privacy-policy")
 def privacy_policy():
     """Privacy policy."""
@@ -2982,6 +3207,8 @@ def sitemap():
         ("main.analytics", {}),
         ("main.results", {}),
         ("main.blog_index", {}),
+        ("main.videos_index", {}),
+        ("main.ab_tests_index", {}),
         ("main.cro_ebook", {}),
         ("main.cro_cost_roi_landing", {}),
         ("main.privacy_policy", {}),
@@ -3003,6 +3230,14 @@ def sitemap():
             urls.append(url_for("main.blog_post", slug=post["slug"], _external=True))
         except Exception:
             pass
+    from app.video_pages import load_video_pages
+
+    for vp in load_video_pages():
+        urls.append(url_for("main.video_page", slug=vp["slug"], _external=True))
+    from app.case_studies import load_case_studies
+
+    for cs in load_case_studies():
+        urls.append(url_for("main.ab_test_page", slug=cs["slug"], _external=True))
     def escape_loc(s: str) -> str:
         return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;").replace("'", "&apos;")
 
@@ -3424,6 +3659,20 @@ def llms_txt():
         for p in posts:
             desc = (p.get("description") or "").strip()
             lines.append(f"- [{p['title']}]({base}{url_for('main.blog_post', slug=p['slug'])})" + (f": {desc}" if desc else ""))
+    from app.video_pages import load_video_pages, plain
+
+    video_pages = load_video_pages()
+    if video_pages:
+        lines += ["", "## Videos (each page has a summary, key takeaways, FAQ and the full transcript)", ""]
+        for vp in video_pages:
+            lines.append(f"- [{vp['title']}]({base}{url_for('main.video_page', slug=vp['slug'])}): {plain(vp.get('summary') or vp.get('teaser') or '')}")
+    from app.case_studies import load_case_studies
+
+    case_studies = load_case_studies()
+    if case_studies:
+        lines += ["", "## Winning A/B tests (anonymised case studies with before/after, results and why it worked)", ""]
+        for cs in case_studies:
+            lines.append(f"- [{cs['title']}]({base}{url_for('main.ab_test_page', slug=cs['slug'])}): {cs.get('summary') or cs.get('teaser') or ''}")
     lines += [
         "",
         "## Optional",

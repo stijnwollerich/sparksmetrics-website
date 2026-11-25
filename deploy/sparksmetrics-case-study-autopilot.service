@@ -1,0 +1,12 @@
+[Unit]
+Description=Sparksmetrics: winning Spark A/B tests -> anonymised /ab-tests/<slug> case studies
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/sparksmetrics
+EnvironmentFile=/var/www/sparksmetrics/.env
+ExecStart=/var/www/sparksmetrics/.venv/bin/python tasks/case_study_autopilot.py
+TimeoutStartSec=3600

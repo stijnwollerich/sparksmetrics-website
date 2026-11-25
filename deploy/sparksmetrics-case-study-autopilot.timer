@@ -1,0 +1,10 @@
+[Unit]
+Description=Check Spark for new winning A/B tests every Monday
+
+[Timer]
+OnCalendar=Mon *-*-* 07:30:00
+RandomizedDelaySec=900
+Persistent=true
+
+[Install]
+WantedBy=timers.target

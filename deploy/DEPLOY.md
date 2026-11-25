@@ -440,3 +440,46 @@ curl -sS -o /dev/null -w "%{http_code}\n" -H "Host: spark.sparksmetrics.com" htt
 - [ ] DNS: A records for sparksmetrics.com and www.sparksmetrics.com point to droplet IP
 - [ ] Certbot run so https://sparksmetrics.com works
 - [ ] No other vhost uses `server_name .sparksmetrics.com` (only `spark.sparksmetrics.com` for the spark app)
+
+## Video autopilot (/videos pages)
+
+`tasks/video_autopilot.py` turns every new long YouTube video into a page at `/videos/<slug>`
+(summary, takeaways, chapters, article, FAQ, transcript, VideoObject/FAQ schema). Pages written on the
+server go to `instance/video_pages/` (gitignored); pages in `app/video_pages/` are committed.
+
+Needs in `.env`: `ANTHROPIC_API_KEY`, `TRANSCRIPT_API_KEY` (same key as the HECJ app), optional
+`SLACK_WEBHOOK_URL` (ping when a page goes live), `VIDEO_AUTOPILOT_SINCE` (default 2026-10-26).
+`pip install -r requirements.txt` (adds `anthropic`).
+
+One-time setup on the droplet:
+
+```bash
+mkdir -p /var/www/sparksmetrics/instance/video_pages && chown -R www-data:www-data /var/www/sparksmetrics/instance
+cp deploy/sparksmetrics-video-autopilot.{service,timer} /etc/systemd/system/
+systemctl daemon-reload && systemctl enable --now sparksmetrics-video-autopilot.timer
+systemctl start sparksmetrics-video-autopilot.service && journalctl -u sparksmetrics-video-autopilot -n 30
+```
+
+Rebuild one page: `sudo -u www-data .venv/bin/python tasks/video_autopilot.py --video <youtube id> --force`.
+Hide one: delete its JSON. Edit one: edit its JSON (cache refreshes within a minute).
+
+## Case study autopilot (/ab-tests pages)
+
+`tasks/case_study_autopilot.py` turns every complete winning experiment in Spark into an anonymised case study
+at `/ab-tests/<slug>`. It makes replica mockups from the real screenshots (OpenAI image edit), has Claude check
+them against the real screenshots and the client name, saves the replicas back to Spark, and writes the page.
+Incomplete winners are listed in the Slack summary with what's missing. The experiment card galleries
+(/results, /conversion-rate-optimization, /free-cro-audit, /apply) now show these case studies only, so they
+never show real client screenshots.
+
+Needs in `.env` (besides the video autopilot keys): `SPARK_API_TOKEN` (Spark's API token), `OPENAI_API_KEY`.
+Optional: `CASE_STUDY_EXCLUDE=12,34` to keep tests off the site.
+
+```bash
+mkdir -p /var/www/sparksmetrics/instance/case_studies && chown -R www-data:www-data /var/www/sparksmetrics/instance
+cp deploy/sparksmetrics-case-study-autopilot.{service,timer} /etc/systemd/system/
+systemctl daemon-reload && systemctl enable --now sparksmetrics-case-study-autopilot.timer
+sudo -u www-data .venv/bin/python tasks/case_study_autopilot.py --dry-run   # what's ready / missing
+```
+
+Unpublish: delete the JSON (and its images) and add the id to `CASE_STUDY_EXCLUDE`.

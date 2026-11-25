@@ -1,0 +1,406 @@
+{
+ "thumbnail": "https://i.ytimg.com/vi/8iyagjq2vCM/maxresdefault.jpg",
+ "slug": "the-black-friday-playbook-for-shopify-brands-profit-not-just-orders",
+ "youtube_id": "8iyagjq2vCM",
+ "youtube_title": "The Black Friday Playbook for Shopify Brands",
+ "published": "2026-11-08",
+ "generated_at": "2026-11-25T11:52:10+00:00",
+ "duration_seconds": 930,
+ "title": "The Black Friday Playbook for Shopify Brands: Profit, Not Just Orders",
+ "meta_title": "Black Friday Playbook for Shopify: The Profit Grid",
+ "meta_description": "Learn which Black Friday playbook fits your Shopify store, how to calculate your break-even discount, and the setup to run before November 23.",
+ "teaser": "Two questions put your store in one of four Black Friday playbooks that protect profit instead of just chasing orders.",
+ "summary": "A 30% Black Friday discount can mean you need twice the orders just to make the same profit, so the right Black Friday plan for a Shopify store depends on two questions: do your customers buy again, and can your margin take a discount? The answers put you in one of four boxes (the Comeback, the Rush, the Stack or the Vault), each with its own moves, and every store should add early access and treat returning customers differently from new ones.",
+ "key_takeaways": [
+  "Run the break-even multiplier before you pick a discount: your margin divided by (your margin minus the discount) tells you how many times more orders you need just to stand still. Above 60% margin you have room, below 50% you don't.",
+  "If customers buy again and your margin has room, give every Black Friday order a January code (for example $20 off your next order over $80, valid January 5 to 31) so you have a reason to email them in your slowest month.",
+  "If your margin is thin, give away value instead of price: a free gift the customer sees as $30 but costs you maybe $8 beats 10% more off, which is $10 straight out of your margin.",
+  "Add an early access sign-up form now and give that list access 24 to 48 hours before everyone else. Klaviyo reported Scuffers' early access email made around 400% more revenue than the same email sent to everyone else.",
+  "Use Shopify's discount eligibility setting to give customers who have purchased at least once an extra gift or extra 5%, and send new visitors from ads straight to a best seller with the sale price showing.",
+  "Before Black Friday: show the price after discount with a crossed-out compare-at price, use automatic discounts, turn off your welcome pop-up, test-order every offer, and freeze your site from November 23.",
+  "Change your abandoned cart flow to send after 30 minutes and allow it once a day per customer. Little Sleepies made more on day one than they projected for the entire week."
+ ],
+ "stats": [
+  {
+   "value": "2x",
+   "label": "Orders needed to make the same profit at 30% off"
+  },
+  {
+   "value": "4%",
+   "label": "New Black Friday customers who ever bought again (one study)"
+  },
+  {
+   "value": "400%",
+   "label": "More revenue from Scuffers' early access email"
+  },
+  {
+   "value": "$41,000",
+   "label": "Extra revenue from decluttering a client's cart"
+  }
+ ],
+ "chapters": [
+  {
+   "t": 0,
+   "title": "30% off means twice the orders"
+  },
+  {
+   "t": 49,
+   "title": "The Black Friday Profit Grid"
+  },
+  {
+   "t": 121,
+   "title": "The Comeback: buy again, margin has room"
+  },
+  {
+   "t": 199,
+   "title": "The Rush and the visitor P&L"
+  },
+  {
+   "t": 325,
+   "title": "The Stack: buy again, thin margin"
+  },
+  {
+   "t": 393,
+   "title": "The Vault: buy once, thin margin"
+  },
+  {
+   "t": 488,
+   "title": "The Head Start: early access"
+  },
+  {
+   "t": 627,
+   "title": "Treat returning customers differently"
+  },
+  {
+   "t": 722,
+   "title": "Black Friday checklist and the Little Sleepies setting"
+  },
+  {
+   "t": 855,
+   "title": "Recap and what to do today"
+  }
+ ],
+ "sections": [
+  {
+   "heading": "How many more orders do you need to break even on a Black Friday discount?",
+   "t": 0,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "If you give 30% off on Black Friday, you can need **twice the orders to make the same amount of profit**. It's a simple calculation, and most ecommerce brands never make it. They default to a bigger discount and judge the weekend on orders.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "A bigger discount isn't the answer anyway. Klaviyo data shows that last year discounts went down, but sales went up 11%. So before you set any offer, answer two questions.",
+     "items": []
+    },
+    {
+     "type": "ol",
+     "text": "",
+     "items": [
+      "Do your customers buy again? Coffee beans, underwear and skincare: yes. A sofa, a stroller or a mattress: no.",
+      "Can your margin take a discount? Use the **break-even multiplier**: your margin divided by your margin minus the discount. That number is how many times more orders you need just to stand still. Rule of thumb: above 60% margin you have room, below 50% you don't."
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Those two answers give you four boxes. I call it the **Black Friday Profit Grid**.",
+     "items": []
+    },
+    {
+     "type": "ul",
+     "text": "",
+     "items": [
+      "**The Comeback** (buy again, room in the margin): you win them now and earn in January.",
+      "**The Rush** (buy once, room in the margin): you win on the first order.",
+      "**The Stack** (buy again, thin margin): you add value instead of discount.",
+      "**The Vault** (buy once, thin margin): you sell access, not price."
+     ]
+    }
+   ]
+  },
+  {
+   "heading": "The Comeback: how to turn Black Friday buyers into repeat customers",
+   "t": 121,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "In the Comeback box, people purchase again and your margin has room. Black Friday is where you acquire the customer, and you expect them to come back later. There are three moves.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "**Move one: discount the first order to get the repeat purchase.** A big discount gets people in the door, and if your product is one they get hooked on, they come back, whether that's a subscription or a one-time purchase.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "**Move two: the January code.** Every Black Friday order gets a code that only works from January 5 to January 31. Something like $20 off your next order over $80. January is your slowest month, so now you have a reason to email every Black Friday buyer and they have a reason to come back. This isn't new: Kohl's has done it for years with spend $50, get $10 to use later.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "**Move three: split your follow-up.** In one study, only 4% of new Black Friday customers ever bought again. New buyers should get the January code plus an email on how to get the most out of what they bought. Returning buyers get a loyalty perk.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "The Rush: how to make Black Friday profitable when customers only buy once",
+   "t": 199,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "In the Rush, people order once and your margin has room. There is no second order, so **you have to make the profit today, in that single order**.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "**Move one: a hero product.** Take one of your best sellers and give it a big discount. That gets people in the door. Everything else is also discounted for Black Friday, but much less.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "**Move two: tiered discounts with a visible progress bar.** Tiers only work if shoppers can see them, so add a progress bar to your cart, like \"$40 more to unlock 30%\".",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "This is also where the cart trick comes in, and it works in any of the four boxes: **keep the cart clean**. We tested a decluttered cart for a client, took out the extra upsell blocks, and conversion went up 11% over 3 months. That's about $41,000 in additional revenue. One progress bar beats four widgets.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "**Move three: the mystery box.** Goose and Gander did this: three surprise items, and one is always their famous t-shirt. Customers get the surprise, you clear low stock, and your best sellers never get discounted.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Whatever box you're in, don't judge Black Friday on conversion rate. We use what we call the **visitor P&L**. Every discount you give away is profit margin you don't get back, so we look at what each visitor actually earns you. Profit is what matters, not the conversion rate or even the revenue.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "The Stack: what to offer on Black Friday when your margins are thin",
+   "t": 325,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "The Stack is for stores where customers buy again but margins are thin. Here you don't want to give more discount. Instead of giving away price, you **give away value** on the order.",
+     "items": []
+    },
+    {
+     "type": "ul",
+     "text": "",
+     "items": [
+      "**A free gift instead of a bigger discount.** Spend $100, get a product worth $30. The customer sees $30, but you pay maybe $8 to make it. Compare that to 10% more off, which is $10 straight out of your margin.",
+      "**A gift card bonus.** Buy a $100 gift card, get a $20 bonus card that only works from January. You get the cash in November and the customer back in January. Some gift cards are never even used.",
+      "**Free shipping instead of deeper discounts.** Lower your free shipping threshold for the weekend or make shipping free on everything. For a lot of shoppers, free shipping beats an extra 5% off, and on a big order it costs you less than 5%."
+     ]
+    }
+   ]
+  },
+  {
+   "heading": "The Vault: what should premium brands with thin margins do on Black Friday?",
+   "t": 393,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "The Vault is the toughest box: thin margins and single purchases. This is where discounting is the worst thing you can do. Instead of giving away price or value, you **give away access**. If you're a premium brand in any of the four boxes, these moves apply to you too.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "**Move one: create something unique for Black Friday.** A limited product, a special variation or a color. It creates urgency because people want it, it runs out, and it ends after a set number of days, so you don't need to give anything away.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "**Move two: password-only early access.** Some brands lock the whole store for a day and only the early access list gets in. It feels exclusive, but a password page blocks Google and breaks every ad pointing at your site. Only do this with a big, engaged list, and only for 24 hours, not the whole weekend.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "**Move three: opt out completely.** REI has closed its stores on Black Friday since 2015. Patagonia once ran a Black Friday ad that said \"Don't buy this jacket\".",
+     "items": []
+    },
+    {
+     "type": "quote",
+     "text": "From a premium brand, saying no to Black Friday is a campaign in itself.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "How do you set up Black Friday early access on Shopify?",
+   "t": 488,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Whatever box you're in, two steps come first. I call them the Head Start. Last Black Friday, revenue from returning customers grew 13.5% faster than revenue from new ones, and in one study only 4% of new Black Friday customers ever bought again. **Your best Black Friday customers are the ones you already have.** So let them in first.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Early access is the most proven tactic there is. Klaviyo published a case on the fashion brand Scuffers: last Black Friday, their early access email made around 400% more revenue than the same email sent to everyone else. If you do one thing this week, set this up.",
+     "items": []
+    },
+    {
+     "type": "ol",
+     "text": "",
+     "items": [
+      "Add an early access sign-up form to your website and ask for email address and phone number.",
+      "Give that list VIP access 48 to 24 hours before everyone else, while all your products and variants are still in stock.",
+      "Give them a better reason than \"be the first\". Some brands show new arrivals you can only see after you sign in, and make that visible now. The products are right there, you just can't see them yet, so curiosity builds your list.",
+      "Fill the list from Instagram: Klaviyo can reply to anyone who comments a keyword (say \"early\") with a DM and a sign-up link. It's free.",
+      "Put the sign-up on your order confirmation page too."
+     ]
+    }
+   ]
+  },
+  {
+   "heading": "How should you treat returning customers differently on Black Friday?",
+   "t": 627,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "On Black Friday you have two people on your store: someone who has already bought from you three times, and someone who clicked an ad for a big discount. Most stores show them exactly the same thing, and **that is costing you real dollars**.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Your returning customers already trust you, so give them something new visitors don't get. Shopify lets you limit a discount to one customer segment: go to Discounts, create one, and under Eligibility pick customers who have purchased at least once. Now your regulars get an extra gift or an extra 5%, and nobody else does.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "New visitors need proof: your best sellers, your reviews and your guarantee right at the top. For ad traffic, skip the homepage and send people straight to the best seller with the sale price already showing.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "The same goes for email. Shinola didn't email everyone harder. They sent Black Friday emails to their most engaged customers and SMS only to people who had engaged recently. Fewer people, and Klaviyo reported their Black Friday revenue went up 27%, with revenue per person emailed up 48%.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "Black Friday checklist for Shopify stores",
+   "t": 722,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "None of this works if your site and email aren't ready. Run these five checks before the sale.",
+     "items": []
+    },
+    {
+     "type": "ol",
+     "text": "",
+     "items": [
+      "**Show the price after discount, not just a percentage.** Set the compare-at price so the old price shows crossed out, and use automatic discounts instead of only codes. A coupon field is a door out of your checkout.",
+      "**Turn off your welcome pop-up.** \"Sign up and get 10%\" is irrelevant when you have a bigger sale running. Turn off any other campaigns too.",
+      "**Shopify Plus: check your Scripts.** Shopify Scripts stopped working on June 30th. If your tiered discounts or free gifts ran on Scripts, they're gone. Place a test order for every single offer before Monday the 21st.",
+      "**Freeze your site from November 23rd.** No new themes, go into a code freeze. A/B tests can stay live because they sit on top of your site and can be switched off easily, but avoid big risks during your most important week.",
+      "**Fix your abandoned cart timing.** Little Sleepies, a baby clothing brand, sent their abandoned cart email after 30 minutes instead of an hour, and let a customer receive it once a day instead of once every two weeks. Their VP of marketing said they made more on day one than they projected for the entire week."
+     ]
+    },
+    {
+     "type": "p",
+     "text": "That last one works because people shop around on Black Friday. They add to cart on Friday, come back Saturday, leave again. If your flow can only reach them once every two weeks, you miss those returns. One thing to do today: find your gross margins per product. If you've entered product costs in Shopify, you'll see them in Shopify analytics. If the numbers scare you, you're probably in the Stack or the Vault.",
+     "items": []
+    }
+   ]
+  }
+ ],
+ "faq": [
+  {
+   "q": "How do I calculate if my Shopify store can afford a Black Friday discount?",
+   "a": "Use the break-even multiplier: your margin divided by your margin minus the discount. The result is how many times more orders you need just to make the same profit. As a rule of thumb, above a 60% margin you have room to discount, below 50% you don't."
+  },
+  {
+   "q": "What should I offer on Black Friday if my margins are thin?",
+   "a": "Give away value instead of price. A free gift with a $100 order that the customer sees as worth $30 might cost you about $8, while 10% more off costs you $10 of margin. Gift card bonuses that only work from January and free shipping are other options. If customers also only buy once, sell access with limited products or early access instead of discounting."
+  },
+  {
+   "q": "When should Black Friday early access start?",
+   "a": "Give your early access list VIP access 48 to 24 hours before everyone else, while all products and variants are still available. Start collecting sign-ups now with a form on your site, your order confirmation page and Instagram keyword replies through Klaviyo. Klaviyo reported Scuffers' early access email made around 400% more revenue than the same email sent to everyone else."
+  },
+  {
+   "q": "How do I give returning customers a separate discount in Shopify?",
+   "a": "Go to Discounts in Shopify, create a discount, and under Eligibility pick customers who have purchased at least once. That lets you give your regulars an extra gift or an extra 5% that new visitors don't get. New visitors should see reviews, best sellers and your guarantee instead."
+  },
+  {
+   "q": "What abandoned cart settings work best for Black Friday?",
+   "a": "Send the abandoned cart email faster and allow it more often. Little Sleepies changed the send time from one hour to 30 minutes and let customers receive it once a day instead of once every two weeks, and made more on day one than they had projected for the whole week. Shoppers come back and leave several times over the weekend, so a strict frequency limit misses them."
+  },
+  {
+   "q": "Should I turn off my welcome pop-up during Black Friday?",
+   "a": "Yes. A \"sign up and get 10% off\" pop-up is irrelevant when you're running a bigger sale, so turn it off along with any other campaigns running at the same time. Also show the discounted price with the original price crossed out and use automatic discounts so shoppers don't leave checkout to hunt for codes."
+  }
+ ],
+ "tags": [
+  "Shopify CRO",
+  "Ecommerce strategy",
+  "Case study"
+ ],
+ "transcript": [
+  {
+   "t": 0,
+   "text": "30% off on Black Friday, you will need twice the orders to make the same amount of profit. And this is a simple calculation most ecommerce brands don't make. In this video I'm going to show you four different plans tailored to your store. I'll ask you two very simple questions that help you understand exactly what will work for your store this year, and I'll show you exactly what to implement to actually get profit, not just more orders. And no, it's not a bigger discount. Klaviyo data actually shows us that last year the discounts went down, but sales went up with 11%. And stay until the end to see one email marketing trick that a baby clothing brand applied to basically reach their Black Friday goals on the first day instead of the first whole week."
+  },
+  {
+   "t": 49,
+   "text": "Two questions. The first one: do your customers buy again? Coffee beans, underwear, skincare products: yes. A sofa, a stroller, a mattress: no. Question two: can your margins take a discount? And here's a very quick test that we call the break-even multiplier. The formula is your margin divided by your margin minus the discount. That number is how many times more orders you need just to stand still. So a rule of thumb: above 60% margin you have room, below 50% you don't. That gives you four boxes. I call this the profit grid. Buy again, room in the margin: the Comeback. You win them now and earn in January. Buy once and room in margin: the Rush. You win on the first order. Buy again and thin margins: the Stack. You add more value instead of discount. Buy once and thin margins: the Vault. You sell access, not price. Pick your box now. I'll go through each."
+  },
+  {
+   "t": 121,
+   "text": "Okay, the first one is the Comeback. This is where people would purchase again and you have room in your margins. With Black Friday, you acquire the customer, but you expect them to come back later. There are three moves here. Move one: discount the first order to get a recurrent purchase later. If you give a huge discount, it gets people in the door and you know they will get hooked. They will come back, whether it's a subscription or a one-time purchase. Move two: the January code. Every Black Friday order gets a code. It only works from January the 5th to the 31st. Something like $20 off your next order over $80. Why January? It's your slowest month. Now you have a reason to email every Black Friday buyer and they have a reason to come back. This isn't new. Kohl's has done it for years. Spend $50 and get $10 to use later."
+  },
+  {
+   "t": 180,
+   "text": "Move three: remember the 4% who came back? This is the fix. Split your follow-up. New buyers get the January code plus an email on how to get the most out of what they bought. Returning buyers get a loyalty perk. And that is the Comeback. Now let's move over to the Rush, where people only buy once. The Rush: this is where people order only once and you have room in your margin. Important here is that you have to make the profit today in that single order, right? Because there is no subsequent order. And here I'll also share a very helpful trick for your cart that works in any of these quadrants. Three moves. Move number one: have a hero product that's one of your best sellers and give this one a huge discount. This gets people in the door, and all the other products you have available do get a discount with Black Friday, but much less. Here's the catch: it only works if they can see the tier. So add a progress bar to your cart. $40 more to unlock 30%."
+  },
+  {
+   "t": 246,
+   "text": "And here is the cart trick: keep it clean. We tested a decluttered cart for a client. We took out the extra upsell blocks and conversion went up with 11% over 3 months. That's about $41,000 in additional revenue. One progress bar beats four simple widgets. Now, move three: the mystery box. Goose and Gander did this. Three surprise items, and one is always their famous t-shirt, and customers get the surprise. You clear low stock and bestsellers never get discounted. We're past halfway, and the next one is something most stores don't think about. Most stores judge Black Friday on the conversion rate, but we don't. And that is something we call the visitor P&L, because every discount you give away is profit margin you don't get back. We look at what each visitor actually earns you, and that is what's important: the profit, not the conversion rate or even the revenue."
+  },
+  {
+   "t": 314,
+   "text": "If your margin is much thinner, there are other strategies that you can apply. Instead of giving away price, you give away value. Let's get into it. The Stack: this is you if your customers buy again, but your margins are thin. So here you don't want to give more discount, but instead add more value to the single order. Move one: a free gift instead of a bigger discount. Spend $100, get a product worth $30. The customer sees $30, but you pay maybe $8 to make it. Now compare that to 10% more off. That's $10 straight out of your margin. Move two: a gift card bonus. Buy a $100 gift card and get a $20 bonus card. That bonus only works from January, so you get the cash in November, but you get them back in January. And some gift cards are actually never even used."
+  },
+  {
+   "t": 376,
+   "text": "Move three: free shipping instead of deeper discounts. Lower your free shipping threshold for the weekend or make it free on everything. For a lot of shoppers, free shipping beats an extra 5% discount. And on a big order, it costs you less than 5%. That leaves us with the last box, the Vault, where you've got thin margins and only single purchases. This is a tough one, but also a very interesting problem to solve. The Vault: this is where discounting is the worst thing you can do. And instead of giving away the price or the value, you could give away access. If you're a premium brand in any of these four boxes, listen closely. Here again, three moves. Move one: create something that's unique for Black Friday that doesn't give you the need to give things away for free. This could be a limited product, a special variation or a color that would give some sense of urgency for customers coming to your site, because they really want to get it, but it's going to run out and it's going to end after so many days."
+  },
+  {
+   "t": 443,
+   "text": "Move two: password-only early access. Some brands lock the whole store for a day. Only the early access list gets in. It feels exclusive, but be careful. A password page blocks Google and it breaks every ad pointing at your site. So only do this with a big, engaged list and only for 24 hours, not the whole weekend. Move three: opt out completely. REI has closed its stores on Black Friday since 2015. Patagonia once ran a Black Friday ad that said, \"Don't buy this jacket.\" From a premium brand, saying no to Black Friday is a campaign in itself. That is the four boxes. Something that's relevant to all stores is the Head Start. Here's why these two come first. Last Black Friday, revenue from returning customers grew 13.5% faster than new ones. And new Black Friday customers, in one study, only 4% ever bought again. So your best Black Friday customers are the ones you already have."
+  },
+  {
+   "t": 512,
+   "text": "That makes the first step incredibly simple: let them in first. Early access. It's the most proven tactic there is. Here is the proof. Klaviyo published a case on the fashion brand Scuffers. Last Black Friday, their early access email made around 400% more revenue than the same email sent to everyone else. Here's the setup. If you do one thing this week, it must be this. Add a form to let people sign up for the early access on your website. These are your loyal customers. Ask them for their email address and their phone number. And then 48 to 24 hours before everybody else gets access, they get VIP access, right when all your products and variants are still available. But \"be the first\" isn't a strong enough reason. You need to give them a better one. So there are brands out there that have something very clever. They show new arrivals you can only see after you sign in. And they already make that visible right now. The products are right there, you just can't see them yet. That's curiosity building your list for you."
+  },
+  {
+   "t": 586,
+   "text": "Two more ways to fill the list. One: Instagram. Klaviyo can reply to anyone who comments a keyword, say \"early\", with a DM and a sign-up link. It's free. Two: your order confirmation page. Put the sign-up there too. The early access tells your best customers that they are special. The second step: make sure that your site and your email treat them that way. And by the way, if you enjoy videos like these that help you understand how you can improve the performance of your Shopify store, definitely subscribe to the channel. I post a video regularly that teaches you how to make more money on Shopify. Right, step two: how to treat them differently. On Black Friday, you have two people visiting your store. The first one is someone that has already purchased three times on your store, and the other one is just someone clicking an ad to get a huge discount for Black Friday. The mistake most stores make is that they show the exact same information to both of these users, and that is costing you real dollars. Your returning customers already trust you, so give them something new visitors don't get."
+  },
+  {
+   "t": 657,
+   "text": "Shopify lets you limit a discount to one customer segment. Go to Discounts, create one, and under Eligibility, pick customers who have purchased at least once. Now your regulars get an extra gift or an extra 5%, and you're not giving it to anyone else. Your new visitors need something else: proof. Your best sellers, your reviews, your guarantee, right at the top. And on your ad, skip the homepage. Send them straight to the best seller with the sale price already showing. And the same goes for your email. Shinola didn't email everyone harder. They sent their Black Friday emails to the most engaged customers, and SMS only to the people who had engaged recently. Fewer people. Klaviyo reported their Black Friday revenue went up by 27%, and revenue per person emailed up 48%. And that is the Head Start that you can implement on your store. But none of these work if your site and your email aren't ready for Black Friday. So let's go through a quick checklist to make sure you meet the expectations."
+  },
+  {
+   "t": 728,
+   "text": "Five things, fast. One: show the price after the discount, not just a percentage. Set the compare-at price so the old price shows crossed out. And use automatic discounts, not only codes. A coupon field is a door out of your checkout. Two: turn off your welcome pop-up. \"Sign up and get a 10% discount\" is not relevant on Black Friday, because you have a bigger sale going on. Make sure you turn off any other campaigns you've got going on. Three: this one's for Shopify Plus. Shopify Scripts stopped working on June 30th this year. If your tiered discounts or free gifts run on Scripts, they're gone. So place a test order for every single offer before Monday the 21st. Freeze your site from November 23rd. Don't publish new themes. Basically go into a code freeze. If you do run A/B tests, you can keep these live. These are basically added on top of your site and can be turned off very easily. But you want to avoid taking huge risks around Black Friday, because this is the moment you've got to shine."
+  },
+  {
+   "t": 800,
+   "text": "And five: the surprising setting I told you about earlier. Little Sleepies is a baby clothing brand. Before their Black Friday sale, they changed two things in the abandoned cart emails. First, the email went out after 30 minutes instead of an hour. Second, and this is a big one, a customer could get it once a day. Before, it was once every two weeks. The result: their VP of marketing said they made more on day one than they projected for the entire week. Why does this work? On Black Friday, people shop around. They add to cart on Friday. They come back on Saturday. They leave again. If your email can only reach them once every two weeks, you miss one of those. Check yours today. It's a small change and you want to make sure you've got it right."
+  },
+  {
+   "t": 855,
+   "text": "Now we've gone through it, let's sum up what we discussed. So find your box with these two questions. Treat returning customers differently than new customers, and especially treat your loyal customers best. These are your key audience in your Black Friday campaigns. Here's one thing to do today: find out your gross margins on your products. If you've entered this into Shopify already, you should be able to see this in your analytics on Shopify. If you haven't, that is the first thing to do. If the numbers scare you, you're probably in Stack or Vault. And if you're not sure what box you're in, I'll leave a link down below in the description. If you're interested, we can have a look at what quadrant you would fall into and what are the best tactics to really scale your sales at the end of this quarter. And one more thing: a lot of customers will add a product to cart but will never make the purchase. These customers are stuck at checkout. I made a whole other video explaining why this happens and what are the simple tricks you can apply on your checkout to improve the checkout abandonment rate, and get more of these customers that already said \"I want this product\" but for some reason didn't swipe their credit card on your store."
+  }
+ ]
+}

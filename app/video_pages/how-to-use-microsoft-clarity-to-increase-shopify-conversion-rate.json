@@ -1,0 +1,391 @@
+{
+ "thumbnail": "https://i.ytimg.com/vi/lWhW53MAd9o/maxresdefault.jpg",
+ "slug": "how-to-use-microsoft-clarity-to-increase-shopify-conversion-rate",
+ "youtube_id": "lWhW53MAd9o",
+ "youtube_title": "How to Use Microsoft Clarity to Increase Your Shopify Conversion Rate",
+ "published": "2026-11-02",
+ "generated_at": "2026-11-25T11:52:00+00:00",
+ "duration_seconds": 962,
+ "title": "How to Use Microsoft Clarity to Increase Shopify Conversion Rate",
+ "meta_title": "Microsoft Clarity for Shopify: Raise Conversion Rate",
+ "meta_description": "How we use Microsoft Clarity on Shopify stores: heatmaps first, click maps, smart events, conversion maps and a 5-step method for session recordings.",
+ "teaser": "The exact order we use Microsoft Clarity in, from heatmaps to recordings, that took one store from 1% to 2.1% conversion rate.",
+ "summary": "Microsoft Clarity shows why Shopify visitors drop off, while GA4 only shows where. Start with heatmaps and click maps across thousands of sessions, use smart events and conversion maps to see which elements relate to purchases, then watch filtered session recordings to find patterns you turn into A/B test hypotheses. On one store, this process took the conversion rate from 1% to 2.1% in 90 days.",
+ "key_takeaways": [
+  "Look at heatmaps before session recordings: heatmaps combine thousands of users at once, recordings show one at a time.",
+  "Change Clarity's default 3-day date range to around the last 30 days, or to whatever period matches how often your site changes.",
+  "Check your collection page scroll and click maps. If visitors only see the first two rows, put your bestsellers there and label them as bestsellers.",
+  "Use the product page click map to see which accordions, size guides or gallery images get the most clicks, then surface that information near the add to cart button.",
+  "Use conversion maps to compare the conversion rate of users who clicked an element (like a size guide accordion) with those who did not, so you know which elements earn their place.",
+  "Filter by referrer and by browser, OS and device: cold ad traffic, organic traffic, mobile and desktop users behave very differently.",
+  "Watch recordings only after finding the drop-off in GA4 or Shopify, filtered to sessions over 15 seconds, sorted by most clicks, at 2x or 4x speed, and look for patterns across 15 to 20 of them."
+ ],
+ "stats": [
+  {
+   "value": "1% → 2.1%",
+   "label": "Conversion rate on one store after 90 days"
+  },
+  {
+   "value": "20 min",
+   "label": "Time to find test hypotheses using heatmaps"
+  },
+  {
+   "value": "3 days",
+   "label": "Clarity's default date range (change it to ~30)"
+  },
+  {
+   "value": "15-20",
+   "label": "Recordings to watch per question"
+  }
+ ],
+ "chapters": [
+  {
+   "t": 0,
+   "title": "GA4 tells you where, Clarity tells you why"
+  },
+  {
+   "t": 67,
+   "title": "Start with heatmaps, not recordings"
+  },
+  {
+   "t": 165,
+   "title": "The buried bestseller problem"
+  },
+  {
+   "t": 249,
+   "title": "Product page click maps, dead and rage clicks"
+  },
+  {
+   "t": 385,
+   "title": "Smart events"
+  },
+  {
+   "t": 455,
+   "title": "Conversion maps"
+  },
+  {
+   "t": 570,
+   "title": "Filter by referrer: cold ads vs organic"
+  },
+  {
+   "t": 654,
+   "title": "Filter by browser, OS and device"
+  },
+  {
+   "t": 721,
+   "title": "How to watch session recordings (5 steps)"
+  },
+  {
+   "t": 852,
+   "title": "The full loop: GA4, Clarity, hypothesis, A/B test"
+  }
+ ],
+ "sections": [
+  {
+   "heading": "Why use Microsoft Clarity if you already have GA4?",
+   "t": 0,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Improving your conversion rate is not that difficult once you know what to improve. The problem is that **GA4 tells you where the problem is, not why**. It shows you which page loses people, but it can't show you what those people were trying to do.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Microsoft Clarity fills that gap. It shows exactly how users interact with your store, so you understand what needs to change. On one store we worked on, we used Clarity heatmaps to come up with a list of test hypotheses within 20 minutes. After 90 days of testing, the conversion rate went from **1% to 2.1%**.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Below is the exact order we use Clarity in, and how you can apply it to your own Shopify store.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "Should you start with heatmaps or session recordings?",
+   "t": 67,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Start with heatmaps. Recordings are fun to watch, but you can only watch one at a time. They take time, they're tedious, and if you're looking at the wrong data you can watch tons of them and learn nothing.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Heatmaps combine thousands, even hundreds of thousands of users at once. They tell you which page or section deserves your attention. Once you know what you want to understand, then you go into the recordings.",
+     "items": []
+    },
+    {
+     "type": "ul",
+     "text": "",
+     "items": [
+      "**Change the date range.** Clarity defaults to the last 3 days. Set it to something like the last 30 days, or adjust it to how often your site changes, so the data is relevant.",
+      "**Fix blocked screenshots.** If a newsletter pop-up or cookie banner covers the heatmap, Clarity isn't broken: the screenshot it captured includes the pop-up. Use the option to change the screenshot and pick a different render of the page."
+     ]
+    }
+   ]
+  },
+  {
+   "heading": "How do you spot buried bestsellers on a collection page?",
+   "t": 165,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "The first thing I look at is what I call the **buried bestseller problem**. A visitor lands on a collection page and only sees the first two rows of products. The scroll heatmap shows people don't scroll that far, and the click map shows they click very high on the page.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "That's only a problem if your products are ordered badly. Your bestsellers usually have better reviews and better product quality, so they should be at the top. Calling them \"bestseller\" also gives the user more confidence.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Say you have 24 or 25 products and the customer only sees 30% of the page. That's six or seven products. If those aren't your best ones, you're losing clicks. **Order your products so the strongest ones are seen first**, and you'll get a better click-through rate and a higher conversion rate.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "What does the product page click map tell you about customer anxiety?",
+   "t": 249,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "On the product page, I use the click map to find out what customers are anxious about. GA4 could track clicks too, but tracking every element on a page is tedious. **Clarity tracks every click by default.**",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Visitors scroll the page with a limited view, especially on mobile, and they click where they want more information: the gallery, the variant selector, the size guide, or accordions about shipping details below the fold. Where their clicks cluster is the question they most want answered.",
+     "items": []
+    },
+    {
+     "type": "ul",
+     "text": "",
+     "items": [
+      "If an accordion gets a lot of clicks, people want information that's hidden. Many more want it but never click. Surface it, for example by adding shipping details around the add to cart button.",
+      "If the size guide gets a lot of attention, answer the question upfront, for example by stating that the model is 5'4\" and wears size S."
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Then look at **dead click clusters**. Customers click because they expect something to happen, but there's no link or functionality. Often they click again, and some turn into rage clicks. Those clusters show you where people wish there was something, so you can make that functionality real.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "How do smart events work in Microsoft Clarity?",
+   "t": 385,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Clarity automatically captures events known from Shopify, like add to cart, seeing reviews and making a purchase. You can **filter heatmaps and recordings by the event a user triggered**.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "For example, filter on the see reviews event and compare those users with the ones who didn't see a review. Maybe they were more confident. Maybe they jumped straight to the reviews instead of scrolling top to bottom. That tells you what to surface more or make easier to find.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Say there's one particular review on a bestselling product that everybody wants to see. Some might leave, but maybe most who saw it did buy. Filtering by events shows you what those users do differently from everyone else.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "What is a conversion map in Microsoft Clarity?",
+   "t": 455,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "This is the feature nobody talks about and we use all the time. A conversion map adds ecommerce data to the heatmaps tab, so you see what people clicked on or saw together with the purchase data tied to it.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Take a product page with accordions for shipping details, return policy and size guide. Say 100 people clicked the size guide. Click the element and you can see how many of those users made a purchase. If their conversion rate is double that of people who didn't click it, you know that element matters.",
+     "items": []
+    },
+    {
+     "type": "quote",
+     "text": "You can actually really understand how an element on your site contributes to the performance without even having to A/B test it.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "You can do this per element for conversion rate, revenue or sessions, including reviews and collection page changes. It's especially useful for new elements. If nobody clicks a new accordion, it added no value. If people click it but convert at a lower rate than those who don't, they probably aren't getting anything from it, so **remove it or A/B test it**.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "Why filter Clarity by referrer, browser and device?",
+   "t": 570,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Users from **cold ads** and users from **organic search** behave very differently. Organic visitors had the intent to come to your site, so they read more, look at all the images and probably convert at a higher rate. Cold traffic just clicked an ad and spends less time learning about the product.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "For cold traffic, make things easy to understand, readily available and a bit quicker. Returning customers and organic visitors take their time, so longer copy that educates can work. Combine the referrer filter with conversion maps to see which elements contribute more for each group. At some point you can use that to personalise the experience for cold and warm segments.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Then filter by **browser, operating system and device**. You see your site through your own screen, which is very different from a smaller, bigger or different screen. Desktop and mobile differ in user experience and performance. Don't just design mobile first: verify that everything works for customers on every device. You'll often find bugs this way.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "How do you watch session recordings without wasting hours?",
+   "t": 721,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Recordings are an important tool, but watching random ones won't give you any answers. This is the five-step process we use:",
+     "items": []
+    },
+    {
+     "type": "ol",
+     "text": "",
+     "items": [
+      "Find where customers leave the funnel. Use GA4 or Shopify to see whether the biggest drop is on the product page, cart or checkout.",
+      "In Clarity, filter by that page. Only include sessions longer than 15 seconds and users relevant to your question, otherwise you're watching people who never intended to buy.",
+      "Sort the list from most clicks to fewest. This filters out users who weren't engaged.",
+      "Watch at 2x or 4x speed. Skipping inactivity is possible but often gives a strange view.",
+      "Watch 15 to 20 recordings and look for what's common across them."
+     ]
+    },
+    {
+     "type": "p",
+     "text": "The tricky part is interpretation. Someone might rage click an element a million times and still buy. **One frustrating moment in one recording doesn't mean changing that element will move conversion rate.** Look for patterns: where people often scroll to, what information they're searching for, and how you can surface it better.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "The full loop: GA4, Clarity, hypothesis, A/B test",
+   "t": 852,
+   "blocks": [
+    {
+     "type": "ol",
+     "text": "",
+     "items": [
+      "Use GA4 or Shopify to find where users abandon the most. That's the biggest problem to solve.",
+      "Open Clarity to understand why: how those users behave, what they look for, what they miss and where they click.",
+      "Turn those observations into hypotheses: changes you believe will improve performance.",
+      "A/B test them to see if the change actually makes or breaks the bank.",
+      "After the test, compare how users engaged with the winning and losing variants in Clarity."
+     ]
+    },
+    {
+     "type": "p",
+     "text": "That last step is often forgotten. Comparing behaviour across variants tells you whether the element really drove the improvement, or whether there's still more you can do. We've run this process hundreds of times, and it's how we approach every new brand we work with.",
+     "items": []
+    }
+   ]
+  }
+ ],
+ "faq": [
+  {
+   "q": "What is the difference between GA4 and Microsoft Clarity?",
+   "a": "GA4 tells you where visitors drop off in your funnel, but not why. Microsoft Clarity shows how users actually interact with your store through heatmaps, click maps and session recordings, so you can understand the reason behind the drop-off."
+  },
+  {
+   "q": "Should I look at heatmaps or session recordings first in Clarity?",
+   "a": "Heatmaps first. They combine thousands of users at once and show you which page or section needs attention. Recordings show one user at a time and are slow to watch, so only go into them once you know what question you're trying to answer."
+  },
+  {
+   "q": "What date range should I use in Microsoft Clarity?",
+   "a": "Clarity defaults to the last 3 days, which is usually too short. Change it to something like the last 30 days, or match it to how often your site changes so the data reflects the current version of your store."
+  },
+  {
+   "q": "What is a conversion map in Microsoft Clarity?",
+   "a": "A conversion map adds ecommerce data to the heatmaps tab. You can click an element, such as a size guide accordion, and see the conversion rate, revenue or sessions of users who engaged with it. If those users convert at double the rate of others, the element is important; if they convert lower or nobody clicks, consider removing or A/B testing it."
+  },
+  {
+   "q": "How many Clarity session recordings should I watch?",
+   "a": "Watch 15 to 20 recordings per question. Filter first to the page with the highest drop-off, to sessions longer than 15 seconds, sort by most clicks, and watch at 2x or 4x speed. Look for patterns across recordings rather than reacting to one user's behaviour."
+  },
+  {
+   "q": "What are dead clicks and rage clicks in Clarity?",
+   "a": "Dead clicks are clicks on something that doesn't respond because there's no link or functionality. When users keep clicking repeatedly, those become rage clicks. Clusters of them show where customers expect something to happen, so you can add that functionality."
+  }
+ ],
+ "tags": [
+  "Shopify CRO",
+  "Analytics",
+  "A/B testing",
+  "Product pages"
+ ],
+ "transcript": [
+  {
+   "t": 0,
+   "text": "Improving your conversion rate is actually not that difficult. You just need to know what to improve on your store. GA4 gives you tons of data, but it often tells you where the problem is at and not why. So, what do you do? You open Microsoft Clarity and you figure out exactly how the user interacts with your store and therefore understand what you need to change. Now, we worked on this on a business. We used heatmaps to figure out within 20 minutes what are the different hypotheses that we have that we should test and learn from on the site. After 90 days, we improved the conversion rate from 1% to 2.1%. An incredible uplift only possible because of Microsoft Clarity. Now, I will show you exactly what are the steps we took, in what order, and more importantly, how can you use this in your business to improve the performance of your e-commerce store. And stay until the end because I will discuss one very powerful feature in Microsoft Clarity nobody talks about and we use all the time."
+  },
+  {
+   "t": 67,
+   "text": "Okay, so the first thing is heatmaps over recordings. I get it, recordings are fun and interesting, but you can only watch one at a time. So, if you first look at the heatmaps, you can figure out where you need to put your attention to. Let's say what section or what page, you can figure out what you want to understand and then go into the recordings. Recordings take time and they're tedious to watch. And often, if you're not looking at the right data, you can watch tons of recordings and learn nothing from it. So, make sure you always first go through the heatmaps because here you don't watch one user at a time, you can combine thousands, hundreds of thousands of users at the same time. The default setting on Microsoft Clarity is 3 days. So, you definitely want to change that to, let's say, the last 30 days. Or if you change your site never or a lot, you might adjust the date range to that, uh, decision or how often the site changes. You want to have relevant data in your date range."
+  },
+  {
+   "t": 125,
+   "text": "Now, one practical tip I can give you as well is whenever you open a heatmap, sometimes there is a pop-up for a newsletter or a pop-up from a cookie banner. Of course, this obstructs your view of what happens on the site. And this is not because Microsoft Clarity is necessarily broken. It's because this, the screenshot taken and presented to you has the pop-up. But you can change this. You can click on change the page or change the screenshot, and it allows you to select a different render of that page. And then everything works perfectly and as normal. Okay, let's move on. I'll show you actually what to look at on Microsoft Clarity. And the first one is the best-seller buried problem. This is basically where you come to a collection page, and the user only sees like the first two rows of your products. And you can look at that on the heatmaps as well. You can see people don't scroll that far. So, they're more likely to click on the very few first options. And if you switch to the click map, you can actually see that people do click very high on the page."
+  },
+  {
+   "t": 189,
+   "text": "And this is a problem if your products are not ordered correctly. Because you can easily figure out what are your best-selling products, what are the ones that should be promoted the most, and these should be at the top because they have better reviews, better product quality, the everything is probably better with the best sellers. And even having them called best seller gives more confidence to the user. So, if you have, let's say, 24, 25 products, and the customer only sees 30%, they only see about six or seven products, which is not that much if your products are not the best. So, make sure your products are ordered in the same correct way so you get the best click-through rate and the highest conversion rate. A very quick note before we keep going. If you see value in watching these videos, you can always subscribe to my channel. Every week I'll publish new videos and ways to help you improve your business. Let's get back to the video. Now, we've actually gone through the collection page. Let's now jump into the product page."
+  },
+  {
+   "t": 249,
+   "text": "Okay, now you want to figure out what customers are actually anxious about. And you do this by looking at the click map on the product page. Because you want to know where people click on, right? GA4 could do this, too. But you don't want to track the whole page, which is very tedious. You might want to track a few clicks here and there. But Microsoft Clarity tracks everything by default, which is very powerful and very interesting. So, the user goes through the page with a limited view, especially on mobile. But they go through the page and they often click where they want to have more information. If it's a gallery, if it's the selector, if the, the size guide, if it's any of the accordions about the shipping details below the fold, etc. You want to figure out where their attention goes to the most, because this is the question they want to have answered the most. And that way, you can help surface that information easier and better."
+  },
+  {
+   "t": 303,
+   "text": "So, let's say someone clicks on an accordion a lot. It means they're interested in something that's actually hidden. A lot of people want this information, but they don't see it. They won't even click on it. So, maybe you can surface that information about, let's say, shipping details and add it around the add to cart button. Or if they really want to know things about the size guide, you might already say that the model is 5'4\" and they're using size S or whatever. So, that way you can kind of surface the relevant information for the users without them having to put more effort into it. And then the other thing to look into is dead click clusters. Often customers expect something to happen and therefore they click. But sometimes nothing happens because there's no link or no functionality. So, by understanding the dead clicks, you can actually see where they wish there was something. And often when they click and they expect something, they will click again. And some people will get rage clicks and they will click many times to figure out how to get it to work. So, by understanding what they expect, you can improve the site by actually making that functionality real."
+  },
+  {
+   "t": 366,
+   "text": "Now, before we move on, a quick question to you. Have you ever used the smart clicks in Clarity? It's an interesting feature. Most people do not know that they exist, but it interestingly tells you exactly what events are fired by what users, and it helps you understand it very quickly. Now, the next thing I want to mention to you is about smart events. So, Microsoft Clarity automatically captures events that are known from Shopify. Add to cart, seeing reviews, making a purchase, and you can actually filter the data you see by the event that was triggered. So, let's say if you're interested in the see reviews event, you can actually see the recordings or the heatmaps from people that saw the reviews. And you can see how they behaved different from the ones that did not see a review. Maybe they were a lot more confident. Maybe they jumped straight to the reviews instead of slowly going from top to bottom. And you can figure out what are different behaviors for different types of users or different smart events they trigger. And that way, you can understand what you should maybe surface more, make it easier to find, or what are key things that they always look at."
+  },
+  {
+   "t": 438,
+   "text": "Let's say there's a particular review on one of your best-selling products that everybody wants to see. Some might leave, but maybe even when they saw it, most did make a purchase. So, that way you can really filter down the events and see what those users do differently than any other user on your site. Now, the next one is the conversion map. This is something I teased earlier on in the video. Basically, what this allows you to do is integrate an almost e-commerce feature onto the heatmaps tab on Microsoft Clarity. So, what it shows you. So, if you go into the heatmap, you can either see what people were clicking on or saw, and then what type of e-commerce data is related to that. For example, you have a product page, you have a few of your accordions, let's say shipping details, another one is about return policy, another one is maybe your size guide. Let's say we can see that 100 people clicked on the size guide. We clicked on the element and then we can actually see how many users made a purchase when they also clicked on the size guide accordion. The conversion rate might be double from the ones that did not."
+  },
+  {
+   "t": 503,
+   "text": "So then you know, okay, probably this is very important. You can do the same with reviews, collection page changes, and really figure out per element what is the conversion rate or revenue or the amount of sessions that came from users clicking or engaging with that element. And that is very powerful because then you can actually really understand how an element on your site contributes to the performance without even having to A/B test it. So let's say you built something new, you build a new page and it has a new accordion. You might already see people don't click on it. So therefore, basically added no value. Or maybe people did click on it, but actually converted at a lower rate than the ones that did not. And you might assume that these users are not really getting benefit from reading this section. Which basically means you might just want to remove it or of course A/B test it. So this is a very interesting feature to understand the actual elements that are on your site. It allows you to play with new elements a lot easier and of course with all existing elements. You can see if you should remove or if they should stay."
+  },
+  {
+   "t": 570,
+   "text": "The next thing I would suggest you to do is filter by the referrer. The users that come from cold ads behave very differently than the ones that come from organic search. One had the intent to come to your site and the other one just clicked a random ad. And their behavior will be vastly different, too. Cold traffic will probably spend less time in learning about your product and really understanding everything that you do. While organic traffic had the intent, so they will spend more time reading everything, looking at all the images, and probably converting at a higher rate. But what they do could be distinctly different. For cold traffic, you probably want to make things very easily to understand, readily available, everything should be a little, little bit quicker. While for returning customers or organic search, they take their time and you might use more longer copy to educate them more. But with the heatmaps and click maps, you can get a good understanding of how these two different groups engage with your site and how you can best serve them."
+  },
+  {
+   "t": 628,
+   "text": "You can even combine it with the conversion map we spoke about earlier. You can see what elements contribute more for organic search versus cold traffic. And that way you can probably at some point personalize the experience on your site so that the segment cold or warm has elements that suit them best. And with the heatmaps and recordings, you get a very good understanding of how that works. Now, the next one is filtering by browser and operating system. And this is key as well because you observe your site through your screen, which is vastly different from someone that's on a smaller, bigger, or just different screen and browsing system. The site might not always be exactly the same. Now, particularly when it comes to desktop versus mobile, the user experience is vastly different. The performance is as well. So, you want to make sure you don't only design mobile first, but that you also verify that everything worked for your customer because there is no other or better way to see what customers on all different devices see than using Microsoft Clarity."
+  },
+  {
+   "t": 696,
+   "text": "It really helps you understand how they engage with the product page on a very small screen or on a very big screen. And you might even find bugs or issues on your site. And of course, by knowing these things, you can better optimize your site to also for them provide a very useful and pleasant user experience on your site, which eventually of course leads to more revenue and a higher performance. Now, actually let's start about the session recordings. A very important tool, but you need to make sure you use it wisely. Just watching random recordings is not going to give you any answer. Step one, figure out where customers are leaving the funnel. All right, is it on the cart, checkout, product page? Figure out through GA4 or Shopify where the drop is the highest. Step two, go to Microsoft Clarity and filter by the specific page where the abandonment rate is highest. Make sure you filter for sessions that only last longer than 15 seconds and that you include users that are relevant in your study. And the last ones are definitely important because you only want to include sessions with considerable spent time. Otherwise, you're just looking at users that never had the intent to make a purchase."
+  },
+  {
+   "t": 768,
+   "text": "Step three, order the list from highest clicks to lowest. This gives you the best data and really filters out the users that were not engaged. Step four, watch at a higher speed. You can also skip inactivities, but it often gives a, a strange view. Just watch at a higher speed, x2, x4, so you can quickly go through the images. And then step five, look at 15 or 20 screen recordings to see if it answers your specific question. What is common among all these 10 or 15 screen recordings that is worth spending your time on. Now, watching at screen recordings is definitely very tricky. A simple example might be rage clicks. Someone might get frustrated with an element and expect something that didn't happen and they might click a million times, but they could still make a purchase. So, seeing one single element that is not performing as you expect on a screen recording doesn't mean that it's worth changing to improve the conversion rate drastically. You're really trying to figure out among all these recordings, what is a common pattern? Where did they scroll to often? Where was the information that they're looking for and how can we better surface that?"
+  },
+  {
+   "t": 840,
+   "text": "It's not really about what is the smoothest experience because customers behave differently, they see different things, they click on different things. So, don't look at one or few things that happened. Really look for a pattern across many recordings. Okay, now let's look at the whole process. The steps you basically follow is you go to GA4 or Shopify, you figure out where users are abandoning the site the most. This is the biggest problem to solve. You know where, now let's figure out why. You open Microsoft Clarity, you figure out exactly how these users behave, what they're looking for, what they're missing, where they're clicking to get a good understanding of what is going through their mind. These findings of observations, you turn them into hypotheses, right? Assumptions that you believe, hey, if we fix those, the performance will go up. And that is the backbone of your testing. Through A/B testing, you can actually figure out if making these changes breaks the bank or makes the bank. And that is very important."
+  },
+  {
+   "t": 897,
+   "text": "And then a step that's often forgotten, too, is that after you run the test, you want to look at the winning variant and the losing variant and compare how users engage with it differently. That really gives you a good grasp of if the element contributed to the improvement of your conversion rate or if there are still things that you can do even better. I showed you exactly how a real CRO agency uses Microsoft Clarity to improve the performance of any e-commerce store. And we've gone through this hundreds and hundreds of times. And we really figured out what makes an e-commerce business tick. We've seen it from the inside and we apply it to all new brands we work on. If you feel this is all a lot of work, you can always reach out to us on the link below and we'll look over your shoulder to really help you scale your business to the next level. Improve your ROAS, improve your AOV, and of course your conversion rate. I publish videos every single week about CRO, so if you're interested, you can always follow along. And then I'll see you in the next one."
+  }
+ ]
+}

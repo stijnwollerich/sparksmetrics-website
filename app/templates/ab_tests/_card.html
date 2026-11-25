@@ -1,0 +1,13 @@
+{% set rr = c.results %}{% set lift = rr.conv_improvement if rr.conv_improvement is not none else rr.psv_improvement %}
+<a class="vp-vcard" href="{{ url_for('main.ab_test_page', slug=c.slug) }}" data-tags="{{ c.page_type }}">
+  <div class="vp-thumb vp-thumb--ba">
+    <img src="{{ url_for('main.ab_test_image', name=c.images.control) }}" alt="" loading="lazy">
+    <img src="{{ url_for('main.ab_test_image', name=c.images.winner) }}" alt="" loading="lazy">
+    {% if lift is not none %}<span class="vp-lift">{{ '+' if lift > 0 else '' }}{{ '%g'|format(lift) }}% {{ 'conv. rate' if rr.conv_improvement is not none else 'rev/visitor' }}</span>{% endif %}
+  </div>
+  <div class="vp-vcard-body">
+    <small>{{ c.page_type }} · {{ c.industry }}</small>
+    <h3>{{ c.card_title or c.title }}</h3>
+    <p>{{ c.teaser }}</p>
+  </div>
+</a>

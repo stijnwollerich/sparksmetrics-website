@@ -24,7 +24,8 @@
     <div id="exp-viewport" class="overflow-hidden">
       <div id="exp-track" class="flex gap-4 md:gap-5 transition-transform duration-300 ease-in-out">
       {% for exp in spark_experiments %}
-      <article class="exp-card flex flex-col rounded-2xl overflow-hidden bg-white border border-gray-200/80 shadow-sm hover:shadow-md hover:border-gray-300/90 transition-all duration-200 flex-shrink-0">
+      <article class="exp-card flex flex-col rounded-2xl overflow-hidden bg-white border border-gray-200/80 shadow-sm hover:shadow-md hover:border-gray-300/90 transition-all duration-200 flex-shrink-0" style="position:relative">
+      {% if exp.url %}<a href="{{ exp.url }}" style="position:absolute;inset:0;z-index:20" aria-label="Read the case study: {{ exp.test_name }}"></a>{% endif %}
 
         {# page type pill #}
         {% if exp.page %}

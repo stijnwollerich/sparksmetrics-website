@@ -1,0 +1,83 @@
+{
+ "slug": "size-selector-ab-test-12-5-more-conversions-for-an-underwear-brand",
+ "experiment_id": 75,
+ "fingerprint": "251c96b418ae6d86",
+ "generated_at": "2026-11-25T12:10:51+00:00",
+ "start_date": "2026-10-11",
+ "end_date": "2026-11-04",
+ "results": {
+  "conv_improvement": 12.5,
+  "psv_improvement": 17.7,
+  "aov_improvement": 4.6,
+  "rev_added": 11617,
+  "rev_added_3m": 43562,
+  "visitors": 18132,
+  "days": 24
+ },
+ "images": {
+  "control": "size-selector-ab-test-12-5-more-conversions-for-an-underwear-brand-before.webp",
+  "winner": "size-selector-ab-test-12-5-more-conversions-for-an-underwear-brand-after.webp"
+ },
+ "change_seen": "The winner makes sizing easier to read by turning the plain 'Size chart' text link into a larger outlined pill button, enlarging the size buttons into a 4-per-row grid, and making the price bold and orange.",
+ "title": "Size Selector A/B Test: 12.5% More Conversions for an Underwear Brand",
+ "card_title": "Readable size selector",
+ "meta_title": "Size Guide A/B Test: +12.5% Conversions on a Product Page",
+ "meta_description": "We made the size chart link a button, enlarged the size grid and bolded the price. Conversion rate rose 12.5% and revenue per visitor grew 17.7%.",
+ "teaser": "Making sizing easier to read on the product page lifted conversion rate by 12.5% and revenue per visitor by 17.7% for a women's underwear brand.",
+ "industry": "women's underwear",
+ "page_type": "Product page",
+ "summary": "We made the size selection area on a women's underwear product page easier to read: the size chart link became a larger outlined button, the size buttons became bigger in a 4-per-row grid, and the price turned bold and orange. Conversion rate rose 12.5%, revenue per visitor rose 17.7% and average order value rose 4.6% across 18132 visitors over 24 days. The likely reason is that fit is the main worry when buying underwear online, and the variant made checking and picking a size much easier.",
+ "problem": [
+  "On the original product page, the size chart was a small plain text link in the corner next to the size label. For a product where fit decides whether the shopper is happy, the one tool that answers \"which size am I?\" was easy to overlook.",
+  "The size buttons were also small and packed six to a row, with nine sizes spread over two uneven rows. That makes the selector harder to scan and tap, especially on a phone. The price sat in plain black text and did not stand out from the rest of the page."
+ ],
+ "hypothesis": "If we make the size chart and size buttons larger and easier to read, and make the price stand out, then more visitors will choose a size with confidence and buy, because fit uncertainty is a key reason shoppers hesitate on underwear.",
+ "control_label": "Small text link for the size chart, compact size buttons six per row, price in plain black text.",
+ "winner_label": "Outlined pill button for the size chart, larger size buttons in a 4-per-row grid, price in bold orange.",
+ "changes": [
+  "Turned the plain \"Size chart\" text link into a larger outlined pill button with a tape measure icon.",
+  "Enlarged the size buttons and arranged them in a cleaner grid of four per row.",
+  "Kept the sold-out size visibly crossed out within the new grid.",
+  "Made the price bold and orange so it reads as a key piece of information.",
+  "Left the product images, benefit icons, colour swatches and bundle offer unchanged."
+ ],
+ "why_it_worked": [
+  "Underwear is a fit-sensitive purchase. Shoppers who are unsure of their size often leave rather than guess. A size chart that looks like a real button gets noticed and used, which likely helped more visitors settle on a size and move on to adding to cart.",
+  "Larger size buttons in a tidy grid are faster to scan and easier to tap. When choosing a size takes less effort and fewer mis-taps, fewer people drop off at that step.",
+  "The bold, coloured price made the cost clear at a glance. We also saw average order value rise 4.6%. The record does not explain that lift, but a likely reason is that shoppers who felt confident about fit were more willing to buy several pairs and use the multi-item bundle discount on the page."
+ ],
+ "takeaways": [
+  "If you sell apparel or underwear, style your size chart link as a visible button with an icon, placed right next to the size selector.",
+  "Give size buttons enough room: larger tap targets in an even grid (for example four per row) are easier to read and select than a crowded row.",
+  "Keep unavailable sizes visible but clearly crossed out so shoppers know the range without confusion.",
+  "Make the price visually distinct so shoppers do not have to search for it before deciding.",
+  "Measure revenue per visitor and average order value as well as conversion rate, since easier sizing can also lead to larger orders."
+ ],
+ "faq": [
+  {
+   "q": "Does making the size chart more visible increase conversions?",
+   "a": "In this test it did. Turning a small size chart text link into an outlined button, together with larger size buttons and a bolder price, lifted conversion rate by 12.5%. For fit-sensitive products, a size guide that shoppers actually notice reduces the uncertainty that stops them buying."
+  },
+  {
+   "q": "How big should size buttons be on a product page?",
+   "a": "Big enough to read and tap comfortably on a phone. In our winning variant the size buttons were enlarged into a grid of four per row instead of six. A useful check is whether each button can be tapped with a thumb without hitting its neighbour."
+  },
+  {
+   "q": "Should the price on a product page be highlighted?",
+   "a": "Making the price bold and coloured was part of the winning variant here, so it can help shoppers find key information quickly. Because we changed it together with the size selector, we cannot isolate its effect, so test it in your own store before assuming it works alone."
+  },
+  {
+   "q": "Can a size guide change affect average order value?",
+   "a": "It can. In this test average order value rose 4.6% and revenue per visitor rose 17.7%. A likely explanation is that shoppers who are confident about fit are more willing to buy multiple items, especially when a multi-item discount is offered."
+  },
+  {
+   "q": "How long should a product page A/B test run?",
+   "a": "Long enough to cover full weekly buying cycles and reach a reliable sample. This test ran for 24 days with 18132 visitors. Stopping early on a short spike in results is a common way to pick the wrong winner."
+  }
+ ],
+ "tags": [
+  "Product page",
+  "Layout",
+  "Pricing"
+ ]
+}

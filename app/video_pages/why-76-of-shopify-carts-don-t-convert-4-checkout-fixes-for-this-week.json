@@ -1,0 +1,359 @@
+{
+ "thumbnail": "https://i.ytimg.com/vi/L7LkBOTRKcs/maxresdefault.jpg",
+ "slug": "why-76-of-shopify-carts-don-t-convert-4-checkout-fixes-for-this-week",
+ "youtube_id": "L7LkBOTRKcs",
+ "youtube_title": "Why 76% of Shopify Checkouts Fail (and 4 Fixes You Can Ship This Week)",
+ "published": "2026-10-26",
+ "generated_at": "2026-11-25T11:49:03+00:00",
+ "duration_seconds": 834,
+ "title": "Why 76% of Shopify Carts Don't Convert (4 Checkout Fixes for This Week)",
+ "meta_title": "Shopify Checkout Abandonment: 4 Fixes to Ship This Week",
+ "meta_description": "Why 76% of Shopify shoppers who add to cart never buy, and 4 checkout fixes: cost transparency, fewer fields, trust and express pay, cart upgrades.",
+ "teaser": "Why shoppers who love your product still abandon checkout, and four practical Shopify fixes you can ship this week.",
+ "summary": "Most Shopify checkout abandonment is not caused by the product. It comes from surprise costs, unnecessary friction like forced accounts and long forms, and missing trust or express payment options. Fix these by showing shipping and taxes in the cart, cutting form fields, adding trust signals and express checkout, and enhancing the cart with a free shipping bar, a real shipping cutoff timer and your return policy.",
+ "key_takeaways": [
+  "Show shipping costs and taxes in the cart, before checkout. If shipping is a flat rate or taxes are a fixed percentage, state them or give an estimate early. The checkout is for confirmation, not discovery.",
+  "Add a free shipping threshold bar to your cart. More people reaching free shipping means fewer surprise costs at checkout, and it lifts AOV.",
+  "Allow guest checkout in Shopify settings and ask for account creation on the order confirmation page instead.",
+  "Remove every checkout field you don't actually use. If you never call customers after purchase, don't ask for a phone number.",
+  "Enable address autocomplete in Shopify so mobile shoppers can fill in their address in a few taps.",
+  "Say \"Checkout securely\" on the cart button, display payment method logos, and put express payment buttons in the cart so shoppers can skip the form.",
+  "Write out a short version of your return policy in the cart (not a link or dropdown), and only use a shipping cutoff timer if it is real."
+ ],
+ "stats": [
+  {
+   "value": "76%",
+   "label": "of shoppers who add to cart never complete the purchase"
+  },
+  {
+   "value": "24M",
+   "label": "visitors across almost 1,000 Shopify stores in the 2026 study"
+  },
+  {
+   "value": "4 in 10",
+   "label": "cart abandoners leave because of surprise costs (Baymard)"
+  },
+  {
+   "value": "9",
+   "label": "checkout form fields many stores easily ask for"
+  }
+ ],
+ "chapters": [
+  {
+   "t": 0,
+   "title": "Nearly half of checkouts never convert"
+  },
+  {
+   "t": 26,
+   "title": "The 2026 Shopify study (24M visitors)"
+  },
+  {
+   "t": 72,
+   "title": "Why checkout breaks"
+  },
+  {
+   "t": 98,
+   "title": "Fix 1: Cost discovery"
+  },
+  {
+   "t": 348,
+   "title": "Fix 2: Friction overload"
+  },
+  {
+   "t": 488,
+   "title": "Fix 3: Trust and express payments"
+  },
+  {
+   "t": 660,
+   "title": "Fix 4: The enhancement layer"
+  },
+  {
+   "t": 760,
+   "title": "Shopify Plus checkout extensions"
+  },
+  {
+   "t": 783,
+   "title": "Recap and free audit"
+  }
+ ],
+ "sections": [
+  {
+   "heading": "Why do shoppers abandon checkout on Shopify?",
+   "t": 0,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Nearly half of the visitors who reach your checkout never make the purchase. A 2026 study of almost a thousand Shopify stores and 24 million visitors found that **76% of users who add a product to cart never swipe their credit card**. That number includes a big group who never reached checkout at all, and they are harder to convert.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "The group I care about most is the one that did reach checkout. They liked the product, they committed to it, they filled in their name and address. Then something they saw at the very end stopped them. That something is almost never the product itself.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "You have probably seen the usual list: forced account creation, lack of trust, high shipping costs. Those are real, but they only touch the surface. The psychology underneath is what makes the difference, and none of my fixes involve lowering your prices or paying for shipping yourself.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "How do surprise costs kill checkout conversion?",
+   "t": 98,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Cost discovery is the simplest fix of the four. A shopper evaluates your product, compares it with competitors, falls in love with yours and adds it to cart. Then at checkout they get hit with taxes, shipping and maybe other fees they never factored in. That forces them to **re-evaluate the whole offer**, and many of them abandon.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Baymard found that four out of 10 people who abandon their cart do so because of these surprise costs.",
+     "items": []
+    },
+    {
+     "type": "quote",
+     "text": "It's not the product that's killing the conversions, it's the surprises that you throw at them in the checkout.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "In the video I walk through Gymshark. Their cart shows lots of elements, including a free shipping threshold that nudges you to spend more, but nothing about the actual shipping, taxes or fees. The first time you see those is on the checkout, where in my example $5 is added for shipping. That is a surprise, and a negative experience for the customer.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Brooklinen handles it better. Their cart shows shipping as free (and when it's free, promote it as much as you can) and says taxes will be calculated at checkout. So I already know my total will be above $135 before I get there. The checkout then simply confirms it with a shipping line and estimated taxes based on the zip code.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Behavioral research explains why this matters so much. Charging $5 more on the product leads to a higher cart completion rate than charging the same $5 as shipping or a fee. A separate fee **feels like a penalty**, and that drives abandonment.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "How do I show shipping and taxes before checkout?",
+   "t": 289,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "There are three things you can do this week to remove surprise costs:",
+     "items": []
+    },
+    {
+     "type": "ol",
+     "text": "",
+     "items": [
+      "Add a free shipping threshold bar to your cart. The more people reach free shipping, the fewer get surprised at checkout, and it shows them the value of spending a bit more to save on shipping.",
+      "Communicate taxes as early as possible. If you charge a flat rate or a percentage, say so before checkout, or give an estimate.",
+      "Show shipping pricing in the cart. If it's a flat rate, show it in the cart before it ever appears on checkout. If it's an estimate, do exactly the same."
+     ]
+    },
+    {
+     "type": "quote",
+     "text": "Keep in mind, the checkout is for confirmation, not for discovery.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Try not to show any new information on the checkout. That improves your overall conversion rate, not just your checkout completion.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "How do I reduce friction in the Shopify checkout?",
+   "t": 348,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Fix number two is friction overload. The classic example is **requiring customers to create an account**. It feels like an obstacle when all they want is to swipe their card and receive the product. If you want the benefits of accounts, ask for it on the order confirmation page instead. In Shopify, go to Settings, then Checkout, where you can allow guest purchases or choose when customers create an account.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "A well-known big retailer changed the text on the button that leads to checkout from \"Register\" to \"Continue\". It made clicking feel easy instead of feeling like a commitment, and that small change was credited with a large revenue uplift over the following years. It's an extreme example, but the strategy holds: make it smooth and don't force people to do things they don't want to do, because it costs you money.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Here's the version most people miss. Even without forced accounts, shoppers still have to fill out your form, and that can easily be **nine different fields**. If you don't call customers after a purchase, don't ask for their phone number. The same goes for every other field: if you don't need it, don't ask for it.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "The third step is **address autocomplete**. Typing a full address on a phone is tedious. Shopify lets you enable autocomplete, so shoppers start typing, pick their address from the suggestions, and everything fills in. On mobile especially, that gets them to the payment step much faster.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "How do trust signals and express payments improve checkout conversion?",
+   "t": 488,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Fix three covers payment gaps, and there are two issues. The first is trust. When someone lands on your store, they don't trust you at all, and you need to earn it, especially around checkout. Shopify limits what you can change on the checkout itself for security reasons, but you can communicate the same things in your cart.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Gymshark's cart button says **\"Checkout securely\"**. It doesn't change what the shopper does next, but it reassures them. Everyone knows and trusts Gymshark; most brands don't have that recognition, so saying it is even more useful for you. They also display the payment methods, which signals that card details go to the bank or payment gateway, not to the store.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Brooklinen's button just says \"Checkout\". Is it secure? You'd assume so, but they don't confirm it, so the shopper has to decide that on their own. Payment methods aren't shown either. That leaves room for doubt. Saying it confidently earns trust.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "The second issue is speed. **Express payment methods** let customers skip your nine-field form. You can show them on the checkout, but it's even simpler to put them in the cart. Allbirds shows four payment options at the bottom of the cart; clicking one goes straight to that payment method and skips the standard Shopify checkout form.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Try this yourself: open your store on your phone and count the clicks from landing on a page to completing a payment. The more clicks it takes, the more users you lose along the way.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "What can I add to my cart to improve checkout completion?",
+   "t": 660,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Once the first three fixes are in place, there's an enhancement layer most stores never get to. It all lives in the cart, so **you don't need Shopify Plus** for any of it.",
+     "items": []
+    },
+    {
+     "type": "ul",
+     "text": "",
+     "items": [
+      "A free shipping threshold bar. Most themes have one built in, otherwise use an app or custom code. Show shoppers how far they are from saving on shipping. It improves checkout completion and helps AOV.",
+      "A real shipping cutoff timer, for example: \"If you order within the next 23 minutes, your shipping will happen today and the product will arrive by Friday.\" Never use a fake one, because that loses trust. A real one builds trust and adds a little urgency.",
+      "A real trust signal. The best one is your return policy, written out in short, concise wording. Not a link, not a dropdown. A short review or testimonial such as \"it was a perfect fit\" also works."
+     ]
+    },
+    {
+     "type": "p",
+     "text": "The return policy in particular is what tips over a hesitant shopper who is on the edge of buying.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "What can Shopify Plus stores change on the checkout?",
+   "t": 760,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "If you're on Shopify Plus, there are many checkout extensions available. On the right side of the checkout there's a block where you can choose what to show: a banner, a countdown timer, or whatever the apps provide. They're worth trying, but **test them** to see whether they actually perform on your checkout.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "To recap: 76% of people who add to cart never buy, and most of that loss happens at checkout. Remove surprise costs, cut friction, add trust and express payments, and enhance your cart. That's how you get more out of the expensive traffic you already pay for.",
+     "items": []
+    }
+   ]
+  }
+ ],
+ "faq": [
+  {
+   "q": "What is a normal cart abandonment rate on Shopify?",
+   "a": "A 2026 study of almost a thousand Shopify stores with 24 million visitors found that 76% of users who added a product to cart did not complete the purchase. That includes many who never reached checkout, but nearly half of visitors who do reach checkout still don't buy."
+  },
+  {
+   "q": "Why do customers abandon checkout after adding to cart?",
+   "a": "It is rarely the product. The main causes are surprise costs like shipping, taxes and fees shown for the first time at checkout, friction such as forced account creation and long forms, and missing trust signals or fast payment options. Baymard found four out of 10 cart abandoners leave because of surprise costs."
+  },
+  {
+   "q": "Should I show shipping costs in the Shopify cart?",
+   "a": "Yes. If shipping is a flat rate, show it in the cart before checkout, and if it's an estimate, show the estimate. Do the same for taxes. The checkout should confirm what shoppers already know, not reveal new costs."
+  },
+  {
+   "q": "Should I require customers to create an account on Shopify?",
+   "a": "No. Forced account creation feels like an obstacle when shoppers just want to pay. Allow guest checkout in Shopify under Settings, then Checkout, and ask customers to create an account on the order confirmation page instead."
+  },
+  {
+   "q": "Do I need Shopify Plus to improve my checkout?",
+   "a": "No. Most improvements can go in the cart: showing shipping and taxes, a free shipping bar, \"Checkout securely\" button text, payment method logos, express payment buttons, a real shipping cutoff timer and your written-out return policy. Shopify Plus adds checkout extensions, which are worth testing."
+  },
+  {
+   "q": "Do express payment buttons increase conversion rate?",
+   "a": "They make checkout quicker because shoppers skip the standard Shopify form, which can easily have nine fields. Placing them in the cart, as Allbirds does with four options, cuts the number of clicks to purchase, and fewer clicks means fewer lost users."
+  }
+ ],
+ "tags": [
+  "Checkout",
+  "Shopify CRO",
+  "Ecommerce strategy"
+ ],
+ "transcript": [
+  {
+   "t": 0,
+   "text": "Nearly half of the visitors that reach your checkout never make that purchase. In this video, I'm going to show you exactly the reasons why this happens and what you can do on your store this week to improve your checkout abandonment rate. And I'm not going to tell you you need to lower the cost of your products or you have to pay for shipping yourself. No, I'm going to give you real tips that improve the performance of your store. Let's have a look. A 2026 study looked at almost a thousand Shopify stores with 24 million visitors. They saw that 76% of users adding a product to cart eventually did not swipe their credit card to purchase the product. Now, this includes a big chunk of users that never reached checkout."
+  },
+  {
+   "t": 48,
+   "text": "Those will be a bit harder to convert than the audience that actually reached checkout, filled out their name, their address, but the information presented to them is something that kept them from making that purchase. This is strange because they committed to the product. They liked the product, but at the very end something happens that made them not commit to that purchase. And that something is almost never the product itself. Very often it's one of three things. Now, you've probably already seen a list: creating an account, trust, high shipping cost. And although these are very important and real, it's just touching the surface. It's the much deeper psychology that's going on that really matters and that makes a difference to your store's performance."
+  },
+  {
+   "t": 98,
+   "text": "The first fix is cost discovery, and this is the simplest out of all of them. Someone is evaluating your product. They compare your products, the competitor's product, and eventually they fall in love with what you offer and they commit to adding the product to cart. Now, once they reach checkout, they're actually surprised with the charges you're throwing at them. It's taxes, shipping costs, maybe some other fees, and this is not what they evaluated at the beginning. And that really causes people to reevaluate the offer, and therefore abandon the checkout. Baymard, a study, found out that four out of 10 people who abandon cart is because of these surprise costs. It's not the product that's killing the conversions, it's the surprises that you throw at them in the checkout."
+  },
+  {
+   "t": 148,
+   "text": "Now, let me actually show you what that looks like. So, here on the website of Gymshark, I just added a product to cart. When I open the cart, I'm basically presented with tons of elements, but not with anything related to the shipping or taxes or any other fees they would charge me at checkout. They do, of course, show elements that help me spend more, including a free shipping threshold. Now, if I already know shipping is going to be crazy expensive, I'd rather spend my money on products rather than shipping, right? So, it could be a motivator by saying, \"Hey, shipping is very high. You're only 20 bucks off from free shipping, so you should spend more.\" But, no details about the actual fees. If I now go through to the checkout, this is the first time where they present us with the information about shipping and, uh, and taxes that will be charged on your zip code. So, here we can see we're being charged $5 extra on our shipping details. This is a surprise, right? So, it's a negative experience for a customer."
+  },
+  {
+   "t": 215,
+   "text": "If we do the same for Brooklinen, I just added a product to cart. If I open the cart, we can actually see that there are shipping details, but these are free. When it's free, of course, you want to promote the heck out of it. But, also there are taxes, and these will be calculated at checkout. So, at least I'm preparing myself that the total amount I will pay is above $135. Now, if I do reach checkout. As it's Shopify, the information is fairly similar, right? So, there is just a line item for shipping and estimated taxes based on the zip code entered here on the form. So, here you can already see that they're charging quite a few more dollars to get this order to be completed."
+  },
+  {
+   "t": 264,
+   "text": "Behavioral researchers have confirmed why this works so reliably. They actually found out that if you charge $5 more for the product, the cart completion rate will be higher than when you charge $5 for shipping or other fees, because that really feels like a penalty, a punishment, and that leads to higher cart abandonment rates. Now, what do you actually do about it? There are three things you can do this week. The first one is add a free shipping threshold bar on your cart. The more people reach free shipping, the less people will get a surprise in checkout. But, also it allows them to see the value of spending more and saving the money on the shipping. But, besides that, you also want to communicate your taxes as early as possible. If you have a flat rate tax or a percentage, you can communicate that beforehand. You can even give them an estimate. And the third one, when it comes to shipping pricing, if it's a flat rate, communicate it on the cart before you even show it on the checkout. If it's an estimate, you can do exactly the same."
+  },
+  {
+   "t": 332,
+   "text": "Keep in mind, the checkout is for confirmation, not for discovery. Try to not show any new information on the checkout, and that really improves the performance of your overall conversion rate, not only that of your checkout. Now, fix number two is friction overload. The most common example that I'm sure you've heard is requiring customers to checkout with an account. If you do this, it feels like an obstacle for them to create an account while they just want to continue as quickly as possible, swipe the credit card, and receive the product. If you do want to benefit from them creating an account, you can always ask it on the order confirmation page. If you go into your Shopify settings, checkout, there you can define if a guest account can make a purchase or when you want them to create an account."
+  },
+  {
+   "t": 387,
+   "text": "Another example here too is from a very famous big retailer. They changed the message on the actual button that takes them to checkout. Instead of saying register, they changed it to just continue. This makes it a lot more intriguing to click without feeling you have to do something. And only that small change really made this company $300 in the revenue uplift over the next few years. Now, this is an extreme example, but the strategy remains the same. Make it smooth. Don't obligate them to do things they don't want to do, because it is costing you money. Now, here's the version most people miss. You might not ask them already for an account, but they are still required to fill out all your forms. This could be easily nine different fields on your checkout form. If you don't give them a call after they make a purchase, don't ask for their phone number. And the same goes for all the other fields. If you don't need them, don't ask them. Make the process simpler, and you will see more checkouts."
+  },
+  {
+   "t": 455,
+   "text": "And the third one is auto-complete addresses. Especially when you're on your phone, it's tedious to type out your whole address. But of course, with Shopify, you can enable the auto-complete. You start typing the address, and it automatically gives you options. And especially on mobile, you just take your address, it fills everything out, and you can start swiping your card. So, here you got very simple three steps that you can improve on your checkout to make the experience smooth and to provide less friction for your users. Okay, the third one, payment gaps. There are actually two issues here, and the first one is trust. Whenever someone comes to your store, they don't trust you a single bit. You need to gain their trust, especially in the checkout."
+  },
+  {
+   "t": 505,
+   "text": "Let's have a look again at Gymshark and Brooklinen. They both use Shopify Plus, and as we know, Shopify limits the ability to display different things on the checkout because they want to keep it secure, right? So, on Shopify, you're certainly limited what you can do, but you can communicate very similar things also on your cart. So, when we look at Gymshark, what they do here at the bottom is they say \"Checkout securely.\" It's the same as saying checkout. It doesn't change your understanding of what to do next, but it adds a bit more value to ensure you that it's secure. Now, you know Gymshark, you trust Gymshark, but not everybody has a company this big as Gymshark. So, if your company's different, it's very helpful to gain trust by communicating it's a secure payment. And you also do that by displaying the actual payment methods. Kind of showing you don't pay or you don't share your details with Gymshark, you share with the actual bank or payment gateway, right?"
+  },
+  {
+   "t": 568,
+   "text": "If we now go to Brooklinen, they do it slightly different. So, they just say checkout. Is it secure? You would assume, but they're not confirming it, right? So, the user then has to come up with that thought on their own, like, \"Ah, I do trust them? I do think it's secure?\" But just saying it confidently, you gain trust. The same for the payment methods. These are not communicated in here. And that, of course, brings doubt to the mind of the customer to feel the safety to make payments to Brooklinen. Now, the other way to make it easy for customers to checkout is to offer an express payment method. So, they don't have to go through your nine field form on the actual checkout. And you can communicate this, of course, on the checkout, but even simpler, do it on the cart. So, if we look at Allbirds here, we can see at the bottom they do offer four different payment methods. If I click any of these, it will take me straight to the actual payment method, and I skip the normal Shopify checkout form. So, this way you simplify the process, you make it quicker, and you increase your conversion rate."
+  },
+  {
+   "t": 642,
+   "text": "An interesting exercise you can go through by yourself is opening your store on your phone, and then counting how many clicks would it take from visiting the page to actually having made the payment. The more clicks it requires, the more users you're losing in the process. Now, if you've solved all these things that I've already mentioned so far, there is an additional layer most stores never actually get to. And this is the enhancement layer. This is actually implemented on your cart, so you don't need Shopify Plus to be able to modify your checkout. The first one is a free shipping threshold bar on your cart. Most themes already have this built in, but you can easily install this through apps or custom code. Show customers where they're at with the amount that they're purchasing, and how far they're off from saving X amount of dollars on their shipping costs. As we saw earlier, it really improves the checkout completion rate, and of course, it does good for your AOV."
+  },
+  {
+   "t": 706,
+   "text": "And the second one is a real shipping cutoff timer, not a fake one, because that loses trust, but a real one that would say something along the lines of, \"If you order within the next 23 minutes, your shipping will happen today, and the product will arrive by Friday.\" This gains trust and instills a little bit of urgency to your customers. And the third one is a real trust signal on the checkout or cart. And the best option you can implement is actually your return policy. Not a link, not a drop down, but the actual policy written out there in short and concise wording. This allows them to really be tipped over whenever they're hesitant to make that purchase. Another option could also be a testimonial or a review that would just say something like it was a perfect fit. This really improves the checkout rate."
+  },
+  {
+   "t": 760,
+   "text": "If you are on Shopify Plus, there are tons of extensions you can utilize to even improve this further on your checkout. On the right side of your checkout, there's a block you can change what you show. This could be a banner, countdown timer, it could be anything that these apps provide. They're definitely worth trying and testing out if they do well on your checkout. So there you have it. As we've seen, 76% of people who are at the cart never buy, and most of that happens on the actual checkout. We've gone through the exact problems your site might be having and how you can solve those to improve the performance of your store."
+  },
+  {
+   "t": 800,
+   "text": "Now we as a CRO agency go through this process day in and day out. We have seen what works and what doesn't work. If you feel this is all a lot of work and you want to have some experts look under the hood of your e-commerce store so you can actually reap the benefits of all the expensive traffic you have to acquire, you can always drop a link down below and we will run this audit for you for free. We'll also leave our contact details down below, so feel free to reach out if you have any questions or if you want to chat with us to see how we can work together."
+  }
+ ]
+}

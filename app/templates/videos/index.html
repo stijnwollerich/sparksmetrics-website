@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Shopify CRO Videos: Tests, Teardowns and How-Tos | Sparksmetrics{% endblock %}
+{% block meta_description %}Every Sparksmetrics YouTube video as a readable page: summary, key takeaways, chapters and the full transcript. Shopify CRO, A/B testing and analytics.{% endblock %}
+{% block og_title %}Shopify CRO videos by Stijn Wollerich{% endblock %}
+{% block twitter_title %}Shopify CRO videos by Stijn Wollerich{% endblock %}
+{% block og_description %}Every video as a readable page: summary, key takeaways, chapters and the full transcript.{% endblock %}
+{% block twitter_description %}Every video as a readable page: summary, key takeaways, chapters and the full transcript.{% endblock %}
+{% block head_extras %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/video-page.css') }}?v={{ video_css_v }}" />
+<script type="application/ld+json">{{ schema | tojson }}</script>
+{% endblock %}
+
+{% block content %}
+<div class="vp">
+  <section class="vp-hero vp-index-hero">
+    <div class="vp-wrap">
+      <p class="vp-eyebrow">Videos</p>
+      <h1>Shopify CRO, explained on video</h1>
+      <p class="vp-lead">What I learn running A/B tests for 200+ D2C brands, one video a week. Every video has its own page with the short answer, key takeaways, chapters and the full transcript.</p>
+    </div>
+  </section>
+
+  <section class="vp-main">
+    <div class="vp-wrap">
+      {% if tags|length > 1 %}
+      <div class="vp-filters" role="group" aria-label="Filter by topic">
+        <button type="button" class="vp-filter" data-filter="" aria-pressed="true">All</button>
+        {% for t in tags %}<button type="button" class="vp-filter" data-filter="{{ t }}" id="{{ t|lower|replace(' ', '-')|replace('/', '') }}" aria-pressed="false">{{ t }}</button>{% endfor %}
+      </div>
+      {% endif %}
+      {% if pages %}
+        {% set r = pages[0] %}{% set feature = True %}{% include "videos/_card.html" %}
+        {% set feature = False %}
+        <div class="vp-cards">
+          {% for r in pages[1:] %}{% include "videos/_card.html" %}{% endfor %}
+        </div>
+      {% else %}
+        <p style="text-align:center;color:#5b5b63">New videos are on their way.</p>
+      {% endif %}
+    </div>
+  </section>
+</div>
+{% endblock %}
+
+{% block body_end %}
+<script>
+(function () {
+  var btns = document.querySelectorAll('.vp-filter');
+  function apply(tag) {
+    btns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-filter') === tag)); });
+    document.querySelectorAll('.vp-vcard').forEach(function (c) {
+      c.style.display = !tag || (c.getAttribute('data-tags') || '').split('|').indexOf(tag) > -1 ? '' : 'none';
+    });
+  }
+  btns.forEach(function (b) { b.addEventListener('click', function () { apply(b.getAttribute('data-filter')); }); });
+  var hash = decodeURIComponent(location.hash.slice(1));
+  btns.forEach(function (b) { if (hash && b.id === hash) apply(b.getAttribute('data-filter')); });
+})();
+</script>
+{% endblock %}

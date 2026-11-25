@@ -1,0 +1,408 @@
+{
+ "thumbnail": "https://i.ytimg.com/vi/bALO3KcpMHE/maxresdefault.jpg",
+ "slug": "roas-dropping-as-you-scale-fix-your-site-before-new-creatives",
+ "youtube_id": "bALO3KcpMHE",
+ "youtube_title": "Stop Making New Ad Creatives. Fix This First.",
+ "published": "2026-11-18",
+ "generated_at": "2026-11-25T11:49:31+00:00",
+ "duration_seconds": 691,
+ "title": "ROAS Dropping as You Scale? Fix Your Site Before New Creatives",
+ "meta_title": "ROAS Drops When You Scale Ads? Fix Your Website First",
+ "meta_description": "Why ROAS drops when you scale Shopify ads, how to calculate your break-even click, a 2-minute report to check it, and 3 site fixes for cold traffic.",
+ "teaser": "Why ROAS falls when you scale ads, the break-even click formula, and three site fixes that make cold traffic convert.",
+ "summary": "When you scale your ad budget, ROAS usually drops because the platform runs out of warm buyers and starts sending colder visitors, who convert worse on a site built for people who already know you. The fix is often on the website: calculate your break-even click (average order value × margin × conversion rate), compare conversion rate by traffic source before and after scaling, and adapt the first screen for strangers with ad-matching messaging, proof near the buy button, and clear delivery and returns information.",
+ "key_takeaways": [
+  "Scaling pushes ad platforms past your warm buyers to colder visitors, so each click gets more expensive and converts worse even when your creatives are fine.",
+  "Calculate your break-even click: average order value × profit margin × conversion rate. At $90, 60% and 3% that is $1.62, the most you can pay per click without losing money.",
+  "Pull conversion rate per traffic source (direct, email, paid social) for the month before you raised budget and for last month. If only paid social dropped, your site is failing strangers.",
+  "Open your three highest-spending ads on your phone and tap through. The first screen, without scrolling, should repeat the ad's promise in words, the same or a very close image, and the same offer.",
+  "Put your star rating and review count under the product title, one real customer quote that answers the biggest doubt next to the add to cart button, and a one-line guarantee right under it, all on the first mobile screen.",
+  "Show delivery time as a date or range and explain returns in one sentence, near the buy button and under the checkout button in the cart. On a DIY kits brand, delivery details plus a cleaner cart lifted revenue per visitor by almost 11%."
+ ],
+ "stats": [
+  {
+   "value": "72% vs 17%",
+   "label": "Checkout rate for existing traffic vs cold traffic on a home goods store"
+  },
+  {
+   "value": "9%",
+   "label": "Share of product page views that reached the reviews at the bottom"
+  },
+  {
+   "value": "~11%",
+   "label": "Revenue per visitor uplift from delivery details and a cleaner cart"
+  },
+  {
+   "value": "$1.08 → $1.43",
+   "label": "Break-even click after the example fixes, with clicks costing $1.20"
+  }
+ ],
+ "chapters": [
+  {
+   "t": 0,
+   "title": "Your ROAS drops when you scale"
+  },
+  {
+   "t": 39,
+   "title": "Why scaling makes every visitor colder"
+  },
+  {
+   "t": 120,
+   "title": "The break-even click"
+  },
+  {
+   "t": 242,
+   "title": "The 2-minute report and the 72% vs 17% gap"
+  },
+  {
+   "t": 307,
+   "title": "Fix 1: Echo the ad"
+  },
+  {
+   "t": 409,
+   "title": "Fix 2: Proof for strangers"
+  },
+  {
+   "t": 464,
+   "title": "Fix 3: Answer the last question"
+  },
+  {
+   "t": 543,
+   "title": "What this did on real stores"
+  },
+  {
+   "t": 590,
+   "title": "Your ads set the cost, your website sets the worth"
+  },
+  {
+   "t": 657,
+   "title": "Free CRO audit"
+  }
+ ],
+ "sections": [
+  {
+   "heading": "Why does ROAS drop when you scale your ads?",
+   "t": 39,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "When you raise your budget, Facebook or any other ad platform first shows your ads to the people most likely to buy. Those are people who already know your brand or were already looking for your product. That gives you a great conversion rate and a great ROAS, which is exactly why the platform starts there.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Once you scale, the platform has to look for the **next tier of possible customers**. Doubling your ad spend does not double the number of users you get. Each extra user becomes more and more expensive, and each one knows less about you.",
+     "items": []
+    },
+    {
+     "type": "quote",
+     "text": "Your ads didn't get worse, but your visitors got colder.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Here is the problem. Your site is built for an average visitor, someone who might already be interested in what you sell and may have heard of your brand. A cold visitor has no idea who you are, and your page has to take them from that point all the way to trusting you with their credit card. If the page doesn't answer their needs, they leave, and you've paid for the click either way. Across the 200+ Shopify brands we've worked with, I've seen this happen all the time, and new creatives or a new media buying agency rarely solve it.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "What is the break-even click and how do you calculate it?",
+   "t": 120,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "The break-even click is the most you can pay for a click before you start losing money. It's part of what we call the **visitor P&L**: looking at a single visitor from cost to profit. Most ecommerce brands don't know this number.",
+     "items": []
+    },
+    {
+     "type": "ol",
+     "text": "",
+     "items": [
+      "Take your average order value.",
+      "Multiply it by your profit margin. This tells you what's left after shipping and cost of goods sold.",
+      "Multiply that by your conversion rate.",
+      "The result is what you make on average per click, which is also the most you can spend to get one."
+     ]
+    },
+    {
+     "type": "p",
+     "text": "I'm leaving lifetime value out here. If you have that data, it's very important to factor it in as well.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "An example. Your order value is $90, your margin is 60%, and at your current budget 3% of visitors buy. $90 × 60% × 3% = **$1.62**. You pay $1 a click, so you make 62 cents on every click and your ROAS is 2.7. Life is pretty good.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Now you scale. The visitors are colder, so conversion drops from 3% to 2%, and clicks get a bit more expensive at $1.20. Your break-even click is now **$1.08**. You're paying $1.20, so you lose 12 cents on every click, and the more you spend, the more you lose.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Look at what changed. The price, the product and the business stayed the same. One small number on your site's performance moved, and that's the difference between a winning and a losing ads account. New creatives can get you cheaper clicks, but they don't turn a cold visitor into a buyer.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "How do you check if your website is the problem?",
+   "t": 242,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "This is a report you can pull in about two minutes. The key is to look at conversion rate per source, not for the whole store.",
+     "items": []
+    },
+    {
+     "type": "ol",
+     "text": "",
+     "items": [
+      "Open your analytics and pull conversion rate by traffic source.",
+      "Keep three rows: direct, email and paid social.",
+      "Run it twice: once for the month before you raised your budget and once for the last month.",
+      "Compare the two periods row by row."
+     ]
+    },
+    {
+     "type": "p",
+     "text": "If direct and email stayed about the same and paid social dropped, your website works for people who already know you and fails for strangers. Those strangers are exactly what you're paying for now.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "The gap can be big. One of our clients selling home goods had a **checkout rate of 72%**. Once they brought in cold traffic, that cold traffic converted at **17%**, roughly four times worse. Because you pay for every one of those clicks, that 17% has to go up for scaling to be worth it.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "Fix 1: Does your landing page echo the ad?",
+   "t": 307,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "A cold visitor knows exactly one thing about you: the ad they just saw. That is the whole relationship. So the first thing they check when they land is whether they're in the right place.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Here's a typical mismatch. The ad promised cooler sleep, showed the product on a bed and offered 20% off. The page says \"classic sheet set\", shows a studio photo and doesn't mention the offer. Every promise from the ad is gone. A regular customer doesn't care. A stranger thinks they clicked the wrong thing.",
+     "items": []
+    },
+    {
+     "type": "ol",
+     "text": "",
+     "items": [
+      "Open your three highest-spending ads on your phone.",
+      "Tap through to the page.",
+      "On the first screen, without scrolling, check for the same promise in words.",
+      "Check for the same image, or one very close to it.",
+      "Check for the same offer."
+     ]
+    },
+    {
+     "type": "p",
+     "text": "If one of the three is missing, you know what to fix first. You **don't need a separate landing page for every ad**. Most brands have three or four very strong hooks that let them scale, so test angles in your ads and match the site to those angles, without building 100,000 unique pages.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Echoing the ad keeps people on your site. Staying doesn't bring money in, though. The next two fixes are where the real money is.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "Fix 2: Where should reviews and proof go for cold traffic?",
+   "t": 409,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Your regulars already know you're good. Strangers need someone else to say it. Most stores have that proof (reviews, a guarantee, press), but it sits at the bottom of the page.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "On the same home goods store, only about **9% of page views reached the bottom** of the page. For nine out of ten visitors, the reviews didn't exist. Proof has to be where the decision is made, and that's usually around the add to cart button.",
+     "items": []
+    },
+    {
+     "type": "ul",
+     "text": "",
+     "items": [
+      "Your star rating and number of reviews directly under the product title.",
+      "One real customer quote that answers the biggest doubt, close to the add to cart button.",
+      "Your guarantee in one line, right under it."
+     ]
+    },
+    {
+     "type": "p",
+     "text": "All three go on the **first screen on mobile**. Skip the wall of badges: three pieces of proof placed exactly where the stranger hesitates.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "Fix 3: How to answer delivery and returns before checkout",
+   "t": 464,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Now the stranger believes you, but one question is still stopping them from paying. On a DIY kits brand, we tested adding a single line under the checkout button in the cart: \"Arrives in 4 to 7 business days.\"",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Think about who needs that line. Your regulars have ordered before and know how fast you ship. A stranger has no idea. Is it a week or a month? Does it ship from the other side of the world? Most stores answer that on a shipping page nobody opens, or in the checkout after the visitor has typed their address. By then it's too late, because the stranger already left to think about it.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Returns work the same way. If I don't know you, I want to be sure I can send the product back if it isn't what I expected or if it arrives faulty.",
+     "items": []
+    },
+    {
+     "type": "ul",
+     "text": "",
+     "items": [
+      "When it arrives, shown as a date or a range.",
+      "How returns work, in one simple sentence."
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Put these two lines **near your buy button and under the checkout button in the cart**.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "What did these fixes do on real stores?",
+   "t": 543,
+   "blocks": [
+    {
+     "type": "p",
+     "text": "On the DIY kits brand, we tested showing the delivery details in the cart together with cleaning up the clutter. That improved **revenue per visitor by almost 11%**: 11% more revenue from the same store without spending more on ads.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "On the product page, we tested showing how the product is actually used. That gave a **6% uplift in revenue per visitor**.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Now put changes like that back into the earlier example. Say the three fixes take your cold conversion rate from 2% to 2.4% and your order value from $90 to $99. Your break-even click goes from $1.08 to **$1.43**. You're still paying $1.20 a click, but you're profitable again on the bigger budget.",
+     "items": []
+    }
+   ]
+  },
+  {
+   "heading": "Should you make new ad creatives or fix your website first?",
+   "t": 590,
+   "blocks": [
+    {
+     "type": "quote",
+     "text": "Your ad creatives decide how much a click will cost, but your website will confirm how much a click is actually worth.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "Ads are not a race to the bottom. You should go in trying to spend the most, because the brand that can afford to spend the most gets the click and takes customers from its competitors. If your conversion rate is bad or your AOV is low, you can't spend much, and scaling gets harder as your margins get thinner until you're losing money. If your LTV is strong, you can outspend your competitors.",
+     "items": []
+    },
+    {
+     "type": "p",
+     "text": "So before you brief another round of creatives or switch media buying agency, run the numbers above. Most often, **the website can be improved much more easily than you can lower your cost per click**.",
+     "items": []
+    }
+   ]
+  }
+ ],
+ "faq": [
+  {
+   "q": "Why does my ROAS go down when I increase my ad budget?",
+   "a": "Ad platforms first show your ads to the people most likely to buy, such as people who already know your brand. When you scale, they move on to colder audiences, so each click costs more and converts less. Your site is usually built for warm visitors, so cold traffic leaves without buying."
+  },
+  {
+   "q": "How do I calculate my break-even cost per click?",
+   "a": "Multiply your average order value by your profit margin (after shipping and cost of goods sold), then by your conversion rate. With a $90 order value, 60% margin and 3% conversion rate, that's $1.62 per click. If you pay more than that per click, you lose money, before counting lifetime value."
+  },
+  {
+   "q": "Will new ad creatives fix falling ROAS?",
+   "a": "Often not. New creatives can get you cheaper clicks, but they don't turn a cold visitor into a buyer. If your conversion rate on paid social dropped while direct and email stayed the same, the problem is how your site handles strangers."
+  },
+  {
+   "q": "How can I tell if cold traffic is converting worse on my store?",
+   "a": "Pull conversion rate by traffic source for direct, email and paid social, once for the month before you raised your budget and once for last month. If direct and email held steady and paid social dropped, your site isn't working for new visitors. On one home goods store, the checkout rate was 72% for existing traffic and 17% for cold traffic."
+  },
+  {
+   "q": "Do I need a separate landing page for every ad?",
+   "a": "No. Most brands have three or four strong hooks that drive scale, so you can match the site to those angles. What matters is that the first screen repeats the ad's promise, uses the same or a very similar image, and shows the same offer."
+  },
+  {
+   "q": "Where should I put reviews on a Shopify product page?",
+   "a": "Near the add to cart button, on the first screen on mobile. On one store only about 9% of page views reached the bottom of the page, so reviews placed there were invisible to most visitors. Put the star rating and review count under the title, one customer quote near the button and a one-line guarantee under it."
+  }
+ ],
+ "tags": [
+  "Paid ads",
+  "Shopify CRO",
+  "A/B testing",
+  "Product pages",
+  "Ecommerce strategy"
+ ],
+ "transcript": [
+  {
+   "t": 0,
+   "text": "You raised your ad budget and your sales went up by a little, but your ROAS actually went down. You build new creatives to solve the problem, maybe even change your media buying agency, but the same happens again. Now, we've worked with more than 200 Shopify brands and this has happened all the time. And there's a very specific reason for this on your ads, but certainly also on your site. So today I'll show you exactly the reasons for this and how you can basically overcome them so you can still scale your ads. I'll also give you a very quick assessment you can run on your own store to figure out if you are encountering this problem. Here is what happens when you start raising your ad budget. Facebook or any other ad platform basically first shows your ads to the people that are most likely to buy, because this of course gives you the best ROAS and helps you spend more. So people that already know your brand, they were already looking for your company or your product, they are the ones that are being shown the ads first. Great conversion rate, great ROAS. But once you start scaling your ads, it's basically looking for the next tier of possible customers for your store."
+  },
+  {
+   "t": 70,
+   "text": "If you double your ad spend, it's technically not doubling the amount of users you get from it, but instead each user becomes more and more expensive. So your ads didn't get worse, but your visitors got colder. And here's the problem. Your site is built for an average user, someone who might already have an interest in what you're selling and might even have heard of your brand already. But once you bring in cold traffic, the site needs to be very different to be able to sell someone who has no idea what you're doing to someone who's trusting you with their credit card. And if your page doesn't answer to the needs of your visitor, they will leave, and you've paid for the click either way. But how much can you actually spend on a click before you start losing money? This is a very important number and most ecommerce brands don't even know."
+  },
+  {
+   "t": 120,
+   "text": "Let's go through it. I call it the break-even click and it's part of our visitor P&L. This is what we use to basically look at the numbers from a visitor, from cost to profit. Take your average order value, multiply that by your profit margins. This will tell you how much you've left after spending on shipping and the cost of goods sold. And then you multiply it by your conversion rate, and the number that will come after that is basically how much you're making after every click on average. So that is also the most you can actually spend to get a click. Now, we're not including lifetime value here, but if you have that data, it will be very important to understand that as well. Let's run through it. Say your order value is $90. Your margin is 60%, and at your current budget, 3% of visitors make a purchase. 90 times 60% times 3% is $1.62. You're paying a dollar a click. You make 62 cents on every click and your ROAS is 2.7."
+  },
+  {
+   "t": 183,
+   "text": "Life is pretty good. Now you scale. Cold visitors, so conversions drop from 3% to 2%, and clicks got a bit more expensive, $1.20. Your break-even click is now $1.08. You're paying $1.20. You lose 12 cents on every click, and the more you spend, the more of course you lose. Now look at what changed. Not the price, not the product, not the business, just a small number on your site's performance that makes a huge difference between a great ads manager and a losing ads manager. And that is why new creatives don't always fix your problem. It gets you cheaper clicks, but it doesn't turn a cold visitor into a purchaser. Just quickly in between, if you find this content valuable, I basically audit and share the results of any of our CRO tests on these videos and on my LinkedIn. So definitely feel free to follow along. Now, how do you know this problem is actually happening on your store?"
+  },
+  {
+   "t": 242,
+   "text": "So here's the report I promised. Open your analytics and pull conversion rate by traffic source. Not for the whole store, per source. You want three rows: direct, email and paid social. Then do it twice, once for the month before you raised your budget and once for the last month. If direct and email stayed about the same and paid social dropped, your website isn't broken. It's broken for strangers, and that's exactly what you're paying for now. So here's an example of how big this gap can actually be. One client of ours selling home goods had a checkout rate of 72%. Now, once they started bringing in cold traffic, they saw that cold traffic only had a rate of 17%, basically performing four times less. And then here, of course, you pay for clicks. So to make it worthwhile, that 17% has to go up. So now we've basically identified the problem, but what is it that a stranger needs to improve the conversion rate on cold traffic, and therefore getting a much better ROAS on your ads?"
+  },
+  {
+   "t": 307,
+   "text": "Fix one. I call it echo the ad. A cold visitor knows exactly one thing about you: the ad they just saw. That is the whole relationship. So when they land, they check one thing first: am I in the right place? Look at this one. The ad promised cooler sleep, showed the product on a bed and offered 20% off. The page says classic sheet set, shows a studio photo and doesn't mention the offer. Every promise from the ad is gone. A regular customer doesn't care. A stranger thinks they clicked the wrong thing. Here's how to apply this right now. Open the three highest spending ads on your phone. Tap through. On the first screen of the page, without scrolling, look for three things: the same promise in words, the same image or one very close to it, and of course the same offer."
+  },
+  {
+   "t": 360,
+   "text": "If one of the three is missing, you already know what to fix first. And what is important too is, on the ads you can try different angles and you can change the site to basically match that angle. You don't need a different landing page for all your ads. Most brands have like three or four very strong hooks that allow them to scale the business, and that goes without creating 100,000 unique pages. That is fix number one, the echo effect. And this lets people stay on your site, but staying doesn't bring money into the door. We need them to make a purchase. The next two is where the real money is at. And one of them is actually very simple to implement with just a line of text. And we implemented this on a real store. We tested it and we saw it work."
+  },
+  {
+   "t": 409,
+   "text": "Fix number two: proof for strangers. Your regulars already know you're good. Strangers need someone else to say it. And most stores have that proof: reviews, a guarantee, press. It's just at the bottom of the page. On that same home goods store, about 9% of page views reached the bottom. Nine. So for nine out of 10 visitors, the reviews didn't even exist. The proof has to be where the decision is made, and this is often around the add to cart button. Here's how to apply this right now. Three things, all on the first screen on mobile. Your star rating and the number of reviews under the product title. One real customer quote that answers the biggest doubts, close to the button. And your guarantee in one line, right under it. Not a wall of badges. Three pieces placed where the stranger hesitates."
+  },
+  {
+   "t": 464,
+   "text": "That is fix number two. Now your stranger believes you, but there's one important key element missing to make them pay. This is where you answer that last question, and the one that I promised you early on. 'Arrives in four to seven business days.' We added that under the checkout button in a cart as part of a test on a DIY kits brand. Think about who needs that line. Your regulars have ordered before. They know how fast you ship. A stranger has no idea. Is this a week, a month? Does it ship from the other side of the world? Most stores answer that on a shipping page nobody opens, or in the checkout after you've typed your address. It's too late. The stranger already left to think about it. The same goes for the returns. If I don't know you, I want to make sure I can send the product back if it's not according to what I'm looking for, or even if there is a faulty product."
+  },
+  {
+   "t": 521,
+   "text": "Here is how to apply this right now. Put two lines near your buy button and under your checkout button: when it arrives, as a date or a range, and how returns work, just in one simple sentence. So that is fix number three. Now let's have a look at an example where we really tested this, and I can show you this really moves the numbers. On this DIY brand I mentioned earlier, we tested sharing the delivery details on the cart and cleaning up the clutter. This almost improved the revenue per visitor by 11%. This means 11% more revenue from your store without spending more on ads. We also tested on the product page how the product is actually used, and here we got a 6% uplift in revenue per visitor. Now put changes like that back into our example. Say the three fixes take your cold conversion rate from 2% to 2.4% and your order value from 90 to 99. Your break-even click goes from $1.08 to $1.43. You're still paying $1.20, but you're profitable again on the bigger budget."
+  },
+  {
+   "t": 590,
+   "text": "And that is the part I want you to remember. Your ad creatives decide how much a click will cost, but your website will confirm how much a click is actually worth. On the ads, it's not a race to the bottom. Instead of spending less, you should go into it trying to spend the most. The more you spend, the more you will steal the lunch of your competitors, because the one that spends the most gets the click. And if you're cheap, if your conversion rate on your site is bad or your AOV is very low, then of course you cannot spend that much on the ads. So then scaling becomes very hard, because your margins get thinner and thinner until the point you're losing money. But if your LTV is incredible, you can easily outspend your competitors, and that is the name of the game. So before you brief another round of creatives or change your media buyer agency, look at the numbers we went through before you make that decision, because most often it's the website that can be improved much more easily than you can actually lower the cost per click on your ads."
+  },
+  {
+   "t": 657,
+   "text": "So if your store does more than 1,000 orders every single month, definitely click the link down below and we can run a free CRO audit for you. We'll put all our experience, all the learnings we've gotten from working with other big clients, and we'll see how we can implement those on your store to increase the performance and your likelihood to scale the business to the next level. And if you want to see the other two tests I spoke about on the product page and on the cart in full, I've made another video about this to basically show the before, the after and the actual numbers. I'll leave the link down in the description."
+  }
+ ]
+}
