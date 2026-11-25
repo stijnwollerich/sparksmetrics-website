@@ -108,7 +108,7 @@ def get_website_experiments(*, force_refresh: bool = False) -> list[dict[str, An
     images and link to the full write-up. The live Spark feed below can fall back to real client screenshots,
     so it is no longer used for public cards.
     """
-    from app.case_studies import as_gallery_card, load_case_studies
+    from app.case_studies import as_gallery_card, is_public, load_case_studies
 
     def image_url(name: str) -> str:
         return url_for("main.ab_test_image", name=name)
@@ -116,7 +116,7 @@ def get_website_experiments(*, force_refresh: bool = False) -> list[dict[str, An
     cards = []
     for item in load_case_studies(fresh=force_refresh):
         card = as_gallery_card(item, image_url)
-        card["url"] = url_for("main.ab_test_page", slug=item["slug"])
+        card["url"] = url_for("main.ab_test_page", slug=item["slug"]) if is_public() else None
         cards.append(card)
     return cards
 

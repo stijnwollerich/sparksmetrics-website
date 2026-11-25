@@ -3072,8 +3072,10 @@ def video_page(slug: str):
 @main_bp.route("/ab-tests")
 def ab_tests_index():
     """Winning A/B tests as anonymised case studies (written by tasks/case_study_autopilot.py)."""
-    from app.case_studies import load_case_studies
+    from app.case_studies import is_public, load_case_studies
 
+    if not is_public():
+        abort(404)
     items = load_case_studies()
     page_types = []
     for c in items:
@@ -3113,8 +3115,10 @@ def ab_test_image(name: str):
 @main_bp.route("/ab-tests/<slug>")
 def ab_test_page(slug: str):
     """One winning A/B test: before/after (anonymised), results, hypothesis, why it worked, FAQ."""
-    from app.case_studies import get_case_study, related_case_studies
+    from app.case_studies import get_case_study, is_public, related_case_studies
 
+    if not is_public():
+        abort(404)
     cs = get_case_study(slug)
     if not cs:
         abort(404)
@@ -3190,6 +3194,9 @@ def redirect_target_for_404(path: str):
             if served.replace("_", "-").lower() == norm:
                 return url_for("main.blog_post", slug=served)
         return None
+    if path.startswith(("/videos", "/ab-tests")):
+        # these routes handle the trailing slash themselves; retrying the other variant would loop on a 404
+        return None
     alt = path.rstrip("/") if (path != "/" and path.endswith("/")) else path + "/"
     try:
         endpoint, _ = current_app.url_map.bind("localhost").match(alt, method="GET")
@@ -3208,7 +3215,6 @@ def sitemap():
         ("main.results", {}),
         ("main.blog_index", {}),
         ("main.videos_index", {}),
-        ("main.ab_tests_index", {}),
         ("main.cro_ebook", {}),
         ("main.cro_cost_roi_landing", {}),
         ("main.privacy_policy", {}),
@@ -3234,10 +3240,12 @@ def sitemap():
 
     for vp in load_video_pages():
         urls.append(url_for("main.video_page", slug=vp["slug"], _external=True))
-    from app.case_studies import load_case_studies
+    from app.case_studies import is_public, load_case_studies
 
-    for cs in load_case_studies():
-        urls.append(url_for("main.ab_test_page", slug=cs["slug"], _external=True))
+    if is_public():
+        urls.append(url_for("main.ab_tests_index", _external=True))
+        for cs in load_case_studies():
+            urls.append(url_for("main.ab_test_page", slug=cs["slug"], _external=True))
     def escape_loc(s: str) -> str:
         return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;").replace("'", "&apos;")
 
@@ -3666,9 +3674,9 @@ def llms_txt():
         lines += ["", "## Videos (each page has a summary, key takeaways, FAQ and the full transcript)", ""]
         for vp in video_pages:
             lines.append(f"- [{vp['title']}]({base}{url_for('main.video_page', slug=vp['slug'])}): {plain(vp.get('summary') or vp.get('teaser') or '')}")
-    from app.case_studies import load_case_studies
+    from app.case_studies import is_public, load_case_studies
 
-    case_studies = load_case_studies()
+    case_studies = load_case_studies() if is_public() else []
     if case_studies:
         lines += ["", "## Winning A/B tests (anonymised case studies with before/after, results and why it worked)", ""]
         for cs in case_studies:

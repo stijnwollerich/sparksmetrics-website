@@ -670,7 +670,12 @@ def run(args) -> int:
         STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
         STATE_FILE.write_text(json.dumps(state, indent=1))
     if built or failed:
-        lines = [f":trophy: New A/B test case study: *{i['title']}*\n{base}/ab-tests/{i['slug']}" for i in built]
+        from app.case_studies import is_public
+
+        if is_public():
+            lines = [f":trophy: New A/B test case study: *{i['title']}*\n{base}/ab-tests/{i['slug']}" for i in built]
+        else:
+            lines = [f":trophy: New A/B test case study ready (not public, AB_TESTS_PUBLIC is off): *{i['title']}*" for i in built]
         lines += [f":warning: Case study for test #{i} failed: {e}" for i, e in failed]
         if skipped:
             lines.append("Winning tests waiting for info in Spark:\n" + "\n".join(f"• #{i}: {e}" for i, e in skipped))

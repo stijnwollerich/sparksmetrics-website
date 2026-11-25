@@ -11,6 +11,7 @@ checks both before it writes a file, and nothing else feeds these pages.
 from __future__ import annotations
 
 import json
+import os
 import time
 from pathlib import Path
 
@@ -19,6 +20,14 @@ SEED_DIR = ROOT / "app" / "case_studies"
 AUTO_DIR = ROOT / "instance" / "case_studies"
 
 _cache: dict = {"at": 0.0, "items": []}
+
+
+def is_public() -> bool:
+    """/ab-tests pages, their sitemap/llms.txt entries and the footer link only exist when AB_TESTS_PUBLIC=1.
+    The autopilot keeps building case studies either way."""
+    return os.environ.get("AB_TESTS_PUBLIC", "").strip().lower() in ("1", "true", "yes")
+
+
 _CACHE_SECONDS = 60
 
 

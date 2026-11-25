@@ -97,6 +97,12 @@ def create_app(config_object="app.config.Config") -> Flask:
 
     app.register_blueprint(main_bp)
 
+    from app.case_studies import is_public as _ab_tests_public
+
+    @app.context_processor
+    def _ab_tests_flag():
+        return {"ab_tests_public": _ab_tests_public()}
+
     # Cache-busting version for the prebuilt Tailwind stylesheet (static files are cached for a year)
     import hashlib
     _css = os.path.join(app.static_folder, "css", "tailwind.css")

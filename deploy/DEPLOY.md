@@ -483,3 +483,5 @@ sudo -u www-data .venv/bin/python tasks/case_study_autopilot.py --dry-run   # wh
 ```
 
 Unpublish: delete the JSON (and its images) and add the id to `CASE_STUDY_EXCLUDE`.
+
+**Not public by default.** The autopilot keeps building case studies and saving replicas to Spark, but /ab-tests, the case study pages, their sitemap/llms.txt entries and the footer link only exist with `AB_TESTS_PUBLIC=1` in `.env` (then restart). The experiment cards on /results etc. stay on, anonymised and unlinked, until the switch is on.
