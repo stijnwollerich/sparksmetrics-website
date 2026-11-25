@@ -1,5 +1,6 @@
 """HTTP surface for CRO nurture (isolated blueprint)."""
 
+import hmac
 import os
 from datetime import datetime
 from typing import Any, Dict, List, Optional
@@ -36,7 +37,7 @@ def _check_ingest_secret() -> bool:
     if not expected:
         return False
     got = extract_ingest_secret(request)
-    return bool(got) and got == expected
+    return bool(got) and hmac.compare_digest(got.encode(), expected.encode())
 
 
 def _token_from_request() -> str:
@@ -57,14 +58,14 @@ def _check_cron_token() -> bool:
     expected = cn_config.cron_token()
     if not expected:
         return False
-    return _token_from_request() == expected
+    return hmac.compare_digest(_token_from_request().encode(), expected.encode())
 
 
 def _check_webhook_token() -> bool:
     expected = cn_config.brevo_webhook_token()
     if not expected:
         return False
-    return request.args.get("token") == expected
+    return hmac.compare_digest((request.args.get("token") or "").encode(), expected.encode())
 
 
 def _nurture_lead_display_rows(leads: list, max_subject_len: int = 72) -> List[Dict[str, Any]]:
@@ -133,7 +134,7 @@ def internal_leads_dashboard():
     expected = cn_config.internal_dashboard_token()
     if not expected:
         return render_template("cro_nurture_internal_not_configured.html"), 503
-    if _token_from_request() != expected:
+    if not hmac.compare_digest(_token_from_request().encode(), expected.encode()):
         return render_template("cro_nurture_internal_unauthorized.html"), 401
     limit_nurture = _optional_int_query("limit")
     limit_forms = _optional_int_query("form_limit")
