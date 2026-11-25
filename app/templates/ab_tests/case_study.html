@@ -24,49 +24,44 @@
     <div class="vp-wrap">
       <nav class="vp-crumbs" aria-label="Breadcrumb">
         <a href="{{ url_for('main.index') }}">Home</a><span aria-hidden="true">/</span>
-        <a href="{{ url_for('main.ab_tests_index') }}">A/B tests</a><span aria-hidden="true">/</span>
-        <span>{{ cs.page_type }}</span>
+        <a href="{{ url_for('main.ab_tests_index') }}">A/B tests</a>
       </nav>
       <h1>{{ cs.title }}</h1>
       <p class="vp-lead">{{ cs.teaser }}</p>
-      <div class="vp-chips">
-        <span class="vp-chip vp-chip--win"><span class="material-symbols-outlined" aria-hidden="true">emoji_events</span>Winning test</span>
-        <a class="vp-chip vp-chip--tag" href="{{ url_for('main.ab_tests_index') }}#{{ cs.page_type|lower|replace(' ', '-') }}">{{ cs.page_type }}</a>
-        <span class="vp-chip">{{ cs.industry }}</span>
-        {% if r.days %}<span class="vp-chip"><span class="material-symbols-outlined" aria-hidden="true">schedule</span>{{ r.days }} days</span>{% endif %}
-        {% if end_label %}<span class="vp-chip"><span class="material-symbols-outlined" aria-hidden="true">calendar_today</span>{{ end_label }}</span>{% endif %}
-      </div>
+      <p class="vp-meta">
+        <a href="{{ url_for('main.ab_tests_index') }}#{{ cs.page_type|lower|replace(' ', '-') }}">{{ cs.page_type }}</a><span aria-hidden="true">·</span>
+        <span>{{ cs.industry|capitalize }}</span>
+        {% if r.days %}<span aria-hidden="true">·</span><span>Ran {{ r.days }} days</span>{% endif %}
+        {% if end_label %}<span aria-hidden="true">·</span><span>{{ end_label }}</span>{% endif %}
+      </p>
     </div>
   </section>
 
   <section class="vp-main">
     <div class="vp-wrap vp-grid">
       <div>
-        <div class="vp-stats vp-stats--results">
-          {% if r.conv_improvement is not none %}<div class="vp-stat"><b>{{ pct(r.conv_improvement) }}</b><span>Conversion rate</span></div>{% endif %}
-          {% if r.psv_improvement is not none %}<div class="vp-stat"><b>{{ pct(r.psv_improvement) }}</b><span>Revenue per visitor</span></div>{% endif %}
-          {% if r.aov_improvement is not none %}<div class="vp-stat vp-stat--muted"><b>{{ pct(r.aov_improvement) }}</b><span>Average order value</span></div>{% endif %}
-          {% if r.visitors %}<div class="vp-stat vp-stat--muted"><b>{{ '{:,}'.format(r.visitors) }}</b><span>Visitors in the test</span></div>{% endif %}
-        </div>
+        <dl class="vp-figures vp-figures--top">
+          {% if r.conv_improvement is not none %}<div><dt>Conversion rate</dt><dd class="vp-up">{{ pct(r.conv_improvement) }}</dd></div>{% endif %}
+          {% if r.psv_improvement is not none %}<div><dt>Revenue per visitor</dt><dd class="vp-up">{{ pct(r.psv_improvement) }}</dd></div>{% endif %}
+          {% if r.aov_improvement is not none %}<div><dt>Average order value</dt><dd>{{ pct(r.aov_improvement) }}</dd></div>{% endif %}
+          {% if r.visitors %}<div><dt>Visitors</dt><dd>{{ '{:,}'.format(r.visitors) }}</dd></div>{% endif %}
+        </dl>
 
         <div class="vp-ba">
           <figure>
-            <figcaption><span class="vp-ba-tag">Before</span>{{ cs.control_label }}</figcaption>
+            <figcaption><strong>Before</strong> {{ cs.control_label }}</figcaption>
             <a href="{{ url_for('main.ab_test_image', name=cs.images.control) }}" target="_blank" rel="noopener" class="vp-ba-shot">
-              <img src="{{ url_for('main.ab_test_image', name=cs.images.control) }}" alt="Original version: {{ cs.control_label }}" loading="eager"></a>
+              <img src="{{ url_for('main.ab_test_image', name=cs.images.control) }}" alt="Original version: {{ cs.control_label }}"></a>
           </figure>
           <figure class="vp-ba-win">
-            <figcaption><span class="vp-ba-tag">Winner {{ pct(r.conv_improvement if r.conv_improvement is not none else r.psv_improvement) }}</span>{{ cs.winner_label }}</figcaption>
+            <figcaption><strong>After, the winner</strong> {{ cs.winner_label }}</figcaption>
             <a href="{{ url_for('main.ab_test_image', name=cs.images.winner) }}" target="_blank" rel="noopener" class="vp-ba-shot">
-              <img src="{{ url_for('main.ab_test_image', name=cs.images.winner) }}" alt="Winning version: {{ cs.winner_label }}" loading="eager"></a>
+              <img src="{{ url_for('main.ab_test_image', name=cs.images.winner) }}" alt="Winning version: {{ cs.winner_label }}"></a>
           </figure>
         </div>
-        <p class="vp-note"><span class="material-symbols-outlined" aria-hidden="true">visibility_off</span>Mockups of the real pages: brand, products and prices are changed to keep the client anonymous. The layout and the tested change are the same.</p>
+        <p class="vp-note">These are mockups of the real pages. The brand, products and prices are changed to keep the client anonymous; the layout and the tested change are the same.</p>
 
-        <div class="vp-card vp-answer">
-          <h2>The short version</h2>
-          <p>{{ cs.summary }}</p>
-        </div>
+        <p class="vp-summary">{{ cs.summary }}</p>
 
         <article class="vp-article">
           <section>
@@ -75,7 +70,7 @@
           </section>
           <section>
             <h2>Hypothesis</h2>
-            <blockquote class="vp-quote">{{ cs.hypothesis }}<cite>Our hypothesis</cite></blockquote>
+            <blockquote class="vp-quote"><p>{{ cs.hypothesis }}</p></blockquote>
           </section>
           <section>
             <h2>What we changed</h2>
@@ -92,37 +87,37 @@
             <h2>Why it worked</h2>
             {% for p in cs.why_it_worked %}<p>{{ p }}</p>{% endfor %}
           </section>
+          <section>
+            <h2>How to apply this to your store</h2>
+            <ol class="vp-list">{% for t in cs.takeaways %}<li>{{ t }}</li>{% endfor %}</ol>
+          </section>
+          {% if cs.faq %}
+          <section>
+            <h2>Frequently asked questions</h2>
+            <div class="vp-faq">
+              {% for f in cs.faq %}<details{% if loop.first %} open{% endif %}><summary>{{ f.q }}</summary><p>{{ f.a }}</p></details>{% endfor %}
+            </div>
+          </section>
+          {% endif %}
         </article>
-
-        <div class="vp-card vp-takeaways">
-          <h2>How to apply this to your store</h2>
-          <ol>{% for t in cs.takeaways %}<li>{{ t }}</li>{% endfor %}</ol>
-        </div>
-
-        {% if cs.faq %}
-        <h2 class="vp-block-title">Frequently asked questions</h2>
-        <div class="vp-faq">
-          {% for f in cs.faq %}<details{% if loop.first %} open{% endif %}><summary>{{ f.q }}</summary><p>{{ f.a }}</p></details>{% endfor %}
-        </div>
-        {% endif %}
       </div>
 
       <aside class="vp-aside">
-        <div class="vp-card">
-          <h3>Test at a glance</h3>
+        <div class="vp-side">
+          <h3>At a glance</h3>
           <dl class="vp-facts">
             <dt>Page</dt><dd>{{ cs.page_type }}</dd>
-            <dt>Store</dt><dd>{{ cs.industry|capitalize }} (Shopify)</dd>
+            <dt>Store</dt><dd>{{ cs.industry|capitalize }}, Shopify</dd>
             {% if r.days %}<dt>Length</dt><dd>{{ r.days }} days</dd>{% endif %}
             {% if r.visitors %}<dt>Visitors</dt><dd>{{ '{:,}'.format(r.visitors) }}</dd>{% endif %}
-            <dt>Result</dt><dd class="vp-win">Winner, rolled out</dd>
+            <dt>Result</dt><dd>Winner, rolled out</dd>
           </dl>
         </div>
-        <div class="vp-card vp-cta">
+        <div class="vp-side vp-cta">
           <h3>Want wins like this?</h3>
           <p>Apply for a free CRO audit. If you qualify, I record a walkthrough of your store with the tests I'd run first.</p>
           <a class="vp-btn" href="{{ url_for('main.apply_cro_audit_landing') }}?utm_source=ab_test_page&amp;utm_medium=referral&amp;utm_campaign={{ cs.slug }}">Get my free audit</a>
-          <a class="vp-btn vp-btn--ghost" href="{{ url_for('main.ab_tests_index') }}">See all winning tests</a>
+          <a class="vp-textlink" href="{{ url_for('main.ab_tests_index') }}">See all winning tests</a>
         </div>
       </aside>
     </div>
@@ -131,8 +126,7 @@
   {% if related %}
   <section class="vp-related">
     <div class="vp-wrap">
-      <p class="vp-eyebrow">More winning tests</p>
-      <h2 class="vp-display" style="font-size:clamp(24px,3vw,34px);margin:0 0 24px;color:#1A1A1B">Tests like this one</h2>
+      <h2 class="vp-section-title">More winning tests</h2>
       <div class="vp-cards">{% for c in related %}{% include "ab_tests/_card.html" %}{% endfor %}</div>
     </div>
   </section>

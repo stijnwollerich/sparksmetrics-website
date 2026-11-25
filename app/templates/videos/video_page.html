@@ -24,17 +24,17 @@
     <div class="vp-wrap">
       <nav class="vp-crumbs" aria-label="Breadcrumb">
         <a href="{{ url_for('main.index') }}">Home</a><span aria-hidden="true">/</span>
-        <a href="{{ url_for('main.videos_index') }}">Videos</a><span aria-hidden="true">/</span>
-        <span>{{ page.tags[0] if page.tags else 'CRO' }}</span>
+        <a href="{{ url_for('main.videos_index') }}">Videos</a>
       </nav>
       <h1>{{ page.title }}</h1>
       <p class="vp-lead">{{ page.teaser }}</p>
-      <div class="vp-chips">
-        {% for tag in page.tags %}<a class="vp-chip vp-chip--tag" href="{{ url_for('main.videos_index') }}#{{ tag|lower|replace(' ', '-')|replace('/', '') }}">{{ tag }}</a>{% endfor %}
-        <span class="vp-chip"><span class="material-symbols-outlined" aria-hidden="true">calendar_today</span>{{ published_label }}</span>
-        <span class="vp-chip"><span class="material-symbols-outlined" aria-hidden="true">schedule</span>{{ ts(page.duration_seconds) }} video</span>
-        <a class="vp-chip" href="https://www.youtube.com/watch?v={{ page.youtube_id }}" target="_blank" rel="noopener"><span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>Watch on YouTube</a>
-      </div>
+      <p class="vp-meta">
+        <span>{{ published_label }}</span><span aria-hidden="true">·</span>
+        <span>{{ ts(page.duration_seconds) }} video</span><span aria-hidden="true">·</span>
+        <a href="https://www.youtube.com/watch?v={{ page.youtube_id }}" target="_blank" rel="noopener">Watch on YouTube</a>
+        {% if page.tags %}<span aria-hidden="true">·</span>
+        <span>{% for tag in page.tags %}<a href="{{ url_for('main.videos_index') }}#{{ tag|lower|replace(' ', '-')|replace('/', '') }}">{{ tag }}</a>{% if not loop.last %}, {% endif %}{% endfor %}</span>{% endif %}
+      </p>
     </div>
   </section>
 
@@ -50,84 +50,83 @@
         </div>
 
         {% if page.chapters %}
-        <details class="vp-card vp-mobile-only vp-mchapters">
-          <summary>Chapters · {{ page.chapters|length }}</summary>
+        <details class="vp-mobile-only vp-mchapters">
+          <summary>Chapters ({{ page.chapters|length }})</summary>
           <ol class="vp-chapters">
             {% for c in page.chapters %}<li><button type="button" data-seek="{{ c.t }}"><span class="vp-time">{{ ts(c.t) }}</span>{{ c.title }}</button></li>{% endfor %}
           </ol>
         </details>
         {% endif %}
-        <div class="vp-card vp-answer">
-          <h2>The short answer</h2>
-          <p>{{ rich(page.summary) }}</p>
-        </div>
 
-        <div class="vp-card vp-takeaways">
-          <h2>Key takeaways</h2>
-          <ol>{% for item in page.key_takeaways %}<li>{{ rich(item) }}</li>{% endfor %}</ol>
-        </div>
+        <p class="vp-summary">{{ rich(page.summary) }}</p>
 
         {% if page.stats %}
-        <div class="vp-stats">
-          {% for s in page.stats %}<div class="vp-stat"><b>{{ s.value }}</b><span>{{ s.label }}</span></div>{% endfor %}
-        </div>
+        <dl class="vp-figures">
+          {% for s in page.stats %}<div><dt>{{ s.label }}</dt><dd>{{ s.value }}</dd></div>{% endfor %}
+        </dl>
         {% endif %}
 
         <article class="vp-article">
+          <section>
+            <h2>Key takeaways</h2>
+            <ol class="vp-list">{% for item in page.key_takeaways %}<li>{{ rich(item) }}</li>{% endfor %}</ol>
+          </section>
           {% for s in page.sections %}
           <section id="part-{{ loop.index }}">
             <h2>{{ s.heading }}</h2>
-            <button type="button" class="vp-jump" data-seek="{{ s.t }}"><span class="material-symbols-outlined" aria-hidden="true" style="font-size:16px">play_circle</span>Watch this part · {{ ts(s.t) }}</button>
+            <button type="button" class="vp-jump" data-seek="{{ s.t }}">Watch this part ({{ ts(s.t) }})</button>
             {% for b in s.blocks %}
               {% if b.type == 'p' %}<p>{{ rich(b.text) }}</p>
               {% elif b.type == 'ul' %}{% if b.text %}<p>{{ rich(b.text) }}</p>{% endif %}<ul>{% for i in b['items'] %}<li>{{ rich(i) }}</li>{% endfor %}</ul>
               {% elif b.type == 'ol' %}{% if b.text %}<p>{{ rich(b.text) }}</p>{% endif %}<ol>{% for i in b['items'] %}<li>{{ rich(i) }}</li>{% endfor %}</ol>
-              {% elif b.type == 'quote' %}<blockquote class="vp-quote">{{ plain(b.text) }}<cite>Stijn Wollerich</cite></blockquote>
+              {% elif b.type == 'quote' %}<blockquote class="vp-quote"><p>“{{ plain(b.text) }}”</p></blockquote>
               {% endif %}
             {% endfor %}
           </section>
           {% endfor %}
+
+          {% if page.faq %}
+          <section>
+            <h2>Frequently asked questions</h2>
+            <div class="vp-faq">
+              {% for f in page.faq %}<details{% if loop.first %} open{% endif %}><summary>{{ f.q }}</summary><p>{{ rich(f.a) }}</p></details>{% endfor %}
+            </div>
+          </section>
+          {% endif %}
+
+          <section>
+            <h2>Full transcript</h2>
+            <details class="vp-transcript">
+              <summary>Show the full transcript</summary>
+              <div class="vp-transcript-body">
+                {% for line in page.transcript %}
+                <div class="vp-tline"><button type="button" class="vp-time" data-seek="{{ line.t }}">{{ ts(line.t) }}</button><p>{{ line.text }}</p></div>
+                {% endfor %}
+              </div>
+            </details>
+          </section>
         </article>
 
-        {% if page.faq %}
-        <h2 class="vp-block-title">Frequently asked questions</h2>
-        <div class="vp-faq">
-          {% for f in page.faq %}
-          <details{% if loop.first %} open{% endif %}><summary>{{ f.q }}</summary><p>{{ rich(f.a) }}</p></details>
-          {% endfor %}
-        </div>
-        {% endif %}
-
-        <h2 class="vp-block-title">Full transcript</h2>
-        <details class="vp-transcript">
-          <summary>Read the full video transcript <small>{{ page.transcript|length }} parts · click a time to jump</small></summary>
-          <div class="vp-transcript-body">
-            {% for line in page.transcript %}
-            <div class="vp-tline"><button type="button" class="vp-time" data-seek="{{ line.t }}">{{ ts(line.t) }}</button><p>{{ line.text }}</p></div>
-            {% endfor %}
-          </div>
-        </details>
-
         <div class="vp-author">
-          <div class="vp-avatar" aria-hidden="true">S</div>
-          <p><strong>Stijn Wollerich</strong><br>Founder of Sparksmetrics. I've worked on CRO and A/B testing for 200+ D2C Shopify brands. New videos every week on <a href="https://www.youtube.com/@stijnwollerich" target="_blank" rel="noopener" style="color:#FF4D00;font-weight:600">YouTube</a>.</p>
+          <img src="{{ url_for('static', filename='images/stijn-avatar.png') }}" alt="Stijn Wollerich" width="56" height="56" loading="lazy">
+          <p><strong>Stijn Wollerich</strong><br>Founder of Sparksmetrics. I've worked on CRO and A/B testing for 200+ D2C Shopify brands and post a new video every week on <a href="https://www.youtube.com/@stijnwollerich" target="_blank" rel="noopener">YouTube</a>.</p>
         </div>
       </div>
 
       <aside class="vp-aside">
         {% if page.chapters %}
-        <div class="vp-card vp-desktop-only">
+        <div class="vp-side vp-desktop-only">
           <h3>Chapters</h3>
           <ol class="vp-chapters">
             {% for c in page.chapters %}<li><button type="button" data-seek="{{ c.t }}"><span class="vp-time">{{ ts(c.t) }}</span>{{ c.title }}</button></li>{% endfor %}
           </ol>
         </div>
         {% endif %}
-        <div class="vp-card vp-cta">
+        <div class="vp-side vp-cta">
           <h3>Want this for your store?</h3>
           <p>Apply for a free CRO audit. If you qualify, I record a walkthrough of your store with the tests I'd run first.</p>
           <a class="vp-btn" href="{{ url_for('main.apply_cro_audit_landing') }}?utm_source=video_page&amp;utm_medium=referral&amp;utm_campaign={{ page.slug }}">Get my free audit</a>
-          <a class="vp-btn vp-btn--ghost" href="https://www.youtube.com/@stijnwollerich?sub_confirmation=1" target="_blank" rel="noopener">Subscribe on YouTube</a>
+          <a class="vp-textlink" href="https://www.youtube.com/@stijnwollerich?sub_confirmation=1" target="_blank" rel="noopener">Subscribe on YouTube</a>
         </div>
       </aside>
     </div>
@@ -136,8 +135,7 @@
   {% if related %}
   <section class="vp-related">
     <div class="vp-wrap">
-      <p class="vp-eyebrow">Keep watching</p>
-      <h2 class="vp-display" style="font-size:clamp(24px,3vw,34px);margin:0 0 24px;color:#1A1A1B">More videos like this</h2>
+      <h2 class="vp-section-title">More videos like this</h2>
       <div class="vp-cards">
         {% for r in related %}{% include "videos/_card.html" %}{% endfor %}
       </div>
