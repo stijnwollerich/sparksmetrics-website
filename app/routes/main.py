@@ -2187,6 +2187,9 @@ def _notify_slack_strategy_session_step(
     ).strip()
     if not webhook_url:
         return
+    # The standalone page opens straight on Calendly (step 6), so a step with no answers is just a page view.
+    if not completed and not any((annual_revenue, fname, email, website_url)):
+        return
 
     field_label = _STRATEGY_SESSION_STEP_LABELS.get(step, f"step {step}")
     status = "completed funnel" if completed else "did not finish funnel"
