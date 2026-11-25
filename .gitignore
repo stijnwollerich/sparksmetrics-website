@@ -34,6 +34,8 @@ instance/
 local.db
 app/strategy_session_logs/
 app/client_logs/
+app/qualify_quiz_logs/
+app/calendly_logs/
 
 # Testing
 .pytest_cache/
