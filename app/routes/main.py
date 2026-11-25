@@ -17,6 +17,96 @@ BREVO_CONTACTS_URL = "https://api.brevo.com/v3/contacts"
 main_bp = Blueprint("main", __name__)
 
 
+# --- Security helpers ---------------------------------------------------------------------------
+
+def _slack_escape(value) -> str:
+    """Escape user input for Slack mrkdwn so form fields can't inject <!channel>, @mentions or fake links."""
+    return str(value or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
+# Funnel/session ids from the browser (mss_…, qq-…, qq_…). Also used in file names, so keep them plain.
+_SAFE_ID_RE = re.compile(r"^[A-Za-z0-9_-]{1,80}$")
+
+
+def _client_ip() -> str:
+    """Visitor IP: nginx sets X-Real-IP (gunicorn only listens on 127.0.0.1)."""
+    return (request.headers.get("X-Real-IP") or request.remote_addr or "").strip()
+
+
+_rate_hits: dict[str, list[float]] = {}
+
+
+def _rate_limited(bucket: str, per_ip: int, window: int = 3600, global_limit: int | None = None) -> bool:
+    """Simple in-process sliding-window limiter (per gunicorn worker). True when the request should be refused."""
+    import time
+
+    now = time.time()
+    keys = [(f"{bucket}|{_client_ip()}", per_ip)]
+    if global_limit:
+        keys.append((f"{bucket}|*", global_limit))
+    if len(_rate_hits) > 20000:
+        _rate_hits.clear()
+    limited = False
+    for key, limit in keys:
+        hits = [t for t in _rate_hits.get(key, []) if now - t < window]
+        _rate_hits[key] = hits
+        if len(hits) >= limit:
+            limited = True
+    if not limited:
+        for key, _ in keys:
+            _rate_hits[key].append(now)
+    return limited
+
+
+def _too_many_requests():
+    return jsonify({"success": False, "error": "Too many requests. Please try again later."}), 429
+
+
+def _is_public_store_url(url: str | None) -> bool:
+    """Only let public http(s) hostnames through to Spark fetches/screenshots (no localhost, IPs, ports, internal names).
+
+    Spark fetches these URLs from the same droplet, so this blocks SSRF to local services. Hostnames are
+    resolved and every address must be public.
+    """
+    import ipaddress
+    import socket
+    from urllib.parse import urlparse
+
+    try:
+        p = urlparse((url or "").strip())
+        host = (p.hostname or "").rstrip(".").lower()
+        port = p.port
+    except ValueError:
+        return False
+    if p.scheme not in ("http", "https") or not host or p.username or p.password:
+        return False
+    if port not in (None, 80, 443):
+        return False
+    labels = host.split(".")
+    if len(labels) < 2 or host.endswith((".localhost", ".local", ".internal", ".lan", ".home", ".arpa")):
+        return False
+    tld = labels[-1]
+    if tld.isdigit() or tld.startswith("0x"):
+        return False  # IPv4 literal in any notation (127.0.0.1, 127.1, 0x7f.1)
+    try:
+        ipaddress.ip_address(host)
+        return False  # IP literal
+    except ValueError:
+        pass
+    try:
+        infos = socket.getaddrinfo(host, port or 443, proto=socket.IPPROTO_TCP)
+    except (OSError, UnicodeError):
+        return False
+    for info in infos:
+        try:
+            ip = ipaddress.ip_address(info[4][0].split("%", 1)[0])
+        except ValueError:
+            return False
+        if not ip.is_global:
+            return False
+    return bool(infos)
+
+
 # Central redirects: (from_paths, target_view_name, status_code). Add new redirects here.
 REDIRECTS = [
     (["/cro"], "main.cro", 301),
@@ -725,8 +815,10 @@ def _send_cro_cost_roi_results_email(
     safe_url = html.escape(website_url)
     esc_plan = html.escape(plan_name)
     esc_roi = html.escape(roi_disp)
-    results_url = url_for("main.results", _external=True)
-    schedule_url = url_for("main.schedule_a_call", _external=True)
+    # Absolute links from SITE_URL, not the request Host header (attacker-controlled; this email goes to any address).
+    site = (current_app.config.get("SITE_URL") or "https://sparksmetrics.com").rstrip("/")
+    results_url = site + url_for("main.results")
+    schedule_url = site + url_for("main.schedule_a_call")
     esc_results = html.escape(results_url, quote=True)
     esc_schedule = html.escape(schedule_url, quote=True)
 
@@ -798,8 +890,10 @@ def cro_cost_roi_landing():
 @main_bp.route("/cro-cost-roi/submit", methods=["POST"])
 def cro_cost_roi_submit():
     """Persist calculator lead; recomputes model server-side from revenue."""
+    if _rate_limited("cro_cost_roi_submit", per_ip=5, global_limit=150):
+        return _too_many_requests()
     data = request.get_json(silent=True) or request.form or {}
-    fname = (data.get("fname") or "").strip()
+    fname = (data.get("fname") or "").strip()[:80]
     email = (data.get("email") or "").strip()
     website_raw = (data.get("website_url") or data.get("url") or "").strip()
     rev = _parse_usd_amount(data.get("monthly_revenue_usd"))
@@ -894,11 +988,13 @@ def cro_cost_roi_submit():
 @main_bp.route("/cro-scan/check", methods=["POST"])
 def cro_scan_check():
     """Validate store URL: we must find both a product and a category page, or we decline (scan would be poor anyway)."""
+    if _rate_limited("cro_scan_check", per_ip=15, global_limit=300):
+        return _too_many_requests()
     data = request.get_json(silent=True) or request.form or {}
     raw = (data.get("website_url") or data.get("url") or "").strip()
     _notify_slack_cro_scan_submit(raw)
     normalized = _normalize_shopify_url(raw)
-    if not normalized:
+    if not normalized or not _is_public_store_url(normalized):
         return jsonify({"success": False, "error": "Please enter a valid website URL."}), 400
     if not spark_backend.enabled():
         return jsonify({
@@ -1054,6 +1150,8 @@ def cro_scan_report_preview():
 def cro_scan_report_view(token):
     """Serve a stored CRO report by secret token. Only link holders can view; not listed or indexed."""
     t = (token or "").strip()
+    if not _SAFE_ID_RE.match(t):
+        abort(404)
     if spark_backend.enabled():
         report = spark_backend.fetch_cro_scan_report_json(t)
         if not report:
@@ -1113,6 +1211,9 @@ def cro_scan_test_discovery():
     Test-only: discover home, collection, product for a domain. No report, no email, no scan.
     GET: form to enter URL. POST: run discovery and show result.
     """
+    # Dev tool only: on production it let anyone make Spark fetch arbitrary URLs from the server.
+    if not current_app.debug:
+        return render_template("404.html"), 404  # not abort(): the 404 slash-redirect would bounce between both rules
     result = None
     if request.method == "POST":
         raw = (request.form.get("url") or request.form.get("website_url") or "").strip()
@@ -1146,6 +1247,12 @@ def cro_scan_preview_image():
     params = {k: request.args.get(k, "") for k in ("url", "width") if request.args.get(k, "").strip()}
     if "url" not in params:
         abort(404)
+    from urllib.parse import unquote
+
+    if not _is_public_store_url(unquote(params["url"])):
+        abort(404)
+    if _rate_limited("cro_preview_image", per_ip=30, global_limit=600):
+        abort(429)
     status, body = spark_backend.fetch_cro_preview_image(params=params)
     if status != 200 or not body:
         abort(404)
@@ -1169,6 +1276,9 @@ def _enqueue_cro_scan(
             (store_url or "")[:60],
             email,
         )
+        return
+    if not _is_public_store_url(store_url):
+        current_app.logger.warning("CRO scan skipped: not a public store URL (%s)", (store_url or "")[:60])
         return
     ok = spark_backend.trigger_cro_scan_run(
         store_url=store_url,
@@ -1214,6 +1324,8 @@ def _maybe_enqueue_lead_magnet_background_scan(
 @main_bp.route("/cro-scan/submit-email", methods=["POST"])
 def cro_scan_submit_email():
     """Save email + store URL + orders per month for CRO scan report; return success."""
+    if _rate_limited("cro_scan_submit", per_ip=5, global_limit=150):
+        return _too_many_requests()
     data = request.get_json(silent=True) or request.form or {}
     email = (data.get("email") or "").strip()
     store_url = (data.get("website_url") or data.get("url") or "").strip() or None
@@ -1492,6 +1604,8 @@ def pdp_redesign_thanks():
 @main_bp.route("/pdp-redesign/intake", methods=["POST"])
 def pdp_redesign_intake():
     """Save post-purchase intake (product URL, platform, off-limits)."""
+    if _rate_limited("pdp_intake", per_ip=20):
+        return _too_many_requests()
     data = request.get_json(silent=True) or request.form or {}
     email = (data.get("email") or "").strip()
     fname = (data.get("name") or data.get("fname") or "").strip() or "Buyer"
@@ -1711,7 +1825,7 @@ def _notify_slack_cro_scan_submit(raw_value: str) -> None:
     webhook_url = (current_app.config.get("SLACK_WEBHOOK_URL") or "").strip()
     if not webhook_url:
         return
-    display = (raw_value or "(empty)").strip() or "(empty)"
+    display = _slack_escape((raw_value or "").strip()[:300]) or "(empty)"
     text = "CRO scan form submitted: {}".format(display)
     try:
         import requests
@@ -1736,7 +1850,7 @@ def _notify_slack_cro_scan_non_shopify(store_url: str) -> None:
     webhook_url = (current_app.config.get("SLACK_WEBHOOK_URL") or "").strip()
     if not webhook_url:
         return
-    text = "CRO scan: non-Shopify (generic ecommerce) URL submitted – scan will use category + product discovery: {}".format(store_url)
+    text = "CRO scan: non-Shopify (generic ecommerce) URL submitted – scan will use category + product discovery: {}".format(_slack_escape(store_url))
     try:
         import requests
     except ModuleNotFoundError:
@@ -1760,7 +1874,7 @@ def _notify_slack_cro_scan_url(store_url: str) -> None:
     webhook_url = (current_app.config.get("SLACK_WEBHOOK_URL") or "").strip()
     if not webhook_url:
         return
-    text = "CRO scan URL submitted: {}".format(store_url)
+    text = "CRO scan URL submitted: {}".format(_slack_escape(store_url))
     try:
         import requests
     except ModuleNotFoundError:
@@ -1793,11 +1907,13 @@ def _notify_slack_sparksmetrics_cro_cost_roi(
     ).strip()
     if not webhook_url:
         return
+    fname, email = _slack_escape(fname), _slack_escape(email)
+    website_url, business_stage = _slack_escape(website_url), _slack_escape(business_stage)
     lines = [
         "*New lead · form_success*",
         "• Form: `ccr-lead-form` — CRO Cost / ROI Calculator",
         "• Lead type: `cro_cost_roi`",
-        f"• Name: *{fname}* <{email}>",
+        f"• Name: *{fname}* ({email})",
     ]
     if website_url:
         lines.append(f"• Website: {website_url}")
@@ -1901,6 +2017,9 @@ def _build_slack_lead_lines(
     slack_headline: str | None = None,
     event: str = "form_success",
 ) -> list[str]:
+    fname, email = _slack_escape(fname), _slack_escape(email)
+    business_stage, website_url = _slack_escape(business_stage), _slack_escape(website_url)
+    resource_slug = _slack_escape(resource_slug) if resource_slug else resource_slug
     lines = []
     if slack_headline and slack_headline.strip():
         lines.append(slack_headline.strip())
@@ -1910,7 +2029,7 @@ def _build_slack_lead_lines(
     if resource_slug:
         res_label = _SLACK_RESOURCE_LABELS.get(resource_slug, resource_slug)
         lines.append(f"• Resource: `{resource_slug}` ({res_label})")
-    lines.append(f"• Name: *{fname}* <{email}>")
+    lines.append(f"• Name: *{fname}* ({email})")
     if business_stage:
         if lead_type == "cro_scan":
             lines.append(f"• Orders per month: {business_stage}")
@@ -1995,6 +2114,8 @@ def _notify_slack_lead(
 @main_bp.route("/client-event", methods=["POST"])
 def client_event():
     """Receive lightweight client-side diagnostic events (beacon/POST)."""
+    if _rate_limited("client_event", per_ip=120):
+        return ("", 204)
     try:
         data = request.get_json(silent=True) or {}
         current_app.logger.info("Client event received: %s", json.dumps(data or {}, ensure_ascii=False))
@@ -2012,7 +2133,7 @@ def client_event():
         # Slack ping for audit modal open on /free-cro-audit/
         if data.get("event_type") == "audit_modal_open":
             _notify_slack_simple(
-                f"👁 *CRO Audit page* — someone opened the audit form\n> {data.get('page_url', '').strip() or '(no URL)'}"
+                f"👁 *CRO Audit page* — someone opened the audit form\n> {_slack_escape(str(data.get('page_url') or '').strip()[:300]) or '(no URL)'}"
             )
     except Exception as e:
         current_app.logger.warning("Failed to record client event: %s", e)
@@ -2025,6 +2146,8 @@ def calendly_webhook():
     Receive Calendly webhooks (invitee.created, invitee.canceled, etc).
     Persist to file and optionally save invitee as a lead if email is present.
     """
+    if _rate_limited("calendly_webhook", per_ip=120):
+        return jsonify({"status": "rate_limited"}), 429
     try:
         data = request.get_json(silent=True) or {}
     except Exception:
@@ -2079,10 +2202,13 @@ def calendly_webhook():
 def admin_client_events():
     """Return recent client events (only accessible from localhost)."""
     # Allow access only from localhost for safety
+    remote = request.remote_addr or ""
+    if remote not in ("127.0.0.1", "::1", "localhost"):
+        abort(404)
+    # Behind nginx every request comes from 127.0.0.1; nginx always adds these headers, direct local calls don't.
+    if request.headers.get("X-Real-IP") or request.headers.get("X-Forwarded-For"):
+        abort(404)
     try:
-        remote = request.remote_addr or ""
-        if remote not in ("127.0.0.1", "::1", "localhost"):
-            abort(404)
         from pathlib import Path
 
         log_dir = Path(__file__).resolve().parents[1] / "client_logs"
@@ -2191,6 +2317,9 @@ def _notify_slack_strategy_session_step(
     if not completed and not any((annual_revenue, fname, email, website_url)):
         return
 
+    annual_revenue, fname, email = _slack_escape(annual_revenue), _slack_escape(fname), _slack_escape(email)
+    website_url, visitor_country = _slack_escape(website_url), _slack_escape(visitor_country)
+    funnel_session_id = _slack_escape(funnel_session_id)
     field_label = _STRATEGY_SESSION_STEP_LABELS.get(step, f"step {step}")
     status = "completed funnel" if completed else "did not finish funnel"
     lines = [
@@ -2318,7 +2447,7 @@ def _format_qualify_quiz_answer_lines(answers: dict | None) -> list[str]:
         entry = answers.get(qid)
         if not isinstance(entry, dict):
             continue
-        answer_label = (entry.get("label") or entry.get("value") or "").strip()
+        answer_label = _slack_escape(str(entry.get("label") or entry.get("value") or "").strip())
         if not answer_label:
             continue
         question_label = _QUALIFY_QUIZ_QUESTION_LABELS.get(qid, qid)
@@ -2372,12 +2501,15 @@ def _notify_slack_qualify_quiz_complete(
     if not webhook_url:
         return
 
+    fname, email, tier = _slack_escape(fname), _slack_escape(email), _slack_escape(tier)
+    revenue_left, form_page_url = _slack_escape(revenue_left), _slack_escape(form_page_url)
+    quiz_summary = _slack_escape(quiz_summary)
     outcome = "Qualified — book step" if qualified else "Not qualified — ebook offer"
     lines = [
         f"*Qualify quiz · form_step* — {outcome}",
         "• Form: `qualify-quiz` — CRO Qualify Quiz",
         "• Lead type: `qualify_quiz`",
-        f"• Session: `{funnel_session_id}`",
+        f"• Session: `{_slack_escape(funnel_session_id)}`",
     ]
     if fname:
         lines.append(f"• Name: *{fname}*")
@@ -2495,10 +2627,15 @@ def _save_qualify_quiz_lead(
 @main_bp.route("/qualify-quiz-lead", methods=["POST"])
 def qualify_quiz_lead():
     """Capture quiz answers when a qualified lead reaches the book page."""
+    if _rate_limited("qualify_quiz_lead", per_ip=60):
+        return _too_many_requests()
     data = request.get_json(silent=True) or {}
     funnel_session_id = (data.get("funnel_session_id") or "").strip()
     if not funnel_session_id:
         return jsonify({"success": False, "error": "Session id required"}), 400
+    # Used in a file name (qualify_quiz_logs/<id>.slack_sent): no path characters.
+    if not _SAFE_ID_RE.match(funnel_session_id):
+        return jsonify({"success": False, "error": "Invalid session id"}), 400
 
     email = (data.get("email") or "").strip() or None
     fname = (data.get("fname") or "").strip() or None
@@ -2559,6 +2696,8 @@ def qualify_quiz_lead():
 @main_bp.route("/strategy-session-step", methods=["POST"])
 def strategy_session_step():
     """Capture each strategy-session funnel answer; persist + Slack even if user abandons."""
+    if _rate_limited("strategy_session_step", per_ip=60):
+        return _too_many_requests()
     data = request.get_json(silent=True) or {}
     try:
         step = int(data.get("step"))
@@ -2570,6 +2709,8 @@ def strategy_session_step():
     funnel_session_id = (data.get("funnel_session_id") or "").strip()
     if not funnel_session_id:
         return jsonify({"success": False, "error": "Session id required"}), 400
+    if not _SAFE_ID_RE.match(funnel_session_id):
+        return jsonify({"success": False, "error": "Invalid session id"}), 400
 
     annual_revenue = (data.get("annual_revenue") or "").strip() or None
     fname = (data.get("fname") or "").strip() or None
@@ -2627,6 +2768,8 @@ def request_audit():
     CRO scan, Brevo/Slack; **2** = upsert metrics on the same contact (no second background scan;
     ``enroll_nurture: false`` on Spark so automation is not restarted).
     """
+    if _rate_limited("request_audit", per_ip=20):
+        return _too_many_requests()
     data = request.get_json(silent=True) or {}
     ms_raw = data.get("audit_multistep_step")
     ms_step: int | None
@@ -2801,6 +2944,8 @@ def request_audit():
 @main_bp.route("/download-resource", methods=["POST"])
 def download_resource():
     """Collect fname and email for resource download; return download URL. Resource slug in body."""
+    if _rate_limited("download_resource", per_ip=20):
+        return _too_many_requests()
     data = request.get_json(silent=True) or {}
     fname = (data.get("fname") or "").strip()
     email = (data.get("email") or "").strip()
@@ -2881,7 +3026,12 @@ def analytics():
 
 @main_bp.route("/spark-experiments/image", methods=["GET"])
 def spark_experiment_image():
-    """Proxy experiment screenshots from Spark (published tests only)."""
+    """Proxy experiment screenshots from Spark.
+
+    Disabled: public cards use anonymised /ab-tests/img/ replicas now, and Spark allows every experiment's
+    images here (real client screenshots), so this proxy only exposed what the site no longer shows.
+    """
+    abort(404)
     if not spark_backend.enabled():
         abort(503)
     path = (request.args.get("path") or "").strip()
@@ -3274,6 +3424,8 @@ def free_ab_test_landing():
 @main_bp.route("/apply-ab-test", methods=["POST"])
 def apply_ab_test():
     """Accept free A/B test application: name, email, store URL, revenue, challenge."""
+    if _rate_limited("apply_ab_test", per_ip=20):
+        return _too_many_requests()
     data = request.get_json(silent=True) or {}
     fname = (data.get("fname") or "").strip()
     email = (data.get("email") or "").strip()
@@ -3438,6 +3590,8 @@ def apply_cro_audit_landing():
 @main_bp.route("/apply-cro-audit", methods=["POST"])
 def apply_cro_audit():
     """Application from /apply. Returns qualified=True when own brand + $100k+/month."""
+    if _rate_limited("apply_cro_audit", per_ip=20):
+        return _too_many_requests()
     data = request.get_json(silent=True) or {}
     fname = (data.get("fname") or "").strip()
     email = (data.get("email") or "").strip()
@@ -3534,6 +3688,8 @@ def chat_message():
     """Chat widget on /apply: emails the message to Stijn (reply-to = visitor) and pings Slack."""
     from html import escape
 
+    if _rate_limited("chat_message", per_ip=10, global_limit=200):
+        return _too_many_requests()
     data = request.get_json(silent=True) or {}
     name = (data.get("name") or "").strip()[:80]
     email = (data.get("email") or "").strip()[:200]
@@ -3577,7 +3733,7 @@ def chat_message():
 
             requests.post(
                 webhook_url,
-                json={"text": f"*Website chat* from {who}\n{message}\n_{page}_"},
+                json={"text": f"*Website chat* from {_slack_escape(who)}\n{_slack_escape(message)}\n_{_slack_escape(page)}_"},
                 timeout=5,
             )
         except Exception as e:
